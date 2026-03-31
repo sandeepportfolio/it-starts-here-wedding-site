@@ -1271,11 +1271,60 @@
     }
 
     // ---- Active Nav ----
+    // ---- Scrollspy: highlight active nav link + auto-scroll nav ----
     const navLinks = document.querySelectorAll('.nav-link');
-    const navObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { if (entry.isIntersecting) { const id = entry.target.id; navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id)); } });
-    }, { threshold: 0.3, rootMargin: '-80px 0px -50% 0px' });
-    document.querySelectorAll('section[id]').forEach(s => { if (s.id) navObserver.observe(s); });
+    const navScroller = document.getElementById('sticky-nav')?.querySelector('.flex');
+    const sections = Array.from(document.querySelectorAll('section[id]')).filter(s => s.id);
+    let scrollspyTick = false;
+
+    function updateScrollspy() {
+      scrollspyTick = false;
+      const scrollY = window.scrollY;
+      const offset = 120; // account for sticky nav height + buffer
+      let activeId = '';
+
+      // Find the section currently in view (last section whose top is above offset)
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (sections[i].offsetTop - offset <= scrollY) {
+          activeId = sections[i].id;
+          break;
+        }
+      }
+      // If at bottom of page, activate last section
+      if (window.innerHeight + scrollY >= document.body.scrollHeight - 50) {
+        activeId = sections[sections.length - 1]?.id || activeId;
+      }
+
+      navLinks.forEach(link => {
+        const isActive = link.getAttribute('href') === '#' + activeId;
+        link.classList.toggle('active', isActive);
+        // Auto-scroll nav to center the active link
+        if (isActive && navScroller) {
+          const linkLeft = link.offsetLeft;
+          const linkWidth = link.offsetWidth;
+          const scrollerWidth = navScroller.offsetWidth;
+          const target = linkLeft - (scrollerWidth / 2) + (linkWidth / 2);
+          navScroller.scrollTo({ left: target, behavior: 'smooth' });
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!scrollspyTick) { scrollspyTick = true; requestAnimationFrame(updateScrollspy); }
+    }, { passive: true });
+    // On click, immediately activate the clicked link
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        if (navScroller) {
+          const target = link.offsetLeft - (navScroller.offsetWidth / 2) + (link.offsetWidth / 2);
+          navScroller.scrollTo({ left: target, behavior: 'smooth' });
+        }
+      });
+    });
+    // Initial run after seal opens
+    setTimeout(updateScrollspy, 100);
   </script>
 </body>
 </html>
