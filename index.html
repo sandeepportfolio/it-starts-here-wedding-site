@@ -646,9 +646,23 @@
 
         <!-- Venue + quick actions -->
         <div class="flex flex-wrap items-center justify-center gap-3 mb-6 reveal">
-          <a href="https://www.google.com/maps/dir/?api=1&destination=621+Park+Vista+Rd+Plano+TX+75094" target="_blank" rel="noopener" class="btn-outline text-[11px]">&#128205; Directions to Venue</a>
-          <a href="https://www.airbnb.com/s/Allen--TX/homes?checkin=2026-05-08&checkout=2026-05-10&adults=2" target="_blank" rel="noopener" class="btn-outline text-[11px]">&#127968; Browse Airbnb</a>
-          <a href="https://www.booking.com/searchresults.html?ss=Allen%2C+Texas%2C+USA&checkin=2026-05-08&checkout=2026-05-10&group_adults=2" target="_blank" rel="noopener" class="btn-outline text-[11px]">&#128197; Booking.com</a>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=621+Park+Vista+Rd+Plano+TX+75094" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 8px; border-radius:16px; background:var(--bg-alt); border:1px solid var(--border); text-decoration:none; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.borderColor='var(--gold)';this.style.boxShadow='0 4px 16px rgba(184,146,74,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+              <span style="font-size:24px;">&#128205;</span>
+              <span style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text); text-align:center;">Directions</span>
+              <span style="font-size:9px; color:var(--text-muted);">Google Maps</span>
+            </a>
+            <a href="https://www.airbnb.com/s/Allen--TX/homes?checkin=2026-05-08&checkout=2026-05-10&adults=2" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 8px; border-radius:16px; background:var(--bg-alt); border:1px solid var(--border); text-decoration:none; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.borderColor='#FF5A5F';this.style.boxShadow='0 4px 16px rgba(255,90,95,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+              <span style="font-size:24px;">&#127968;</span>
+              <span style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text); text-align:center;">Airbnb</span>
+              <span style="font-size:9px; color:var(--text-muted);">Browse stays</span>
+            </a>
+            <a href="https://www.booking.com/searchresults.html?ss=Allen%2C+Texas%2C+USA&checkin=2026-05-08&checkout=2026-05-10&group_adults=2" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 8px; border-radius:16px; background:var(--bg-alt); border:1px solid var(--border); text-decoration:none; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.borderColor='#003580';this.style.boxShadow='0 4px 16px rgba(0,53,128,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+              <span style="font-size:24px;">&#128197;</span>
+              <span style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text); text-align:center;">Booking</span>
+              <span style="font-size:9px; color:var(--text-muted);">.com</span>
+            </a>
+          </div>
         </div>
 
         <!-- Distance disclaimer -->
@@ -661,10 +675,10 @@
 
         <!-- Price filter tabs -->
         <div class="flex gap-2 mb-6 reveal" id="price-filter">
-          <button class="text-[10px] px-3 py-1.5 rounded-full font-medium cursor-pointer transition-all" style="border: 1px solid var(--gold); color: var(--gold); background: var(--gold-glow);" onclick="filterHotels('all', this)">All</button>
-          <button class="text-[10px] px-3 py-1.5 rounded-full font-medium cursor-pointer transition-all" style="border: 1px solid var(--border); color: var(--text-muted); background: transparent;" onclick="filterHotels('budget', this)">$ Under $100</button>
-          <button class="text-[10px] px-3 py-1.5 rounded-full font-medium cursor-pointer transition-all" style="border: 1px solid var(--border); color: var(--text-muted); background: transparent;" onclick="filterHotels('mid', this)">$$ $100–$180</button>
-          <button class="text-[10px] px-3 py-1.5 rounded-full font-medium cursor-pointer transition-all" style="border: 1px solid var(--border); color: var(--text-muted); background: transparent;" onclick="filterHotels('upscale', this)">$$$ $180+</button>
+          <button style="display:inline-flex; align-items:center; gap:5px; padding:8px 16px; border-radius:12px; font-size:11px; font-weight:500; cursor:pointer; transition:all 0.2s; border:1px solid var(--gold); color:var(--gold); background:var(--gold-glow); font-family:'Montserrat',sans-serif; letter-spacing:0.02em;" onclick="filterHotels('all', this)">All</button>
+          <button style="display:inline-flex; align-items:center; gap:5px; padding:8px 16px; border-radius:12px; font-size:11px; font-weight:500; cursor:pointer; transition:all 0.2s; border:1px solid var(--border); color:var(--text-muted); background:var(--bg-card); font-family:'Montserrat',sans-serif; letter-spacing:0.02em;" onclick="filterHotels('budget', this)"><span style="color:#22c55e; font-weight:700;">$</span> Under $100</button>
+          <button style="display:inline-flex; align-items:center; gap:5px; padding:8px 16px; border-radius:12px; font-size:11px; font-weight:500; cursor:pointer; transition:all 0.2s; border:1px solid var(--border); color:var(--text-muted); background:var(--bg-card); font-family:'Montserrat',sans-serif; letter-spacing:0.02em;" onclick="filterHotels('mid', this)"><span style="color:var(--gold); font-weight:700;">$$</span> $100–$180</button>
+          <button style="display:inline-flex; align-items:center; gap:5px; padding:8px 16px; border-radius:12px; font-size:11px; font-weight:500; cursor:pointer; transition:all 0.2s; border:1px solid var(--border); color:var(--text-muted); background:var(--bg-card); font-family:'Montserrat',sans-serif; letter-spacing:0.02em;" onclick="filterHotels('upscale', this)"><span style="color:var(--burgundy); font-weight:700;">$$$</span> $180+</button>
         </div>
 
         <!-- ===== CLOSEST (under 5 mi) ===== -->
@@ -1258,7 +1272,7 @@
 
     // ---- Hotel Filter ----
     function filterHotels(price, btn) {
-      document.querySelectorAll('#price-filter button').forEach(b => { b.style.borderColor = 'var(--border)'; b.style.color = 'var(--text-muted)'; b.style.background = 'transparent'; });
+      document.querySelectorAll('#price-filter button').forEach(b => { b.style.borderColor = 'var(--border)'; b.style.color = 'var(--text-muted)'; b.style.background = 'var(--bg-card)'; });
       btn.style.borderColor = 'var(--gold)'; btn.style.color = 'var(--gold)'; btn.style.background = 'var(--gold-glow)';
       // Filter all hotel card grids (new image cards)
       document.querySelectorAll('.hotel-img-card').forEach(card => {
