@@ -1105,29 +1105,13 @@
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- FIREBASE SDK -->
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    updatePassword,
-    updateProfile
-  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  import {
-    getFirestore,
-    collection,
-    doc,
-    getDocs,
-    addDoc,
-    updateDoc,
-    deleteDoc,
-    onSnapshot,
-    serverTimestamp
-  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+<!-- FIREBASE SDK (compat = UMD, no module issues) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+  // NOTE: Using Firebase compat (UMD) builds instead of ES modules for maximum compatibility
+  // All firebase calls use window.firebase.xxx() syntax
 
   const firebaseConfig = {
     apiKey: "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g",
@@ -1137,9 +1121,10 @@
     appId: "1:36824586549:web:711579dbdca5a73ddf147c"
   };
 
-  const app_fb = initializeApp(firebaseConfig);
-  const auth = getAuth(app_fb);
-  const db = getFirestore(app_fb);
+  // Compat API: firebase.xxx()
+  const app_fb = firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
   const ALLOWED_EMAILS = [
     'lakshminamburi@yahoo.com',
@@ -1240,7 +1225,7 @@
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await firebase.auth().signInWithEmailAndPassword(email, password);
       loginForm.reset();
     } catch (err) {
       showAuthError(err.message || 'Sign in failed. Please check your credentials.');
@@ -1264,13 +1249,13 @@
       return;
     }
     try {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      const cred = await firebase.auth().createUserWithEmailAndPassword(email, password);
       await updateProfile(cred.user, { displayName: name });
-      await addDoc(collection(db, 'admins'), {
+      await addDoc(firebase.firestore().collection('admins'), {
         email: email.toLowerCase(),
         name,
         role: 'admin',
-        createdAt: serverTimestamp()
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       registerForm.reset();
     } catch (err) {
@@ -1284,12 +1269,12 @@
   const authScreen = document.getElementById('authScreen');
   const appShell = document.getElementById('app');
 
-  onAuthStateChanged(auth, async (user) => {
+  firebase.auth().onAuthStateChanged( async (user) => {
     if (user) {
       // Check if email is authorized
       if (!ALLOWED_EMAILS.includes(user.email.toLowerCase())) {
         showAuthError('This account is not authorized to access the admin portal.');
-        await signOut(auth);
+        await firebase.auth().signOut();
         authScreen.style.display = 'flex';
         appShell.style.display = 'none';
         return;
@@ -1409,17 +1394,17 @@
     unsubscribes: [],
 
     startRealtime() {
-      const unsubRsvps = onSnapshot(collection(db, 'rsvps'), snap => {
+      const unsubRsvps = firebase.firestore().onSnapshot(firebase.firestore().collection('rsvps'), snap => {
         state.rsvps = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         this.renderRsvps();
         this.updateStats();
       });
-      const unsubPhotos = onSnapshot(collection(db, 'photos'), snap => {
+      const unsubPhotos = firebase.firestore().onSnapshot(firebase.firestore().collection('photos'), snap => {
         state.photos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         this.renderPhotos();
         this.updateStats();
       });
-      const unsubMessages = onSnapshot(collection(db, 'messages'), snap => {
+      const unsubMessages = firebase.firestore().onSnapshot(firebase.firestore().collection('messages'), snap => {
         state.messages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         this.renderMessages();
         this.updateStats();
@@ -1470,7 +1455,7 @@
 
     async confirmRsvp(id) {
       try {
-        await updateDoc(doc(db, 'rsvps', id), { status: 'confirmed', attendance: 'attending' });
+        await firebase.firestore().updateDoc(firebase.firestore().doc('rsvps', id), { status: 'confirmed', attendance: 'attending' });
         showToast('RSVP confirmed!');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
@@ -1478,21 +1463,21 @@
     async deleteRsvp(id) {
       if (!confirm('Delete this RSVP?')) return;
       try {
-        await deleteDoc(doc(db, 'rsvps', id));
+        await firebase.firestore().deleteDoc(firebase.firestore().doc('rsvps', id));
         showToast('RSVP deleted');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
 
     async approvePhoto(id) {
       try {
-        await updateDoc(doc(db, 'photos', id), { approved: true });
+        await firebase.firestore().updateDoc(firebase.firestore().doc('photos', id), { approved: true });
         showToast('Photo approved!');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
 
     async rejectPhoto(id) {
       try {
-        await updateDoc(doc(db, 'photos', id), { approved: false });
+        await firebase.firestore().updateDoc(firebase.firestore().doc('photos', id), { approved: false });
         showToast('Photo rejected');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
@@ -1500,7 +1485,7 @@
     async deleteMessage(id) {
       if (!confirm('Delete this message?')) return;
       try {
-        await deleteDoc(doc(db, 'messages', id));
+        await firebase.firestore().deleteDoc(firebase.firestore().doc('messages', id));
         showToast('Message deleted');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
@@ -1518,7 +1503,7 @@
       const name = document.getElementById('settingsName').value.trim();
       if (!name) return showToast('Name cannot be empty', 'error');
       try {
-        await updateProfile(auth.currentUser, { displayName: name });
+        await firebase.auth().currentUser.updateProfile({ displayName: name });
         showToast('Name updated!');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
@@ -1527,14 +1512,14 @@
       const pwd = document.getElementById('settingsPassword').value;
       if (!pwd || pwd.length < 6) return showToast('Password must be at least 6 characters', 'error');
       try {
-        await updatePassword(auth.currentUser, pwd);
+        await firebase.auth().currentUser.updatePassword(pwd);
         document.getElementById('settingsPassword').value = '';
         showToast('Password updated!');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
 
     async logout() {
-      await signOut(auth);
+      await firebase.auth().signOut();
     }
   };
 
