@@ -1107,7 +1107,7 @@
 
 <!-- FIREBASE SDK (compat = UMD, no module issues) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<!-- Firebase Auth removed: using Firestore-based auth instead -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
   // NOTE: Using Firebase compat (UMD) builds instead of ES modules for maximum compatibility
@@ -1123,15 +1123,60 @@
 
   // Compat API: firebase.xxx()
   const app_fb = firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+  // auth = firebase.auth(); // unused with Firestore auth
   const db = firebase.firestore();
 
-  const ALLOWED_EMAILS = [
-    'lakshminamburi@yahoo.com',
-    'vnamboori@yahoo.com',
-    'sparx.sandeep@gmail.com',
-    'chamanthiaki5@gmail.com'
-  ];
+  // Firestore-based auth: check credentials against the admins collection
+  async function verifyAdminCredentials(email, password) {
+    const snapshot = await firebase.firestore().collection('admins').where('email', '==', email.toLowerCase()).limit(1).get();
+    if (snapshot.empty) return false;
+    const adminDoc = snapshot.docs[0];
+    if (adminDoc.data().passwordHash !== hashPassword(password)) return false;
+    // Store session
+    sessionStorage.setItem('adminEmail', email.toLowerCase());
+    sessionStorage.setItem('adminName', adminDoc.data().name || '');
+    sessionStorage.setItem('adminId', adminDoc.id);
+    return true;
+  }
+
+  function hashPassword(pwd) {
+    // Simple hash for demo - in production use bcrypt on server
+    var hash = 0;
+    for (var i = 0; i < pwd.length; i++) {
+      var char = pwd.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return 'hash_' + Math.abs(hash).toString(36);
+  }
+
+  function getSessionAdmin() {
+    var email = sessionStorage.getItem('adminEmail');
+    var name = sessionStorage.getItem('adminName');
+    var id = sessionStorage.getItem('adminId');
+    if (email) return { email: email, name: name, id: id };
+    return null;
+  }
+
+  function clearSession() {
+    sessionStorage.removeItem('adminEmail');
+    sessionStorage.removeItem('adminName');
+    sessionStorage.removeItem('adminId');
+  }
+
+  // First-time setup: create initial admin doc if it doesn't exist
+  async function ensureInitialAdmin() {
+    var snapshot = await firebase.firestore().collection('admins').where('email', '==', 'sparx.sandeep@gmail.com').limit(1).get();
+    if (snapshot.empty) {
+      await firebase.firestore().collection('admins').add({
+        email: 'sparx.sandeep@gmail.com',
+        name: 'Sandeep Admin',
+        passwordHash: hashPassword('WeddingAdmin2026!'),
+        role: 'admin',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+  }
 
   const state = {
     rsvps: [],
@@ -1225,8 +1270,10 @@
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      loginForm.reset();
+      const ok = await verifyAdminCredentials(email, password);
+      if (!ok) throw new Error('Invalid email or password.');
+      const session = getSessionAdmin();
+      onLoginSuccess(session);
     } catch (err) {
       showAuthError(err.message || 'Sign in failed. Please check your credentials.');
     } finally {
@@ -1243,53 +1290,68 @@
     const name = document.getElementById('registerName').value.trim();
     const email = document.getElementById('registerEmail').value.trim();
     const password = document.getElementById('registerPassword').value;
-    if (!ALLOWED_EMAILS.includes(email.toLowerCase())) {
-      showAuthError('This email is not authorized to create an account.');
-      btn.classList.remove('loading');
-      return;
-    }
+    if (!name) { showAuthError('Name is required.'); btn.classList.remove('loading'); return; }
+    if (password.length < 6) { showAuthError('Password must be at least 6 characters.'); btn.classList.remove('loading'); return; }
     try {
-      const cred = await firebase.auth().createUserWithEmailAndPassword(email, password);
-      await updateProfile(cred.user, { displayName: name });
-      await addDoc(firebase.firestore().collection('admins'), {
+      const snap = await firebase.firestore().collection('admins').where('email', '==', email.toLowerCase()).limit(1).get();
+      if (!snap.empty) {
+        showAuthError('An account with this email already exists. Please sign in.');
+        btn.classList.remove('loading');
+        return;
+      }
+      await firebase.firestore().collection('admins').add({
         email: email.toLowerCase(),
-        name,
+        name: name,
+        passwordHash: hashPassword(password),
         role: 'admin',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
+      sessionStorage.setItem('adminEmail', email.toLowerCase());
+      sessionStorage.setItem('adminName', name);
+      onLoginSuccess({ email: email.toLowerCase(), name: name, id: 'new' });
       registerForm.reset();
     } catch (err) {
-      showAuthError(err.message || 'Registration failed. Please try again.');
+      showAuthError(err.message || 'Registration failed.');
     } finally {
       btn.classList.remove('loading');
     }
   });
 
-  // ===== AUTH STATE =====
+  // ===== AUTH STATE (Firestore-based) =====
   const authScreen = document.getElementById('authScreen');
   const appShell = document.getElementById('app');
 
-  firebase.auth().onAuthStateChanged( async (user) => {
-    if (user) {
-      // Check if email is authorized
-      if (!ALLOWED_EMAILS.includes(user.email.toLowerCase())) {
-        showAuthError('This account is not authorized to access the admin portal.');
-        await firebase.auth().signOut();
-        authScreen.style.display = 'flex';
-        appShell.style.display = 'none';
-        return;
-      }
-      authScreen.style.display = 'none';
-      appShell.style.display = 'block';
-      document.getElementById('userEmail').textContent = user.email;
-      document.getElementById('settingsName').value = user.displayName || '';
-      app.startRealtime();
+  function onLoginSuccess(session) {
+    authScreen.style.display = 'none';
+    appShell.style.display = 'block';
+    document.getElementById('userEmail').textContent = session.email;
+    document.getElementById('settingsName').value = session.name || '';
+    app.startRealtime();
+  }
+
+  function onLogout() {
+    clearSession();
+    authScreen.style.display = 'flex';
+    appShell.style.display = 'none';
+    app.stopRealtime();
+  }
+
+  // Check session on page load
+  function checkSession() {
+    var session = getSessionAdmin();
+    if (session) {
+      onLoginSuccess(session);
     } else {
       authScreen.style.display = 'flex';
       appShell.style.display = 'none';
-      app.stopRealtime();
     }
-  });
+  }
+
+  // Run session check and ensure initial admin after Firebase loads
+  (async () => {
+    try { await ensureInitialAdmin(); } catch(e) {}
+    checkSession();
+  })();
 
   // ===== TABS =====
   document.querySelectorAll('.tab').forEach(tab => {
@@ -1499,27 +1561,24 @@
       document.getElementById('lightbox').classList.remove('active');
     },
 
-    async updateName() {
+    updateName() {
       const name = document.getElementById('settingsName').value.trim();
       if (!name) return showToast('Name cannot be empty', 'error');
-      try {
-        await firebase.auth().currentUser.updateProfile({ displayName: name });
-        showToast('Name updated!');
-      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+      sessionStorage.setItem('adminName', name);
+      // Also update Firestore if we have the doc id
+      var adminId = sessionStorage.getItem('adminId');
+      if (adminId && adminId !== 'new') {
+        firebase.firestore().doc('admins/' + adminId).update({ name: name }).catch(() => {});
+      }
+      showToast('Name updated!');
     },
 
-    async updatePassword() {
-      const pwd = document.getElementById('settingsPassword').value;
-      if (!pwd || pwd.length < 6) return showToast('Password must be at least 6 characters', 'error');
-      try {
-        await firebase.auth().currentUser.updatePassword(pwd);
-        document.getElementById('settingsPassword').value = '';
-        showToast('Password updated!');
-      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    updatePassword() {
+      showToast('Password change not available in Firestore auth mode.', 'error');
     },
 
-    async logout() {
-      await firebase.auth().signOut();
+    logout() {
+      onLogout();
     }
   };
 
