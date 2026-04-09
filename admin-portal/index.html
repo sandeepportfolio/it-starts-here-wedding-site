@@ -4,196 +4,473 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wedding Admin Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%8D%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg: #0a0a0a;
-      --card: #1a1a1a;
-      --card-border: #2a2a2a;
       --gold: #D4B06A;
+      --gold-light: #E8C988;
       --gold-dark: #B8924A;
-      --text: #f0f0f0;
-      --text-muted: #888;
-      --danger: #e74c3c;
-      --success: #2ecc71;
-      --pending: #f39c12;
+      --gold-glow: rgba(212, 176, 106, 0.15);
+      --surface: rgba(255, 253, 248, 0.04);
+      --surface-hover: rgba(255, 253, 248, 0.08);
+      --border: rgba(255, 253, 248, 0.08);
+      --border-focus: rgba(212, 176, 106, 0.5);
+      --text: #F0EDE6;
+      --text-muted: rgba(240, 237, 230, 0.45);
+      --text-ghost: rgba(240, 237, 230, 0.25);
+      --danger: #E07070;
+      --success: #6EC87A;
+      --bg-dark: #08080A;
+      --card-bg: rgba(255, 253, 248, 0.03);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--bg);
+    html, body {
+      height: 100%;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-dark);
       color: var(--text);
-      min-height: 100vh;
-      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* === LOGIN SCREEN === */
-    .auth-screen {
+    /* ===== ANIMATED BACKGROUND ===== */
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background: var(--bg-dark);
+    }
+
+    .bg-scene::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,176,106,0.07) 0%, transparent 70%);
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: orbFloat1 12s ease-in-out infinite;
+    }
+
+    .bg-scene::after {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,58,74,0.06) 0%, transparent 70%);
+      bottom: -100px;
+      right: -100px;
+      animation: orbFloat2 15s ease-in-out infinite;
+    }
+
+    @keyframes orbFloat1 {
+      0%, 100% { top: -200px; transform: translateX(-50%) scale(1); }
+      50% { top: -150px; transform: translateX(-50%) scale(1.1); }
+    }
+
+    @keyframes orbFloat2 {
+      0%, 100% { bottom: -100px; right: -100px; transform: scale(1); }
+      50% { bottom: -50px; right: -50px; transform: scale(1.15); }
+    }
+
+    /* Floating dust particles */
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0;
+      animation: particleFloat linear infinite;
+    }
+
+    @keyframes particleFloat {
+      0% { opacity: 0; transform: translateY(100vh) scale(0); }
+      10% { opacity: 0.4; }
+      90% { opacity: 0.4; }
+      100% { opacity: 0; transform: translateY(-20vh) scale(1); }
+    }
+
+    /* ===== AUTH CONTAINER ===== */
+    .auth-wrapper {
+      position: relative;
+      z-index: 1;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      padding: 24px;
     }
 
-    .auth-card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 40px 32px;
+    .auth-container {
       width: 100%;
-      max-width: 400px;
+      max-width: 440px;
     }
 
-    .auth-card h1 {
+    /* ===== BRANDING HEADER ===== */
+    .brand {
+      text-align: center;
+      margin-bottom: 36px;
+      animation: brandEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    @keyframes brandEntrance {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(184,146,74,0.2), rgba(184,146,74,0.05));
+      border: 1px solid rgba(212,176,106,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+    }
+
+    .brand-subtitle {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
       color: var(--gold);
-      font-size: 1.8rem;
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .auth-card .subtitle {
-      text-align: center;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-      font-size: 0.9rem;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
       font-weight: 500;
     }
 
-    .form-group input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 1rem;
-      font-family: inherit;
-      transition: border-color 0.2s;
+    /* ===== CARD ===== */
+    .auth-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 32px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      animation: cardEntrance 0.8s 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+      transform: translateY(20px);
+      position: relative;
+      overflow: hidden;
     }
 
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--gold);
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,176,106,0.3), transparent);
     }
 
-    .btn {
-      width: 100%;
-      padding: 14px;
+    @keyframes cardEntrance {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== TAB TOGGLE ===== */
+    .auth-tabs {
+      display: flex;
+      background: rgba(255,253,248,0.04);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 28px;
+      border: 1px solid var(--border);
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 10px;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      font-family: inherit;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
-      transition: all 0.2s;
-      min-height: 44px;
+      border-radius: 8px;
+      transition: all 0.25s ease;
+      letter-spacing: 0.02em;
     }
 
-    .btn-primary {
-      background: var(--gold);
-      color: #000;
+    .auth-tab.active {
+      background: rgba(212,176,106,0.12);
+      color: var(--gold);
+      box-shadow: 0 0 12px rgba(212,176,106,0.08);
     }
 
-    .btn-primary:hover {
-      background: var(--gold-dark);
-    }
-
-    .btn-secondary {
-      background: var(--card-border);
+    .auth-tab:hover:not(.active) {
       color: var(--text);
     }
 
-    .btn-secondary:hover {
-      background: #3a3a3a;
+    /* ===== FLOATING LABEL INPUTS ===== */
+    .field {
+      position: relative;
+      margin-bottom: 20px;
     }
 
-    .btn-danger {
-      background: var(--danger);
-      color: #fff;
+    .field-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-ghost);
+      transition: color 0.25s;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
     }
 
-    .btn-danger:hover {
-      background: #c0392b;
+    .field-input {
+      width: 100%;
+      padding: 18px 16px 8px;
+      background: rgba(255,253,248,0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.25s ease;
+      outline: none;
     }
 
-    .btn-small {
-      padding: 8px 16px;
+    .field-input:focus {
+      border-color: var(--border-focus);
+      background: rgba(255,253,248,0.06);
+      box-shadow: 0 0 0 3px rgba(212,176,106,0.08), 0 0 20px rgba(212,176,106,0.04);
+    }
+
+    .field-input:focus + .field-label,
+    .field-input:not(:placeholder-shown) + .field-label {
+      font-size: 0.65rem;
+      top: 10px;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+
+    .field-input:focus ~ .field-icon {
+      color: var(--gold);
+    }
+
+    .field-label {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
       font-size: 0.85rem;
-      width: auto;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: all 0.2s ease;
+      letter-spacing: 0.02em;
+      background: transparent;
     }
 
-    .btn-success {
-      background: var(--success);
-      color: #fff;
+    .field-border-glow {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      border-radius: 2px;
+      transition: width 0.35s ease;
     }
 
-    .btn-pending {
-      background: var(--pending);
-      color: #fff;
+    .field-input:focus ~ .field-border-glow {
+      width: 80%;
     }
 
-    .auth-toggle {
+    /* ===== PASSWORD TOGGLE ===== */
+    .field-eye {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-ghost);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+    }
+
+    .field-eye:hover { color: var(--text-muted); }
+
+    /* ===== SUBMIT BUTTON ===== */
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #B8924A 0%, #D4B06A 50%, #E8C988 100%);
+      color: #0a0805;
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.25s ease;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(184,146,74,0.35), 0 0 0 1px rgba(212,176,106,0.3);
+    }
+
+    .btn-submit:hover::before { opacity: 1; }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Spinner inside button */
+    .btn-spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: #0a0805;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+
+    .btn-submit.loading .btn-spinner { display: block; }
+    .btn-submit.loading .btn-text { opacity: 0; }
+    .btn-submit.loading { pointer-events: none; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== ERROR MESSAGE ===== */
+    .auth-error {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(224,112,112,0.1);
+      border: 1px solid rgba(224,112,112,0.25);
+      color: var(--danger);
+      font-size: 0.8rem;
+      margin-bottom: 16px;
+      animation: errorShake 0.4s ease;
+    }
+
+    .auth-error.show { display: flex; }
+
+    @keyframes errorShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    /* ===== DIVIDER ===== */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .auth-divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .auth-divider-text {
+      font-size: 0.7rem;
+      color: var(--text-ghost);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ===== FORMS ===== */
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+
+    /* ===== FOOTER HINT ===== */
+    .auth-footer {
       text-align: center;
       margin-top: 20px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
+      font-size: 0.78rem;
+      color: var(--text-ghost);
+      animation: cardEntrance 0.8s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
     }
 
-    .auth-toggle a {
+    .auth-footer a {
       color: var(--gold);
-      cursor: pointer;
       text-decoration: none;
       font-weight: 500;
+      transition: color 0.2s;
     }
 
-    .auth-toggle a:hover {
-      text-decoration: underline;
-    }
+    .auth-footer a:hover { color: var(--gold-light); }
 
-    .error-msg {
-      background: rgba(231, 76, 60, 0.15);
-      border: 1px solid var(--danger);
-      color: var(--danger);
-      padding: 12px 16px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      display: none;
-    }
-
-    /* === APP SHELL === */
+    /* ===== APP SHELL (dashboard) ===== */
     .app { display: none; }
 
     .app-header {
-      background: var(--card);
-      border-bottom: 1px solid var(--card-border);
-      padding: 16px 20px;
+      background: rgba(255,253,248,0.03);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: sticky;
       top: 0;
       z-index: 100;
+      backdrop-filter: blur(20px);
     }
 
     .app-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
       color: var(--gold);
-      font-size: 1.2rem;
     }
 
     .user-menu {
@@ -203,16 +480,16 @@
     }
 
     .user-email {
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
     }
 
-    /* === TABS === */
+    /* Tabs */
     .tabs {
       display: flex;
       overflow-x: auto;
-      background: var(--card);
-      border-bottom: 1px solid var(--card-border);
+      background: rgba(255,253,248,0.02);
+      border-bottom: 1px solid var(--border);
       -webkit-overflow-scrolling: touch;
     }
 
@@ -221,121 +498,118 @@
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.82rem;
       font-weight: 500;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
       white-space: nowrap;
       min-height: 44px;
       transition: all 0.2s;
       border-bottom: 2px solid transparent;
+      letter-spacing: 0.02em;
     }
 
     .tab:hover { color: var(--text); }
-
-    .tab.active {
-      color: var(--gold);
-      border-bottom-color: var(--gold);
-    }
+    .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
 
     .tab-content { display: none; padding: 20px; }
     .tab-content.active { display: block; }
 
-    /* === DASHBOARD === */
+    /* Stats grid */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
       margin-bottom: 24px;
     }
 
     .stat-card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 16px;
       text-align: center;
+      transition: all 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: rgba(212,176,106,0.25);
+      background: rgba(212,176,106,0.04);
     }
 
     .stat-card .number {
-      font-size: 2rem;
-      font-weight: 700;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
       color: var(--gold);
+      line-height: 1;
     }
 
     .stat-card .label {
-      font-size: 0.8rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 6px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.1em;
     }
 
-    /* === SEARCH & FILTER === */
+    /* Search bar */
     .search-bar {
       display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
     }
 
     .search-bar input {
       flex: 1;
-      min-width: 200px;
-      padding: 12px 16px;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      background: var(--card);
+      min-width: 180px;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(255,253,248,0.04);
       color: var(--text);
-      font-size: 0.95rem;
-      font-family: inherit;
-    }
-
-    .search-bar input:focus {
+      font-size: 0.85rem;
+      font-family: 'Inter', sans-serif;
       outline: none;
-      border-color: var(--gold);
+      transition: border-color 0.2s;
     }
 
-    .filter-group {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .search-bar input:focus { border-color: var(--border-focus); }
 
     .filter-btn {
-      padding: 10px 16px;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      background: var(--card);
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: transparent;
       color: var(--text-muted);
-      font-size: 0.85rem;
-      font-family: inherit;
+      font-size: 0.78rem;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
-      min-height: 44px;
       transition: all 0.2s;
     }
 
     .filter-btn:hover, .filter-btn.active {
       border-color: var(--gold);
       color: var(--gold);
+      background: var(--gold-glow);
     }
 
-    /* === DATA LISTS === */
-    .data-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    /* Data items */
+    .data-list { display: flex; flex-direction: column; gap: 10px; }
 
     .data-item {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       overflow: hidden;
+      transition: border-color 0.2s;
     }
 
+    .data-item:hover { border-color: rgba(255,253,248,0.12); }
+
     .data-item-header {
-      padding: 16px;
+      padding: 14px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -343,174 +617,136 @@
       gap: 12px;
     }
 
-    .data-item-header:hover {
-      background: rgba(255,255,255,0.02);
-    }
-
-    .data-item-info {
-      flex: 1;
-      min-width: 0;
-    }
-
     .data-item-info h3 {
-      font-size: 1rem;
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
     }
 
     .data-item-info p {
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
     }
 
-    .data-item-meta {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
     .badge {
-      padding: 4px 10px;
+      padding: 3px 10px;
       border-radius: 20px;
-      font-size: 0.75rem;
+      font-size: 0.68rem;
       font-weight: 600;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    .badge-attending { background: rgba(46, 204, 113, 0.2); color: var(--success); }
-    .badge-declined { background: rgba(231, 76, 60, 0.2); color: var(--danger); }
-    .badge-pending { background: rgba(243, 156, 18, 0.2); color: var(--pending); }
-    .badge-approved { background: rgba(46, 204, 113, 0.2); color: var(--success); }
-    .badge-rejected { background: rgba(231, 76, 60, 0.2); color: var(--danger); }
-    .badge-confirmed { background: rgba(46, 204, 113, 0.2); color: var(--success); }
+    .badge-attending { background: rgba(110,200,122,0.15); color: var(--success); }
+    .badge-declined { background: rgba(224,112,112,0.15); color: var(--danger); }
+    .badge-pending { background: rgba(212,176,106,0.15); color: var(--gold); }
+    .badge-approved { background: rgba(110,200,122,0.15); color: var(--success); }
+    .badge-rejected { background: rgba(224,112,112,0.15); color: var(--danger); }
+    .badge-confirmed { background: rgba(110,200,122,0.15); color: var(--success); }
 
     .chevron {
       color: var(--text-muted);
       transition: transform 0.2s;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
 
-    .data-item.expanded .chevron {
-      transform: rotate(180deg);
-    }
+    .data-item.expanded .chevron { transform: rotate(180deg); }
 
     .data-item-details {
       display: none;
       padding: 16px;
-      border-top: 1px solid var(--card-border);
-      background: rgba(0,0,0,0.2);
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.15);
     }
 
-    .data-item.expanded .data-item-details {
-      display: block;
-    }
+    .data-item.expanded .data-item-details { display: block; }
 
     .detail-row {
       display: flex;
       justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--card-border);
-      flex-wrap: wrap;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
       gap: 8px;
     }
 
     .detail-row:last-child { border-bottom: none; }
 
-    .detail-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
+    .detail-label { font-size: 0.78rem; color: var(--text-muted); }
+    .detail-value { font-size: 0.85rem; text-align: right; }
 
-    .detail-value {
-      font-size: 0.9rem;
-      text-align: right;
-    }
-
-    .data-item-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 16px;
-      flex-wrap: wrap;
-    }
-
-    /* === PHOTOS GRID === */
+    /* Photos grid */
     .photos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
     }
 
     .photo-card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       overflow: hidden;
+      transition: border-color 0.2s;
     }
+
+    .photo-card:hover { border-color: rgba(212,176,106,0.25); }
 
     .photo-card img {
       width: 100%;
       aspect-ratio: 1;
       object-fit: cover;
       cursor: pointer;
+      display: block;
     }
 
     .photo-info {
-      padding: 12px;
+      padding: 10px 12px;
     }
 
     .photo-info h4 {
-      font-size: 0.9rem;
-      margin-bottom: 4px;
+      font-size: 0.82rem;
+      margin-bottom: 2px;
     }
 
     .photo-info p {
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
     }
 
     .photo-actions {
       display: flex;
-      gap: 8px;
-      padding: 12px;
+      gap: 6px;
+      padding: 10px 12px;
       padding-top: 0;
     }
 
-    .photo-actions button {
-      flex: 1;
-      min-height: 44px;
-    }
-
-    /* === LIGHTBOX === */
+    /* Lightbox */
     .lightbox {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.95);
+      background: rgba(0,0,0,0.92);
       z-index: 1000;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      backdrop-filter: blur(8px);
     }
 
-    .lightbox.active {
-      display: flex;
-    }
+    .lightbox.active { display: flex; }
 
     .lightbox img {
       max-width: 100%;
-      max-height: 90vh;
-      border-radius: 8px;
+      max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
     }
 
     .lightbox-close {
       position: absolute;
       top: 20px;
       right: 20px;
-      background: var(--card);
-      border: 1px solid var(--card-border);
+      background: rgba(255,253,248,0.08);
+      border: 1px solid var(--border);
       color: var(--text);
       width: 44px;
       height: 44px;
@@ -520,692 +756,777 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.2s;
     }
 
-    /* === SETTINGS === */
+    .lightbox-close:hover {
+      background: rgba(255,253,248,0.14);
+      border-color: rgba(212,176,106,0.3);
+    }
+
+    /* Settings */
     .settings-section {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
       padding: 24px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .settings-section h3 {
+      font-family: 'Cormorant Garamond', serif;
       color: var(--gold);
-      margin-bottom: 20px;
-      font-size: 1.1rem;
+      margin-bottom: 16px;
+      font-size: 1rem;
+      font-weight: 400;
     }
 
-    /* === LOADING === */
+    /* Loading */
     .loading {
       text-align: center;
       padding: 40px;
       color: var(--text-muted);
+      font-size: 0.85rem;
     }
 
-    .spinner {
-      border: 3px solid var(--card-border);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* === TOAST === */
+    /* Toast */
     .toast {
       position: fixed;
-      bottom: 20px;
+      bottom: 24px;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      padding: 14px 24px;
-      border-radius: 8px;
-      font-size: 0.9rem;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(26,26,30,0.95);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.82rem;
       z-index: 2000;
-      transition: transform 0.3s;
-      max-width: calc(100% - 40px);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
     }
 
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: rgba(110,200,122,0.4); color: var(--success); }
+    .toast.error { border-color: rgba(224,112,112,0.4); color: var(--danger); }
+
+    /* Shared button styles */
+    .btn {
+      padding: 9px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 36px;
     }
 
-    .toast.success { border-color: var(--success); color: var(--success); }
-    .toast.error { border-color: var(--danger); color: var(--danger); }
+    .btn-primary {
+      background: linear-gradient(135deg, #B8924A, #D4B06A);
+      color: #0a0805;
+    }
 
-    /* === MOBILE TABLE === */
-    @media (max-width: 600px) {
-      .auth-card { padding: 24px 20px; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .tab { padding: 12px 14px; font-size: 0.85rem; }
-      .search-bar { flex-direction: column; }
-      .search-bar input { min-width: 100%; }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(184,146,74,0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255,253,248,0.06);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,253,248,0.1);
+      border-color: rgba(255,253,248,0.15);
+    }
+
+    .btn-danger {
+      background: rgba(224,112,112,0.15);
+      color: var(--danger);
+      border: 1px solid rgba(224,112,112,0.2);
+    }
+
+    .btn-danger:hover {
+      background: rgba(224,112,112,0.25);
+    }
+
+    .btn-success {
+      background: rgba(110,200,122,0.15);
+      color: var(--success);
+      border: 1px solid rgba(110,200,122,0.2);
+    }
+
+    .btn-success:hover {
+      background: rgba(110,200,122,0.25);
+    }
+
+    .btn-small {
+      padding: 7px 12px;
+      font-size: 0.72rem;
+      min-height: 32px;
     }
 
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,253,248,0.15); }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .auth-card { padding: 28px 20px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .tab { padding: 12px 14px; font-size: 0.78rem; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- AUTH SCREEN -->
-  <div class="auth-screen" id="authScreen">
+<!-- ===== ANIMATED BACKGROUND ===== -->
+<div class="bg-scene" id="bgScene"></div>
+
+<!-- ===== AUTH SCREEN ===== -->
+<div class="auth-wrapper" id="authScreen">
+  <div class="auth-container">
+
+    <!-- Brand -->
+    <div class="brand">
+      <div class="brand-icon">💍</div>
+      <div class="brand-title">Wedding Admin</div>
+      <div class="brand-subtitle">Portal</div>
+    </div>
+
+    <!-- Card -->
     <div class="auth-card">
-      <h1>💍 Admin Portal</h1>
-      <p class="subtitle">Wedding Management System</p>
 
-      <div class="error-msg" id="authError"></div>
+      <!-- Tab Toggle -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-form="login" id="tabLogin">Sign In</button>
+        <button class="auth-tab" data-form="register" id="tabRegister">Register</button>
+      </div>
 
-      <!-- LOGIN FORM -->
-      <form id="loginForm">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="loginEmail" required minlength="5">
+      <!-- Error -->
+      <div class="auth-error" id="authError">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="authErrorText"></span>
+      </div>
+
+      <!-- Login Form -->
+      <form class="auth-form active" id="loginForm" novalidate>
+        <div class="field">
+          <input type="email" class="field-input" id="loginEmail" placeholder=" " autocomplete="email" required>
+          <label class="field-label" for="loginEmail">Email address</label>
+          <div class="field-border-glow"></div>
+          <div class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="loginPassword" required minlength="6">
+        <div class="field">
+          <input type="password" class="field-input" id="loginPassword" placeholder=" " autocomplete="current-password" required>
+          <label class="field-label" for="loginPassword">Password</label>
+          <div class="field-border-glow"></div>
+          <button type="button" class="field-eye" onclick="togglePassword('loginPassword', this)" aria-label="Toggle password visibility">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="eye-open"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="eye-closed" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
         </div>
-        <button type="submit" class="btn btn-primary">Sign In</button>
+        <button type="submit" class="btn-submit" id="loginBtn">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-spinner"></span>
+        </button>
       </form>
 
-      <p class="auth-toggle">
-        No account? <a id="showRegister">Register here</a>
-      </p>
-
-      <!-- REGISTER FORM -->
-      <form id="registerForm" style="display:none;">
-        <div class="form-group">
-          <label>Your Name</label>
-          <input type="text" id="registerName" required minlength="2">
+      <!-- Register Form -->
+      <form class="auth-form" id="registerForm" novalidate>
+        <div class="field">
+          <input type="text" class="field-input" id="registerName" placeholder=" " autocomplete="name" required>
+          <label class="field-label" for="registerName">Full name</label>
+          <div class="field-border-glow"></div>
+          <div class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="registerEmail" required>
+        <div class="field">
+          <input type="email" class="field-input" id="registerEmail" placeholder=" " autocomplete="email" required>
+          <label class="field-label" for="registerEmail">Email address</label>
+          <div class="field-border-glow"></div>
+          <div class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="registerPassword" required minlength="6">
+        <div class="field">
+          <input type="password" class="field-input" id="registerPassword" placeholder=" " autocomplete="new-password" required minlength="6">
+          <label class="field-label" for="registerPassword">Password</label>
+          <div class="field-border-glow"></div>
+          <button type="button" class="field-eye" onclick="togglePassword('registerPassword', this)" aria-label="Toggle password">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="eye-open"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="eye-closed" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
         </div>
-        <button type="submit" class="btn btn-primary">Create Account</button>
+        <button type="submit" class="btn-submit" id="registerBtn">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-spinner"></span>
+        </button>
       </form>
+    </div>
 
-      <p class="auth-toggle">
-        Have an account? <a id="showLogin">Sign in</a>
-      </p>
+    <!-- Footer -->
+    <div class="auth-footer">
+      Protected &middot; Authorized personnel only
     </div>
   </div>
+</div>
 
-  <!-- APP SHELL -->
-  <div class="app" id="app">
-    <header class="app-header">
-      <h2>💍 Admin Portal</h2>
-      <div class="user-menu">
-        <span class="user-email" id="userEmail"></span>
-        <button class="btn btn-secondary btn-small" onclick="app.logout()">Logout</button>
-      </div>
-    </header>
-
-    <nav class="tabs">
-      <button class="tab active" data-tab="dashboard">Dashboard</button>
-      <button class="tab" data-tab="rsvps">RSVPs</button>
-      <button class="tab" data-tab="photos">Photos</button>
-      <button class="tab" data-tab="messages">Messages</button>
-      <button class="tab" data-tab="settings">Settings</button>
-    </nav>
-
-    <!-- DASHBOARD TAB -->
-    <div class="tab-content active" id="tab-dashboard">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="number" id="statTotal">0</div>
-          <div class="label">Total RSVPs</div>
-        </div>
-        <div class="stat-card">
-          <div class="number" id="statAttending">0</div>
-          <div class="label">Attending</div>
-        </div>
-        <div class="stat-card">
-          <div class="number" id="statDeclined">0</div>
-          <div class="label">Declined</div>
-        </div>
-        <div class="stat-card">
-          <div class="number" id="statPhotos">0</div>
-          <div class="label">Photos</div>
-        </div>
-        <div class="stat-card">
-          <div class="number" id="statMessages">0</div>
-          <div class="label">Messages</div>
-        </div>
-      </div>
+<!-- ===== APP SHELL ===== -->
+<div class="app" id="app">
+  <header class="app-header">
+    <h2>💍 Wedding Admin</h2>
+    <div class="user-menu">
+      <span class="user-email" id="userEmail"></span>
+      <button class="btn btn-secondary btn-small" onclick="app.logout()">Logout</button>
     </div>
+  </header>
 
-    <!-- RSVPS TAB -->
-    <div class="tab-content" id="tab-rsvps">
-      <div class="search-bar">
-        <input type="text" id="rsvpSearch" placeholder="Search RSVPs...">
-        <div class="filter-group">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="pending">Pending</button>
-          <button class="filter-btn" data-filter="attending">Attending</button>
-          <button class="filter-btn" data-filter="declined">Declined</button>
-        </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard">Dashboard</button>
+    <button class="tab" data-tab="rsvps">RSVPs</button>
+    <button class="tab" data-tab="photos">Photos</button>
+    <button class="tab" data-tab="messages">Messages</button>
+    <button class="tab" data-tab="settings">Settings</button>
+  </nav>
+
+  <!-- Dashboard -->
+  <div class="tab-content active" id="tab-dashboard">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="number" id="statTotal">0</div>
+        <div class="label">Total RSVPs</div>
       </div>
-      <div class="data-list" id="rsvpList"></div>
-    </div>
-
-    <!-- PHOTOS TAB -->
-    <div class="tab-content" id="tab-photos">
-      <div class="photos-grid" id="photosGrid"></div>
-    </div>
-
-    <!-- MESSAGES TAB -->
-    <div class="tab-content" id="tab-messages">
-      <div class="data-list" id="messagesList"></div>
-    </div>
-
-    <!-- SETTINGS TAB -->
-    <div class="tab-content" id="tab-settings">
-      <div class="settings-section">
-        <h3>Profile</h3>
-        <div class="form-group">
-          <label>Display Name</label>
-          <input type="text" id="settingsName" style="max-width:300px;">
-        </div>
-        <button class="btn btn-primary" style="max-width:200px;" onclick="app.updateName()">Update Name</button>
+      <div class="stat-card">
+        <div class="number" id="statAttending">0</div>
+        <div class="label">Attending</div>
       </div>
-
-      <div class="settings-section">
-        <h3>Security</h3>
-        <div class="form-group">
-          <label>New Password</label>
-          <input type="password" id="settingsPassword" style="max-width:300px;" minlength="6">
-        </div>
-        <button class="btn btn-primary" style="max-width:200px;" onclick="app.updatePassword()">Change Password</button>
+      <div class="stat-card">
+        <div class="number" id="statDeclined">0</div>
+        <div class="label">Declined</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" id="statPhotos">0</div>
+        <div class="label">Photos</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" id="statMessages">0</div>
+        <div class="label">Messages</div>
       </div>
     </div>
   </div>
 
-  <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" onclick="app.closeLightbox()">×</button>
-    <img id="lightboxImg" src="" alt="Photo">
+  <!-- RSVPs -->
+  <div class="tab-content" id="tab-rsvps">
+    <div class="search-bar">
+      <input type="text" id="rsvpSearch" placeholder="Search RSVPs...">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="attending">Attending</button>
+        <button class="filter-btn" data-filter="declined">Declined</button>
+        <button class="filter-btn" data-filter="pending">Pending</button>
+      </div>
+    </div>
+    <div class="data-list" id="rsvpList"></div>
   </div>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast"></div>
+  <!-- Photos -->
+  <div class="tab-content" id="tab-photos">
+    <div class="photos-grid" id="photosGrid"></div>
+  </div>
 
-  <!-- FIREBASE SDK -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signOut,
-      onAuthStateChanged,
-      updatePassword,
-      updateProfile
-    } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-    import {
-      getFirestore,
-      collection,
-      doc,
-      getDocs,
-      addDoc,
-      updateDoc,
-      deleteDoc,
-      onSnapshot,
-      query,
-      orderBy,
-      serverTimestamp
-    } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+  <!-- Messages -->
+  <div class="tab-content" id="tab-messages">
+    <div class="data-list" id="messagesList"></div>
+  </div>
 
-    // ============================================================
-    // FIREBASE CONFIG — Replace with your project config
-    // ============================================================
-    const firebaseConfig = {
-      apiKey: "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g",
-      authDomain: "it-starts-here-wedding.firebaseapp.com",
-      projectId: "it-starts-here-wedding",
-      messagingSenderId: "36824586549",
-      appId: "1:36824586549:web:711579dbdca5a73ddf147c"
-    };
+  <!-- Settings -->
+  <div class="tab-content" id="tab-settings">
+    <div class="settings-section">
+      <h3>Profile</h3>
+      <div class="field" style="max-width:300px;">
+        <input type="text" class="field-input" id="settingsName" placeholder=" " style="background:rgba(255,253,248,0.06);border-color:rgba(255,253,248,0.12);">
+        <label class="field-label" for="settingsName">Display Name</label>
+        <div class="field-border-glow"></div>
+      </div>
+      <button class="btn btn-primary btn-small" onclick="app.updateName()">Update Name</button>
+    </div>
+    <div class="settings-section">
+      <h3>Security</h3>
+      <div class="field" style="max-width:300px;">
+        <input type="password" class="field-input" id="settingsPassword" placeholder=" " style="background:rgba(255,253,248,0.06);border-color:rgba(255,253,248,0.12);" minlength="6">
+        <label class="field-label" for="settingsPassword">New Password</label>
+        <div class="field-border-glow"></div>
+      </div>
+      <button class="btn btn-primary btn-small" onclick="app.updatePassword()">Change Password</button>
+    </div>
+  </div>
+</div>
 
-    // Initialize Firebase
-    const app_fb = initializeApp(firebaseConfig);
-    const auth = getAuth(app_fb);
-    const db = getFirestore(app_fb);
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="app.closeLightbox()">&times;</button>
+  <img id="lightboxImg" src="" alt="Photo">
+</div>
 
-    // ALLOWED ADMIN EMAILS
-    const ALLOWED_EMAILS = [
-      'lakshminamburi@yahoo.com',
-      'vnamboori@yahoo.com',
-      'sparx.sandeep@gmail.com',
-      'chamanthiaki5@gmail.com'
-    ];
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
-    // ============================================================
-    // APP STATE
-    // ============================================================
-    const state = {
-      rsvps: [],
-      photos: [],
-      messages: [],
-      rsvpFilter: 'all',
-      rsvpSearch: ''
-    };
+<!-- FIREBASE SDK -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updatePassword,
+    updateProfile
+  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import {
+    getFirestore,
+    collection,
+    doc,
+    getDocs,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    onSnapshot,
+    serverTimestamp
+  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-    // ============================================================
-    // TOAST HELPER
-    // ============================================================
-    function showToast(msg, type = 'success') {
-      const toast = document.getElementById('toast');
-      toast.textContent = msg;
-      toast.className = `toast ${type} show`;
-      setTimeout(() => { toast.className = 'toast'; }, 3000);
+  const firebaseConfig = {
+    apiKey: "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g",
+    authDomain: "it-starts-here-wedding.firebaseapp.com",
+    projectId: "it-starts-here-wedding",
+    messagingSenderId: "36824586549",
+    appId: "1:36824586549:web:711579dbdca5a73ddf147c"
+  };
+
+  const app_fb = initializeApp(firebaseConfig);
+  const auth = getAuth(app_fb);
+  const db = getFirestore(app_fb);
+
+  const ALLOWED_EMAILS = [
+    'lakshminamburi@yahoo.com',
+    'vnamboori@yahoo.com',
+    'sparx.sandeep@gmail.com',
+    'chamanthiaki5@gmail.com'
+  ];
+
+  const state = {
+    rsvps: [],
+    photos: [],
+    messages: [],
+    rsvpFilter: 'all',
+    rsvpSearch: ''
+  };
+
+  // ===== PARTICLE BACKGROUND =====
+  (function spawnParticles() {
+    const scene = document.getElementById('bgScene');
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDuration = (8 + Math.random() * 14) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+      scene.appendChild(p);
     }
+  })();
 
-    // ============================================================
-    // AUTH
-    // ============================================================
-    const authScreen = document.getElementById('authScreen');
-    const appShell = document.getElementById('app');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const authError = document.getElementById('authError');
-
-    function showError(msg) {
-      authError.textContent = msg;
-      authError.style.display = 'block';
+  // ===== PASSWORD TOGGLE =====
+  window.togglePassword = function(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const open = btn.querySelector('.eye-open');
+    const closed = btn.querySelector('.eye-closed');
+    if (input.type === 'password') {
+      input.type = 'text';
+      open.style.display = 'none';
+      closed.style.display = 'block';
+    } else {
+      input.type = 'password';
+      open.style.display = 'block';
+      closed.style.display = 'none';
     }
+  };
 
-    function hideError() {
-      authError.style.display = 'none';
+  // ===== TOAST =====
+  function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className = `toast ${type} show`;
+    setTimeout(() => { toast.className = 'toast'; }, 3200);
+  }
+
+  // ===== AUTH TAB SWITCHING =====
+  const tabLogin = document.getElementById('tabLogin');
+  const tabRegister = document.getElementById('tabRegister');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const authError = document.getElementById('authError');
+  const authErrorText = document.getElementById('authErrorText');
+
+  function showAuthError(msg) {
+    authErrorText.textContent = msg;
+    authError.classList.add('show');
+  }
+
+  function hideAuthError() {
+    authError.classList.remove('show');
+  }
+
+  tabLogin.addEventListener('click', () => {
+    tabLogin.classList.add('active');
+    tabRegister.classList.remove('active');
+    loginForm.classList.add('active');
+    registerForm.classList.remove('active');
+    hideAuthError();
+  });
+
+  tabRegister.addEventListener('click', () => {
+    tabRegister.classList.add('active');
+    tabLogin.classList.remove('active');
+    registerForm.classList.add('active');
+    loginForm.classList.remove('active');
+    hideAuthError();
+  });
+
+  // ===== LOGIN =====
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideAuthError();
+    const btn = document.getElementById('loginBtn');
+    btn.classList.add('loading');
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      loginForm.reset();
+    } catch (err) {
+      showAuthError(err.message || 'Sign in failed. Please check your credentials.');
+    } finally {
+      btn.classList.remove('loading');
     }
+  });
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hideError();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        loginForm.reset();
-      } catch (err) {
-        showError(err.message || 'Login failed');
-      }
-    });
-
-    registerForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hideError();
-      const name = document.getElementById('registerName').value;
-      const email = document.getElementById('registerEmail').value;
-      const password = document.getElementById('registerPassword').value;
-
-      if (!ALLOWED_EMAILS.includes(email.toLowerCase())) {
-        showError('This email is not authorized to create an account.');
-        return;
-      }
-
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(cred.user, { displayName: name });
-        // Store admin in Firestore
-        await addDoc(collection(db, 'admins'), {
-          email: email.toLowerCase(),
-          name,
-          role: 'admin',
-          createdAt: serverTimestamp()
-        });
-        registerForm.reset();
-      } catch (err) {
-        showError(err.message || 'Registration failed');
-      }
-    });
-
-    document.getElementById('showRegister').addEventListener('click', () => {
-      loginForm.style.display = 'none';
-      registerForm.style.display = 'block';
-      hideError();
-    });
-
-    document.getElementById('showLogin').addEventListener('click', () => {
-      registerForm.style.display = 'none';
-      loginForm.style.display = 'block';
-      hideError();
-    });
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        authScreen.style.display = 'none';
-        appShell.style.display = 'block';
-        document.getElementById('userEmail').textContent = user.email;
-        document.getElementById('settingsName').value = user.displayName || '';
-        app.startRealtime();
-      } else {
-        authScreen.style.display = 'flex';
-        appShell.style.display = 'none';
-        app.stopRealtime();
-      }
-    });
-
-    // ============================================================
-    // TABS
-    // ============================================================
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+  // ===== REGISTER =====
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideAuthError();
+    const btn = document.getElementById('registerBtn');
+    btn.classList.add('loading');
+    const name = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    if (!ALLOWED_EMAILS.includes(email.toLowerCase())) {
+      showAuthError('This email is not authorized to create an account.');
+      btn.classList.remove('loading');
+      return;
+    }
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(cred.user, { displayName: name });
+      await addDoc(collection(db, 'admins'), {
+        email: email.toLowerCase(),
+        name,
+        role: 'admin',
+        createdAt: serverTimestamp()
       });
+      registerForm.reset();
+    } catch (err) {
+      showAuthError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      btn.classList.remove('loading');
+    }
+  });
+
+  // ===== AUTH STATE =====
+  const authScreen = document.getElementById('authScreen');
+  const appShell = document.getElementById('app');
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      authScreen.style.display = 'none';
+      appShell.style.display = 'block';
+      document.getElementById('userEmail').textContent = user.email;
+      document.getElementById('settingsName').value = user.displayName || '';
+      app.startRealtime();
+    } else {
+      authScreen.style.display = 'flex';
+      appShell.style.display = 'none';
+      app.stopRealtime();
+    }
+  });
+
+  // ===== TABS =====
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
     });
+  });
 
-    // ============================================================
-    // RENDER HELPERS
-    // ============================================================
-    function formatDate(ts) {
-      if (!ts) return '—';
-      const d = ts.toDate ? ts.toDate() : new Date(ts);
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    }
+  // ===== HELPERS =====
+  function formatDate(ts) {
+    if (!ts) return '—';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
 
-    function renderRsvpItem(rsvp) {
-      const badgeClass = {
-        attending: 'badge-attending',
-        declined: 'badge-declined',
-        pending: 'badge-pending'
-      }[rsvp.status] || 'badge-pending';
-
-      return `
-        <div class="data-item" data-id="${rsvp.id}">
-          <div class="data-item-header" onclick="app.toggleItem('${rsvp.id}')">
-            <div class="data-item-info">
-              <h3>${rsvp.name || '—'}</h3>
-              <p>${rsvp.email || '—'} · ${rsvp.attendance || 'Pending response'}</p>
-            </div>
-            <div class="data-item-meta">
-              <span class="badge ${rsvp.status === 'confirmed' ? 'badge-confirmed' : badgeClass}">${rsvp.attendance || 'Pending'}</span>
-              <span class="chevron">▼</span>
-            </div>
+  function renderRsvpItem(rsvp) {
+    const badgeMap = { attending: 'badge-attending', declined: 'badge-declined', pending: 'badge-pending' };
+    const badgeClass = badgeMap[rsvp.attendance] || 'badge-pending';
+    return `
+      <div class="data-item" data-id="${rsvp.id}">
+        <div class="data-item-header" onclick="app.toggleItem('${rsvp.id}')">
+          <div class="data-item-info">
+            <h3>${rsvp.name || '—'}</h3>
+            <p>${rsvp.email || '—'} · ${rsvp.attendance || 'Pending'}</p>
           </div>
-          <div class="data-item-details">
-            <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${rsvp.email || '—'}</span></div>
-            <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value">${rsvp.phone || '—'}</span></div>
-            <div class="detail-row"><span class="detail-label">Attendance</span><span class="detail-value">${rsvp.attendance || '—'}</span></div>
-            <div class="detail-row"><span class="detail-label">Dietary</span><span class="detail-value">${rsvp.dietary || 'None specified'}</span></div>
-            <div class="detail-row"><span class="detail-label">Plus Ones</span><span class="detail-value">${rsvp.plusOnes || 0}</span></div>
-            <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value">${rsvp.message || '—'}</span></div>
-            <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">${formatDate(rsvp.createdAt)}</span></div>
-            <div class="data-item-actions">
-              ${rsvp.status !== 'confirmed' ? `<button class="btn btn-success btn-small" onclick="app.confirmRsvp('${rsvp.id}')">✓ Confirm</button>` : ''}
-              <button class="btn btn-danger btn-small" onclick="app.deleteRsvp('${rsvp.id}')">🗑 Delete</button>
-            </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="badge ${rsvp.status === 'confirmed' ? 'badge-confirmed' : badgeClass}">${rsvp.attendance || 'Pending'}</span>
+            <span class="chevron">▼</span>
           </div>
         </div>
-      `;
-    }
-
-    function renderPhotoItem(photo) {
-      const statusBadge = photo.approved === true ? 'badge-approved' : photo.approved === false ? 'badge-rejected' : 'badge-pending';
-      const statusText = photo.approved === true ? 'Approved' : photo.approved === false ? 'Rejected' : 'Pending';
-
-      return `
-        <div class="photo-card" data-id="${photo.id}">
-          <img src="${photo.imageData}" alt="Wedding photo" loading="lazy" onclick="app.openLightbox('${photo.imageData}')">
-          <div class="photo-info">
-            <h4>${photo.uploaderName || 'Anonymous'}</h4>
-            <p>${photo.caption || 'No caption'}</p>
-            <p style="font-size:0.75rem;margin-top:4px;"><span class="badge ${statusBadge}">${statusText}</span></p>
-          </div>
-          <div class="photo-actions">
-            <button class="btn btn-success btn-small" onclick="app.approvePhoto('${photo.id}')" ${photo.approved === true ? 'disabled' : ''}>✓</button>
-            <button class="btn btn-danger btn-small" onclick="app.rejectPhoto('${photo.id}')" ${photo.approved === false ? 'disabled' : ''}>✗</button>
+        <div class="data-item-details">
+          <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${rsvp.email || '—'}</span></div>
+          <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value">${rsvp.phone || '—'}</span></div>
+          <div class="detail-row"><span class="detail-label">Attendance</span><span class="detail-value">${rsvp.attendance || '—'}</span></div>
+          <div class="detail-row"><span class="detail-label">Dietary</span><span class="detail-value">${rsvp.dietary || 'None specified'}</span></div>
+          <div class="detail-row"><span class="detail-label">Plus Ones</span><span class="detail-value">${rsvp.plusOnes || 0}</span></div>
+          <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value">${rsvp.message || '—'}</span></div>
+          <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">${formatDate(rsvp.createdAt)}</span></div>
+          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+            ${rsvp.status !== 'confirmed' ? `<button class="btn btn-success btn-small" onclick="app.confirmRsvp('${rsvp.id}')">✓ Confirm</button>` : ''}
+            <button class="btn btn-danger btn-small" onclick="app.deleteRsvp('${rsvp.id}')">🗑 Delete</button>
           </div>
         </div>
-      `;
-    }
+      </div>`;
+  }
 
-    function renderMessageItem(msg) {
-      return `
-        <div class="data-item" data-id="${msg.id}">
-          <div class="data-item-header" onclick="app.toggleItem('${msg.id}')">
-            <div class="data-item-info">
-              <h3>${msg.name || '—'}</h3>
-              <p>${msg.email || '—'}</p>
-            </div>
-            <div class="data-item-meta">
-              <span class="chevron">▼</span>
-            </div>
+  function renderPhotoItem(photo) {
+    const approved = photo.approved;
+    const statusClass = approved === true ? 'badge-approved' : approved === false ? 'badge-rejected' : 'badge-pending';
+    const statusText = approved === true ? 'Approved' : approved === false ? 'Rejected' : 'Pending';
+    return `
+      <div class="photo-card" data-id="${photo.id}">
+        <img src="${photo.imageData}" alt="Wedding photo" loading="lazy" onclick="app.openLightbox('${photo.imageData}')">
+        <div class="photo-info">
+          <h4>${photo.uploaderName || 'Anonymous'}</h4>
+          <p>${photo.caption || 'No caption'}</p>
+          <p style="margin-top:6px;"><span class="badge ${statusClass}">${statusText}</span></p>
+        </div>
+        <div class="photo-actions">
+          <button class="btn btn-success btn-small" onclick="app.approvePhoto('${photo.id}')" ${approved === true ? 'disabled' : ''}>✓</button>
+          <button class="btn btn-danger btn-small" onclick="app.rejectPhoto('${photo.id}')" ${approved === false ? 'disabled' : ''}>✗</button>
+        </div>
+      </div>`;
+  }
+
+  function renderMessageItem(msg) {
+    return `
+      <div class="data-item" data-id="${msg.id}">
+        <div class="data-item-header" onclick="app.toggleItem('${msg.id}')">
+          <div class="data-item-info">
+            <h3>${msg.name || '—'}</h3>
+            <p>${msg.email || '—'}</p>
           </div>
-          <div class="data-item-details">
-            <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${msg.email || '—'}</span></div>
-            <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value">${msg.message || '—'}</span></div>
-            <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">${formatDate(msg.createdAt)}</span></div>
-            <div class="data-item-actions">
-              <button class="btn btn-danger btn-small" onclick="app.deleteMessage('${msg.id}')">🗑 Delete</button>
-            </div>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="data-item-details">
+          <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${msg.email || '—'}</span></div>
+          <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value">${msg.message || '—'}</span></div>
+          <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">${formatDate(msg.createdAt)}</span></div>
+          <div style="margin-top:14px;">
+            <button class="btn btn-danger btn-small" onclick="app.deleteMessage('${msg.id}')">🗑 Delete</button>
           </div>
         </div>
-      `;
-    }
+      </div>`;
+  }
 
-    function filterRsvps() {
-      const filter = state.rsvpFilter;
-      const search = state.rsvpSearch.toLowerCase();
-      return state.rsvps.filter(r => {
-        const matchFilter = filter === 'all' || r.attendance === filter;
-        const matchSearch = !search ||
-          (r.name && r.name.toLowerCase().includes(search)) ||
-          (r.email && r.email.toLowerCase().includes(search));
-        return matchFilter && matchSearch;
+  function filterRsvps() {
+    const f = state.rsvpFilter;
+    const s = state.rsvpSearch.toLowerCase();
+    return state.rsvps.filter(r => {
+      const matchF = f === 'all' || r.attendance === f;
+      const matchS = !s || (r.name && r.name.toLowerCase().includes(s)) || (r.email && r.email.toLowerCase().includes(s));
+      return matchF && matchS;
+    });
+  }
+
+  // ===== APP OBJECT =====
+  const app = {
+    unsubscribes: [],
+
+    startRealtime() {
+      const unsubRsvps = onSnapshot(collection(db, 'rsvps'), snap => {
+        state.rsvps = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        this.renderRsvps();
+        this.updateStats();
       });
+      const unsubPhotos = onSnapshot(collection(db, 'photos'), snap => {
+        state.photos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        this.renderPhotos();
+        this.updateStats();
+      });
+      const unsubMessages = onSnapshot(collection(db, 'messages'), snap => {
+        state.messages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        this.renderMessages();
+        this.updateStats();
+      });
+      this.unsubscribes = [unsubRsvps, unsubPhotos, unsubMessages];
+    },
+
+    stopRealtime() {
+      this.unsubscribes.forEach(u => u());
+      this.unsubscribes = [];
+    },
+
+    updateStats() {
+      const r = state.rsvps;
+      document.getElementById('statTotal').textContent = r.length;
+      document.getElementById('statAttending').textContent = r.filter(x => x.attendance === 'attending').length;
+      document.getElementById('statDeclined').textContent = r.filter(x => x.attendance === 'declined').length;
+      document.getElementById('statPhotos').textContent = state.photos.length;
+      document.getElementById('statMessages').textContent = state.messages.length;
+    },
+
+    renderRsvps() {
+      const list = document.getElementById('rsvpList');
+      const filtered = filterRsvps();
+      list.innerHTML = filtered.length
+        ? filtered.map(r => renderRsvpItem(r)).join('')
+        : '<div class="loading">No RSVPs found</div>';
+    },
+
+    renderPhotos() {
+      const grid = document.getElementById('photosGrid');
+      grid.innerHTML = state.photos.length
+        ? state.photos.map(p => renderPhotoItem(p)).join('')
+        : '<div class="loading">No photos submitted yet</div>';
+    },
+
+    renderMessages() {
+      const list = document.getElementById('messagesList');
+      list.innerHTML = state.messages.length
+        ? state.messages.map(m => renderMessageItem(m)).join('')
+        : '<div class="loading">No messages yet</div>';
+    },
+
+    toggleItem(id) {
+      const el = document.querySelector(`.data-item[data-id="${id}"]`);
+      if (el) el.classList.toggle('expanded');
+    },
+
+    async confirmRsvp(id) {
+      try {
+        await updateDoc(doc(db, 'rsvps', id), { status: 'confirmed', attendance: 'attending' });
+        showToast('RSVP confirmed!');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    async deleteRsvp(id) {
+      if (!confirm('Delete this RSVP?')) return;
+      try {
+        await deleteDoc(doc(db, 'rsvps', id));
+        showToast('RSVP deleted');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    async approvePhoto(id) {
+      try {
+        await updateDoc(doc(db, 'photos', id), { approved: true });
+        showToast('Photo approved!');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    async rejectPhoto(id) {
+      try {
+        await updateDoc(doc(db, 'photos', id), { approved: false });
+        showToast('Photo rejected');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    async deleteMessage(id) {
+      if (!confirm('Delete this message?')) return;
+      try {
+        await deleteDoc(doc(db, 'messages', id));
+        showToast('Message deleted');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    openLightbox(url) {
+      document.getElementById('lightboxImg').src = url;
+      document.getElementById('lightbox').classList.add('active');
+    },
+
+    closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    },
+
+    async updateName() {
+      const name = document.getElementById('settingsName').value.trim();
+      if (!name) return showToast('Name cannot be empty', 'error');
+      try {
+        await updateProfile(auth.currentUser, { displayName: name });
+        showToast('Name updated!');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    async updatePassword() {
+      const pwd = document.getElementById('settingsPassword').value;
+      if (!pwd || pwd.length < 6) return showToast('Password must be at least 6 characters', 'error');
+      try {
+        await updatePassword(auth.currentUser, pwd);
+        document.getElementById('settingsPassword').value = '';
+        showToast('Password updated!');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    async logout() {
+      await signOut(auth);
     }
+  };
 
-    // ============================================================
-    // APP OBJECT
-    // ============================================================
-    const app = {
-      unsubscribes: [],
+  // ===== SEARCH & FILTER =====
+  document.getElementById('rsvpSearch').addEventListener('input', e => {
+    state.rsvpSearch = e.target.value;
+    app.renderRsvps();
+  });
 
-      startRealtime() {
-        // RSVPs
-        const unsubRsvps = onSnapshot(collection(db, 'rsvps'), (snap) => {
-          state.rsvps = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-          this.renderRsvps();
-          this.updateStats();
-        });
-
-        // Photos
-        const unsubPhotos = onSnapshot(collection(db, 'photos'), (snap) => {
-          state.photos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-          this.renderPhotos();
-          this.updateStats();
-        });
-
-        // Messages
-        const unsubMessages = onSnapshot(collection(db, 'messages'), (snap) => {
-          state.messages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-          this.renderMessages();
-          this.updateStats();
-        });
-
-        this.unsubscribes = [unsubRsvps, unsubPhotos, unsubMessages];
-      },
-
-      stopRealtime() {
-        this.unsubscribes.forEach(u => u());
-        this.unsubscribes = [];
-      },
-
-      updateStats() {
-        const rsvps = state.rsvps;
-        const attending = rsvps.filter(r => r.attendance === 'attending').length;
-        const declined = rsvps.filter(r => r.attendance === 'declined').length;
-        const pendingPhotos = state.photos.filter(p => p.approved === undefined || p.approved === null).length;
-
-        document.getElementById('statTotal').textContent = rsvps.length;
-        document.getElementById('statAttending').textContent = attending;
-        document.getElementById('statDeclined').textContent = declined;
-        document.getElementById('statPhotos').textContent = pendingPhotos;
-        document.getElementById('statMessages').textContent = state.messages.length;
-      },
-
-      renderRsvps() {
-        const filtered = filterRsvps();
-        const list = document.getElementById('rsvpList');
-        list.innerHTML = filtered.length
-          ? filtered.map(r => renderRsvpItem(r)).join('')
-          : '<div class="loading">No RSVPs found</div>';
-      },
-
-      renderPhotos() {
-        const grid = document.getElementById('photosGrid');
-        grid.innerHTML = state.photos.length
-          ? state.photos.map(p => renderPhotoItem(p)).join('')
-          : '<div class="loading">No photos submitted yet</div>';
-      },
-
-      renderMessages() {
-        const list = document.getElementById('messagesList');
-        list.innerHTML = state.messages.length
-          ? state.messages.map(m => renderMessageItem(m)).join('')
-          : '<div class="loading">No messages yet</div>';
-      },
-
-      toggleItem(id) {
-        const el = document.querySelector(`.data-item[data-id="${id}"]`);
-        if (el) el.classList.toggle('expanded');
-      },
-
-      async confirmRsvp(id) {
-        try {
-          await updateDoc(doc(db, 'rsvps', id), { status: 'confirmed', attendance: 'attending' });
-          showToast('RSVP confirmed!');
-        } catch (err) {
-          showToast('Failed: ' + err.message, 'error');
-        }
-      },
-
-      async deleteRsvp(id) {
-        if (!confirm('Delete this RSVP?')) return;
-        try {
-          await deleteDoc(doc(db, 'rsvps', id));
-          showToast('RSVP deleted');
-        } catch (err) {
-          showToast('Failed: ' + err.message, 'error');
-        }
-      },
-
-      async approvePhoto(id) {
-        try {
-          await updateDoc(doc(db, 'photos', id), { approved: true });
-          showToast('Photo approved!');
-        } catch (err) {
-          showToast('Failed: ' + err.message, 'error');
-        }
-      },
-
-      async rejectPhoto(id) {
-        try {
-          await updateDoc(doc(db, 'photos', id), { approved: false });
-          showToast('Photo rejected');
-        } catch (err) {
-          showToast('Failed: ' + err.message, 'error');
-        }
-      },
-
-      async deleteMessage(id) {
-        if (!confirm('Delete this message?')) return;
-        try {
-          await deleteDoc(doc(db, 'messages', id));
-          showToast('Message deleted');
-        } catch (err) {
-          showToast('Failed: ' + err.message, 'error');
-        }
-      },
-
-      openLightbox(url) {
-        document.getElementById('lightboxImg').src = url;
-        document.getElementById('lightbox').classList.add('active');
-      },
-
-      closeLightbox() {
-        document.getElementById('lightbox').classList.remove('active');
-      },
-
-      async updateName() {
-        const name = document.getElementById('settingsName').value.trim();
-        if (!name) return showToast('Name cannot be empty', 'error');
-        try {
-          await updateProfile(auth.currentUser, { displayName: name });
-          showToast('Name updated!');
-        } catch (err) {
-          showToast('Failed: ' + err.message, 'error');
-        }
-      },
-
-      async updatePassword() {
-        const pwd = document.getElementById('settingsPassword').value;
-        if (!pwd || pwd.length < 6) return showToast('Password must be at least 6 characters', 'error');
-        try {
-          await updatePassword(auth.currentUser, pwd);
-          document.getElementById('settingsPassword').value = '';
-          showToast('Password updated!');
-        } catch (err) {
-          showToast('Failed: ' + err.message, 'error');
-        }
-      },
-
-      async logout() {
-        await signOut(auth);
-      }
-    };
-
-    // ============================================================
-    // SEARCH & FILTER
-    // ============================================================
-    document.getElementById('rsvpSearch').addEventListener('input', (e) => {
-      state.rsvpSearch = e.target.value;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.rsvpFilter = btn.dataset.filter;
       app.renderRsvps();
     });
+  });
 
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.rsvpFilter = btn.dataset.filter;
-        app.renderRsvps();
-      });
-    });
+  // ===== LIGHTBOX CLOSE =====
+  document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target === document.getElementById('lightbox')) app.closeLightbox();
+  });
 
-    // Lightbox close on click outside
-    document.getElementById('lightbox').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('lightbox')) {
-        app.closeLightbox();
-      }
-    });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') app.closeLightbox();
+  });
 
-    // Keyboard close
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') app.closeLightbox();
-    });
-
-    // Make app globally accessible
-    window.app = app;
-  </script>
+  window.app = app;
+</script>
 </body>
 </html>
