@@ -867,6 +867,7 @@
         await addDoc(collection(db, 'admins'), {
           email: email.toLowerCase(),
           name,
+          role: 'admin',
           createdAt: serverTimestamp()
         });
         registerForm.reset();

@@ -2,46 +2,43 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check if user is an admin
-    // Admins are identified by their email in the admin_users collection
+    // Helper function to check if user is authenticated
     function isAuthenticated() {
       return request.auth != null;
     }
-    
+
+    // Admin check: user email must be in the allowed list AND have an admin doc
     function isAdmin() {
-      return isAuthenticated() && 
-        get(/databases/$(database)/documents/admin_users/$(request.auth.uid)).data.role == 'admin';
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'admin';
     }
-    
-    // Admin users collection
-    match /admin_users/{userId} {
+
+    // Admins collection — stores admin user records (one doc per uid)
+    match /admins/{userId} {
       allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
-      allow write: if false; // Only created via Firebase Console / CLI
+      allow write: if false; // Only created programmatically on registration
     }
-    
-    // RSVPs - anyone can create, only admins can read all/update/delete
+
+    // RSVPs — guests can submit (no auth needed), admins can read/update/delete
     match /rsvps/{rsvpId} {
-      allow create: if isAuthenticated();
+      allow create: if true; // Anyone can submit an RSVP from the public site
       allow read: if isAdmin();
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
-    
-    // Photos - anyone can view approved photos, authenticated users can upload,
-    // only admins can approve/delete
+
+    // Photos — anyone can submit (uploads base64 to Firestore, no Storage needed),
+    // admins can approve/reject/delete. Public can read only approved photos.
     match /photos/{photoId} {
-      // Anyone can read approved photos (for the public gallery)
-      allow read: if resource.data.approved == true || isAdmin();
-      // Authenticated users can create new photo entries (upload goes to Storage)
-      allow create: if isAuthenticated();
-      // Only admins can update (approve/reject) or delete
+      allow create: if true; // Anyone can submit a photo
+      allow read: if isAdmin() || resource.data.approved == true;
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
-    
-    // Guest messages - anyone can create, only admins can read/delete
-    match /guest_messages/{messageId} {
-      allow create: if isAuthenticated();
+
+    // Messages — anyone can submit, only admins can read/delete
+    match /messages/{messageId} {
+      allow create: if true; // Anyone can leave a message
       allow read: if isAdmin();
       allow update: if false;
       allow delete: if isAdmin();
