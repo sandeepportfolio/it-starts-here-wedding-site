@@ -18,6 +18,14 @@
   "homepage": "https://github.com/sandeepportfolio/it-starts-here-wedding-site#readme",
   "description": "",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.8.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
     "tailwindcss": "^3.4.19"
-  }
+  },
+  "type": "commonjs"
 }

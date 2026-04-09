@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Admin Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #121212; color: #f8f9fa; }
+        .navbar { background-color: #1e1e1e !important; border-bottom: 2px solid #D4B06A; }
+        .navbar-brand { color: #D4B06A !important; font-weight: bold; }
+        .nav-tabs { border-bottom: 1px solid #444; }
+        .nav-tabs .nav-link { color: #ccc; border: none; padding: 1rem 1.5rem; }
+        .nav-tabs .nav-link.active { background: transparent; color: #D4B06A; border-bottom: 3px solid #D4B06A; font-weight: bold; }
+        .nav-tabs .nav-link:hover { color: #D4B06A; }
+        
+        .card { background: #1e1e1e; border: 1px solid #333; border-radius: 10px; margin-bottom: 1rem; }
+        .stat-card { border-left: 4px solid #D4B06A; }
+        .stat-card .display-4 { color: #D4B06A; font-weight: bold; }
+        
+        .table { color: #e0e0e0; border-color: #444; }
+        .table th { color: #D4B06A; border-bottom: 2px solid #555; }
+        .table td { border-color: #333; vertical-align: middle; }
+        .table-responsive { overflow-x: auto; }
+        
+        .btn-gold { background-color: #D4B06A; color: #000; font-weight: 500; min-height: 44px; }
+        .btn-gold:hover { background-color: #b89759; color: #000; }
+        .btn-outline-gold { border-color: #D4B06A; color: #D4B06A; min-height: 44px; }
+        .btn-outline-gold:hover { background-color: #D4B06A; color: #000; }
+        .btn-icon { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+
+        .form-control, .form-select { background: #2c2c2c; border: 1px solid #444; color: #fff; min-height: 44px; }
+        .form-control:focus, .form-select:focus { background: #2c2c2c; color: #fff; border-color: #D4B06A; box-shadow: 0 0 0 0.25rem rgba(212, 176, 106, 0.25); }
+
+        .photo-card img { width: 100%; height: 200px; object-fit: cover; border-top-left-radius: 9px; border-top-right-radius: 9px; }
+        
+        @media (max-width: 768px) {
+            .nav-tabs { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; padding-bottom: 5px; }
+            .nav-tabs .nav-link { white-space: nowrap; padding: 0.8rem 1rem; }
+            .stat-cards { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><i class="bi bi-gem"></i> Admin Portal</a>
+        <div class="d-flex align-items-center">
+            <span id="user-name" class="text-light me-3 d-none d-md-inline"></span>
+            <button class="btn btn-sm btn-outline-danger" onclick="logout()">Logout</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid mt-3">
+    <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#dashboard" type="button">Dashboard</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#rsvps" type="button" onclick="loadRSVPs()">RSVPs</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#photos" type="button" onclick="loadPhotos()">Photos</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#messages" type="button" onclick="loadMessages()">Messages</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#settings" type="button">Settings</button></li>
+    </ul>
+
+    <div class="tab-content pb-5">
+        
+        <!-- DASHBOARD -->
+        <div class="tab-pane fade show active" id="dashboard">
+            <div class="row g-3 stat-cards" id="stats-container">
+                <div class="col-md-3">
+                    <div class="card stat-card p-3 h-100">
+                        <h6 class="text-muted text-uppercase mb-1">Total RSVPs</h6>
+                        <div class="display-4" id="stat-rsvps">0</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card p-3 h-100">
+                        <h6 class="text-muted text-uppercase mb-1">Attending</h6>
+                        <div class="display-4" id="stat-attending">0</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card p-3 h-100">
+                        <h6 class="text-muted text-uppercase mb-1">Total Photos</h6>
+                        <div class="display-4" id="stat-photos">0</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card p-3 h-100 border-danger border-left-4">
+                        <h6 class="text-muted text-uppercase mb-1">Pending Photos</h6>
+                        <div class="display-4 text-warning" id="stat-unapproved">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RSVPS -->
+        <div class="tab-pane fade" id="rsvps">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h4 class="text-gold m-0">RSVP List</h4>
+                <div class="input-group" style="max-width: 300px;">
+                    <input type="text" id="rsvp-search" class="form-control" placeholder="Search name/email..." onkeyup="if(event.key==='Enter') loadRSVPs()">
+                    <button class="btn btn-gold" onclick="loadRSVPs()"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover m-0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Attending</th>
+                                    <th>+1s</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rsvp-body">
+                                <tr><td colspan="6" class="text-center py-4">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHOTOS -->
+        <div class="tab-pane fade" id="photos">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-gold m-0">Photo Moderation</h4>
+                <button class="btn btn-outline-gold" onclick="loadPhotos()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+            </div>
+            <div class="row g-4" id="photos-grid">
+                <div class="col-12 text-center py-4">Loading...</div>
+            </div>
+        </div>
+
+        <!-- MESSAGES -->
+        <div class="tab-pane fade" id="messages">
+            <h4 class="text-gold mb-3">Guest Messages</h4>
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover m-0">
+                            <thead><tr><th>Guest</th><th>Message</th><th>Date</th><th>Action</th></tr></thead>
+                            <tbody id="msg-body">
+                                <tr><td colspan="4" class="text-center py-4">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div class="tab-pane fade" id="settings">
+            <h4 class="text-gold mb-3">System Settings</h4>
+            <!-- Settings intentionally left sparse, add pw change if needed -->
+            <p>Welcome to the admin portal.</p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/public/index.html';
+
+    const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+
+    async function init() {
+        try {
+            const res = await fetch('/api/auth/me', { headers });
+            if (!res.ok) throw new Error('Auth failed');
+            const user = await res.json();
+            document.getElementById('user-name').innerText = user.name;
+            loadStats();
+        } catch (e) {
+            logout();
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('adminToken');
+        window.location.href = '/public/index.html';
+    }
+
+    async function loadStats() {
+        try {
+            const res = await fetch('/api/dashboard/stats', { headers });
+            const data = await res.json();
+            document.getElementById('stat-rsvps').innerText = data.rsvpCount || 0;
+            document.getElementById('stat-attending').innerText = data.attendingCount || 0;
+            document.getElementById('stat-photos').innerText = data.photoCount || 0;
+            document.getElementById('stat-unapproved').innerText = data.unapprovedPhotos || 0;
+        } catch(e) { console.error('Stats error', e); }
+    }
+
+    async function loadRSVPs() {
+        const q = document.getElementById('rsvp-search').value;
+        const res = await fetch(`/api/rsvps${q ? '?search='+encodeURIComponent(q) : ''}`, { headers });
+        const data = await res.json();
+        const tbody = document.getElementById('rsvp-body');
+        if (!data.length) return tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No RSVPs found</td></tr>';
+        
+        tbody.innerHTML = data.map(r => `
+            <tr>
+                <td><strong>${r.name}</strong><br><small class="text-muted">${r.dietary_restrictions ? 'Diet: '+escapeHtml(r.dietary_restrictions) : ''}</small></td>
+                <td><small>${escapeHtml(r.email)}<br>${escapeHtml(r.phone || '')}</small></td>
+                <td><span class="badge ${r.attendance==='yes'?'bg-success':(r.attendance==='no'?'bg-danger':'bg-secondary')}">${r.attendance}</span></td>
+                <td>${r.plus_ones}</td>
+                <td>
+                    <select class="form-select form-select-sm w-auto d-inline" onchange="updateRSVPStatus(${r.id}, this.value)">
+                        <option value="pending" ${r.status==='pending'?'selected':''}>Pending</option>
+                        <option value="confirmed" ${r.status==='confirmed'?'selected':''}>Confirmed</option>
+                    </select>
+                </td>
+                <td>
+                    ${r.message ? `<button class="btn btn-sm btn-info btn-icon me-1" title="View Message" onclick="alert('${escapeHtml(r.message.replace(/'/g,"\\'"))}')"><i class="bi bi-chat-text"></i></button>` : ''}
+                    <button class="btn btn-sm btn-danger btn-icon" onclick="deleteRSVP(${r.id})"><i class="bi bi-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async function updateRSVPStatus(id, status) {
+        await fetch(`/api/rsvps/${id}`, { method: 'PATCH', headers, body: JSON.stringify({ status }) });
+    }
+
+    async function deleteRSVP(id) {
+        if(!confirm('Are you sure?')) return;
+        await fetch(`/api/rsvps/${id}`, { method: 'DELETE', headers });
+        loadRSVPs(); loadStats();
+    }
+
+    async function loadPhotos() {
+        const res = await fetch('/api/photos', { headers });
+        const data = await res.json();
+        const grid = document.getElementById('photos-grid');
+        if (!data.length) return grid.innerHTML = '<div class="col-12 text-center py-4">No photos uploaded yet</div>';
+
+        grid.innerHTML = data.map(p => `
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card photo-card h-100 ${p.approved ? 'border-success' : 'border-warning'}">
+                    <img src="${p.url}" alt="Photo">
+                    <div class="card-body p-2">
+                        <small class="d-block text-truncate"><strong>By:</strong> ${escapeHtml(p.uploader_name)}</small>
+                        ${p.caption ? `<small class="d-block text-muted text-truncate">"${escapeHtml(p.caption)}"</small>` : ''}
+                    </div>
+                    <div class="card-footer bg-transparent border-0 p-2 d-flex justify-content-between">
+                        ${p.approved 
+                            ? `<button class="btn btn-sm btn-warning w-50 me-1" onclick="togglePhoto(${p.id}, 0)">Unapprove</button>`
+                            : `<button class="btn btn-sm btn-success w-50 me-1" onclick="togglePhoto(${p.id}, 1)">Approve</button>`
+                        }
+                        <button class="btn btn-sm btn-danger flex-grow-1" onclick="deletePhoto(${p.id})"><i class="bi bi-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    async function togglePhoto(id, approved) {
+        await fetch(`/api/photos/${id}`, { method: 'PATCH', headers, body: JSON.stringify({ approved }) });
+        loadPhotos(); loadStats();
+    }
+
+    async function deletePhoto(id) {
+        if(!confirm('Delete this photo permanently?')) return;
+        await fetch(`/api/photos/${id}`, { method: 'DELETE', headers });
+        loadPhotos(); loadStats();
+    }
+
+    async function loadMessages() {
+        const res = await fetch('/api/messages', { headers });
+        const data = await res.json();
+        const tbody = document.getElementById('msg-body');
+        if (!data.length) return tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4">No messages yet</td></tr>';
+        
+        tbody.innerHTML = data.map(m => `
+            <tr>
+                <td><strong>${escapeHtml(m.name)}</strong><br><small class="text-muted">${escapeHtml(m.email)}</small></td>
+                <td>${escapeHtml(m.message)}</td>
+                <td style="white-space: nowrap;"><small>${new Date(m.created_at).toLocaleDateString()}</small></td>
+                <td><button class="btn btn-sm btn-danger btn-icon" onclick="deleteMsg(${m.id})"><i class="bi bi-trash"></i></button></td>
+            </tr>
+        `).join('');
+    }
+
+    async function deleteMsg(id) {
+        if(!confirm('Delete message?')) return;
+        await fetch(`/api/messages/${id}`, { method: 'DELETE', headers });
+        loadMessages();
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+    }
+
+    init();
+</script>
+</body>
+</html>
