@@ -1154,7 +1154,9 @@
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signInWithPopup,
+    getRedirectResult,
     GoogleAuthProvider,
+    signInWithRedirect,
     signOut,
     onAuthStateChanged,
     updatePassword,
@@ -1261,15 +1263,28 @@
     btn.classList.add('loading');
     hideAuthError();
     try {
-      await signInWithPopup(auth, googleProvider);
+      await signInWithRedirect(auth, googleProvider);
     } catch (err) {
-      if (err.code !== 'auth/popup-closed-by-user') {
-        showAuthError(err.message || 'Google sign-in failed. Please try again.');
-      }
-    } finally {
+      showAuthError(err.message || 'Google sign-in failed. Please try again.');
       btn.classList.remove('loading');
     }
   };
+
+  // Handle redirect result on page load
+  (async () => {
+    try {
+      const result = await getRedirectResult(auth);
+      if (result?.user) {
+        // Redirect sign-in succeeded — onAuthStateChanged will handle UI update
+      }
+    } catch (err) {
+      if (err.code !== 'auth/redirect-cancelled-by-user' && err.code !== 'auth/no-auth-event') {
+        showAuthError(err.message || 'Sign-in failed. Please try again.');
+      }
+    }
+    // Remove loading state in case we came back from redirect
+    document.getElementById('googleSignInBtn')?.classList.remove('loading');
+  })();
 
   tabLogin.addEventListener('click', () => {
     tabLogin.classList.add('active');
