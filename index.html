@@ -1675,43 +1675,42 @@
     setTimeout(updateScrollspy, 100);
   </script>
 
-  <!-- STANDALONE SEAL SCRIPT — no dependencies, guaranteed to run last -->
+  <!-- STANDALONE SEAL SCRIPT — no dependencies, runs at end of body -->
   <script>
-    (function() {
+    // Define breakSeal as a bare global function (not window.breakSeal)
+    // This is critical: onclick="breakSeal()" in HTML looks for 'breakSeal' in global scope
+    function breakSeal() {
       var overlay = document.getElementById('seal-overlay');
       var content = document.getElementById('content');
       var themeToggle = document.getElementById('theme-toggle');
       var heroInner = document.getElementById('hero-inner');
 
-      // Skip if already broken
-      if (localStorage.getItem('sealBroken') === 'true') {
-        overlay.style.display = 'none';
-        content.style.display = 'block';
-        themeToggle.style.display = 'flex';
-        heroInner.classList.remove('hero-entrance');
-        heroInner.querySelectorAll(':scope > *').forEach(function(c) { c.style.opacity = '1'; });
-        return;
-      }
+      if (overlay.style.display === 'none') return;
+      overlay.style.display = 'none';
+      content.style.display = 'block';
+      themeToggle.style.display = 'flex';
+      heroInner.classList.add('animate');
 
-      // Global function — called by onclick attribute
-      window.breakSeal = function() {
-        if (overlay.style.display === 'none') return;
-        overlay.style.display = 'none';
-        content.style.display = 'block';
-        themeToggle.style.display = 'flex';
-        heroInner.classList.add('animate');
-        // Init reveals
-        var observer = new IntersectionObserver(function(entries) {
-          entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
-        localStorage.setItem('sealBroken', 'true');
-      };
+      // Init scroll reveals
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
 
-      // Also bind to the button directly (belt and suspenders)
-      var btn = document.getElementById('seal-btn');
-      if (btn) btn.addEventListener('click', window.breakSeal);
-    })();
+      localStorage.setItem('sealBroken', 'true');
+    }
+
+    // Skip if already broken
+    if (localStorage.getItem('sealBroken') === 'true') {
+      var s = document.getElementById('seal-overlay');
+      var c = document.getElementById('content');
+      var t = document.getElementById('theme-toggle');
+      var h = document.getElementById('hero-inner');
+      if (s) s.style.display = 'none';
+      if (c) c.style.display = 'block';
+      if (t) t.style.display = 'flex';
+      if (h) { h.classList.remove('hero-entrance'); h.querySelectorAll(':scope > *').forEach(function(el) { el.style.opacity = '1'; }); }
+    }
   </script>
 </body>
 </html>
