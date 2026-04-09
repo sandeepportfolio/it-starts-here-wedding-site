@@ -8,6 +8,41 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <!-- Tailwind CSS (compiled, production-ready) -->
   <link rel="stylesheet" href="output.css">
+  <!-- Firebase SDK -->
+  <!-- TODO: Replace with actual Firebase config from Firebase Console -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getStorage, ref, uploadBytes } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    let db = null;
+    let storage = null;
+
+    function initFirebase() {
+      try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        storage = getStorage(app);
+      } catch (e) {
+        console.warn('Firebase init failed:', e.message);
+      }
+    }
+    initFirebase();
+
+    // Expose Firebase services globally
+    window.firebaseDb = () => db;
+    window.firebaseStorage = () => storage;
+    window.firebaseReady = !!db;
+  </script>
   <style>
     * { box-sizing: border-box; }
     body { font-family: 'Montserrat', sans-serif; margin: 0; }
@@ -274,6 +309,55 @@
   <div id="lightbox" onclick="closeLightbox()">
     <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white/70 hover:text-white text-3xl z-10" style="background:none;border:none;cursor:pointer;">&times;</button>
     <img id="lightbox-img" src="" alt="Gallery photo">
+  </div>
+
+  <!-- ===================== PHOTO UPLOAD MODAL ===================== -->
+  <style>
+    #photo-upload-modal { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
+    #photo-upload-modal.open { display:flex; }
+  </style>
+  <div id="photo-upload-modal" onclick="if(event.target===this)closePhotoUpload()">
+    <div style="background:var(--bg-card); border-radius:24px; max-width:480px; width:100%; padding:36px 32px; position:relative; box-shadow:0 24px 64px rgba(0,0,0,0.3); border:1px solid var(--border); max-height:90vh; overflow-y:auto;">
+      <button onclick="closePhotoUpload()" style="position:absolute; top:16px; right:16px; background:none; border:none; cursor:pointer; font-size:24px; color:var(--text-muted); line-height:1;">&times;</button>
+      <div class="text-center mb-6">
+        <div style="font-size:2.5rem; margin-bottom:8px;">📷</div>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.75rem; font-weight:400; color:var(--text);">Share Your Photo</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Upload a moment from the celebration. Thank you for being part of our story!</p>
+      </div>
+      <div id="photo-upload-success" style="display:none; text-align:center; padding:16px; border-radius:12px; background:rgba(184,146,74,0.12); border:1px solid rgba(184,146,74,0.25); margin-bottom:16px;">
+        <p style="font-size:14px; color:var(--gold); font-weight:500;"></p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px;" id="photo-upload-form">
+        <div>
+          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Your Name *</label>
+          <input type="text" id="photo-uploader-name" class="form-input" placeholder="e.g. Priya Patel" required>
+        </div>
+        <div>
+          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Email *</label>
+          <input type="email" id="photo-uploader-email" class="form-input" placeholder="your@email.com" required>
+        </div>
+        <div>
+          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Caption</label>
+          <input type="text" id="photo-caption" class="form-input" placeholder="Describe this moment...">
+        </div>
+        <div>
+          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Photo *</label>
+          <div style="border:2px dashed var(--border); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; background:var(--bg);" id="photo-drop-zone" onclick="document.getElementById('photo-file-input').click()" ondragover="event.preventDefault(); this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="event.preventDefault(); this.style.borderColor='var(--border)'; document.getElementById('photo-file-input').files=event.dataTransfer.files; document.getElementById('photo-file-input').dispatchEvent(new Event('change'))">
+            <img id="photo-preview-img" src="" alt="Preview" style="display:none; max-width:100%; max-height:200px; border-radius:8px; margin:0 auto 12px; object-fit:cover;">
+            <div id="photo-placeholder" style="color:var(--text-muted);">
+              <div style="font-size:1.75rem; margin-bottom:8px;">🖼️</div>
+              <p style="font-size:12px;">Click or drag & drop to select a photo</p>
+              <p style="font-size:10px; color:var(--text-light); margin-top:4px;">JPG, PNG, GIF up to 10MB</p>
+            </div>
+          </div>
+          <input type="file" id="photo-file-input" accept="image/*" style="display:none;">
+        </div>
+        <div id="photo-upload-error" style="display:none; font-size:12px; color:#ef4444; text-align:center; padding:10px; border-radius:8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2);"></div>
+        <button onclick="submitGuestPhoto()" id="photo-submit-btn" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; border-radius:14px; margin-top:4px;">
+          Upload Photo ✨
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- ===================== MAIN CONTENT ===================== -->
@@ -633,9 +717,9 @@
           <h2 class="section-title text-4xl sm:text-5xl">Our Story in Photos</h2>
           <p class="text-sm mt-3 max-w-md mx-auto" style="color: var(--text-muted);">Swipe to explore our journey together.</p>
           <div class="mt-6 mb-4">
-            <a href="/public/upload.html" class="btn-outline" style="border-radius: 99px; padding: 10px 24px; font-size: 14px; text-decoration: none;">
-              <span style="margin-right: 8px;">📷</span> Share Your Photos
-            </a>
+            <button onclick="openPhotoUpload()" class="btn-outline" style="border-radius: 99px; padding: 10px 24px; font-size: 14px; text-decoration: none; background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; font-family: 'Montserrat', sans-serif; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; font-weight: 500;" onmouseover="this.style.background='var(--gold-glow)'" onmouseout="this.style.background='transparent'">
+              <span>📷</span> Share Your Photos
+            </button>
           </div>
           <div class="section-divider mt-4"></div>
         </div>
@@ -1288,6 +1372,99 @@
     }
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
+    // ---- Photo Upload Modal ----
+    function openPhotoUpload() {
+      document.getElementById('photo-upload-modal')?.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closePhotoUpload() {
+      document.getElementById('photo-upload-modal')?.classList.remove('open');
+      document.body.style.overflow = '';
+      // Reset form
+      const form = document.getElementById('photo-upload-form');
+      if (form) form.reset();
+      const preview = document.getElementById('photo-preview-img');
+      if (preview) { preview.src = ''; preview.style.display = 'none'; }
+      const photoErr = document.getElementById('photo-upload-error');
+      if (photoErr) { photoErr.textContent = ''; photoErr.style.display = 'none'; }
+      const photoSucc = document.getElementById('photo-upload-success');
+      if (photoSucc) { photoSucc.style.display = 'none'; }
+    }
+
+    // Preview selected photo
+    document.addEventListener('DOMContentLoaded', () => {
+      const fileInput = document.getElementById('photo-file-input');
+      if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          const preview = document.getElementById('photo-preview-img');
+          if (file && preview) {
+            const reader = new FileReader();
+            reader.onload = (ev) => { preview.src = ev.target.result; preview.style.display = 'block'; };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    });
+
+    // Submit guest photo
+    async function submitGuestPhoto() {
+      const name = document.getElementById('photo-uploader-name')?.value.trim();
+      const email = document.getElementById('photo-uploader-email')?.value.trim();
+      const caption = document.getElementById('photo-caption')?.value.trim();
+      const fileInput = document.getElementById('photo-file-input');
+      const file = fileInput?.files[0];
+      const errorEl = document.getElementById('photo-upload-error');
+      const successEl = document.getElementById('photo-upload-success');
+      const submitBtn = document.getElementById('photo-submit-btn');
+
+      if (!name || !email || !file) {
+        if (errorEl) { errorEl.textContent = 'Please fill in your name, email, and select a photo.'; errorEl.style.display = 'block'; }
+        return;
+      }
+
+      if (errorEl) { errorEl.style.display = 'none'; }
+      if (successEl) { successEl.style.display = 'none'; }
+      if (submitBtn) { submitBtn.textContent = 'Uploading...'; submitBtn.disabled = true; }
+
+      try {
+        const db = window.firebaseDb();
+        const storage = window.firebaseStorage();
+
+        if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
+
+        // Upload photo to Firebase Storage
+        const ext = file.name.split('.').pop() || 'jpg';
+        const uuid = crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2);
+        const storageRef = ref(storage, `photos/${uuid}.${ext}`);
+        await uploadBytes(storageRef, file);
+        const storageUrl = `photos/${uuid}.${ext}`;
+
+        // Save metadata to Firestore
+        await addDoc(collection(db, 'photos'), {
+          uploaderName: name,
+          uploaderEmail: email,
+          caption: caption || '',
+          storageUrl: storageUrl,
+          approved: false,
+          createdAt: new Date()
+        });
+
+        if (successEl) {
+          successEl.textContent = '✨ Photo uploaded! Thank you for sharing this memory with us.';
+          successEl.style.display = 'block';
+        }
+        if (submitBtn) { submitBtn.textContent = 'Upload Another'; submitBtn.disabled = false; }
+
+        // Auto-close after 3 seconds
+        setTimeout(closePhotoUpload, 3000);
+      } catch (e) {
+        console.error('Photo upload error:', e);
+        if (errorEl) { errorEl.textContent = 'Upload failed: ' + e.message + '. Please try again.'; errorEl.style.display = 'block'; }
+        if (submitBtn) { submitBtn.textContent = 'Upload Photo'; submitBtn.disabled = false; }
+      }
+    }
+
     // ---- RSVP ----
     let rsvpResponse = '';
     function selectRsvp(el, response) {
@@ -1305,6 +1482,52 @@
       document.getElementById('rsvp-step-label').textContent = 'Step ' + step + ' of 3';
       for (let i = 1; i <= 3; i++) document.getElementById('rsvp-bar-' + i).style.background = i <= step ? 'var(--gold)' : 'var(--border)';
       if (step === 3 && rsvpResponse !== 'decline') { document.getElementById('rsvp-confirm-title').textContent = 'Thank You!'; document.getElementById('rsvp-confirm-msg').textContent = "Your response has been recorded. We can't wait to celebrate with you!"; }
+    }
+
+    // ---- RSVP Submit (Firebase) ----
+    async function submitRsvpForm() {
+      const name = document.getElementById('rsvp-name')?.value.trim();
+      const email = document.getElementById('rsvp-email')?.value.trim();
+      const phone = document.getElementById('rsvp-phone')?.value.trim();
+      const plusOnes = parseInt(document.getElementById('rsvp-plus-ones')?.value) || 0;
+      const dietary = document.getElementById('rsvp-dietary')?.value.trim();
+      const message = document.getElementById('rsvp-message')?.value.trim();
+      const errorMsg = document.getElementById('rsvp-error-msg');
+      const submitBtn = document.getElementById('rsvp-submit-btn');
+      const backBtn = document.getElementById('rsvp-back-btn');
+
+      if (!name || !email) {
+        if (errorMsg) { errorMsg.innerText = 'Please fill in your name and email.'; errorMsg.classList.remove('hidden'); }
+        return;
+      }
+
+      if (submitBtn) { submitBtn.innerText = 'Submitting...'; submitBtn.disabled = true; }
+      if (backBtn) backBtn.disabled = true;
+      if (errorMsg) errorMsg.classList.add('hidden');
+
+      const data = {
+        name, email, phone,
+        attendance: rsvpResponse,
+        dietary: dietary || '',
+        plusOnes,
+        message: message || '',
+        status: 'pending',
+        createdAt: new Date()
+      };
+
+      try {
+        const db = window.firebaseDb();
+        if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
+
+        await addDoc(collection(db, 'rsvps'), data);
+        goRsvpStep(3);
+      } catch (e) {
+        console.error('RSVP error:', e);
+        if (errorMsg) { errorMsg.innerText = 'Error submitting RSVP. Please try again. (' + e.message + ')'; errorMsg.classList.remove('hidden'); }
+      } finally {
+        if (submitBtn) { submitBtn.innerText = 'Submit'; submitBtn.disabled = false; }
+        if (backBtn) backBtn.disabled = false;
+      }
     }
 
     // ---- Copy to Clipboard ----
@@ -1394,80 +1617,3 @@
   </script>
 </body>
 </html>
-
-<script>
-  let rsvpAttendance = '';
-
-  function selectRsvp(el, attendance) {
-    document.querySelectorAll('.rsvp-option').forEach(opt => {
-      opt.style.borderColor = 'var(--border)';
-      opt.style.background = 'transparent';
-    });
-    el.style.borderColor = 'var(--gold)';
-    el.style.background = 'rgba(212,176,106,0.05)';
-    rsvpAttendance = attendance;
-    
-    setTimeout(() => {
-      goRsvpStep(2);
-    }, 400);
-  }
-
-  function goRsvpStep(step) {
-    document.querySelectorAll('.rsvp-step').forEach(el => el.classList.remove('active'));
-    document.getElementById('rsvp-step-' + step).classList.add('active');
-    
-    document.getElementById('rsvp-step-label').innerText = 'Step ' + step + ' of 3';
-    
-    document.getElementById('rsvp-bar-1').style.background = step >= 1 ? 'var(--gold)' : 'var(--border)';
-    document.getElementById('rsvp-bar-2').style.background = step >= 2 ? 'var(--gold)' : 'var(--border)';
-    document.getElementById('rsvp-bar-3').style.background = step >= 3 ? 'var(--gold)' : 'var(--border)';
-  }
-
-  async function submitRsvpForm() {
-    const errorMsg = document.getElementById('rsvp-error-msg');
-    const submitBtn = document.getElementById('rsvp-submit-btn');
-    const backBtn = document.getElementById('rsvp-back-btn');
-    
-    const data = {
-      name: document.getElementById('rsvp-name').value,
-      email: document.getElementById('rsvp-email').value,
-      phone: document.getElementById('rsvp-phone').value,
-      attendance: rsvpAttendance,
-      plus_ones: parseInt(document.getElementById('rsvp-plus-ones').value || 0),
-      dietary_restrictions: document.getElementById('rsvp-dietary').value,
-      message: document.getElementById('rsvp-message').value
-    };
-
-    if (!data.name || !data.email) {
-      errorMsg.innerText = 'Name and email are required.';
-      errorMsg.classList.remove('hidden');
-      return;
-    }
-
-    submitBtn.innerText = 'Submitting...';
-    submitBtn.disabled = true;
-    backBtn.disabled = true;
-    errorMsg.classList.add('hidden');
-
-    try {
-      const res = await fetch('/api/rsvps', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      
-      if (res.ok) {
-        goRsvpStep(3);
-      } else {
-        throw new Error('Failed to submit');
-      }
-    } catch (e) {
-      errorMsg.innerText = 'Error submitting RSVP. Please try again.';
-      errorMsg.classList.remove('hidden');
-    } finally {
-      submitBtn.innerText = 'Submit';
-      submitBtn.disabled = false;
-      backBtn.disabled = false;
-    }
-  }
-</script>
