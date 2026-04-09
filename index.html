@@ -1702,5 +1702,44 @@
     // Initial run after seal opens
     setTimeout(updateScrollspy, 100);
   </script>
+
+  <!-- STANDALONE SEAL SCRIPT — no dependencies, guaranteed to run last -->
+  <script>
+    (function() {
+      var overlay = document.getElementById('seal-overlay');
+      var content = document.getElementById('content');
+      var themeToggle = document.getElementById('theme-toggle');
+      var heroInner = document.getElementById('hero-inner');
+
+      // Skip if already broken
+      if (localStorage.getItem('sealBroken') === 'true') {
+        overlay.style.display = 'none';
+        content.style.display = 'block';
+        themeToggle.style.display = 'flex';
+        heroInner.classList.remove('hero-entrance');
+        heroInner.querySelectorAll(':scope > *').forEach(function(c) { c.style.opacity = '1'; });
+        return;
+      }
+
+      // Global function — called by onclick attribute
+      window.breakSeal = function() {
+        if (overlay.style.display === 'none') return;
+        overlay.style.display = 'none';
+        content.style.display = 'block';
+        themeToggle.style.display = 'flex';
+        heroInner.classList.add('animate');
+        // Init reveals
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+        localStorage.setItem('sealBroken', 'true');
+      };
+
+      // Also bind to the button directly (belt and suspenders)
+      var btn = document.getElementById('seal-btn');
+      if (btn) btn.addEventListener('click', window.breakSeal);
+    })();
+  </script>
 </body>
 </html>
