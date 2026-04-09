@@ -1317,34 +1317,6 @@
     });
 
     // ---- Seal - TAP to break ----
-    // NOTE: onclick is set directly on the button HTML element (onclick="breakSeal()")
-    // This is the most reliable cross-device approach, bypassing JS event listener issues
-    const _sealOverlay = document.getElementById('seal-overlay');
-    const _sealBtn = document.getElementById('seal-btn');
-    const _content = document.getElementById('content');
-    const _themeToggle = document.getElementById('theme-toggle');
-
-    window.breakSeal = function() {
-      // Guard: prevent double-fire
-      if (_sealOverlay.style.display === 'none') return;
-      _sealOverlay.style.display = 'none';
-      _content.style.display = 'block';
-      _themeToggle.style.display = 'flex';
-      document.getElementById('hero-inner').classList.add('animate');
-      setTimeout(initReveals, 400);
-      localStorage.setItem('sealBroken', 'true');
-    };
-
-    // Skip seal if previously broken
-    if (localStorage.getItem('sealBroken') === 'true') {
-      _sealOverlay.style.display = 'none';
-      _content.style.display = 'block';
-      _themeToggle.style.display = 'flex';
-      const heroInner = document.getElementById('hero-inner');
-      heroInner.classList.remove('hero-entrance');
-      heroInner.querySelectorAll(':scope > *').forEach(c => c.style.opacity = '1');
-    }
-
     // ---- Scroll Reveal ----
     function initReveals() {
       const observer = new IntersectionObserver((entries) => {
