@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Admin Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #1a1a1a;
+      --card-border: #2a2a2a;
+      --gold: #D4B06A;
+      --gold-dark: #B8924A;
+      --text: #f0f0f0;
+      --text-muted: #888;
+      --danger: #e74c3c;
+      --success: #2ecc71;
+      --pending: #f39c12;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* === LOGIN SCREEN === */
+    .auth-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    }
+
+    .auth-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px 32px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .auth-card h1 {
+      color: var(--gold);
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .auth-card .subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-size: 0.9rem;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 44px;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-dark);
+    }
+
+    .btn-secondary {
+      background: var(--card-border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #3a3a3a;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      width: auto;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn-pending {
+      background: var(--pending);
+      color: #fff;
+    }
+
+    .auth-toggle {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .auth-toggle a {
+      color: var(--gold);
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .auth-toggle a:hover {
+      text-decoration: underline;
+    }
+
+    .error-msg {
+      background: rgba(231, 76, 60, 0.15);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* === APP SHELL === */
+    .app { display: none; }
+
+    .app-header {
+      background: var(--card);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .app-header h2 {
+      color: var(--gold);
+      font-size: 1.2rem;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-email {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* === TABS === */
+    .tabs {
+      display: flex;
+      overflow-x: auto;
+      background: var(--card);
+      border-bottom: 1px solid var(--card-border);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab {
+      padding: 14px 20px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      min-height: 44px;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab:hover { color: var(--text); }
+
+    .tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-content { display: none; padding: 20px; }
+    .tab-content.active { display: block; }
+
+    /* === DASHBOARD === */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .stat-card .label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* === SEARCH & FILTER === */
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .search-bar input {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 16px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 16px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-family: inherit;
+      cursor: pointer;
+      min-height: 44px;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* === DATA LISTS === */
+    .data-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .data-item {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .data-item-header {
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      gap: 12px;
+    }
+
+    .data-item-header:hover {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .data-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .data-item-info h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .data-item-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .data-item-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-attending { background: rgba(46, 204, 113, 0.2); color: var(--success); }
+    .badge-declined { background: rgba(231, 76, 60, 0.2); color: var(--danger); }
+    .badge-pending { background: rgba(243, 156, 18, 0.2); color: var(--pending); }
+    .badge-approved { background: rgba(46, 204, 113, 0.2); color: var(--success); }
+    .badge-rejected { background: rgba(231, 76, 60, 0.2); color: var(--danger); }
+    .badge-confirmed { background: rgba(46, 204, 113, 0.2); color: var(--success); }
+
+    .chevron {
+      color: var(--text-muted);
+      transition: transform 0.2s;
+      font-size: 1.2rem;
+    }
+
+    .data-item.expanded .chevron {
+      transform: rotate(180deg);
+    }
+
+    .data-item-details {
+      display: none;
+      padding: 16px;
+      border-top: 1px solid var(--card-border);
+      background: rgba(0,0,0,0.2);
+    }
+
+    .data-item.expanded .data-item-details {
+      display: block;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--card-border);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .detail-row:last-child { border-bottom: none; }
+
+    .detail-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .detail-value {
+      font-size: 0.9rem;
+      text-align: right;
+    }
+
+    .data-item-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* === PHOTOS GRID === */
+    .photos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .photo-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .photo-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .photo-info {
+      padding: 12px;
+    }
+
+    .photo-info h4 {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .photo-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .photo-actions {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      padding-top: 0;
+    }
+
+    .photo-actions button {
+      flex: 1;
+      min-height: 44px;
+    }
+
+    /* === LIGHTBOX === */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 8px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* === SETTINGS === */
+    .settings-section {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .settings-section h3 {
+      color: var(--gold);
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    /* === LOADING === */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      border: 3px solid var(--card-border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* === TOAST === */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      z-index: 2000;
+      transition: transform 0.3s;
+      max-width: calc(100% - 40px);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success { border-color: var(--success); color: var(--success); }
+    .toast.error { border-color: var(--danger); color: var(--danger); }
+
+    /* === MOBILE TABLE === */
+    @media (max-width: 600px) {
+      .auth-card { padding: 24px 20px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .tab { padding: 12px 14px; font-size: 0.85rem; }
+      .search-bar { flex-direction: column; }
+      .search-bar input { min-width: 100%; }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+  </style>
+</head>
+<body>
+
+  <!-- AUTH SCREEN -->
+  <div class="auth-screen" id="authScreen">
+    <div class="auth-card">
+      <h1>💍 Admin Portal</h1>
+      <p class="subtitle">Wedding Management System</p>
+
+      <div class="error-msg" id="authError"></div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" required minlength="5">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary">Sign In</button>
+      </form>
+
+      <p class="auth-toggle">
+        No account? <a id="showRegister">Register here</a>
+      </p>
+
+      <!-- REGISTER FORM -->
+      <form id="registerForm" style="display:none;">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="registerName" required minlength="2">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="registerEmail" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="registerPassword" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary">Create Account</button>
+      </form>
+
+      <p class="auth-toggle">
+        Have an account? <a id="showLogin">Sign in</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- APP SHELL -->
+  <div class="app" id="app">
+    <header class="app-header">
+      <h2>💍 Admin Portal</h2>
+      <div class="user-menu">
+        <span class="user-email" id="userEmail"></span>
+        <button class="btn btn-secondary btn-small" onclick="app.logout()">Logout</button>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="rsvps">RSVPs</button>
+      <button class="tab" data-tab="photos">Photos</button>
+      <button class="tab" data-tab="messages">Messages</button>
+      <button class="tab" data-tab="settings">Settings</button>
+    </nav>
+
+    <!-- DASHBOARD TAB -->
+    <div class="tab-content active" id="tab-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="number" id="statTotal">0</div>
+          <div class="label">Total RSVPs</div>
+        </div>
+        <div class="stat-card">
+          <div class="number" id="statAttending">0</div>
+          <div class="label">Attending</div>
+        </div>
+        <div class="stat-card">
+          <div class="number" id="statDeclined">0</div>
+          <div class="label">Declined</div>
+        </div>
+        <div class="stat-card">
+          <div class="number" id="statPhotos">0</div>
+          <div class="label">Photos</div>
+        </div>
+        <div class="stat-card">
+          <div class="number" id="statMessages">0</div>
+          <div class="label">Messages</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RSVPS TAB -->
+    <div class="tab-content" id="tab-rsvps">
+      <div class="search-bar">
+        <input type="text" id="rsvpSearch" placeholder="Search RSVPs...">
+        <div class="filter-group">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="pending">Pending</button>
+          <button class="filter-btn" data-filter="attending">Attending</button>
+          <button class="filter-btn" data-filter="declined">Declined</button>
+        </div>
+      </div>
+      <div class="data-list" id="rsvpList"></div>
+    </div>
+
+    <!-- PHOTOS TAB -->
+    <div class="tab-content" id="tab-photos">
+      <div class="photos-grid" id="photosGrid"></div>
+    </div>
+
+    <!-- MESSAGES TAB -->
+    <div class="tab-content" id="tab-messages">
+      <div class="data-list" id="messagesList"></div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div class="tab-content" id="tab-settings">
+      <div class="settings-section">
+        <h3>Profile</h3>
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" id="settingsName" style="max-width:300px;">
+        </div>
+        <button class="btn btn-primary" style="max-width:200px;" onclick="app.updateName()">Update Name</button>
+      </div>
+
+      <div class="settings-section">
+        <h3>Security</h3>
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" id="settingsPassword" style="max-width:300px;" minlength="6">
+        </div>
+        <button class="btn btn-primary" style="max-width:200px;" onclick="app.updatePassword()">Change Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="app.closeLightbox()">×</button>
+    <img id="lightboxImg" src="" alt="Photo">
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- FIREBASE SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      updatePassword,
+      updateProfile
+    } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    import {
+      getFirestore,
+      collection,
+      doc,
+      getDocs,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp
+    } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    // ============================================================
+    // FIREBASE CONFIG — Replace with your project config
+    // ============================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g",
+      authDomain: "it-starts-here-wedding.firebaseapp.com",
+      projectId: "it-starts-here-wedding",
+      messagingSenderId: "36824586549",
+      appId: "1:36824586549:web:711579dbdca5a73ddf147c"
+    };
+
+    // Initialize Firebase
+    const app_fb = initializeApp(firebaseConfig);
+    const auth = getAuth(app_fb);
+    const db = getFirestore(app_fb);
+
+    // ALLOWED ADMIN EMAILS
+    const ALLOWED_EMAILS = [
+      'lakshminamburi@yahoo.com',
+      'vnamboori@yahoo.com',
+      'sparx.sandeep@gmail.com',
+      'chamanthiaki5@gmail.com'
+    ];
+
+    // ============================================================
+    // APP STATE
+    // ============================================================
+    const state = {
+      rsvps: [],
+      photos: [],
+      messages: [],
+      rsvpFilter: 'all',
+      rsvpSearch: ''
+    };
+
+    // ============================================================
+    // TOAST HELPER
+    // ============================================================
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => { toast.className = 'toast'; }, 3000);
+    }
+
+    // ============================================================
+    // AUTH
+    // ============================================================
+    const authScreen = document.getElementById('authScreen');
+    const appShell = document.getElementById('app');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const authError = document.getElementById('authError');
+
+    function showError(msg) {
+      authError.textContent = msg;
+      authError.style.display = 'block';
+    }
+
+    function hideError() {
+      authError.style.display = 'none';
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        loginForm.reset();
+      } catch (err) {
+        showError(err.message || 'Login failed');
+      }
+    });
+
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+      const name = document.getElementById('registerName').value;
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+
+      if (!ALLOWED_EMAILS.includes(email.toLowerCase())) {
+        showError('This email is not authorized to create an account.');
+        return;
+      }
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName: name });
+        // Store admin in Firestore
+        await addDoc(collection(db, 'admins'), {
+          email: email.toLowerCase(),
+          name,
+          createdAt: serverTimestamp()
+        });
+        registerForm.reset();
+      } catch (err) {
+        showError(err.message || 'Registration failed');
+      }
+    });
+
+    document.getElementById('showRegister').addEventListener('click', () => {
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+      hideError();
+    });
+
+    document.getElementById('showLogin').addEventListener('click', () => {
+      registerForm.style.display = 'none';
+      loginForm.style.display = 'block';
+      hideError();
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        authScreen.style.display = 'none';
+        appShell.style.display = 'block';
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('settingsName').value = user.displayName || '';
+        app.startRealtime();
+      } else {
+        authScreen.style.display = 'flex';
+        appShell.style.display = 'none';
+        app.stopRealtime();
+      }
+    });
+
+    // ============================================================
+    // TABS
+    // ============================================================
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+      });
+    });
+
+    // ============================================================
+    // RENDER HELPERS
+    // ============================================================
+    function formatDate(ts) {
+      if (!ts) return '—';
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function renderRsvpItem(rsvp) {
+      const badgeClass = {
+        attending: 'badge-attending',
+        declined: 'badge-declined',
+        pending: 'badge-pending'
+      }[rsvp.status] || 'badge-pending';
+
+      return `
+        <div class="data-item" data-id="${rsvp.id}">
+          <div class="data-item-header" onclick="app.toggleItem('${rsvp.id}')">
+            <div class="data-item-info">
+              <h3>${rsvp.name || '—'}</h3>
+              <p>${rsvp.email || '—'} · ${rsvp.attendance || 'Pending response'}</p>
+            </div>
+            <div class="data-item-meta">
+              <span class="badge ${rsvp.status === 'confirmed' ? 'badge-confirmed' : badgeClass}">${rsvp.attendance || 'Pending'}</span>
+              <span class="chevron">▼</span>
+            </div>
+          </div>
+          <div class="data-item-details">
+            <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${rsvp.email || '—'}</span></div>
+            <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value">${rsvp.phone || '—'}</span></div>
+            <div class="detail-row"><span class="detail-label">Attendance</span><span class="detail-value">${rsvp.attendance || '—'}</span></div>
+            <div class="detail-row"><span class="detail-label">Dietary</span><span class="detail-value">${rsvp.dietary || 'None specified'}</span></div>
+            <div class="detail-row"><span class="detail-label">Plus Ones</span><span class="detail-value">${rsvp.plusOnes || 0}</span></div>
+            <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value">${rsvp.message || '—'}</span></div>
+            <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">${formatDate(rsvp.createdAt)}</span></div>
+            <div class="data-item-actions">
+              ${rsvp.status !== 'confirmed' ? `<button class="btn btn-success btn-small" onclick="app.confirmRsvp('${rsvp.id}')">✓ Confirm</button>` : ''}
+              <button class="btn btn-danger btn-small" onclick="app.deleteRsvp('${rsvp.id}')">🗑 Delete</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPhotoItem(photo) {
+      const statusBadge = photo.approved === true ? 'badge-approved' : photo.approved === false ? 'badge-rejected' : 'badge-pending';
+      const statusText = photo.approved === true ? 'Approved' : photo.approved === false ? 'Rejected' : 'Pending';
+
+      return `
+        <div class="photo-card" data-id="${photo.id}">
+          <img src="${photo.imageData}" alt="Wedding photo" loading="lazy" onclick="app.openLightbox('${photo.imageData}')">
+          <div class="photo-info">
+            <h4>${photo.uploaderName || 'Anonymous'}</h4>
+            <p>${photo.caption || 'No caption'}</p>
+            <p style="font-size:0.75rem;margin-top:4px;"><span class="badge ${statusBadge}">${statusText}</span></p>
+          </div>
+          <div class="photo-actions">
+            <button class="btn btn-success btn-small" onclick="app.approvePhoto('${photo.id}')" ${photo.approved === true ? 'disabled' : ''}>✓</button>
+            <button class="btn btn-danger btn-small" onclick="app.rejectPhoto('${photo.id}')" ${photo.approved === false ? 'disabled' : ''}>✗</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMessageItem(msg) {
+      return `
+        <div class="data-item" data-id="${msg.id}">
+          <div class="data-item-header" onclick="app.toggleItem('${msg.id}')">
+            <div class="data-item-info">
+              <h3>${msg.name || '—'}</h3>
+              <p>${msg.email || '—'}</p>
+            </div>
+            <div class="data-item-meta">
+              <span class="chevron">▼</span>
+            </div>
+          </div>
+          <div class="data-item-details">
+            <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${msg.email || '—'}</span></div>
+            <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value">${msg.message || '—'}</span></div>
+            <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">${formatDate(msg.createdAt)}</span></div>
+            <div class="data-item-actions">
+              <button class="btn btn-danger btn-small" onclick="app.deleteMessage('${msg.id}')">🗑 Delete</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function filterRsvps() {
+      const filter = state.rsvpFilter;
+      const search = state.rsvpSearch.toLowerCase();
+      return state.rsvps.filter(r => {
+        const matchFilter = filter === 'all' || r.attendance === filter;
+        const matchSearch = !search ||
+          (r.name && r.name.toLowerCase().includes(search)) ||
+          (r.email && r.email.toLowerCase().includes(search));
+        return matchFilter && matchSearch;
+      });
+    }
+
+    // ============================================================
+    // APP OBJECT
+    // ============================================================
+    const app = {
+      unsubscribes: [],
+
+      startRealtime() {
+        // RSVPs
+        const unsubRsvps = onSnapshot(collection(db, 'rsvps'), (snap) => {
+          state.rsvps = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          this.renderRsvps();
+          this.updateStats();
+        });
+
+        // Photos
+        const unsubPhotos = onSnapshot(collection(db, 'photos'), (snap) => {
+          state.photos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          this.renderPhotos();
+          this.updateStats();
+        });
+
+        // Messages
+        const unsubMessages = onSnapshot(collection(db, 'messages'), (snap) => {
+          state.messages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          this.renderMessages();
+          this.updateStats();
+        });
+
+        this.unsubscribes = [unsubRsvps, unsubPhotos, unsubMessages];
+      },
+
+      stopRealtime() {
+        this.unsubscribes.forEach(u => u());
+        this.unsubscribes = [];
+      },
+
+      updateStats() {
+        const rsvps = state.rsvps;
+        const attending = rsvps.filter(r => r.attendance === 'attending').length;
+        const declined = rsvps.filter(r => r.attendance === 'declined').length;
+        const pendingPhotos = state.photos.filter(p => p.approved === undefined || p.approved === null).length;
+
+        document.getElementById('statTotal').textContent = rsvps.length;
+        document.getElementById('statAttending').textContent = attending;
+        document.getElementById('statDeclined').textContent = declined;
+        document.getElementById('statPhotos').textContent = pendingPhotos;
+        document.getElementById('statMessages').textContent = state.messages.length;
+      },
+
+      renderRsvps() {
+        const filtered = filterRsvps();
+        const list = document.getElementById('rsvpList');
+        list.innerHTML = filtered.length
+          ? filtered.map(r => renderRsvpItem(r)).join('')
+          : '<div class="loading">No RSVPs found</div>';
+      },
+
+      renderPhotos() {
+        const grid = document.getElementById('photosGrid');
+        grid.innerHTML = state.photos.length
+          ? state.photos.map(p => renderPhotoItem(p)).join('')
+          : '<div class="loading">No photos submitted yet</div>';
+      },
+
+      renderMessages() {
+        const list = document.getElementById('messagesList');
+        list.innerHTML = state.messages.length
+          ? state.messages.map(m => renderMessageItem(m)).join('')
+          : '<div class="loading">No messages yet</div>';
+      },
+
+      toggleItem(id) {
+        const el = document.querySelector(`.data-item[data-id="${id}"]`);
+        if (el) el.classList.toggle('expanded');
+      },
+
+      async confirmRsvp(id) {
+        try {
+          await updateDoc(doc(db, 'rsvps', id), { status: 'confirmed', attendance: 'attending' });
+          showToast('RSVP confirmed!');
+        } catch (err) {
+          showToast('Failed: ' + err.message, 'error');
+        }
+      },
+
+      async deleteRsvp(id) {
+        if (!confirm('Delete this RSVP?')) return;
+        try {
+          await deleteDoc(doc(db, 'rsvps', id));
+          showToast('RSVP deleted');
+        } catch (err) {
+          showToast('Failed: ' + err.message, 'error');
+        }
+      },
+
+      async approvePhoto(id) {
+        try {
+          await updateDoc(doc(db, 'photos', id), { approved: true });
+          showToast('Photo approved!');
+        } catch (err) {
+          showToast('Failed: ' + err.message, 'error');
+        }
+      },
+
+      async rejectPhoto(id) {
+        try {
+          await updateDoc(doc(db, 'photos', id), { approved: false });
+          showToast('Photo rejected');
+        } catch (err) {
+          showToast('Failed: ' + err.message, 'error');
+        }
+      },
+
+      async deleteMessage(id) {
+        if (!confirm('Delete this message?')) return;
+        try {
+          await deleteDoc(doc(db, 'messages', id));
+          showToast('Message deleted');
+        } catch (err) {
+          showToast('Failed: ' + err.message, 'error');
+        }
+      },
+
+      openLightbox(url) {
+        document.getElementById('lightboxImg').src = url;
+        document.getElementById('lightbox').classList.add('active');
+      },
+
+      closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+      },
+
+      async updateName() {
+        const name = document.getElementById('settingsName').value.trim();
+        if (!name) return showToast('Name cannot be empty', 'error');
+        try {
+          await updateProfile(auth.currentUser, { displayName: name });
+          showToast('Name updated!');
+        } catch (err) {
+          showToast('Failed: ' + err.message, 'error');
+        }
+      },
+
+      async updatePassword() {
+        const pwd = document.getElementById('settingsPassword').value;
+        if (!pwd || pwd.length < 6) return showToast('Password must be at least 6 characters', 'error');
+        try {
+          await updatePassword(auth.currentUser, pwd);
+          document.getElementById('settingsPassword').value = '';
+          showToast('Password updated!');
+        } catch (err) {
+          showToast('Failed: ' + err.message, 'error');
+        }
+      },
+
+      async logout() {
+        await signOut(auth);
+      }
+    };
+
+    // ============================================================
+    // SEARCH & FILTER
+    // ============================================================
+    document.getElementById('rsvpSearch').addEventListener('input', (e) => {
+      state.rsvpSearch = e.target.value;
+      app.renderRsvps();
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.rsvpFilter = btn.dataset.filter;
+        app.renderRsvps();
+      });
+    });
+
+    // Lightbox close on click outside
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('lightbox')) {
+        app.closeLightbox();
+      }
+    });
+
+    // Keyboard close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') app.closeLightbox();
+    });
+
+    // Make app globally accessible
+    window.app = app;
+  </script>
+</body>
+</html>
