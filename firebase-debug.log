@@ -1,0 +1,52 @@
+[debug] [2026-04-09T19:55:42.006Z] ----------------------------------------------------------------------
+[debug] [2026-04-09T19:55:42.007Z] Command:       /opt/homebrew/Cellar/node/25.6.1/bin/node /Users/rentamac/local/node-v22.14.0-darwin-arm64/bin/firebase auth:import --project it-starts-here-wedding --token ya29.c.c0AZ4bNpYt8oIeB1qgkTqryDeE8h4LfLgBHde2dmU-stOgoIU0L2ToKT0Sk8n1l_qWa58ebf3RAh-jVimsCy5tYvdTrpORHsN4oAAcGO9ro6r3s_38d4keHbIwfJRRQTQRKOUixYKQ8Jken0Wm4pe_mgHnJMirbjTdDcsdvZvVM234O5TeNGMh0ZenPtcX9-KXoo9l0cGvj8yNfm335l7VPpqR69RJ09NQpPeAQPogB0cZbO2nCwiF63b7nNvHLXDwnG9QOkX4wk7v_ylZv8n0qUaETndpRje6vUuIg6iGvwnIKecr-JGDENALcolwoj6CmtLZ7dKK2xQIy12cEVgFZ1EshlrYOL5EVtMEShip92a1yqMP1GAW9SgctxkB9NvH5sU_EwL399P4cvsWVFB09QYewZp81bnnt5B_7v7irjl8k6y6clpFJsciW7cYsYyubym4Xw4BBdJIJ9VOa18bofQdgz9U1MvMo-WsbRSXyy93ebv-R7tVtoMOQxj2_ttY87ROZi5-6t12-ukl9XZ4pv0O0a2v3m9mXkBI69qzRejsXcX0XdblVFk-X90gZh-WQs9InIjVnXalbbfadJsu6abQaJzczqJM9Jvq4vX8sSeo4wVSs-JnoVX4Xk0w90tWZqBu_UWyg2aFrftwFmWgifo-BpSMihfYy8l6VbIwRF62WzmZ9sYhrO2u2pVdasnRvcMyS8q_Z7qOmzt9BqZQ_mcxJ56pyqtlMfzUk87MuySp-Q3xaQcv2QU85XiQflq2X71F2u86nq9eeysZpxJ3VVhjRdpImip3qylle4vbVaQhFdugz7a3dyOFweSqlV4_Iy_lRc8Bb6gZ2VX_jF46XQ7UaiZf9jVY8lJoIwm_wZR1ss59283aUMsp8-kz0Wa-jMu3YQuwakgjjj2xu0FXMfQo9WswkcuFz8mMMbIF9iWjdteh-aX9a_znqF5jomBh6mjx5il25Ogwpr7rpfzqdWQ4diMmy_U_d94rRMM4rbZFi80vnwO-Wii
+[debug] [2026-04-09T19:55:42.008Z] CLI Version:   15.11.0
+[debug] [2026-04-09T19:55:42.008Z] Platform:      darwin
+[debug] [2026-04-09T19:55:42.008Z] Node Version:  v25.6.1
+[debug] [2026-04-09T19:55:42.008Z] Time:          Thu Apr 09 2026 12:55:42 GMT-0700 (Pacific Daylight Time)
+[debug] [2026-04-09T19:55:42.008Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-09T19:55:42.075Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-09T19:55:42.076Z] > authorizing via --token option
+[warn] ⚠  Authenticating with `--token` is deprecated and will be removed in a future major version of `firebase-tools`. Instead, use a service account key with `GOOGLE_APPLICATION_CREDENTIALS`: https://cloud.google.com/docs/authentication/getting-started 
+[debug] [2026-04-09T19:55:42.076Z] [iam] checking project it-starts-here-wedding for permissions ["firebase.projects.get","firebaseauth.users.create","firebaseauth.users.update"]
+[debug] [2026-04-09T19:55:42.076Z] No OAuth tokens found
+[debug] [2026-04-09T19:55:42.076Z] No OAuth tokens found
+[debug] [2026-04-09T19:55:42.076Z] > refreshing access token with scopes: []
+[debug] [2026-04-09T19:55:42.078Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-04-09T19:55:42.078Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-09T19:55:42.275Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-04-09T19:55:42.276Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-09T19:55:42.276Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/it-starts-here-wedding:testIamPermissions [none]
+[debug] [2026-04-09T19:55:42.276Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/it-starts-here-wedding:testIamPermissions  x-goog-user-project=it-starts-here-wedding
+[debug] [2026-04-09T19:55:42.276Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/it-starts-here-wedding:testIamPermissions {"permissions":["firebase.projects.get","firebaseauth.users.create","firebaseauth.users.update"]}
+[debug] [2026-04-09T19:55:43.299Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/it-starts-here-wedding:testIamPermissions 200
+[debug] [2026-04-09T19:55:43.299Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/it-starts-here-wedding:testIamPermissions {"permissions":["firebase.projects.get","firebaseauth.users.create","firebaseauth.users.update"]}
+[warn] ⚠  No hash algorithm specified. Password users cannot be imported. 
+[debug] [2026-04-09T19:55:43.302Z] TypeError: Cannot read properties of undefined (reading 'endsWith')
+    at Command.actionFn (/Users/rentamac/local/node-v22.14.0-darwin-arm64/lib/node_modules/firebase-tools/lib/commands/auth-import.js:37:19)
+    at /Users/rentamac/local/node-v22.14.0-darwin-arm64/lib/node_modules/firebase-tools/lib/command.js:266:25
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-04-09T19:55:44.064Z] ----------------------------------------------------------------------
+[debug] [2026-04-09T19:55:44.065Z] Command:       /opt/homebrew/Cellar/node/25.6.1/bin/node /Users/rentamac/local/node-v22.14.0-darwin-arm64/bin/firebase --project it-starts-here-wedding --token ya29.c.c0AZ4bNpYt8oIeB1qgkTqryDeE8h4LfLgBHde2dmU-stOgoIU0L2ToKT0Sk8n1l_qWa58ebf3RAh-jVimsCy5tYvdTrpORHsN4oAAcGO9ro6r3s_38d4keHbIwfJRRQTQRKOUixYKQ8Jken0Wm4pe_mgHnJMirbjTdDcsdvZvVM234O5TeNGMh0ZenPtcX9-KXoo9l0cGvj8yNfm335l7VPpqR69RJ09NQpPeAQPogB0cZbO2nCwiF63b7nNvHLXDwnG9QOkX4wk7v_ylZv8n0qUaETndpRje6vUuIg6iGvwnIKecr-JGDENALcolwoj6CmtLZ7dKK2xQIy12cEVgFZ1EshlrYOL5EVtMEShip92a1yqMP1GAW9SgctxkB9NvH5sU_EwL399P4cvsWVFB09QYewZp81bnnt5B_7v7irjl8k6y6clpFJsciW7cYsYyubym4Xw4BBdJIJ9VOa18bofQdgz9U1MvMo-WsbRSXyy93ebv-R7tVtoMOQxj2_ttY87ROZi5-6t12-ukl9XZ4pv0O0a2v3m9mXkBI69qzRejsXcX0XdblVFk-X90gZh-WQs9InIjVnXalbbfadJsu6abQaJzczqJM9Jvq4vX8sSeo4wVSs-JnoVX4Xk0w90tWZqBu_UWyg2aFrftwFmWgifo-BpSMihfYy8l6VbIwRF62WzmZ9sYhrO2u2pVdasnRvcMyS8q_Z7qOmzt9BqZQ_mcxJ56pyqtlMfzUk87MuySp-Q3xaQcv2QU85XiQflq2X71F2u86nq9eeysZpxJ3VVhjRdpImip3qylle4vbVaQhFdugz7a3dyOFweSqlV4_Iy_lRc8Bb6gZ2VX_jF46XQ7UaiZf9jVY8lJoIwm_wZR1ss59283aUMsp8-kz0Wa-jMu3YQuwakgjjj2xu0FXMfQo9WswkcuFz8mMMbIF9iWjdteh-aX9a_znqF5jomBh6mjx5il25Ogwpr7rpfzqdWQ4diMmy_U_d94rRMM4rbZFi80vnwO-Wii
+[debug] [2026-04-09T19:55:44.065Z] CLI Version:   15.11.0
+[debug] [2026-04-09T19:55:44.065Z] Platform:      darwin
+[debug] [2026-04-09T19:55:44.065Z] Node Version:  v25.6.1
+[debug] [2026-04-09T19:55:44.065Z] Time:          Thu Apr 09 2026 12:55:44 GMT-0700 (Pacific Daylight Time)
+[debug] [2026-04-09T19:55:44.065Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-09T19:55:44.066Z] TypeError: Cannot read properties of undefined (reading '0')
+    at Command.<anonymous> (/Users/rentamac/local/node-v22.14.0-darwin-arm64/lib/node_modules/firebase-tools/lib/index.js:78:21)
+    at Command.listener [as _actionHandler] (/Users/rentamac/local/node-v22.14.0-darwin-arm64/lib/node_modules/firebase-tools/node_modules/commander/index.js:413:31)
+    at Command._parseCommand (/Users/rentamac/local/node-v22.14.0-darwin-arm64/lib/node_modules/firebase-tools/node_modules/commander/index.js:914:14)
+    at Command.parse (/Users/rentamac/local/node-v22.14.0-darwin-arm64/lib/node_modules/firebase-tools/node_modules/commander/index.js:717:10)
+    at cli (/Users/rentamac/local/node-v22.14.0-darwin-arm64/lib/node_modules/firebase-tools/lib/bin/cli.js:123:26)
+    at Object.<anonymous> (/Users/rentamac/local/node-v22.14.0-darwin-arm64/lib/node_modules/firebase-tools/lib/bin/firebase.js:17:5)
+    at Module._compile (node:internal/modules/cjs/loader:1811:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1942:10)
+    at Module.load (node:internal/modules/cjs/loader:1532:32)
+    at Module._load (node:internal/modules/cjs/loader:1334:12)
+[error] 
+[error] Error: An unexpected error has occurred.
