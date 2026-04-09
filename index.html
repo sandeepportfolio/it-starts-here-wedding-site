@@ -1323,6 +1323,9 @@
     const themeToggleBtn = document.getElementById('theme-toggle');
 
     function breakSeal() {
+      // Guard: prevent double-fire from touchstart + click on iOS
+      if (sealOverlay.style.display === 'none') return;
+
       // Spawn sparkle particles
       const container = document.getElementById('seal-container');
       const rect = container.getBoundingClientRect();
@@ -1355,12 +1358,9 @@
     }
 
     // Desktop click
-    // Touch-first for iOS Safari (it fires touchstart before generating a click)
-    sealBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      breakSeal();
-    }, { passive: false });
-    // Also handle regular click for desktop
+    // iOS Safari generates a synthetic click ~300ms after touchend
+    // Both touchstart and click will fire — breakSeal() is idempotent so calling twice is fine
+    sealBtn.addEventListener('touchstart', () => { breakSeal(); }, { passive: true });
     sealBtn.addEventListener('click', breakSeal);
     // Close overlay on backdrop tap (accessibility)
     sealOverlay.addEventListener('touchstart', (e) => {
