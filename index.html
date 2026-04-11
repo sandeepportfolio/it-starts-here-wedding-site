@@ -1260,13 +1260,6 @@
     </section>
 
 
-    <!-- ===== SEATING CHART ===== -->
-    <section id="seating" class="py-20 px-6">
-      <div class="max-w-lg mx-auto">
-        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Find Your Place</p><h2 class="section-title text-4xl sm:text-5xl">Seating Chart</h2><p class="text-sm mt-3" style="color:var(--text-muted);">Enter your name to find your table</p><div class="section-divider mt-4"></div></div>
-        <div class="card p-6 reveal"><div class="flex gap-2"><input type="text" class="form-input flex-1" placeholder="Your name..." id="seating-input"><button class="btn-gold" onclick="searchSeating()">Find</button></div><p class="text-xs text-center mt-4" style="color:var(--text-light);" id="seating-result">Seating assignments will appear here closer to the wedding day.</p></div>
-      </div>
-    </section>
 
     <!-- ===== FOOTER ===== -->
     <section class="py-20 px-6 relative overflow-hidden" style="background:var(--bg-alt);">
@@ -1579,11 +1572,6 @@
     }
 
 
-    // ---- Seating ----
-    function searchSeating() {
-      const name = document.getElementById('seating-input').value.trim();
-      document.getElementById('seating-result').textContent = name ? 'Seating assignments will be available closer to the wedding day. Check back soon!' : 'Please enter your name.';
-    }
 
     // ---- Hotel Filter ----
     function filterHotels(price, btn) {
