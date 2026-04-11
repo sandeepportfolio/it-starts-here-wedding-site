@@ -176,11 +176,22 @@
     #lightbox img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 8px; }
 
     /* RSVP */
-    .rsvp-step { display: none; }
-    .rsvp-step.active { display: block; }
-    .rsvp-option { cursor: pointer; padding: 20px; border-radius: 14px; border: 2px solid var(--border); transition: all 0.2s; text-align: left; }
-    .rsvp-option:hover { border-color: var(--gold); background: var(--gold-glow); }
-    .rsvp-option.selected { border-color: var(--gold); background: var(--gold-glow); }
+    .rsvp-step { display: none; opacity: 0; transform: translateY(12px); }
+    .rsvp-step.active { display: block; animation: rsvpFadeIn 0.4s ease forwards; }
+    @keyframes rsvpFadeIn { to { opacity: 1; transform: translateY(0); } }
+    .rsvp-option { cursor: pointer; padding: 18px 20px; border-radius: 12px; border: 1.5px solid var(--border); transition: all 0.25s cubic-bezier(.4,0,.2,1); text-align: left; position: relative; overflow: hidden; }
+    .rsvp-option::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(184,146,74,0.08), rgba(212,176,106,0.04)); opacity: 0; transition: opacity 0.25s; }
+    .rsvp-option:hover { border-color: var(--gold); transform: translateX(4px); }
+    .rsvp-option:hover::before { opacity: 1; }
+    .rsvp-option.selected { border-color: var(--gold); background: var(--gold-glow); box-shadow: 0 0 0 1px var(--gold), 0 4px 16px rgba(184,146,74,0.15); }
+    .rsvp-option.selected::before { opacity: 1; }
+    .rsvp-progress { display: flex; gap: 6px; align-items: center; }
+    .rsvp-progress .bar { height: 3px; border-radius: 3px; flex: 1; background: var(--border); transition: background 0.4s, box-shadow 0.4s; }
+    .rsvp-progress .bar.active { background: linear-gradient(90deg, #B8924A, #D4B06A); box-shadow: 0 0 8px rgba(184,146,74,0.3); }
+    .rsvp-check { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border); transition: all 0.25s; flex-shrink: 0; }
+    .rsvp-option.selected .rsvp-check { background: linear-gradient(135deg, #B8924A, #D4B06A); border-color: transparent; }
+    .rsvp-option.selected .rsvp-check svg { opacity: 1; }
+    .rsvp-check svg { width: 12px; height: 12px; opacity: 0; transition: opacity 0.2s; }
 
     /* Form */
     .form-input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 14px; transition: border-color 0.2s; outline: none; }
@@ -485,14 +496,14 @@
 
     <!-- ===== STICKY NAV ===== -->
     <nav id="sticky-nav" class="sticky top-0 z-[100] glass py-3 px-4" style="border-bottom: 1px solid var(--border);">
-      <div class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+      <div class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none; padding-right: 20px;">
         <a href="#rsvp" class="nav-link">RSVP</a>
         <a href="#story" class="nav-link">Our Story</a>
         <a href="#events" class="nav-link">Events</a>
         <a href="#details" class="nav-link">Details</a>
         <a href="#gallery" class="nav-link">Gallery</a>
         <a href="#hotels" class="nav-link">Stay</a>
-        <a href="#livestream" class="nav-link">Live</a>
+        <a href="#livestream" class="nav-link" style="flex-shrink:0;">Live</a>
       </div>
     </nav>
 
@@ -507,48 +518,71 @@
           <p class="text-sm mt-3" style="color: var(--text-muted);">Kindly respond by April 20th, 2026</p>
           <div class="section-divider mt-4"></div>
         </div>
-        <div class="card p-8 reveal" id="rsvp-form">
-          <div class="flex items-center justify-between mb-6">
-            <div class="text-xs" style="color: var(--text-muted);" id="rsvp-step-label">Step 1 of 3</div>
-            <div class="flex gap-1">
-              <div class="w-8 h-1 rounded-full" style="background: var(--gold);" id="rsvp-bar-1"></div>
-              <div class="w-8 h-1 rounded-full" style="background: var(--border);" id="rsvp-bar-2"></div>
-              <div class="w-8 h-1 rounded-full" style="background: var(--border);" id="rsvp-bar-3"></div>
+        <div class="card reveal" id="rsvp-form" style="padding:32px; border-radius:20px;">
+          <!-- Progress -->
+          <div class="flex items-center justify-between mb-8">
+            <div class="text-xs font-medium" style="color: var(--text-muted); letter-spacing:0.08em; text-transform:uppercase;" id="rsvp-step-label">Step 1 of 3</div>
+            <div class="rsvp-progress" style="width:100px;">
+              <div class="bar active" id="rsvp-bar-1"></div>
+              <div class="bar" id="rsvp-bar-2"></div>
+              <div class="bar" id="rsvp-bar-3"></div>
             </div>
           </div>
+          <!-- Step 1: Attendance -->
           <div class="rsvp-step active" id="rsvp-step-1">
-            <p class="text-xs" style="color: var(--text-muted);">The Question</p>
-            <h3 class="font-heading text-2xl font-medium mb-6">Will you be joining us?</h3>
+            <h3 class="font-heading text-2xl font-medium mb-1">Will you be joining us?</h3>
+            <p class="text-xs mb-6" style="color: var(--text-muted);">Select your response below</p>
             <div class="space-y-3">
-              <div class="rsvp-option" onclick="selectRsvp(this,'attending')"><div class="flex items-center gap-3"><span style="color:var(--gold);">&#10022;</span><div><p class="text-sm font-medium">Joyfully Accept</p><p class="text-xs" style="color:var(--text-muted);">I'll be there in spirit &amp; soul</p></div></div></div>
-              <div class="rsvp-option" onclick="selectRsvp(this,'pending')"><div class="flex items-center gap-3"><span style="color:var(--gold);">&#9672;</span><div><p class="text-sm font-medium">Tentatively Yes</p><p class="text-xs" style="color:var(--text-muted);">I'll confirm closer to the date</p></div></div></div>
-              <div class="rsvp-option" onclick="selectRsvp(this,'declined')"><div class="flex items-center gap-3"><span style="color:var(--text-muted);">&#9671;</span><div><p class="text-sm font-medium">Regretfully Decline</p><p class="text-xs" style="color:var(--text-muted);">Sending love from afar</p></div></div></div>
+              <div class="rsvp-option" onclick="selectRsvp(this,'attending')">
+                <div class="flex items-center gap-4">
+                  <div class="rsvp-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div><p class="text-sm font-medium" style="line-height:1.4;">Joyfully Accept</p><p class="text-xs" style="color:var(--text-muted); margin-top:2px;">We'll be there to celebrate with you</p></div>
+                </div>
+              </div>
+              <div class="rsvp-option" onclick="selectRsvp(this,'pending')">
+                <div class="flex items-center gap-4">
+                  <div class="rsvp-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div><p class="text-sm font-medium" style="line-height:1.4;">Tentatively Yes</p><p class="text-xs" style="color:var(--text-muted); margin-top:2px;">Will confirm closer to the date</p></div>
+                </div>
+              </div>
+              <div class="rsvp-option" onclick="selectRsvp(this,'declined')">
+                <div class="flex items-center gap-4">
+                  <div class="rsvp-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div><p class="text-sm font-medium" style="line-height:1.4;">Regretfully Decline</p><p class="text-xs" style="color:var(--text-muted); margin-top:2px;">Sending love from afar</p></div>
+                </div>
+              </div>
             </div>
           </div>
+          <!-- Step 2: Details -->
           <div class="rsvp-step" id="rsvp-step-2">
-            <p class="text-xs" style="color:var(--text-muted);">Your Details</p>
-            <h3 class="font-heading text-2xl font-medium mb-6">Tell us about you</h3>
+            <h3 class="font-heading text-2xl font-medium mb-1">Your Details</h3>
+            <p class="text-xs mb-6" style="color:var(--text-muted);">Let us know who's coming</p>
             <div class="space-y-4">
-              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Full Name</label><input type="text" class="form-input" placeholder="Your name" id="rsvp-name"></div>
-              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Email</label><input type="email" class="form-input" placeholder="your@email.com" id="rsvp-email"></div>
-              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Phone Number</label><input type="tel" class="form-input" placeholder="Your number" id="rsvp-phone"></div>
-              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Plus Ones</label><input type="number" class="form-input" placeholder="0" min="0" max="10" id="rsvp-plus-ones" value="0"></div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Full Name *</label><input type="text" class="form-input" placeholder="Your name" id="rsvp-name"></div>
+                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Phone</label><input type="tel" class="form-input" placeholder="Your number" id="rsvp-phone"></div>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Email *</label><input type="email" class="form-input" placeholder="your@email.com" id="rsvp-email"></div>
+                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Plus Ones</label><input type="number" class="form-input" placeholder="0" min="0" max="10" id="rsvp-plus-ones" value="0"></div>
+              </div>
               <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Dietary Restrictions</label><input type="text" class="form-input" placeholder="Any allergies or preferences" id="rsvp-dietary"></div>
-              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Message for the Couple</label><textarea class="form-input" rows="3" placeholder="Your wishes..." id="rsvp-message" style="resize:none;"></textarea></div>
-              <div class="flex gap-3 pt-2">
-                <button onclick="goRsvpStep(1)" class="btn-outline flex-1" id="rsvp-back-btn">Back</button>
-                <button onclick="submitRsvpForm()" class="btn-gold flex-1 justify-center" id="rsvp-submit-btn">Submit</button>
+              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Message for the Couple</label><textarea class="form-input" rows="2" placeholder="Your wishes..." id="rsvp-message" style="resize:none;"></textarea></div>
+              <div class="flex gap-3 pt-3">
+                <button onclick="goRsvpStep(1)" class="btn-outline flex-1" id="rsvp-back-btn" style="border-radius:12px;">&#8592; Back</button>
+                <button onclick="submitRsvpForm()" class="btn-gold flex-1 justify-center" id="rsvp-submit-btn" style="border-radius:12px;">Submit RSVP</button>
               </div>
             </div>
             <div id="rsvp-error-msg" class="text-red-500 text-xs mt-3 text-center hidden"></div>
           </div>
+          <!-- Step 3: Confirmation -->
           <div class="rsvp-step" id="rsvp-step-3">
             <div class="text-center py-8">
-              <div class="text-5xl mb-4">&#10024;</div>
+              <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#B8924A,#D4B06A);display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 4px 24px rgba(184,146,74,0.3);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               <h3 class="font-heading text-3xl font-medium mb-2" id="rsvp-confirm-title">Thank You!</h3>
-              <p class="text-sm" style="color:var(--text-muted);" id="rsvp-confirm-msg">Your response has been recorded. We can't wait to celebrate with you!</p>
+              <p class="text-sm" style="color:var(--text-muted); max-width:280px; margin:0 auto;" id="rsvp-confirm-msg">Your response has been recorded. We can't wait to celebrate with you!</p>
               <div class="section-divider mt-6 mb-6"></div>
-              <p class="text-xs" style="color:var(--text-light);">Questions? chamanthiaki5@gmail.com</p>
+              <p class="text-xs" style="color:var(--text-light);">Questions? vnamboori@yahoo.com</p>
             </div>
           </div>
         </div>
