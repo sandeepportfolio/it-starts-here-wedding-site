@@ -1019,8 +1019,7 @@
     setTimeout(() => { toast.className = 'toast'; }, 3200);
   }
 
-  // ===== INIT — no auth, start loading data directly =====
-  app.startRealtime();
+  // ===== INIT — app.startRealtime() is called after the app object is defined below =====
 
   // ===== TABS =====
   document.querySelectorAll('.tab').forEach(tab => {
@@ -1231,6 +1230,9 @@
     },
 
   };
+
+  // ===== INIT — no auth, start loading data directly =====
+  app.startRealtime();
 
   // ===== SEARCH & FILTER =====
   document.getElementById('rsvpSearch').addEventListener('input', e => {
