@@ -386,10 +386,7 @@
     </div>
   </div>
 
-  <!-- ===================== THEME TOGGLE ===================== -->
-  <button id="theme-toggle" class="fixed top-4 right-4 z-[150] w-10 h-10 rounded-full glass flex items-center justify-center cursor-pointer" style="display:none;" title="Toggle dark mode">
-    <span id="theme-icon" class="text-lg">&#9789;</span>
-  </button>
+  <!-- Theme toggle moved into sticky nav -->
 
   <!-- ===================== LIGHTBOX ===================== -->
   <div id="lightbox" onclick="closeLightbox()">
@@ -504,6 +501,9 @@
         <a href="#gallery" class="nav-link">Gallery</a>
         <a href="#hotels" class="nav-link">Stay</a>
         <a href="#livestream" class="nav-link" style="flex-shrink:0;">Live</a>
+        <button id="theme-toggle" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0 ml-1" style="display:none; background:var(--gold-glow); border:1px solid var(--border); transition:all 0.2s;" title="Toggle dark mode">
+          <span id="theme-icon" class="text-sm">&#9789;</span>
+        </button>
       </div>
     </nav>
 
@@ -865,6 +865,26 @@
           <div class="gallery-scroll-item" onclick="openLightbox(this)">
             <img src="images/gallery-new6.jpg" alt="New Photo 6" loading="lazy">
             <div class="gallery-caption"><p class="text-sm font-medium">Us</p><p class="text-xs opacity-70">Always</p></div>
+          </div>
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="images/gallery-new7.jpg" alt="Heart hands" loading="lazy">
+            <div class="gallery-caption"><p class="text-sm font-medium">Heart</p><p class="text-xs opacity-70">Two halves, one love</p></div>
+          </div>
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="images/gallery-new8.jpg" alt="Camera fun" loading="lazy">
+            <div class="gallery-caption"><p class="text-sm font-medium">Candid</p><p class="text-xs opacity-70">Capturing moments</p></div>
+          </div>
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="images/gallery-new9.jpg" alt="Dinner date" loading="lazy">
+            <div class="gallery-caption"><p class="text-sm font-medium">Date Night</p><p class="text-xs opacity-70">Good food, better company</p></div>
+          </div>
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="images/gallery-new10.jpg" alt="Traditional outfit" loading="lazy">
+            <div class="gallery-caption"><p class="text-sm font-medium">Timeless</p><p class="text-xs opacity-70">Made for each other</p></div>
+          </div>
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="images/gallery-new11.jpg" alt="Gym partners" loading="lazy">
+            <div class="gallery-caption"><p class="text-sm font-medium">Partners</p><p class="text-xs opacity-70">In everything we do</p></div>
           </div>
         </div>
         <p class="text-center text-xs mt-2" style="color: var(--text-light);">Swipe or drag &middot; Tap to view full size</p>
