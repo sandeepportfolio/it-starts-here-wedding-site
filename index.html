@@ -1741,6 +1741,13 @@
     }
     updateCountdown();
     setInterval(updateCountdown, 1000);
+
+    // Failsafe: ensure all reveal elements become visible after 2 seconds
+    setTimeout(function() {
+      document.querySelectorAll('.reveal:not(.visible), .reveal-scale:not(.visible)').forEach(function(el) {
+        el.classList.add('visible');
+      });
+    }, 2000);
   </script>
 </body>
 </html>
