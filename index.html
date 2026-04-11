@@ -263,8 +263,6 @@
       flex: 1;
     }
     .hotel-info h3 { font-family: 'Cormorant Garamond', serif; font-weight: 500; line-height: 1.3; }
-    .registry-card { padding: 24px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg-card); text-align: center; cursor: pointer; transition: all 0.2s; }
-    .registry-card:hover { border-color: var(--gold); transform: translateY(-2px); }
 
     /* Misc */
     .section-divider { width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto; }
@@ -495,7 +493,6 @@
         <a href="#gallery" class="nav-link">Gallery</a>
         <a href="#hotels" class="nav-link">Stay</a>
         <a href="#livestream" class="nav-link">Live</a>
-        <a href="#registry" class="nav-link">Registry</a>
       </div>
     </nav>
 
@@ -1170,7 +1167,7 @@
           </div>
 
           <!-- Stream Info Panel -->
-          <div style="padding:24px 24px 28px;">
+          <div style="padding:20px 16px 24px;">
             <!-- Date & Time Row -->
             <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
               <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
@@ -1188,25 +1185,25 @@
             <p style="font-size:13px; line-height:1.6; color:var(--text-muted); margin-bottom:20px;">Watch as Chamanthi &amp; Sandeep exchange vows at the beautiful Shree Swaminarayan Gurukul in Plano, Texas. No login required &mdash; just click and watch.</p>
 
             <!-- Countdown -->
-            <div style="display:flex; align-items:center; justify-content:center; gap:12px; padding:20px 32px; border-radius:16px; background:var(--bg-alt); margin-bottom:20px;">
-              <div style="text-align:center; min-width:60px; padding:0 6px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:300; line-height:1; color:var(--text);" data-days>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.2em; color:var(--text-muted); margin-top:6px;">Days</div>
+            <div style="display:flex; align-items:center; justify-content:center; gap:8px; padding:20px 12px; border-radius:16px; background:var(--bg-alt); margin-bottom:20px; flex-wrap:wrap;">
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-days>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Days</div>
               </div>
-              <span style="color:var(--gold); font-size:1.5rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
-              <div style="text-align:center; min-width:60px; padding:0 6px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:300; line-height:1; color:var(--text);" data-hours>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.2em; color:var(--text-muted); margin-top:6px;">Hours</div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-hours>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Hours</div>
               </div>
-              <span style="color:var(--gold); font-size:1.5rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
-              <div style="text-align:center; min-width:60px; padding:0 6px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:300; line-height:1; color:var(--text);" data-mins>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.2em; color:var(--text-muted); margin-top:6px;">Mins</div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-mins>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Mins</div>
               </div>
-              <span style="color:var(--gold); font-size:1.5rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
-              <div style="text-align:center; min-width:60px; padding:0 6px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:300; line-height:1; color:var(--text);" data-secs>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.2em; color:var(--text-muted); margin-top:6px;">Secs</div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-secs>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Secs</div>
               </div>
             </div>
 
@@ -1241,7 +1238,7 @@
 
         <!-- Timezone Helper -->
         <div class="reveal text-center" style="margin-top:20px;">
-          <p style="font-size:11px; color:var(--text-light);">&#127760; 8:50 AM CST = 9:50 AM EST &middot; 6:50 AM PST &middot; 2:50 PM GMT &middot; 8:20 PM IST</p>
+          <p style="font-size:10px; color:var(--text-light); line-height:1.6; word-break:break-word;">&#127760; 8:50 AM CST = 9:50 AM EST &middot; 6:50 AM PST &middot; 2:50 PM GMT &middot; 8:20 PM IST</p>
         </div>
       </div>
     </section>
@@ -1262,16 +1259,6 @@
       </div>
     </section>
 
-    <!-- ===== GIFT REGISTRY ===== -->
-    <section id="registry" class="py-20 px-6" style="background:var(--bg-alt);">
-      <div class="max-w-3xl mx-auto">
-        <div class="text-center mb-10 reveal"><p class="section-label mb-2">With Gratitude</p><h2 class="section-title text-4xl sm:text-5xl">Gift Registry</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">Your presence is our greatest gift. If you'd like to bless us, any contribution helps us create memories together.</p><div class="section-divider mt-4"></div></div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div class="registry-card reveal stagger" style="--d:0" onclick="copyToClipboard('2146099053',this)"><div class="text-3xl mb-3">&#128177;</div><p class="text-sm font-medium">Zelle</p><p class="text-xs mt-1" style="color:var(--gold);">2146099053</p><p class="text-[9px] mt-2" style="color:var(--text-light);">Tap to copy</p></div>
-        </div>
-        <div class="text-center mt-6 reveal"><p class="text-xs mt-1" style="color:var(--text-light);">Questions? chamanthiaki5@gmail.com</p></div>
-      </div>
-    </section>
 
     <!-- ===== SEATING CHART ===== -->
     <section id="seating" class="py-20 px-6">
@@ -1591,14 +1578,6 @@
       }
     }
 
-    // ---- Copy to Clipboard ----
-    function copyToClipboard(text, el) {
-      navigator.clipboard.writeText(text).then(() => {
-        const p = el.querySelector('p:last-child');
-        const orig = p.textContent; p.textContent = 'Copied!'; p.style.color = 'var(--gold)';
-        setTimeout(() => { p.textContent = orig; p.style.color = ''; }, 2000);
-      });
-    }
 
     // ---- Seating ----
     function searchSeating() {
