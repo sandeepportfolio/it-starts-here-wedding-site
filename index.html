@@ -42,6 +42,8 @@
     window.firebaseDb = () => db;
     window.firebaseStorage = () => storage;
     window.firebaseReady = !!db;
+    window.addDoc = addDoc;
+    window.collection = collection;
   </script>
   <style>
     * { box-sizing: border-box; }
@@ -50,14 +52,14 @@
 
     :root {
       --bg: #FFFDF8; --bg-alt: #FBF8F2; --bg-card: #FFFFFF;
-      --text: #2C2825; --text-muted: #6B6358; --text-light: #A89A88;
+      --text: #2C2825; --text-muted: #6B6358; --text-light: #7A6F62;
       --gold: #B8924A; --gold-glow: rgba(184,146,74,0.15);
       --burgundy: #8B3A4A; --border: #E8DFD1;
       --shadow: 0 4px 24px rgba(0,0,0,0.06);
     }
     .dark {
       --bg: #1A1612; --bg-alt: #231E18; --bg-card: #2A241E;
-      --text: #E8DFD1; --text-muted: #A89A88; --text-light: #5A5248;
+      --text: #E8DFD1; --text-muted: #A89A88; --text-light: #8A8278;
       --gold: #D4B06A; --gold-glow: rgba(212,176,106,0.12);
       --burgundy: #A94E5F; --border: #3A3228;
       --shadow: 0 4px 24px rgba(0,0,0,0.3);
@@ -1499,7 +1501,7 @@
         // Convert to compressed Base64 (no Firebase Storage needed)
         const imageData = await resizeImage(file);
 
-        await addDoc(collection(db, 'photos'), {
+        await window.addDoc(window.collection(db, 'photos'), {
           uploaderName: name,
           uploaderEmail: email,
           caption: caption || '',
@@ -1578,7 +1580,7 @@
         const db = window.firebaseDb();
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
 
-        await addDoc(collection(db, 'rsvps'), data);
+        await window.addDoc(window.collection(db, 'rsvps'), data);
         goRsvpStep(3);
       } catch (e) {
         console.error('RSVP error:', e);
@@ -1693,10 +1695,17 @@
       // Init scroll reveals
       var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+      }, { threshold: 0.05 });
+      document.querySelectorAll('.reveal, .reveal-scale').forEach(function(el) { observer.observe(el); });
 
       localStorage.setItem('sealBroken', 'true');
+    }
+
+    function initRevealObserver() {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+      }, { threshold: 0.05 });
+      document.querySelectorAll('.reveal, .reveal-scale').forEach(function(el) { obs.observe(el); });
     }
 
     // Skip seal if already broken
@@ -1709,6 +1718,8 @@
       if (c) c.style.display = 'block';
       if (t) t.style.display = 'flex';
       if (h) { h.classList.remove('hero-entrance'); h.querySelectorAll(':scope > *').forEach(function(el) { el.style.opacity = '1'; }); }
+      // Set up reveal observer directly — don't rely on DOMContentLoaded timing
+      setTimeout(initRevealObserver, 30);
     }
 
     // ---- Countdown to May 9, 2026 8:50 AM CST ----

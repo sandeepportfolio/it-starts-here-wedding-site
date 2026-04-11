@@ -448,7 +448,7 @@
     .auth-footer a:hover { color: var(--gold-light); }
 
     /* ===== APP SHELL (dashboard) ===== */
-    .app { display: none; }
+    .app { display: block; }
 
     .app-header {
       background: rgba(255,253,248,0.03);
@@ -886,133 +886,10 @@
 <!-- ===== ANIMATED BACKGROUND ===== -->
 <div class="bg-scene" id="bgScene"></div>
 
-<!-- ===== AUTH SCREEN ===== -->
-<div class="auth-wrapper" id="authScreen">
-  <div class="auth-container">
-
-    <!-- Brand -->
-    <div class="brand">
-      <div class="brand-icon">💍</div>
-      <div class="brand-title">Wedding Admin</div>
-      <div class="brand-subtitle">Portal</div>
-    </div>
-
-    <!-- Card -->
-    <div class="auth-card">
-
-      <!-- Tab Toggle -->
-      <div class="auth-tabs">
-        <button class="auth-tab active" data-form="login" id="tabLogin">Sign In</button>
-        <button class="auth-tab" data-form="register" id="tabRegister">Register</button>
-      </div>
-
-      <!-- Error -->
-      <div class="auth-error" id="authError">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span id="authErrorText"></span>
-      </div>
-
-      <!-- Login Form -->
-      <form class="auth-form active" id="loginForm" novalidate>
-        <div class="field">
-          <div class="field-label-row">
-            <div class="field-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            </div>
-            <span class="field-label-text">Email</span>
-          </div>
-          <div class="field-input-wrap">
-            <input type="email" class="field-input" id="loginEmail" autocomplete="email" required>
-            <div class="field-border-glow"></div>
-          </div>
-        </div>
-        <div class="field">
-          <div class="field-label-row">
-            <div class="field-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </div>
-            <span class="field-label-text">Password</span>
-          </div>
-          <div class="field-input-wrap">
-            <input type="password" class="field-input" id="loginPassword" autocomplete="current-password" required>
-            <button type="button" class="field-eye" onclick="togglePassword('loginPassword', this)" aria-label="Toggle password">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="eye-open"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="eye-closed" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-            </button>
-            <div class="field-border-glow"></div>
-          </div>
-        </div>
-        <button type="submit" class="btn-submit" id="loginBtn">
-          <span class="btn-text">Sign In</span>
-          <span class="btn-spinner"></span>
-        </button>
-      </form>
-
-      <!-- Register Form -->
-      <form class="auth-form" id="registerForm" novalidate>
-        <div class="field">
-          <div class="field-label-row">
-            <div class="field-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </div>
-            <span class="field-label-text">Full Name</span>
-          </div>
-          <div class="field-input-wrap">
-            <input type="text" class="field-input" id="registerName" autocomplete="name" required>
-            <div class="field-border-glow"></div>
-          </div>
-        </div>
-        <div class="field">
-          <div class="field-label-row">
-            <div class="field-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            </div>
-            <span class="field-label-text">Email</span>
-          </div>
-          <div class="field-input-wrap">
-            <input type="email" class="field-input" id="registerEmail" autocomplete="email" required>
-            <div class="field-border-glow"></div>
-          </div>
-        </div>
-        <div class="field">
-          <div class="field-label-row">
-            <div class="field-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </div>
-            <span class="field-label-text">Password</span>
-          </div>
-          <div class="field-input-wrap">
-            <input type="password" class="field-input" id="registerPassword" autocomplete="new-password" required minlength="6">
-            <button type="button" class="field-eye" onclick="togglePassword('registerPassword', this)" aria-label="Toggle password">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="eye-open"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="eye-closed" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-            </button>
-            <div class="field-border-glow"></div>
-          </div>
-        </div>
-        <button type="submit" class="btn-submit" id="registerBtn">
-          <span class="btn-text">Create Account</span>
-          <span class="btn-spinner"></span>
-        </button>
-      </form>
-    </div>
-
-    <!-- Footer -->
-    <div class="auth-footer">
-      <span id="footerLoginHint">Don't have an account? <a href="#" onclick="event.preventDefault(); tabRegister.click();">Create one</a></span>
-      <span id="footerRegisterHint" style="display:none;">Already registered? <a href="#" onclick="event.preventDefault(); tabLogin.click();">Sign in</a></span>
-    </div>
-  </div>
-</div>
-
 <!-- ===== APP SHELL ===== -->
 <div class="app" id="app">
   <header class="app-header">
     <h2>💍 Wedding Admin</h2>
-    <div class="user-menu">
-      <span class="user-email" id="userEmail"></span>
-      <button class="btn btn-secondary btn-small" onclick="app.logout()">Logout</button>
-    </div>
   </header>
 
   <nav class="tabs">
@@ -1076,22 +953,8 @@
   <!-- Settings -->
   <div class="tab-content" id="tab-settings">
     <div class="settings-section">
-      <h3>Profile</h3>
-      <div class="field" style="max-width:300px;">
-        <input type="text" class="field-input" id="settingsName" placeholder=" " style="background:rgba(255,253,248,0.06);border-color:rgba(255,253,248,0.12);">
-        <label class="field-label" for="settingsName">Display Name</label>
-        <div class="field-border-glow"></div>
-      </div>
-      <button class="btn btn-primary btn-small" onclick="app.updateName()">Update Name</button>
-    </div>
-    <div class="settings-section">
-      <h3>Security</h3>
-      <div class="field" style="max-width:300px;">
-        <input type="password" class="field-input" id="settingsPassword" placeholder=" " style="background:rgba(255,253,248,0.06);border-color:rgba(255,253,248,0.12);" minlength="6">
-        <label class="field-label" for="settingsPassword">New Password</label>
-        <div class="field-border-glow"></div>
-      </div>
-      <button class="btn btn-primary btn-small" onclick="app.updatePassword()">Change Password</button>
+      <h3>About</h3>
+      <p style="font-size:0.85rem;color:var(--text-muted);">Wedding Admin Portal — Chamanthi &amp; Sandeep, May 9th 2026.</p>
     </div>
   </div>
 </div>
@@ -1126,58 +989,6 @@
   // auth = firebase.auth(); // unused with Firestore auth
   const db = firebase.firestore();
 
-  // Firestore-based auth: check credentials against the admins collection
-  async function verifyAdminCredentials(email, password) {
-    const snapshot = await firebase.firestore().collection('admins').where('email', '==', email.toLowerCase()).limit(1).get();
-    if (snapshot.empty) return false;
-    const adminDoc = snapshot.docs[0];
-    if (adminDoc.data().passwordHash !== hashPassword(password)) return false;
-    // Store session
-    sessionStorage.setItem('adminEmail', email.toLowerCase());
-    sessionStorage.setItem('adminName', adminDoc.data().name || '');
-    sessionStorage.setItem('adminId', adminDoc.id);
-    return true;
-  }
-
-  function hashPassword(pwd) {
-    // Simple hash for demo - in production use bcrypt on server
-    var hash = 0;
-    for (var i = 0; i < pwd.length; i++) {
-      var char = pwd.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return 'hash_' + Math.abs(hash).toString(36);
-  }
-
-  function getSessionAdmin() {
-    var email = sessionStorage.getItem('adminEmail');
-    var name = sessionStorage.getItem('adminName');
-    var id = sessionStorage.getItem('adminId');
-    if (email) return { email: email, name: name, id: id };
-    return null;
-  }
-
-  function clearSession() {
-    sessionStorage.removeItem('adminEmail');
-    sessionStorage.removeItem('adminName');
-    sessionStorage.removeItem('adminId');
-  }
-
-  // First-time setup: create initial admin doc if it doesn't exist
-  async function ensureInitialAdmin() {
-    var snapshot = await firebase.firestore().collection('admins').where('email', '==', 'sparx.sandeep@gmail.com').limit(1).get();
-    if (snapshot.empty) {
-      await firebase.firestore().collection('admins').add({
-        email: 'sparx.sandeep@gmail.com',
-        name: 'Sandeep Admin',
-        passwordHash: hashPassword('WeddingAdmin2026!'),
-        role: 'admin',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
-  }
-
   const state = {
     rsvps: [],
     photos: [],
@@ -1200,22 +1011,6 @@
     }
   })();
 
-  // ===== PASSWORD TOGGLE =====
-  window.togglePassword = function(inputId, btn) {
-    const input = document.getElementById(inputId);
-    const open = btn.querySelector('.eye-open');
-    const closed = btn.querySelector('.eye-closed');
-    if (input.type === 'password') {
-      input.type = 'text';
-      open.style.display = 'none';
-      closed.style.display = 'block';
-    } else {
-      input.type = 'password';
-      open.style.display = 'block';
-      closed.style.display = 'none';
-    }
-  };
-
   // ===== TOAST =====
   function showToast(msg, type = 'success') {
     const toast = document.getElementById('toast');
@@ -1224,134 +1019,8 @@
     setTimeout(() => { toast.className = 'toast'; }, 3200);
   }
 
-  // ===== AUTH TAB SWITCHING =====
-  const tabLogin = document.getElementById('tabLogin');
-  const tabRegister = document.getElementById('tabRegister');
-  const loginForm = document.getElementById('loginForm');
-  const registerForm = document.getElementById('registerForm');
-  const authError = document.getElementById('authError');
-  const authErrorText = document.getElementById('authErrorText');
-
-  function showAuthError(msg) {
-    authErrorText.textContent = msg;
-    authError.classList.add('show');
-  }
-
-  function hideAuthError() {
-    authError.classList.remove('show');
-  }
-
-  tabLogin.addEventListener('click', () => {
-    tabLogin.classList.add('active');
-    tabRegister.classList.remove('active');
-    loginForm.classList.add('active');
-    registerForm.classList.remove('active');
-    hideAuthError();
-    document.getElementById('footerLoginHint').style.display = '';
-    document.getElementById('footerRegisterHint').style.display = 'none';
-  });
-
-  tabRegister.addEventListener('click', () => {
-    tabRegister.classList.add('active');
-    tabLogin.classList.remove('active');
-    registerForm.classList.add('active');
-    loginForm.classList.remove('active');
-    hideAuthError();
-    document.getElementById('footerLoginHint').style.display = 'none';
-    document.getElementById('footerRegisterHint').style.display = '';
-  });
-
-  // ===== LOGIN =====
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    hideAuthError();
-    const btn = document.getElementById('loginBtn');
-    btn.classList.add('loading');
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    try {
-      const ok = await verifyAdminCredentials(email, password);
-      if (!ok) throw new Error('Invalid email or password.');
-      const session = getSessionAdmin();
-      onLoginSuccess(session);
-    } catch (err) {
-      showAuthError(err.message || 'Sign in failed. Please check your credentials.');
-    } finally {
-      btn.classList.remove('loading');
-    }
-  });
-
-  // ===== REGISTER =====
-  registerForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    hideAuthError();
-    const btn = document.getElementById('registerBtn');
-    btn.classList.add('loading');
-    const name = document.getElementById('registerName').value.trim();
-    const email = document.getElementById('registerEmail').value.trim();
-    const password = document.getElementById('registerPassword').value;
-    if (!name) { showAuthError('Name is required.'); btn.classList.remove('loading'); return; }
-    if (password.length < 6) { showAuthError('Password must be at least 6 characters.'); btn.classList.remove('loading'); return; }
-    try {
-      const snap = await firebase.firestore().collection('admins').where('email', '==', email.toLowerCase()).limit(1).get();
-      if (!snap.empty) {
-        showAuthError('An account with this email already exists. Please sign in.');
-        btn.classList.remove('loading');
-        return;
-      }
-      await firebase.firestore().collection('admins').add({
-        email: email.toLowerCase(),
-        name: name,
-        passwordHash: hashPassword(password),
-        role: 'admin',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      sessionStorage.setItem('adminEmail', email.toLowerCase());
-      sessionStorage.setItem('adminName', name);
-      onLoginSuccess({ email: email.toLowerCase(), name: name, id: 'new' });
-      registerForm.reset();
-    } catch (err) {
-      showAuthError(err.message || 'Registration failed.');
-    } finally {
-      btn.classList.remove('loading');
-    }
-  });
-
-  // ===== AUTH STATE (Firestore-based) =====
-  const authScreen = document.getElementById('authScreen');
-  const appShell = document.getElementById('app');
-
-  function onLoginSuccess(session) {
-    authScreen.style.display = 'none';
-    appShell.style.display = 'block';
-    document.getElementById('userEmail').textContent = session.email;
-    document.getElementById('settingsName').value = session.name || '';
-    app.startRealtime();
-  }
-
-  function onLogout() {
-    clearSession();
-    authScreen.style.display = 'flex';
-    appShell.style.display = 'none';
-    app.stopRealtime();
-  }
-
-  // Check session on page load
-  function checkSession() {
-    var session = getSessionAdmin();
-    if (session) {
-      onLoginSuccess(session);
-    } else {
-      authScreen.style.display = 'flex';
-      appShell.style.display = 'none';
-    }
-  }
-
-  // Run session check and ensure initial admin after Firebase loads
-  (async () => {
-    try { await ensureInitialAdmin(); } catch(e) {}
-    checkSession();
-  })();
+  // ===== INIT — no auth, start loading data directly =====
+  app.startRealtime();
 
   // ===== TABS =====
   document.querySelectorAll('.tab').forEach(tab => {
@@ -1456,21 +1125,21 @@
     unsubscribes: [],
 
     startRealtime() {
-      const unsubRsvps = firebase.firestore().onSnapshot(firebase.firestore().collection('rsvps'), snap => {
+      const unsubRsvps = db.collection('rsvps').onSnapshot(snap => {
         state.rsvps = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         this.renderRsvps();
         this.updateStats();
-      });
-      const unsubPhotos = firebase.firestore().onSnapshot(firebase.firestore().collection('photos'), snap => {
+      }, err => showToast('Failed to load RSVPs: ' + err.message, 'error'));
+      const unsubPhotos = db.collection('photos').onSnapshot(snap => {
         state.photos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         this.renderPhotos();
         this.updateStats();
-      });
-      const unsubMessages = firebase.firestore().onSnapshot(firebase.firestore().collection('messages'), snap => {
+      }, err => showToast('Failed to load photos: ' + err.message, 'error'));
+      const unsubMessages = db.collection('messages').onSnapshot(snap => {
         state.messages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         this.renderMessages();
         this.updateStats();
-      });
+      }, err => showToast('Failed to load messages: ' + err.message, 'error'));
       this.unsubscribes = [unsubRsvps, unsubPhotos, unsubMessages];
     },
 
@@ -1517,7 +1186,7 @@
 
     async confirmRsvp(id) {
       try {
-        await firebase.firestore().updateDoc(firebase.firestore().doc('rsvps', id), { status: 'confirmed', attendance: 'attending' });
+        await db.collection('rsvps').doc(id).update({ status: 'confirmed', attendance: 'attending' });
         showToast('RSVP confirmed!');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
@@ -1525,21 +1194,21 @@
     async deleteRsvp(id) {
       if (!confirm('Delete this RSVP?')) return;
       try {
-        await firebase.firestore().deleteDoc(firebase.firestore().doc('rsvps', id));
+        await db.collection('rsvps').doc(id).delete();
         showToast('RSVP deleted');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
 
     async approvePhoto(id) {
       try {
-        await firebase.firestore().updateDoc(firebase.firestore().doc('photos', id), { approved: true });
+        await db.collection('photos').doc(id).update({ approved: true });
         showToast('Photo approved!');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
 
     async rejectPhoto(id) {
       try {
-        await firebase.firestore().updateDoc(firebase.firestore().doc('photos', id), { approved: false });
+        await db.collection('photos').doc(id).update({ approved: false });
         showToast('Photo rejected');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
@@ -1547,7 +1216,7 @@
     async deleteMessage(id) {
       if (!confirm('Delete this message?')) return;
       try {
-        await firebase.firestore().deleteDoc(firebase.firestore().doc('messages', id));
+        await db.collection('messages').doc(id).delete();
         showToast('Message deleted');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
@@ -1561,25 +1230,6 @@
       document.getElementById('lightbox').classList.remove('active');
     },
 
-    updateName() {
-      const name = document.getElementById('settingsName').value.trim();
-      if (!name) return showToast('Name cannot be empty', 'error');
-      sessionStorage.setItem('adminName', name);
-      // Also update Firestore if we have the doc id
-      var adminId = sessionStorage.getItem('adminId');
-      if (adminId && adminId !== 'new') {
-        firebase.firestore().doc('admins/' + adminId).update({ name: name }).catch(() => {});
-      }
-      showToast('Name updated!');
-    },
-
-    updatePassword() {
-      showToast('Password change not available in Firestore auth mode.', 'error');
-    },
-
-    logout() {
-      onLogout();
-    }
   };
 
   // ===== SEARCH & FILTER =====

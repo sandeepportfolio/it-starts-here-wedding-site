@@ -2,46 +2,24 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check if user is authenticated
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-
-    // Admin check: user email must be in the allowed list AND have an admin doc
-    function isAdmin() {
-      return isAuthenticated() &&
-        get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'admin';
-    }
-
-    // Admins collection — stores admin user records (one doc per uid)
-    match /admins/{userId} {
-      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
-      allow write: if false; // Only created programmatically on registration
-    }
-
-    // RSVPs — guests can submit (no auth needed), admins can read/update/delete
+    // RSVPs — anyone can submit, admin portal can read/update/delete
     match /rsvps/{rsvpId} {
-      allow create: if true; // Anyone can submit an RSVP from the public site
-      allow read: if isAdmin();
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
+      allow read, write: if true;
     }
 
-    // Photos — anyone can submit (uploads base64 to Firestore, no Storage needed),
-    // admins can approve/reject/delete. Public can read only approved photos.
+    // Photos — anyone can submit, admin portal can approve/reject/delete
     match /photos/{photoId} {
-      allow create: if true; // Anyone can submit a photo
-      allow read: if isAdmin() || resource.data.approved == true;
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
+      allow read, write: if true;
     }
 
-    // Messages — anyone can submit, only admins can read/delete
+    // Messages — anyone can submit, admin portal can read/delete
     match /messages/{messageId} {
-      allow create: if true; // Anyone can leave a message
-      allow read: if isAdmin();
-      allow update: if false;
-      allow delete: if isAdmin();
+      allow read, write: if true;
+    }
+
+    // Admins collection — no longer used
+    match /admins/{userId} {
+      allow read, write: if false;
     }
   }
 }
