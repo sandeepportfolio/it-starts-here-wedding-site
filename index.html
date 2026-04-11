@@ -1688,26 +1688,6 @@
       setTimeout(initRevealObserver, 30);
     }
 
-    // ---- Countdown to May 9, 2026 8:50 AM CST ----
-    var weddingDate = new Date('2026-05-09T08:50:00-06:00');
-    function updateCountdown() {
-      var diff = weddingDate - new Date();
-      if (diff <= 0) {
-        document.querySelectorAll('[data-days],[data-hours],[data-mins],[data-secs]').forEach(function(el) { el.textContent = '0'; });
-        return;
-      }
-      var d = Math.floor(diff / 86400000);
-      var h = Math.floor((diff % 86400000) / 3600000);
-      var m = Math.floor((diff % 3600000) / 60000);
-      var s = Math.floor((diff % 60000) / 1000);
-      document.querySelectorAll('[data-days]').forEach(function(el) { el.textContent = d; });
-      document.querySelectorAll('[data-hours]').forEach(function(el) { el.textContent = h; });
-      document.querySelectorAll('[data-mins]').forEach(function(el) { el.textContent = m; });
-      document.querySelectorAll('[data-secs]').forEach(function(el) { el.textContent = s; });
-    }
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
     // Failsafe: ensure all reveal elements become visible after 2 seconds
     setTimeout(function() {
       document.querySelectorAll('.reveal:not(.visible), .reveal-scale:not(.visible)').forEach(function(el) {
