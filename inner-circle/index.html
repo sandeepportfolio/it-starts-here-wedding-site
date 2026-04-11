@@ -378,7 +378,7 @@
 
     <div class="relative z-10 flex flex-col items-center gap-8">
       <div class="text-center" style="text-shadow: 0 1px 12px rgba(0,0,0,0.15);">
-        <p class="text-[9px] tracking-[0.7em] uppercase font-medium" style="color: var(--text);">Inner Circle &middot; Exclusive Invitation</p>
+        <p class="text-[9px] tracking-[0.3em] sm:tracking-[0.5em] uppercase font-medium px-4" style="color: var(--text);">Inner Circle &middot; Exclusive</p>
         <p class="font-heading text-2xl sm:text-3xl font-light mt-2" style="color: var(--text);">Chamanthi &amp; Sandeep</p>
       </div>
       <div id="seal-container" class="relative flex items-center justify-center">
@@ -1464,81 +1464,109 @@
         -webkit-mask-image: radial-gradient(ellipse 50% 40% at 50% 50%, black 0%, transparent 100%);
       }
 
-      /* ---- Locked State (Vault Door Experience) ---- */
+      /* ---- Locked State (Glass Card Experience) ---- */
       .ap-locked {
-        position: relative; z-index: 2; text-align: center;
-        padding: 80px 24px; max-width: 480px; width: 100%;
+        position: relative; z-index: 2;
+        padding: 24px; max-width: 440px; width: 100%;
       }
 
-      /* Animated concentric rings */
-      .ap-lock-rings {
-        position: relative; width: 140px; height: 140px;
-        margin: 0 auto 40px;
+      /* Glass card container */
+      .ap-lock-card {
+        position: relative; padding: 48px 32px 40px;
+        border-radius: 32px; text-align: center;
+        background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+        border: 1px solid rgba(212,176,106,0.1);
+        backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+        box-shadow:
+          0 32px 80px -12px rgba(0,0,0,0.5),
+          0 0 1px rgba(212,176,106,0.15),
+          inset 0 1px 0 rgba(255,255,255,0.04);
+        overflow: hidden;
       }
-      .ap-ring {
+      .ap-lock-card::before {
+        content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(212,176,106,0.25), transparent);
+      }
+      .ap-lock-card::after {
+        content: ''; position: absolute; inset: 0; border-radius: 32px;
+        background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,176,106,0.03), transparent 60%);
+        pointer-events: none;
+      }
+
+      /* Animated lock icon with orbital rings */
+      .ap-lock-orb {
+        position: relative; width: 100px; height: 100px;
+        margin: 0 auto 32px;
+      }
+      .ap-orb-ring {
         position: absolute; inset: 0; border-radius: 50%;
-        border: 1px solid rgba(212,176,106,0.12);
-        animation: ap-ring-spin 20s linear infinite;
+        border: 1px solid rgba(212,176,106,0.1);
       }
-      .ap-ring::before {
-        content: ''; position: absolute; width: 6px; height: 6px;
-        border-radius: 50%; background: #D4B06A;
-        top: -3px; left: 50%; transform: translateX(-50%);
-        box-shadow: 0 0 12px rgba(212,176,106,0.6);
+      .ap-orb-ring:nth-child(1) { animation: ap-orbit 12s linear infinite; }
+      .ap-orb-ring:nth-child(1)::after {
+        content: ''; position: absolute; top: -2px; left: 50%; width: 4px; height: 4px;
+        border-radius: 50%; background: #D4B06A; transform: translateX(-50%);
+        box-shadow: 0 0 10px rgba(212,176,106,0.5);
       }
-      .ap-ring:nth-child(2) {
-        inset: 15px; animation-direction: reverse; animation-duration: 15s;
-        border-color: rgba(212,176,106,0.08);
+      .ap-orb-ring:nth-child(2) {
+        inset: 12px; animation: ap-orbit 16s linear infinite reverse;
+        border-color: rgba(212,176,106,0.06);
       }
-      .ap-ring:nth-child(2)::before { background: rgba(212,176,106,0.5); width: 4px; height: 4px; top: -2px; }
-      .ap-ring:nth-child(3) {
-        inset: 30px; animation-duration: 25s;
-        border-color: rgba(212,176,106,0.05);
+      .ap-orb-ring:nth-child(2)::after {
+        content: ''; position: absolute; top: -1.5px; left: 50%; width: 3px; height: 3px;
+        border-radius: 50%; background: rgba(212,176,106,0.5); transform: translateX(-50%);
       }
-      .ap-ring:nth-child(3)::before { background: rgba(212,176,106,0.3); width: 3px; height: 3px; top: -1.5px; }
-      @keyframes ap-ring-spin { to { transform: rotate(360deg); } }
+      @keyframes ap-orbit { to { transform: rotate(360deg); } }
 
-      .ap-lock-center {
+      .ap-orb-center {
         position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        width: 56px; height: 56px; border-radius: 50%;
-        background: rgba(212,176,106,0.06); border: 1px solid rgba(212,176,106,0.2);
+        width: 48px; height: 48px; border-radius: 16px;
+        background: linear-gradient(135deg, rgba(212,176,106,0.1), rgba(212,176,106,0.03));
+        border: 1px solid rgba(212,176,106,0.15);
         display: flex; align-items: center; justify-content: center;
         backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        box-shadow: 0 0 60px rgba(212,176,106,0.08);
       }
-      .ap-lock-center svg { width: 22px; height: 22px; stroke: #D4B06A; fill: none; stroke-width: 1.5; }
+      .ap-orb-center svg { width: 20px; height: 20px; stroke: #D4B06A; fill: none; stroke-width: 1.5; }
 
       .ap-locked-eyebrow {
         font-family: 'Syne', 'Montserrat', sans-serif;
-        font-size: 0.65rem; font-weight: 600;
-        letter-spacing: 0.5em; text-transform: uppercase;
-        color: rgba(212,176,106,0.7); margin-bottom: 16px;
+        font-size: 0.58rem; font-weight: 700;
+        letter-spacing: 0.4em; text-transform: uppercase;
+        color: rgba(212,176,106,0.6); margin-bottom: 14px;
       }
       .ap-locked-heading {
         font-family: 'Cormorant Garamond', serif;
-        font-size: 2.6rem; font-weight: 300; color: #F0EDE6;
-        line-height: 1.15; margin-bottom: 14px;
+        font-size: 2.2rem; font-weight: 300; color: #F0EDE6;
+        line-height: 1.2; margin-bottom: 10px;
       }
-      @media(min-width:640px) { .ap-locked-heading { font-size: 3.4rem; } }
+      @media(min-width:640px) { .ap-locked-heading { font-size: 2.8rem; } }
       .ap-locked-subtext {
         font-family: 'Montserrat', sans-serif;
-        font-size: 0.85rem; color: rgba(240,237,230,0.4);
-        max-width: 380px; margin: 0 auto 40px; line-height: 1.8;
+        font-size: 0.8rem; color: rgba(240,237,230,0.35);
+        max-width: 320px; margin: 0 auto 32px; line-height: 1.7;
       }
 
-      /* Password input — clean line style */
-      .ap-pw-group { max-width: 340px; margin: 0 auto; }
+      /* Password input — glass pill style */
+      .ap-pw-group { max-width: 320px; margin: 0 auto; position: relative; z-index: 1; }
       .ap-pw-field {
-        width: 100%; padding: 16px 0; border: none;
-        border-bottom: 1.5px solid rgba(212,176,106,0.15);
-        background: transparent; color: #F0EDE6;
+        width: 100%; padding: 16px 24px;
+        border-radius: 16px;
+        border: 1px solid rgba(212,176,106,0.12);
+        background: rgba(255,255,255,0.03);
+        color: #F0EDE6;
         font-family: 'Syne', 'Montserrat', sans-serif;
-        font-size: 0.95rem; font-weight: 500;
-        text-align: center; letter-spacing: 0.25em;
-        outline: none; transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+        font-size: 0.9rem; font-weight: 500;
+        text-align: center; letter-spacing: 0.2em;
+        outline: none;
+        transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+        backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       }
-      .ap-pw-field::placeholder { color: rgba(240,237,230,0.15); letter-spacing: 0.15em; font-weight: 400; }
-      .ap-pw-field:focus { border-color: #D4B06A; box-shadow: 0 2px 20px -4px rgba(212,176,106,0.2); }
+      .ap-pw-field::placeholder { color: rgba(240,237,230,0.15); letter-spacing: 0.12em; font-weight: 400; }
+      .ap-pw-field:focus {
+        border-color: rgba(212,176,106,0.35);
+        background: rgba(212,176,106,0.04);
+        box-shadow: 0 0 0 4px rgba(212,176,106,0.06), 0 8px 32px -8px rgba(212,176,106,0.15);
+      }
       .ap-pw-error {
         display: none; font-size: 0.75rem; color: #F07070;
         margin-top: 14px; font-family: 'Montserrat', sans-serif;
@@ -1804,22 +1832,23 @@
 
       <!-- Locked State -->
       <div class="ap-locked" id="partyLocked">
-        <div class="ap-lock-rings">
-          <div class="ap-ring"></div>
-          <div class="ap-ring"></div>
-          <div class="ap-ring"></div>
-          <div class="ap-lock-center">
-            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div class="ap-lock-card">
+          <div class="ap-lock-orb">
+            <div class="ap-orb-ring"></div>
+            <div class="ap-orb-ring"></div>
+            <div class="ap-orb-center">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
           </div>
-        </div>
-        <p class="ap-locked-eyebrow">Private Event</p>
-        <h2 class="ap-locked-heading">Something<br>Extraordinary Awaits</h2>
-        <p class="ap-locked-subtext">Reserved for our closest people. Enter the password to unlock an exclusive evening you won't forget.</p>
-        <div class="ap-pw-group">
-          <input type="password" id="partyPassword" class="ap-pw-field" placeholder="Enter password" autocomplete="off"
-            onkeydown="if(event.key==='Enter')unlockParty()">
-          <p id="partyError" class="ap-pw-error">That's not it. Try again.</p>
-          <button onclick="unlockParty()" class="ap-enter-btn">Unlock Access</button>
+          <p class="ap-locked-eyebrow">Private Event</p>
+          <h2 class="ap-locked-heading">Something<br>Extraordinary Awaits</h2>
+          <p class="ap-locked-subtext">Reserved for our closest people. Enter the password to unlock an exclusive evening.</p>
+          <div class="ap-pw-group">
+            <input type="password" id="partyPassword" class="ap-pw-field" placeholder="Enter password" autocomplete="off"
+              onkeydown="if(event.key==='Enter')unlockParty()">
+            <p id="partyError" class="ap-pw-error">That's not it. Try again.</p>
+            <button onclick="unlockParty()" class="ap-enter-btn">Unlock Access</button>
+          </div>
         </div>
       </div>
 
