@@ -23,6 +23,7 @@
       --text-ghost: rgba(240, 237, 230, 0.25);
       --danger: #E07070;
       --success: #6EC87A;
+      --info: #6EA8E0;
       --bg-dark: #08080A;
       --card-bg: rgba(255, 253, 248, 0.03);
     }
@@ -37,835 +38,365 @@
 
     /* ===== ANIMATED BACKGROUND ===== */
     .bg-scene {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
+      position: fixed; inset: 0; z-index: 0; overflow: hidden;
       background: var(--bg-dark);
     }
-
     .bg-scene::before {
-      content: '';
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
+      content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
       background: radial-gradient(circle, rgba(212,176,106,0.07) 0%, transparent 70%);
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: -200px; left: 50%; transform: translateX(-50%);
       animation: orbFloat1 12s ease-in-out infinite;
     }
-
     .bg-scene::after {
-      content: '';
-      position: absolute;
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
+      content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%;
       background: radial-gradient(circle, rgba(139,58,74,0.06) 0%, transparent 70%);
-      bottom: -100px;
-      right: -100px;
+      bottom: -100px; right: -100px;
       animation: orbFloat2 15s ease-in-out infinite;
     }
-
     @keyframes orbFloat1 {
       0%, 100% { top: -200px; transform: translateX(-50%) scale(1); }
       50% { top: -150px; transform: translateX(-50%) scale(1.1); }
     }
-
     @keyframes orbFloat2 {
       0%, 100% { bottom: -100px; right: -100px; transform: scale(1); }
       50% { bottom: -50px; right: -50px; transform: scale(1.15); }
     }
-
-    /* Floating dust particles */
     .particle {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-      background: var(--gold);
-      opacity: 0;
+      position: absolute; width: 2px; height: 2px; border-radius: 50%;
+      background: var(--gold); opacity: 0;
       animation: particleFloat linear infinite;
     }
-
     @keyframes particleFloat {
       0% { opacity: 0; transform: translateY(100vh) scale(0); }
-      10% { opacity: 0.4; }
-      90% { opacity: 0.4; }
+      10% { opacity: 0.4; } 90% { opacity: 0.4; }
       100% { opacity: 0; transform: translateY(-20vh) scale(1); }
     }
 
-    /* ===== AUTH CONTAINER ===== */
-    .auth-wrapper {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .auth-container {
-      width: 100%;
-      max-width: 440px;
-    }
-
-    /* ===== BRANDING HEADER ===== */
-    .brand {
-      text-align: center;
-      margin-bottom: 36px;
-      animation: brandEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0;
-      transform: translateY(16px);
-    }
-
-    @keyframes brandEntrance {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .brand-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(184,146,74,0.2), rgba(184,146,74,0.05));
-      border: 1px solid rgba(212,176,106,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 16px;
-      font-size: 24px;
-      backdrop-filter: blur(12px);
-    }
-
-    .brand-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.75rem;
-      font-weight: 300;
-      color: var(--text);
-      letter-spacing: 0.02em;
-      margin-bottom: 4px;
-    }
-
-    .brand-subtitle {
-      font-size: 0.7rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 500;
-    }
-
-    /* ===== CARD ===== */
-    .auth-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 36px 32px;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      animation: cardEntrance 0.8s 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0;
-      transform: translateY(20px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .auth-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(212,176,106,0.3), transparent);
-    }
-
-    @keyframes cardEntrance {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== TAB TOGGLE ===== */
-    .auth-tabs {
-      display: flex;
-      background: rgba(255,253,248,0.04);
-      border-radius: 12px;
-      padding: 4px;
-      margin-bottom: 28px;
-      border: 1px solid var(--border);
-    }
-
-    .auth-tab {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      font-weight: 500;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: all 0.25s ease;
-      letter-spacing: 0.02em;
-    }
-
-    .auth-tab.active {
-      background: rgba(212,176,106,0.12);
-      color: var(--gold);
-      box-shadow: 0 0 12px rgba(212,176,106,0.08);
-    }
-
-    .auth-tab:hover:not(.active) {
-      color: var(--text);
-    }
-
-    /* ===== FORM FIELDS — Icon + Label + Input ===== */
-    .field {
-      position: relative;
-      margin-bottom: 18px;
-    }
-
-    .field-label-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .field-icon {
-      color: var(--text-ghost);
-      transition: color 0.25s;
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .field-label-text {
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .field-input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .field-input {
-      width: 100%;
-      padding: 13px 16px;
-      background: rgba(255,253,248,0.04);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
-      font-size: 0.88rem;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.25s ease;
-      outline: none;
-    }
-
-    .field-input:focus {
-      border-color: var(--gold);
-      background: rgba(212,176,106,0.05);
-      box-shadow: 0 0 0 3px rgba(212,176,106,0.1);
-    }
-
-    .field-input:focus ~ .field-icon,
-    .field-input-wrap:focus-within .field-icon {
-      color: var(--gold);
-    }
-
-    .field-border-glow {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      border-radius: 2px;
-      transition: width 0.35s ease;
-      pointer-events: none;
-    }
-
-    .field-input:focus ~ .field-border-glow { width: 80%; }
-
-    /* ===== PASSWORD TOGGLE ===== */
-    .field-eye {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--text-ghost);
-      cursor: pointer;
-      padding: 4px;
-      display: flex;
-      align-items: center;
-      transition: color 0.2s;
-    }
-
-    .field-eye:hover { color: var(--text-muted); }
-    .field-input-wrap:focus-within .field-eye { color: var(--gold); }
-
-    /* ===== SUBMIT BUTTON ===== */
-    .btn-submit {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #B8924A 0%, #D4B06A 50%, #E8C988 100%);
-      color: #0a0805;
-      font-size: 0.8rem;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: all 0.25s ease;
-      margin-top: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-submit::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-
-    .btn-submit:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(184,146,74,0.35), 0 0 0 1px rgba(212,176,106,0.3);
-    }
-
-    .btn-submit:hover::before { opacity: 1; }
-
-    .btn-submit:active {
-      transform: translateY(0);
-    }
-
-    .btn-submit:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Spinner inside button */
-    .btn-spinner {
-      display: none;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(0,0,0,0.2);
-      border-top-color: #0a0805;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin: 0 auto;
-    }
-
-    .btn-submit.loading .btn-spinner { display: block; }
-    .btn-submit.loading .btn-text { opacity: 0; }
-    .btn-submit.loading { pointer-events: none; }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ===== ERROR MESSAGE ===== */
-    .auth-error {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      background: rgba(224,112,112,0.1);
-      border: 1px solid rgba(224,112,112,0.25);
-      color: var(--danger);
-      font-size: 0.8rem;
-      margin-bottom: 16px;
-      animation: errorShake 0.4s ease;
-    }
-
-    .auth-error.show { display: flex; }
-
-    @keyframes errorShake {
-      0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-6px); }
-      40% { transform: translateX(6px); }
-      60% { transform: translateX(-4px); }
-      80% { transform: translateX(4px); }
-    }
-
-    /* ===== DIVIDER ===== */
-    .auth-divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 20px 0;
-    }
-
-    .auth-divider-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .auth-divider-text {
-      font-size: 0.7rem;
-      color: var(--text-ghost);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    /* ===== FORMS ===== */
-    .auth-form { display: none; }
-    .auth-form.active { display: block; }
-
-    /* ===== FOOTER HINT ===== */
-    .auth-footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.78rem;
-      color: var(--text-ghost);
-      animation: cardEntrance 0.8s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0;
-    }
-
-    .auth-footer a {
-      color: var(--gold);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .auth-footer a:hover { color: var(--gold-light); }
-
-    /* ===== APP SHELL (dashboard) ===== */
-    .app { display: block; position: relative; z-index: 1; }
+    /* ===== APP SHELL ===== */
+    .app { position: relative; z-index: 1; min-height: 100vh; }
 
     .app-header {
       background: rgba(255,253,248,0.03);
       border-bottom: 1px solid var(--border);
       padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
       backdrop-filter: blur(20px);
     }
-
     .app-header h2 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-weight: 400;
-      color: var(--gold);
+      font-size: 1.1rem; font-weight: 400; color: var(--gold);
     }
-
-    .user-menu {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .user-email {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
 
     /* Tabs */
     .tabs {
-      display: flex;
-      overflow-x: auto;
+      display: flex; overflow-x: auto;
       background: rgba(255,253,248,0.02);
       border-bottom: 1px solid var(--border);
       -webkit-overflow-scrolling: touch;
     }
-
     .tab {
-      padding: 14px 20px;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      font-weight: 500;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      white-space: nowrap;
-      min-height: 44px;
-      transition: all 0.2s;
-      border-bottom: 2px solid transparent;
-      letter-spacing: 0.02em;
+      padding: 14px 20px; background: none; border: none;
+      color: var(--text-muted); font-size: 0.82rem; font-weight: 500;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      white-space: nowrap; min-height: 44px; transition: all 0.2s;
+      border-bottom: 2px solid transparent; letter-spacing: 0.02em;
+      position: relative;
     }
-
     .tab:hover { color: var(--text); }
     .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab .tab-badge {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--gold); color: #0a0805;
+      font-size: 0.6rem; font-weight: 700;
+      padding: 1px 6px; border-radius: 10px; min-width: 18px; text-align: center;
+    }
 
-    .tab-content { display: none; padding: 20px; }
-    .tab-content.active { display: block; }
+    .tab-content { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
     /* Stats grid */
     .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px; margin-bottom: 24px;
     }
-
     .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px 16px;
-      text-align: center;
-      transition: all 0.2s;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px 16px; text-align: center;
+      transition: all 0.3s; cursor: default;
     }
-
     .stat-card:hover {
       border-color: rgba(212,176,106,0.25);
       background: rgba(212,176,106,0.04);
+      transform: translateY(-2px);
     }
-
+    .stat-card .icon { font-size: 1.5rem; margin-bottom: 8px; }
     .stat-card .number {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2.2rem;
-      font-weight: 300;
-      color: var(--gold);
-      line-height: 1;
+      font-size: 2.4rem; font-weight: 300; color: var(--gold); line-height: 1;
+    }
+    .stat-card .label {
+      font-size: 0.68rem; color: var(--text-muted); margin-top: 6px;
+      text-transform: uppercase; letter-spacing: 0.1em;
     }
 
-    .stat-card .label {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      margin-top: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+    /* Activity feed */
+    .activity-feed {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px; margin-bottom: 20px;
     }
+    .activity-feed h3 {
+      font-family: 'Cormorant Garamond', serif; color: var(--gold);
+      font-size: 1.1rem; font-weight: 400; margin-bottom: 16px;
+    }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      animation: slideIn 0.3s ease;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    .activity-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .activity-icon.rsvp { background: rgba(110,200,122,0.12); }
+    .activity-icon.photo { background: rgba(110,168,224,0.12); }
+    .activity-icon.message { background: rgba(212,176,106,0.12); }
+    .activity-text { font-size: 0.82rem; color: var(--text); line-height: 1.5; }
+    .activity-text .name { color: var(--gold); font-weight: 500; }
+    .activity-time { font-size: 0.7rem; color: var(--text-ghost); margin-top: 2px; }
 
     /* Search bar */
-    .search-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
+    .search-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
     .search-bar input {
-      flex: 1;
-      min-width: 180px;
-      padding: 11px 14px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: rgba(255,253,248,0.04);
-      color: var(--text);
-      font-size: 0.85rem;
-      font-family: 'Inter', sans-serif;
-      outline: none;
+      flex: 1; min-width: 180px; padding: 11px 14px;
+      border: 1px solid var(--border); border-radius: 10px;
+      background: rgba(255,253,248,0.04); color: var(--text);
+      font-size: 0.85rem; font-family: 'Inter', sans-serif; outline: none;
       transition: border-color 0.2s;
     }
-
     .search-bar input:focus { border-color: var(--border-focus); }
 
     .filter-btn {
-      padding: 9px 14px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: all 0.2s;
+      padding: 9px 14px; border: 1px solid var(--border); border-radius: 10px;
+      background: transparent; color: var(--text-muted);
+      font-size: 0.78rem; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: all 0.2s;
     }
-
     .filter-btn:hover, .filter-btn.active {
-      border-color: var(--gold);
-      color: var(--gold);
-      background: var(--gold-glow);
+      border-color: var(--gold); color: var(--gold); background: var(--gold-glow);
     }
 
     /* Data items */
     .data-list { display: flex; flex-direction: column; gap: 10px; }
-
     .data-item {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: border-color 0.2s;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden; transition: all 0.25s;
     }
-
     .data-item:hover { border-color: rgba(255,253,248,0.12); }
+    .data-item.expanded { border-color: rgba(212,176,106,0.2); }
 
     .data-item-header {
-      padding: 14px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      gap: 12px;
+      padding: 14px 16px; display: flex; justify-content: space-between;
+      align-items: center; cursor: pointer; gap: 12px;
     }
-
-    .data-item-info h3 {
-      font-size: 0.9rem;
-      margin-bottom: 2px;
-    }
-
-    .data-item-info p {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
+    .data-item-info h3 { font-size: 0.9rem; margin-bottom: 2px; }
+    .data-item-info p { font-size: 0.78rem; color: var(--text-muted); }
 
     .badge {
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.68rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      padding: 3px 10px; border-radius: 20px; font-size: 0.68rem;
+      font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
     }
-
     .badge-attending { background: rgba(110,200,122,0.15); color: var(--success); }
     .badge-declined { background: rgba(224,112,112,0.15); color: var(--danger); }
     .badge-pending { background: rgba(212,176,106,0.15); color: var(--gold); }
-    .badge-approved { background: rgba(110,200,122,0.15); color: var(--success); }
-    .badge-rejected { background: rgba(224,112,112,0.15); color: var(--danger); }
     .badge-confirmed { background: rgba(110,200,122,0.15); color: var(--success); }
 
-    .chevron {
-      color: var(--text-muted);
-      transition: transform 0.2s;
-      font-size: 1rem;
-    }
-
+    .chevron { color: var(--text-muted); transition: transform 0.25s; font-size: 1rem; }
     .data-item.expanded .chevron { transform: rotate(180deg); }
 
     .data-item-details {
-      display: none;
-      padding: 16px;
-      border-top: 1px solid var(--border);
+      display: none; padding: 16px; border-top: 1px solid var(--border);
       background: rgba(0,0,0,0.15);
     }
-
-    .data-item.expanded .data-item-details { display: block; }
+    .data-item.expanded .data-item-details { display: block; animation: fadeIn 0.25s ease; }
 
     .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 7px 0;
-      border-bottom: 1px solid var(--border);
-      gap: 8px;
+      display: flex; justify-content: space-between; padding: 7px 0;
+      border-bottom: 1px solid var(--border); gap: 8px;
     }
-
     .detail-row:last-child { border-bottom: none; }
-
     .detail-label { font-size: 0.78rem; color: var(--text-muted); }
-    .detail-value { font-size: 0.85rem; text-align: right; }
+    .detail-value { font-size: 0.85rem; text-align: right; max-width: 65%; word-break: break-word; }
 
     /* Photos grid */
     .photos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 14px;
     }
-
     .photo-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: border-color 0.2s;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden; transition: all 0.25s;
     }
-
-    .photo-card:hover { border-color: rgba(212,176,106,0.25); }
-
+    .photo-card:hover { border-color: rgba(212,176,106,0.25); transform: translateY(-2px); }
     .photo-card img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      cursor: pointer;
-      display: block;
+      width: 100%; aspect-ratio: 1; object-fit: cover; cursor: pointer; display: block;
     }
-
-    .photo-info {
-      padding: 10px 12px;
-    }
-
-    .photo-info h4 {
-      font-size: 0.82rem;
-      margin-bottom: 2px;
-    }
-
-    .photo-info p {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-    }
-
-    .photo-actions {
-      display: flex;
-      gap: 6px;
-      padding: 10px 12px;
-      padding-top: 0;
-    }
+    .photo-info { padding: 10px 12px; }
+    .photo-info h4 { font-size: 0.82rem; margin-bottom: 2px; }
+    .photo-info p { font-size: 0.72rem; color: var(--text-muted); }
+    .photo-actions { display: flex; gap: 6px; padding: 10px 12px; padding-top: 0; flex-wrap: wrap; }
 
     /* Lightbox */
     .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.92);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92); z-index: 1000;
+      align-items: center; justify-content: center; padding: 20px;
       backdrop-filter: blur(8px);
     }
-
     .lightbox.active { display: flex; }
-
-    .lightbox img {
-      max-width: 100%;
-      max-height: 88vh;
-      border-radius: 12px;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
-    }
-
+    .lightbox img { max-width: 100%; max-height: 88vh; border-radius: 12px; box-shadow: 0 24px 80px rgba(0,0,0,0.5); }
     .lightbox-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(255,253,248,0.08);
-      border: 1px solid var(--border);
-      color: var(--text);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      font-size: 1.5rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
+      position: absolute; top: 20px; right: 20px;
+      background: rgba(255,253,248,0.08); border: 1px solid var(--border);
+      color: var(--text); width: 44px; height: 44px; border-radius: 50%;
+      font-size: 1.5rem; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; transition: all 0.2s;
     }
+    .lightbox-close:hover { background: rgba(255,253,248,0.14); border-color: rgba(212,176,106,0.3); }
 
-    .lightbox-close:hover {
-      background: rgba(255,253,248,0.14);
-      border-color: rgba(212,176,106,0.3);
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 20px;
     }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: #111114; border: 1px solid var(--border);
+      border-radius: 20px; width: 100%; max-width: 520px;
+      max-height: 90vh; overflow-y: auto; padding: 0;
+      animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    }
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .modal-header {
+      padding: 24px 28px 0; display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 400; color: var(--gold);
+    }
+    .modal-close {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 1.5rem; cursor: pointer; padding: 4px;
+      transition: color 0.2s; line-height: 1;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal-body { padding: 20px 28px 28px; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block; font-size: 0.72rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+      font-weight: 500; margin-bottom: 8px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 12px 14px;
+      background: rgba(255,253,248,0.04); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text);
+      font-size: 0.88rem; font-family: 'Inter', sans-serif;
+      transition: all 0.25s; outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--gold); background: rgba(212,176,106,0.05);
+      box-shadow: 0 0 0 3px rgba(212,176,106,0.1);
+    }
+    .form-select { cursor: pointer; }
+    .form-select option { background: #1a1a1e; color: var(--text); }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .modal-actions { display: flex; gap: 10px; margin-top: 24px; justify-content: flex-end; }
 
     /* Settings */
     .settings-section {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 16px;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; margin-bottom: 16px;
     }
-
     .settings-section h3 {
-      font-family: 'Cormorant Garamond', serif;
-      color: var(--gold);
-      margin-bottom: 16px;
-      font-size: 1rem;
-      font-weight: 400;
+      font-family: 'Cormorant Garamond', serif; color: var(--gold);
+      margin-bottom: 16px; font-size: 1rem; font-weight: 400;
     }
 
-    /* Loading */
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-muted);
-      font-size: 0.85rem;
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: var(--text-muted);
     }
+    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.4; }
+    .empty-state h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--text); margin-bottom: 6px; }
+    .empty-state p { font-size: 0.82rem; max-width: 300px; margin: 0 auto; }
+
+    /* Buttons */
+    .btn {
+      padding: 9px 16px; border: none; border-radius: 8px;
+      font-size: 0.78rem; font-weight: 600;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      transition: all 0.2s; min-height: 36px;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-primary { background: linear-gradient(135deg, #B8924A, #D4B06A); color: #0a0805; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,146,74,0.3); }
+    .btn-secondary { background: rgba(255,253,248,0.06); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: rgba(255,253,248,0.1); border-color: rgba(255,253,248,0.15); }
+    .btn-danger { background: rgba(224,112,112,0.15); color: var(--danger); border: 1px solid rgba(224,112,112,0.2); }
+    .btn-danger:hover { background: rgba(224,112,112,0.25); }
+    .btn-success { background: rgba(110,200,122,0.15); color: var(--success); border: 1px solid rgba(110,200,122,0.2); }
+    .btn-success:hover { background: rgba(110,200,122,0.25); }
+    .btn-info { background: rgba(110,168,224,0.15); color: var(--info); border: 1px solid rgba(110,168,224,0.2); }
+    .btn-info:hover { background: rgba(110,168,224,0.25); }
+    .btn-small { padding: 7px 12px; font-size: 0.72rem; min-height: 32px; }
+    .btn-ghost {
+      background: transparent; color: var(--text-muted);
+      border: 1px solid var(--border); padding: 7px 12px; font-size: 0.72rem;
+    }
+    .btn-ghost:hover { color: var(--gold); border-color: rgba(212,176,106,0.3); }
 
     /* Toast */
     .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
+      position: fixed; bottom: 24px; left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: rgba(26,26,30,0.95);
-      border: 1px solid var(--border);
-      backdrop-filter: blur(16px);
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      z-index: 2000;
+      background: rgba(26,26,30,0.95); border: 1px solid var(--border);
+      backdrop-filter: blur(16px); padding: 12px 20px;
+      border-radius: 10px; font-size: 0.82rem; z-index: 2000;
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      white-space: nowrap;
+      white-space: nowrap; display: flex; align-items: center; gap: 8px;
     }
-
     .toast.show { transform: translateX(-50%) translateY(0); }
     .toast.success { border-color: rgba(110,200,122,0.4); color: var(--success); }
     .toast.error { border-color: rgba(224,112,112,0.4); color: var(--danger); }
+    .toast.info { border-color: rgba(110,168,224,0.4); color: var(--info); }
 
-    /* Shared button styles */
-    .btn {
-      padding: 9px 16px;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: all 0.2s;
-      min-height: 36px;
+    /* Confirm dialog */
+    .confirm-dialog {
+      display: none; position: fixed; inset: 0; z-index: 600;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 20px;
     }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #B8924A, #D4B06A);
-      color: #0a0805;
+    .confirm-dialog.active { display: flex; }
+    .confirm-box {
+      background: #111114; border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; width: 100%; max-width: 380px;
+      text-align: center; animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(184,146,74,0.3);
-    }
-
-    .btn-secondary {
-      background: rgba(255,253,248,0.06);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,253,248,0.1);
-      border-color: rgba(255,253,248,0.15);
-    }
-
-    .btn-danger {
-      background: rgba(224,112,112,0.15);
-      color: var(--danger);
-      border: 1px solid rgba(224,112,112,0.2);
-    }
-
-    .btn-danger:hover {
-      background: rgba(224,112,112,0.25);
-    }
-
-    .btn-success {
-      background: rgba(110,200,122,0.15);
-      color: var(--success);
-      border: 1px solid rgba(110,200,122,0.2);
-    }
-
-    .btn-success:hover {
-      background: rgba(110,200,122,0.25);
-    }
-
-    .btn-small {
-      padding: 7px 12px;
-      font-size: 0.72rem;
-      min-height: 32px;
-    }
+    .confirm-box .icon { font-size: 2rem; margin-bottom: 12px; }
+    .confirm-box h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; margin-bottom: 8px; }
+    .confirm-box p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px; }
+    .confirm-actions { display: flex; gap: 10px; justify-content: center; }
 
     /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -874,62 +405,60 @@
     ::-webkit-scrollbar-thumb:hover { background: rgba(255,253,248,0.15); }
 
     /* Responsive */
-    @media (max-width: 500px) {
-      .auth-card { padding: 28px 20px; }
+    @media (max-width: 600px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .tab { padding: 12px 14px; font-size: 0.78rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .modal { border-radius: 16px; }
+      .header-actions .btn span.label { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- ===== ANIMATED BACKGROUND ===== -->
 <div class="bg-scene" id="bgScene"></div>
 
-<!-- ===== APP SHELL ===== -->
 <div class="app" id="app">
   <header class="app-header">
-    <h2>💍 Wedding Admin</h2>
+    <h2>&#128141; Wedding Admin</h2>
+    <div class="header-actions">
+      <button class="btn btn-ghost" onclick="app.seedTestData()" title="Load test data">&#9881; <span class="label">Seed Data</span></button>
+      <button class="btn btn-ghost" onclick="app.clearAllData()" title="Clear all data">&#128465; <span class="label">Clear</span></button>
+    </div>
   </header>
 
   <nav class="tabs">
     <button class="tab active" data-tab="dashboard">Dashboard</button>
-    <button class="tab" data-tab="rsvps">RSVPs</button>
-    <button class="tab" data-tab="photos">Photos</button>
-    <button class="tab" data-tab="messages">Messages</button>
+    <button class="tab" data-tab="rsvps">RSVPs <span class="tab-badge" id="badgeRsvps" style="display:none">0</span></button>
+    <button class="tab" data-tab="photos">Photos <span class="tab-badge" id="badgePhotos" style="display:none">0</span></button>
+    <button class="tab" data-tab="messages">Messages <span class="tab-badge" id="badgeMsgs" style="display:none">0</span></button>
     <button class="tab" data-tab="settings">Settings</button>
   </nav>
 
   <!-- Dashboard -->
   <div class="tab-content active" id="tab-dashboard">
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="number" id="statTotal">0</div>
-        <div class="label">Total RSVPs</div>
-      </div>
-      <div class="stat-card">
-        <div class="number" id="statAttending">0</div>
-        <div class="label">Attending</div>
-      </div>
-      <div class="stat-card">
-        <div class="number" id="statDeclined">0</div>
-        <div class="label">Declined</div>
-      </div>
-      <div class="stat-card">
-        <div class="number" id="statPhotos">0</div>
-        <div class="label">Photos</div>
-      </div>
-      <div class="stat-card">
-        <div class="number" id="statMessages">0</div>
-        <div class="label">Messages</div>
-      </div>
+      <div class="stat-card"><div class="icon">&#128141;</div><div class="number" id="statTotal">0</div><div class="label">Total RSVPs</div></div>
+      <div class="stat-card"><div class="icon">&#10003;</div><div class="number" id="statAttending">0</div><div class="label">Attending</div></div>
+      <div class="stat-card"><div class="icon">&#128148;</div><div class="number" id="statDeclined">0</div><div class="label">Declined</div></div>
+      <div class="stat-card"><div class="icon">&#128247;</div><div class="number" id="statPhotos">0</div><div class="label">Photos</div></div>
+      <div class="stat-card"><div class="icon">&#128172;</div><div class="number" id="statMessages">0</div><div class="label">Messages</div></div>
+      <div class="stat-card"><div class="icon">&#128101;</div><div class="number" id="statGuests">0</div><div class="label">Total Guests</div></div>
+    </div>
+    <div class="activity-feed">
+      <h3>Recent Activity</h3>
+      <div id="activityFeed"><div class="empty-state"><p>Activity will appear here as RSVPs and messages come in.</p></div></div>
     </div>
   </div>
 
   <!-- RSVPs -->
   <div class="tab-content" id="tab-rsvps">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);font-weight:400;">RSVP Responses</h3>
+      <button class="btn btn-primary btn-small" onclick="app.openAddRsvp()">+ Add RSVP</button>
+    </div>
     <div class="search-bar">
-      <input type="text" id="rsvpSearch" placeholder="Search RSVPs...">
+      <input type="text" id="rsvpSearch" placeholder="Search by name or email...">
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="attending">Attending</button>
@@ -942,19 +471,38 @@
 
   <!-- Photos -->
   <div class="tab-content" id="tab-photos">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);font-weight:400;">Photo Submissions</h3>
+    </div>
     <div class="photos-grid" id="photosGrid"></div>
   </div>
 
   <!-- Messages -->
   <div class="tab-content" id="tab-messages">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);font-weight:400;">Guestbook Messages</h3>
+      <button class="btn btn-primary btn-small" onclick="app.openAddMessage()">+ Add Message</button>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="msgSearch" placeholder="Search messages...">
+    </div>
     <div class="data-list" id="messagesList"></div>
   </div>
 
   <!-- Settings -->
   <div class="tab-content" id="tab-settings">
     <div class="settings-section">
+      <h3>Data Management</h3>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:16px;">Manage your wedding data. Use the seed button to load test entries, or clear to start fresh.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-info btn-small" onclick="app.seedTestData()">&#9881; Seed Test Data</button>
+        <button class="btn btn-danger btn-small" onclick="app.clearAllData()">&#128465; Clear All Data</button>
+      </div>
+    </div>
+    <div class="settings-section">
       <h3>About</h3>
-      <p style="font-size:0.85rem;color:var(--text-muted);">Wedding Admin Portal — Chamanthi &amp; Sandeep, May 9th 2026.</p>
+      <p style="font-size:0.85rem;color:var(--text-muted);">Wedding Admin Portal &mdash; Chamanthi &amp; Sandeep, May 9th 2026.</p>
+      <p style="font-size:0.78rem;color:var(--text-ghost);margin-top:8px;">Real-time Firestore sync &middot; Full CRUD &middot; Public access (no auth required)</p>
     </div>
   </div>
 </div>
@@ -965,17 +513,37 @@
   <img id="lightboxImg" src="" alt="Photo">
 </div>
 
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Edit</h3>
+      <button class="modal-close" onclick="app.closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Confirm Dialog -->
+<div class="confirm-dialog" id="confirmDialog">
+  <div class="confirm-box">
+    <div class="icon" id="confirmIcon">&#9888;&#65039;</div>
+    <h4 id="confirmTitle">Are you sure?</h4>
+    <p id="confirmText">This action cannot be undone.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" onclick="app.cancelConfirm()">Cancel</button>
+      <button class="btn btn-danger" id="confirmBtn" onclick="app.doConfirm()">Delete</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- FIREBASE SDK (compat = UMD, no module issues) -->
+<!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<!-- Firebase Auth removed: using Firestore-based auth instead -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
-  // NOTE: Using Firebase compat (UMD) builds instead of ES modules for maximum compatibility
-  // All firebase calls use window.firebase.xxx() syntax
-
   const firebaseConfig = {
     apiKey: "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g",
     authDomain: "it-starts-here-wedding.firebaseapp.com",
@@ -984,21 +552,16 @@
     appId: "1:36824586549:web:711579dbdca5a73ddf147c"
   };
 
-  // Compat API: firebase.xxx()
   const app_fb = firebase.initializeApp(firebaseConfig);
-  // auth = firebase.auth(); // unused with Firestore auth
   const db = firebase.firestore();
 
   const state = {
-    rsvps: [],
-    photos: [],
-    messages: [],
-    rsvpFilter: 'all',
-    rsvpSearch: ''
+    rsvps: [], photos: [], messages: [],
+    rsvpFilter: 'all', rsvpSearch: '', msgSearch: ''
   };
 
-  // ===== PARTICLE BACKGROUND =====
-  (function spawnParticles() {
+  // ===== PARTICLES =====
+  (function() {
     const scene = document.getElementById('bgScene');
     for (let i = 0; i < 20; i++) {
       const p = document.createElement('div');
@@ -1013,13 +576,12 @@
 
   // ===== TOAST =====
   function showToast(msg, type = 'success') {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.className = `toast ${type} show`;
-    setTimeout(() => { toast.className = 'toast'; }, 3200);
+    const t = document.getElementById('toast');
+    const icons = { success: '\u2713', error: '\u2717', info: '\u2139' };
+    t.innerHTML = `<span>${icons[type] || ''}</span> ${msg}`;
+    t.className = `toast ${type} show`;
+    setTimeout(() => { t.className = 'toast'; }, 3200);
   }
-
-  // ===== INIT — app.startRealtime() is called after the app object is defined below =====
 
   // ===== TABS =====
   document.querySelectorAll('.tab').forEach(tab => {
@@ -1033,37 +595,60 @@
 
   // ===== HELPERS =====
   function formatDate(ts) {
-    if (!ts) return '—';
+    if (!ts) return '\u2014';
     const d = ts.toDate ? ts.toDate() : new Date(ts);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
   }
 
+  function timeAgo(ts) {
+    if (!ts) return '';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    const diff = Date.now() - d.getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days}d ago`;
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ===== RENDERERS =====
   function renderRsvpItem(rsvp) {
     const badgeMap = { attending: 'badge-attending', declined: 'badge-declined', pending: 'badge-pending' };
-    const badgeClass = badgeMap[rsvp.attendance] || 'badge-pending';
+    const badgeClass = rsvp.status === 'confirmed' ? 'badge-confirmed' : (badgeMap[rsvp.attendance] || 'badge-pending');
+    const statusLabel = rsvp.status === 'confirmed' ? 'Confirmed' : (rsvp.attendance || 'Pending');
+    const guests = (parseInt(rsvp.plusOnes) || 0) + 1;
     return `
       <div class="data-item" data-id="${rsvp.id}">
         <div class="data-item-header" onclick="app.toggleItem('${rsvp.id}')">
           <div class="data-item-info">
-            <h3>${rsvp.name || '—'}</h3>
-            <p>${rsvp.email || '—'} · ${rsvp.attendance || 'Pending'}</p>
+            <h3>${escHtml(rsvp.name) || '\u2014'}</h3>
+            <p>${escHtml(rsvp.email) || '\u2014'} \u00b7 ${guests} guest${guests > 1 ? 's' : ''}</p>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
-            <span class="badge ${rsvp.status === 'confirmed' ? 'badge-confirmed' : badgeClass}">${rsvp.attendance || 'Pending'}</span>
-            <span class="chevron">▼</span>
+            <span class="badge ${badgeClass}">${statusLabel}</span>
+            <span class="chevron">\u25BC</span>
           </div>
         </div>
         <div class="data-item-details">
-          <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${rsvp.email || '—'}</span></div>
-          <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value">${rsvp.phone || '—'}</span></div>
-          <div class="detail-row"><span class="detail-label">Attendance</span><span class="detail-value">${rsvp.attendance || '—'}</span></div>
-          <div class="detail-row"><span class="detail-label">Dietary</span><span class="detail-value">${rsvp.dietary || 'None specified'}</span></div>
+          <div class="detail-row"><span class="detail-label">Name</span><span class="detail-value">${escHtml(rsvp.name) || '\u2014'}</span></div>
+          <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${escHtml(rsvp.email) || '\u2014'}</span></div>
+          <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value">${escHtml(rsvp.phone) || '\u2014'}</span></div>
+          <div class="detail-row"><span class="detail-label">Attendance</span><span class="detail-value">${escHtml(rsvp.attendance) || '\u2014'}</span></div>
+          <div class="detail-row"><span class="detail-label">Dietary</span><span class="detail-value">${escHtml(rsvp.dietary) || 'None'}</span></div>
           <div class="detail-row"><span class="detail-label">Plus Ones</span><span class="detail-value">${rsvp.plusOnes || 0}</span></div>
-          <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value">${rsvp.message || '—'}</span></div>
+          <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value">${escHtml(rsvp.message) || '\u2014'}</span></div>
           <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">${formatDate(rsvp.createdAt)}</span></div>
           <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
-            ${rsvp.status !== 'confirmed' ? `<button class="btn btn-success btn-small" onclick="app.confirmRsvp('${rsvp.id}')">✓ Confirm</button>` : ''}
-            <button class="btn btn-danger btn-small" onclick="app.deleteRsvp('${rsvp.id}')">🗑 Delete</button>
+            <button class="btn btn-info btn-small" onclick="event.stopPropagation();app.openEditRsvp('${rsvp.id}')">&#9998; Edit</button>
+            ${rsvp.status !== 'confirmed' ? `<button class="btn btn-success btn-small" onclick="event.stopPropagation();app.confirmRsvp('${rsvp.id}')">\u2713 Confirm</button>` : ''}
+            <button class="btn btn-danger btn-small" onclick="event.stopPropagation();app.deleteRsvp('${rsvp.id}')">\ud83d\uddd1 Delete</button>
           </div>
         </div>
       </div>`;
@@ -1071,19 +656,20 @@
 
   function renderPhotoItem(photo) {
     const approved = photo.approved;
-    const statusClass = approved === true ? 'badge-approved' : approved === false ? 'badge-rejected' : 'badge-pending';
+    const statusClass = approved === true ? 'badge-attending' : approved === false ? 'badge-declined' : 'badge-pending';
     const statusText = approved === true ? 'Approved' : approved === false ? 'Rejected' : 'Pending';
     return `
       <div class="photo-card" data-id="${photo.id}">
-        <img src="${photo.imageData}" alt="Wedding photo" loading="lazy" onclick="app.openLightbox('${photo.imageData}')">
+        <img src="${photo.imageData || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%231a1a1e%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23555%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E'}" alt="Wedding photo" loading="lazy" onclick="app.openLightbox(this.src)">
         <div class="photo-info">
-          <h4>${photo.uploaderName || 'Anonymous'}</h4>
-          <p>${photo.caption || 'No caption'}</p>
+          <h4>${escHtml(photo.uploaderName) || 'Anonymous'}</h4>
+          <p>${escHtml(photo.caption) || 'No caption'}</p>
           <p style="margin-top:6px;"><span class="badge ${statusClass}">${statusText}</span></p>
         </div>
         <div class="photo-actions">
-          <button class="btn btn-success btn-small" onclick="app.approvePhoto('${photo.id}')" ${approved === true ? 'disabled' : ''}>✓</button>
-          <button class="btn btn-danger btn-small" onclick="app.rejectPhoto('${photo.id}')" ${approved === false ? 'disabled' : ''}>✗</button>
+          <button class="btn btn-success btn-small" onclick="app.approvePhoto('${photo.id}')" ${approved === true ? 'disabled style="opacity:0.4"' : ''}>\u2713</button>
+          <button class="btn btn-danger btn-small" onclick="app.rejectPhoto('${photo.id}')" ${approved === false ? 'disabled style="opacity:0.4"' : ''}>\u2717</button>
+          <button class="btn btn-ghost btn-small" onclick="app.deletePhoto('${photo.id}')">\ud83d\uddd1</button>
         </div>
       </div>`;
   }
@@ -1093,17 +679,22 @@
       <div class="data-item" data-id="${msg.id}">
         <div class="data-item-header" onclick="app.toggleItem('${msg.id}')">
           <div class="data-item-info">
-            <h3>${msg.name || '—'}</h3>
-            <p>${msg.email || '—'}</p>
+            <h3>${escHtml(msg.name) || '\u2014'}</h3>
+            <p style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(msg.message) || '\u2014'}</p>
           </div>
-          <span class="chevron">▼</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:0.7rem;color:var(--text-ghost);">${timeAgo(msg.createdAt)}</span>
+            <span class="chevron">\u25BC</span>
+          </div>
         </div>
         <div class="data-item-details">
-          <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${msg.email || '—'}</span></div>
-          <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value">${msg.message || '—'}</span></div>
+          <div class="detail-row"><span class="detail-label">Name</span><span class="detail-value">${escHtml(msg.name) || '\u2014'}</span></div>
+          <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${escHtml(msg.email) || '\u2014'}</span></div>
+          <div class="detail-row"><span class="detail-label">Message</span><span class="detail-value" style="max-width:70%;line-height:1.5;">${escHtml(msg.message) || '\u2014'}</span></div>
           <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">${formatDate(msg.createdAt)}</span></div>
-          <div style="margin-top:14px;">
-            <button class="btn btn-danger btn-small" onclick="app.deleteMessage('${msg.id}')">🗑 Delete</button>
+          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+            <button class="btn btn-info btn-small" onclick="event.stopPropagation();app.openEditMessage('${msg.id}')">&#9998; Edit</button>
+            <button class="btn btn-danger btn-small" onclick="event.stopPropagation();app.deleteMessage('${msg.id}')">\ud83d\uddd1 Delete</button>
           </div>
         </div>
       </div>`;
@@ -1119,32 +710,44 @@
     });
   }
 
+  function filterMessages() {
+    const s = state.msgSearch.toLowerCase();
+    if (!s) return state.messages;
+    return state.messages.filter(m => {
+      return (m.name && m.name.toLowerCase().includes(s)) ||
+             (m.message && m.message.toLowerCase().includes(s)) ||
+             (m.email && m.email.toLowerCase().includes(s));
+    });
+  }
+
   // ===== APP OBJECT =====
   const app = {
     unsubscribes: [],
+    confirmCallback: null,
 
     startRealtime() {
-      const unsubRsvps = db.collection('rsvps').onSnapshot(snap => {
+      const unsubRsvps = db.collection('rsvps').orderBy('createdAt', 'desc').onSnapshot(snap => {
         state.rsvps = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         this.renderRsvps();
         this.updateStats();
+        this.renderActivity();
       }, err => showToast('Failed to load RSVPs: ' + err.message, 'error'));
-      const unsubPhotos = db.collection('photos').onSnapshot(snap => {
+
+      const unsubPhotos = db.collection('photos').orderBy('createdAt', 'desc').onSnapshot(snap => {
         state.photos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         this.renderPhotos();
         this.updateStats();
+        this.renderActivity();
       }, err => showToast('Failed to load photos: ' + err.message, 'error'));
-      const unsubMessages = db.collection('messages').onSnapshot(snap => {
+
+      const unsubMessages = db.collection('messages').orderBy('createdAt', 'desc').onSnapshot(snap => {
         state.messages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         this.renderMessages();
         this.updateStats();
+        this.renderActivity();
       }, err => showToast('Failed to load messages: ' + err.message, 'error'));
-      this.unsubscribes = [unsubRsvps, unsubPhotos, unsubMessages];
-    },
 
-    stopRealtime() {
-      this.unsubscribes.forEach(u => u());
-      this.unsubscribes = [];
+      this.unsubscribes = [unsubRsvps, unsubPhotos, unsubMessages];
     },
 
     updateStats() {
@@ -1154,33 +757,191 @@
       document.getElementById('statDeclined').textContent = r.filter(x => x.attendance === 'declined').length;
       document.getElementById('statPhotos').textContent = state.photos.length;
       document.getElementById('statMessages').textContent = state.messages.length;
+      const totalGuests = r.reduce((sum, x) => sum + (x.attendance === 'attending' ? (parseInt(x.plusOnes) || 0) + 1 : 0), 0);
+      document.getElementById('statGuests').textContent = totalGuests;
+
+      // Tab badges
+      const setBadge = (id, count) => {
+        const el = document.getElementById(id);
+        if (count > 0) { el.textContent = count; el.style.display = ''; }
+        else { el.style.display = 'none'; }
+      };
+      setBadge('badgeRsvps', r.length);
+      setBadge('badgePhotos', state.photos.length);
+      setBadge('badgeMsgs', state.messages.length);
+    },
+
+    renderActivity() {
+      const feed = document.getElementById('activityFeed');
+      const all = [
+        ...state.rsvps.map(r => ({ type: 'rsvp', name: r.name, detail: r.attendance, time: r.createdAt })),
+        ...state.photos.map(p => ({ type: 'photo', name: p.uploaderName, detail: 'uploaded a photo', time: p.createdAt })),
+        ...state.messages.map(m => ({ type: 'message', name: m.name, detail: m.message, time: m.createdAt }))
+      ].sort((a, b) => {
+        const ta = a.time ? (a.time.toDate ? a.time.toDate() : new Date(a.time)) : new Date(0);
+        const tb = b.time ? (b.time.toDate ? b.time.toDate() : new Date(b.time)) : new Date(0);
+        return tb - ta;
+      }).slice(0, 10);
+
+      if (!all.length) {
+        feed.innerHTML = '<div class="empty-state"><p>Activity will appear here as RSVPs and messages come in.</p></div>';
+        return;
+      }
+
+      feed.innerHTML = all.map(item => {
+        const iconMap = { rsvp: 'rsvp', photo: 'photo', message: 'message' };
+        const emojiMap = { rsvp: '\u2713', photo: '\ud83d\udcf7', message: '\ud83d\udcac' };
+        const detailMap = {
+          rsvp: `<span class="name">${escHtml(item.name)}</span> RSVP'd \u2014 ${escHtml(item.detail)}`,
+          photo: `<span class="name">${escHtml(item.name) || 'Someone'}</span> uploaded a photo`,
+          message: `<span class="name">${escHtml(item.name)}</span> left a message`
+        };
+        return `<div class="activity-item">
+          <div class="activity-icon ${iconMap[item.type]}">${emojiMap[item.type]}</div>
+          <div><div class="activity-text">${detailMap[item.type]}</div><div class="activity-time">${timeAgo(item.time)}</div></div>
+        </div>`;
+      }).join('');
     },
 
     renderRsvps() {
       const list = document.getElementById('rsvpList');
       const filtered = filterRsvps();
-      list.innerHTML = filtered.length
-        ? filtered.map(r => renderRsvpItem(r)).join('')
-        : '<div class="loading">No RSVPs found</div>';
+      if (!filtered.length) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon">\ud83d\udc8d</div><h4>No RSVPs yet</h4><p>RSVPs will appear here. Use "Seed Data" to add test entries.</p></div>`;
+        return;
+      }
+      list.innerHTML = filtered.map(r => renderRsvpItem(r)).join('');
     },
 
     renderPhotos() {
       const grid = document.getElementById('photosGrid');
-      grid.innerHTML = state.photos.length
-        ? state.photos.map(p => renderPhotoItem(p)).join('')
-        : '<div class="loading">No photos submitted yet</div>';
+      if (!state.photos.length) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">\ud83d\udcf7</div><h4>No photos yet</h4><p>Photos uploaded by guests will appear here.</p></div>`;
+        return;
+      }
+      grid.innerHTML = state.photos.map(p => renderPhotoItem(p)).join('');
     },
 
     renderMessages() {
       const list = document.getElementById('messagesList');
-      list.innerHTML = state.messages.length
-        ? state.messages.map(m => renderMessageItem(m)).join('')
-        : '<div class="loading">No messages yet</div>';
+      const filtered = filterMessages();
+      if (!filtered.length) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon">\ud83d\udcac</div><h4>No messages yet</h4><p>Guestbook messages will appear here.</p></div>`;
+        return;
+      }
+      list.innerHTML = filtered.map(m => renderMessageItem(m)).join('');
     },
 
     toggleItem(id) {
       const el = document.querySelector(`.data-item[data-id="${id}"]`);
       if (el) el.classList.toggle('expanded');
+    },
+
+    // ===== MODAL =====
+    openModal(title, bodyHtml) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = bodyHtml;
+      document.getElementById('modalOverlay').classList.add('active');
+    },
+    closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    },
+
+    // ===== CONFIRM =====
+    showConfirm(title, text, callback) {
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmText').textContent = text;
+      this.confirmCallback = callback;
+      document.getElementById('confirmDialog').classList.add('active');
+    },
+    cancelConfirm() {
+      document.getElementById('confirmDialog').classList.remove('active');
+      this.confirmCallback = null;
+    },
+    doConfirm() {
+      document.getElementById('confirmDialog').classList.remove('active');
+      if (this.confirmCallback) this.confirmCallback();
+      this.confirmCallback = null;
+    },
+
+    // ===== RSVP CRUD =====
+    openAddRsvp() {
+      this.openModal('Add RSVP', `
+        <div class="form-row"><div class="form-group"><label class="form-label">Name</label><input class="form-input" id="mName" placeholder="Full name"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="mEmail" type="email" placeholder="Email"></div></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="mPhone" placeholder="Phone"></div>
+        <div class="form-group"><label class="form-label">Attendance</label><select class="form-select" id="mAttendance"><option value="attending">Attending</option><option value="declined">Declined</option><option value="pending">Pending</option></select></div></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Plus Ones</label><input class="form-input" id="mPlusOnes" type="number" value="0" min="0"></div>
+        <div class="form-group"><label class="form-label">Dietary</label><input class="form-input" id="mDietary" placeholder="Dietary needs"></div></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="mMessage" placeholder="Optional message..."></textarea></div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="app.saveNewRsvp()">Add RSVP</button>
+        </div>
+      `);
+    },
+
+    async saveNewRsvp() {
+      const data = {
+        name: document.getElementById('mName').value.trim(),
+        email: document.getElementById('mEmail').value.trim(),
+        phone: document.getElementById('mPhone').value.trim(),
+        attendance: document.getElementById('mAttendance').value,
+        plusOnes: parseInt(document.getElementById('mPlusOnes').value) || 0,
+        dietary: document.getElementById('mDietary').value.trim(),
+        message: document.getElementById('mMessage').value.trim(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      if (!data.name) return showToast('Name is required', 'error');
+      try {
+        await db.collection('rsvps').add(data);
+        this.closeModal();
+        showToast('RSVP added!');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    openEditRsvp(id) {
+      const rsvp = state.rsvps.find(r => r.id === id);
+      if (!rsvp) return;
+      this.openModal('Edit RSVP', `
+        <div class="form-row"><div class="form-group"><label class="form-label">Name</label><input class="form-input" id="mName" value="${escHtml(rsvp.name)}"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="mEmail" type="email" value="${escHtml(rsvp.email)}"></div></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="mPhone" value="${escHtml(rsvp.phone)}"></div>
+        <div class="form-group"><label class="form-label">Attendance</label><select class="form-select" id="mAttendance">
+          <option value="attending" ${rsvp.attendance === 'attending' ? 'selected' : ''}>Attending</option>
+          <option value="declined" ${rsvp.attendance === 'declined' ? 'selected' : ''}>Declined</option>
+          <option value="pending" ${rsvp.attendance === 'pending' ? 'selected' : ''}>Pending</option>
+        </select></div></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Plus Ones</label><input class="form-input" id="mPlusOnes" type="number" value="${rsvp.plusOnes || 0}" min="0"></div>
+        <div class="form-group"><label class="form-label">Dietary</label><input class="form-input" id="mDietary" value="${escHtml(rsvp.dietary)}"></div></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="mStatus">
+          <option value="" ${!rsvp.status ? 'selected' : ''}>None</option>
+          <option value="confirmed" ${rsvp.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+        </select></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="mMessage">${escHtml(rsvp.message)}</textarea></div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="app.saveEditRsvp('${id}')">Save Changes</button>
+        </div>
+      `);
+    },
+
+    async saveEditRsvp(id) {
+      const data = {
+        name: document.getElementById('mName').value.trim(),
+        email: document.getElementById('mEmail').value.trim(),
+        phone: document.getElementById('mPhone').value.trim(),
+        attendance: document.getElementById('mAttendance').value,
+        plusOnes: parseInt(document.getElementById('mPlusOnes').value) || 0,
+        dietary: document.getElementById('mDietary').value.trim(),
+        status: document.getElementById('mStatus').value || null,
+        message: document.getElementById('mMessage').value.trim()
+      };
+      try {
+        await db.collection('rsvps').doc(id).update(data);
+        this.closeModal();
+        showToast('RSVP updated!');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
 
     async confirmRsvp(id) {
@@ -1190,14 +951,16 @@
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
 
-    async deleteRsvp(id) {
-      if (!confirm('Delete this RSVP?')) return;
-      try {
-        await db.collection('rsvps').doc(id).delete();
-        showToast('RSVP deleted');
-      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    deleteRsvp(id) {
+      this.showConfirm('Delete RSVP?', 'This will permanently remove this RSVP response.', async () => {
+        try {
+          await db.collection('rsvps').doc(id).delete();
+          showToast('RSVP deleted');
+        } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+      });
     },
 
+    // ===== PHOTO CRUD =====
     async approvePhoto(id) {
       try {
         await db.collection('photos').doc(id).update({ approved: true });
@@ -1212,32 +975,163 @@
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
 
-    async deleteMessage(id) {
-      if (!confirm('Delete this message?')) return;
+    deletePhoto(id) {
+      this.showConfirm('Delete Photo?', 'This will permanently remove this photo.', async () => {
+        try {
+          await db.collection('photos').doc(id).delete();
+          showToast('Photo deleted');
+        } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+      });
+    },
+
+    // ===== MESSAGE CRUD =====
+    openAddMessage() {
+      this.openModal('Add Message', `
+        <div class="form-row"><div class="form-group"><label class="form-label">Name</label><input class="form-input" id="mName" placeholder="Guest name"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="mEmail" type="email" placeholder="Email (optional)"></div></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="mMessage" placeholder="Write a heartfelt message..." style="min-height:120px;"></textarea></div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="app.saveNewMessage()">Add Message</button>
+        </div>
+      `);
+    },
+
+    async saveNewMessage() {
+      const data = {
+        name: document.getElementById('mName').value.trim(),
+        email: document.getElementById('mEmail').value.trim(),
+        message: document.getElementById('mMessage').value.trim(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      if (!data.name || !data.message) return showToast('Name and message are required', 'error');
       try {
-        await db.collection('messages').doc(id).delete();
-        showToast('Message deleted');
+        await db.collection('messages').add(data);
+        this.closeModal();
+        showToast('Message added!');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     },
 
+    openEditMessage(id) {
+      const msg = state.messages.find(m => m.id === id);
+      if (!msg) return;
+      this.openModal('Edit Message', `
+        <div class="form-row"><div class="form-group"><label class="form-label">Name</label><input class="form-input" id="mName" value="${escHtml(msg.name)}"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="mEmail" type="email" value="${escHtml(msg.email)}"></div></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="mMessage" style="min-height:120px;">${escHtml(msg.message)}</textarea></div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="app.saveEditMessage('${id}')">Save Changes</button>
+        </div>
+      `);
+    },
+
+    async saveEditMessage(id) {
+      const data = {
+        name: document.getElementById('mName').value.trim(),
+        email: document.getElementById('mEmail').value.trim(),
+        message: document.getElementById('mMessage').value.trim()
+      };
+      try {
+        await db.collection('messages').doc(id).update(data);
+        this.closeModal();
+        showToast('Message updated!');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    deleteMessage(id) {
+      this.showConfirm('Delete Message?', 'This will permanently remove this guestbook message.', async () => {
+        try {
+          await db.collection('messages').doc(id).delete();
+          showToast('Message deleted');
+        } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+      });
+    },
+
+    // ===== LIGHTBOX =====
     openLightbox(url) {
       document.getElementById('lightboxImg').src = url;
       document.getElementById('lightbox').classList.add('active');
     },
-
     closeLightbox() {
       document.getElementById('lightbox').classList.remove('active');
     },
 
+    // ===== SEED TEST DATA =====
+    async seedTestData() {
+      showToast('Seeding test data...', 'info');
+      const now = firebase.firestore.FieldValue.serverTimestamp();
+      const testRsvps = [
+        { name: 'Priya Sharma', email: 'priya.s@gmail.com', phone: '214-555-0101', attendance: 'attending', plusOnes: 1, dietary: 'Vegetarian', message: 'So excited for your big day! We love you both!', status: 'confirmed', createdAt: now },
+        { name: 'Raj Patel', email: 'raj.patel@outlook.com', phone: '469-555-0202', attendance: 'attending', plusOnes: 3, dietary: 'None', message: 'The whole family is coming! Can\'t wait to celebrate with you.', createdAt: now },
+        { name: 'Emily Chen', email: 'emily.c@yahoo.com', phone: '972-555-0303', attendance: 'attending', plusOnes: 0, dietary: 'Gluten-free', message: 'Wouldn\'t miss it for the world!', createdAt: now },
+        { name: 'Arun Wickramasinghe', email: 'arun.w@gmail.com', phone: '817-555-0404', attendance: 'attending', plusOnes: 1, dietary: 'Vegan', message: 'Flying in from Sri Lanka for this. Much love!', status: 'confirmed', createdAt: now },
+        { name: 'Sarah Johnson', email: 'sarah.j@hotmail.com', phone: '214-555-0505', attendance: 'declined', plusOnes: 0, dietary: '', message: 'So sorry we can\'t make it. Sending all our love from NYC!', createdAt: now },
+        { name: 'Dinesh Kumar', email: 'dinesh.k@gmail.com', phone: '469-555-0606', attendance: 'attending', plusOnes: 2, dietary: 'Vegetarian', message: 'Booked our flights already! See you in Plano!', createdAt: now },
+        { name: 'Michael Thompson', email: 'mike.t@gmail.com', phone: '972-555-0707', attendance: 'pending', plusOnes: 1, dietary: '', message: 'Checking with work on PTO. Will confirm ASAP!', createdAt: now },
+        { name: 'Lakshmi Nair', email: 'lakshmi.n@icloud.com', phone: '214-555-0808', attendance: 'attending', plusOnes: 0, dietary: 'Vegetarian', message: 'I\'ll be bringing my camera to capture every moment!', status: 'confirmed', createdAt: now },
+      ];
+
+      const testMessages = [
+        { name: 'Priya Sharma', email: 'priya.s@gmail.com', message: 'You two are absolutely perfect together. Wishing you a lifetime of love, laughter, and happiness! May your journey together be as beautiful as this day.', createdAt: now },
+        { name: 'Raj Patel', email: 'raj.patel@outlook.com', message: 'From college roommates to watching you find the love of your life \u2014 this is the best chapter yet. Cheers to forever, brother!', createdAt: now },
+        { name: 'Emily Chen', email: 'emily.c@yahoo.com', message: 'The way you two look at each other gives everyone hope. Here\'s to a beautiful marriage and an even more beautiful love story.', createdAt: now },
+        { name: 'Lakshmi Nair', email: 'lakshmi.n@icloud.com', message: 'What a blessing to witness two souls become one. May your home always be filled with love, warmth, and great food!', createdAt: now },
+        { name: 'Arun Wickramasinghe', email: 'arun.w@gmail.com', message: 'Distance means nothing when someone means everything. So proud to be here. Love from Sri Lanka!', createdAt: now },
+      ];
+
+      const testPhotos = [
+        { uploaderName: 'Priya Sharma', caption: 'The happy couple at the engagement party', approved: true, imageData: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Cdefs%3E%3ClinearGradient id=%22g1%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23D4B06A%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%238B3A4A%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill=%22url(%23g1)%22 width=%22400%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2245%25%22 fill=%22white%22 text-anchor=%22middle%22 font-size=%2260%22%3E%F0%9F%92%8D%3C/text%3E%3Ctext x=%2250%25%22 y=%2265%25%22 fill=%22rgba(255,255,255,0.8)%22 text-anchor=%22middle%22 font-size=%2216%22 font-family=%22sans-serif%22%3EEngagement Party%3C/text%3E%3C/svg%3E', createdAt: now },
+        { uploaderName: 'Emily Chen', caption: 'Beautiful mehndi designs', approved: true, imageData: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Cdefs%3E%3ClinearGradient id=%22g2%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23E8C988%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23B8924A%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill=%22url(%23g2)%22 width=%22400%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2245%25%22 fill=%22white%22 text-anchor=%22middle%22 font-size=%2260%22%3E%E2%9C%8B%3C/text%3E%3Ctext x=%2250%25%22 y=%2265%25%22 fill=%22rgba(255,255,255,0.8)%22 text-anchor=%22middle%22 font-size=%2216%22 font-family=%22sans-serif%22%3EMehndi Night%3C/text%3E%3C/svg%3E', createdAt: now },
+        { uploaderName: 'Raj Patel', caption: 'Best friends since day one', approved: null, imageData: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Cdefs%3E%3ClinearGradient id=%22g3%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22%3E%3Cstop offset=%220%25%22 stop-color=%22%236EA8E0%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%234A7AB8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill=%22url(%23g3)%22 width=%22400%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2245%25%22 fill=%22white%22 text-anchor=%22middle%22 font-size=%2260%22%3E%F0%9F%A4%9D%3C/text%3E%3Ctext x=%2250%25%22 y=%2265%25%22 fill=%22rgba(255,255,255,0.8)%22 text-anchor=%22middle%22 font-size=%2216%22 font-family=%22sans-serif%22%3EBest Friends%3C/text%3E%3C/svg%3E', createdAt: now },
+      ];
+
+      try {
+        const batch1 = db.batch();
+        testRsvps.forEach(r => batch1.set(db.collection('rsvps').doc(), r));
+        await batch1.commit();
+
+        const batch2 = db.batch();
+        testMessages.forEach(m => batch2.set(db.collection('messages').doc(), m));
+        await batch2.commit();
+
+        const batch3 = db.batch();
+        testPhotos.forEach(p => batch3.set(db.collection('photos').doc(), p));
+        await batch3.commit();
+
+        showToast('Test data loaded! 8 RSVPs, 5 messages, 3 photos');
+      } catch (err) { showToast('Failed to seed: ' + err.message, 'error'); }
+    },
+
+    clearAllData() {
+      this.showConfirm('Clear All Data?', 'This will delete ALL RSVPs, photos, and messages permanently.', async () => {
+        showToast('Clearing data...', 'info');
+        try {
+          const collections = ['rsvps', 'photos', 'messages'];
+          for (const col of collections) {
+            const snap = await db.collection(col).get();
+            const batch = db.batch();
+            snap.docs.forEach(doc => batch.delete(doc.ref));
+            await batch.commit();
+          }
+          showToast('All data cleared');
+        } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+      });
+    },
   };
 
-  // ===== INIT — no auth, start loading data directly =====
+  // ===== INIT =====
   app.startRealtime();
 
   // ===== SEARCH & FILTER =====
   document.getElementById('rsvpSearch').addEventListener('input', e => {
     state.rsvpSearch = e.target.value;
     app.renderRsvps();
+  });
+
+  document.getElementById('msgSearch').addEventListener('input', e => {
+    state.msgSearch = e.target.value;
+    app.renderMessages();
   });
 
   document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -1249,13 +1143,18 @@
     });
   });
 
-  // ===== LIGHTBOX CLOSE =====
+  // ===== MODAL & LIGHTBOX CLOSE =====
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modalOverlay')) app.closeModal();
+  });
   document.getElementById('lightbox').addEventListener('click', e => {
     if (e.target === document.getElementById('lightbox')) app.closeLightbox();
   });
-
+  document.getElementById('confirmDialog').addEventListener('click', e => {
+    if (e.target === document.getElementById('confirmDialog')) app.cancelConfirm();
+  });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') app.closeLightbox();
+    if (e.key === 'Escape') { app.closeModal(); app.closeLightbox(); app.cancelConfirm(); }
   });
 
   window.app = app;
