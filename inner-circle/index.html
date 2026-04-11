@@ -485,7 +485,7 @@
 
     <!-- ===== STICKY NAV ===== -->
     <nav id="sticky-nav" class="sticky top-0 z-[100] glass py-3 px-4" style="border-bottom: 1px solid var(--border);">
-      <div class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+      <div class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; padding-right: 20px;">
         <a href="#rsvp" class="nav-link">RSVP</a>
         <a href="#story" class="nav-link">Our Story</a>
         <a href="#events" class="nav-link">Events</a>
@@ -493,9 +493,12 @@
         <a href="#gallery" class="nav-link">Gallery</a>
         <a href="#hotels" class="nav-link">Stay</a>
         <a href="#livestream" class="nav-link">Live</a>
-        <a href="#afterparty" class="nav-link" style="color:var(--gold);">&#127881; Party</a>
+        <a href="#afterparty" class="nav-link" style="color:var(--gold); flex-shrink:0;">&#127881; Party</a>
       </div>
     </nav>
+    <style>
+      #sticky-nav .flex::-webkit-scrollbar { display: none; }
+    </style>
 
     <div id="content-sections">
 
@@ -1291,109 +1294,169 @@
 
 
 
-    <!-- ===== AFTER PARTY (Password Protected) ===== -->
-    <section id="afterparty" class="py-24 px-6 relative overflow-hidden" style="background:#0a0408;">
-      <div class="max-w-3xl mx-auto relative z-10">
-        <!-- Locked State -->
-        <div id="partyLocked" class="text-center">
-          <div class="reveal">
-            <div style="font-size:4rem; margin-bottom:16px; animation: pulse 2s ease-in-out infinite;">&#128274;</div>
-            <p style="font-size:0.6rem; letter-spacing:0.5em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:8px;">Secret Invitation</p>
-            <h2 class="font-heading text-4xl sm:text-5xl" style="font-weight:300; margin-bottom:12px;">Something Special Awaits</h2>
-            <p style="font-size:0.85rem; color:var(--text-muted); max-width:400px; margin:0 auto 28px; line-height:1.7;">This section is for the inner circle only. Enter the secret password to unlock an exclusive event.</p>
-          </div>
-          <div class="reveal" style="max-width:360px; margin:0 auto;">
-            <div style="position:relative;">
-              <input type="password" id="partyPassword" placeholder="Enter the secret password..."
-                style="width:100%; padding:16px 20px; border-radius:14px; border:1px solid rgba(212,176,106,0.2); background:rgba(255,253,248,0.04); color:var(--text); font-size:0.9rem; font-family:'Montserrat',sans-serif; outline:none; transition:all 0.3s; text-align:center; letter-spacing:0.1em;"
-                onfocus="this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 30px rgba(212,176,106,0.15)'"
-                onblur="this.style.borderColor='rgba(212,176,106,0.2)'; this.style.boxShadow='none'"
-                onkeydown="if(event.key==='Enter')unlockParty()">
-            </div>
-            <p id="partyError" style="display:none; font-size:0.78rem; color:#E07070; margin-top:10px;">Incorrect password. Try again.</p>
-            <button onclick="unlockParty()" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; font-size:0.8rem; border-radius:14px; margin-top:16px; letter-spacing:0.15em;">
-              UNLOCK &#10024;
-            </button>
-          </div>
+    <!-- ===== AFTER PARTY (Password Protected) — Premium Redesign ===== -->
+    <style>
+      /* ---- After Party Styles ---- */
+      .ap-section { position: relative; overflow: hidden; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+      .ap-bg { position: absolute; inset: 0; z-index: 0; }
+      .ap-bg-gradient { position: absolute; inset: 0; background: linear-gradient(180deg, #030104 0%, #0c0614 30%, #110820 60%, #0a0510 100%); }
+      .ap-bg-orb1 { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(212,176,106,0.08) 0%, transparent 65%); top: -15%; left: -10%; animation: ap-orb-drift 18s ease-in-out infinite; }
+      .ap-bg-orb2 { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(139,58,74,0.07) 0%, transparent 65%); bottom: -10%; right: -10%; animation: ap-orb-drift 22s ease-in-out infinite reverse; }
+      .ap-bg-orb3 { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(110,168,224,0.04) 0%, transparent 65%); top: 50%; left: 60%; animation: ap-orb-drift 15s ease-in-out infinite 3s; }
+      .ap-bg-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(212,176,106,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212,176,106,0.03) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.5; mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 70%); }
+      .ap-bg-noise { position: absolute; inset: 0; opacity: 0.015; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+      @keyframes ap-orb-drift { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px, -20px) scale(1.12); } }
+
+      /* Locked */
+      .ap-locked { position: relative; z-index: 2; text-align: center; padding: 80px 24px; }
+      .ap-lock-icon { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(212,176,106,0.15), rgba(212,176,106,0.03)); border: 1px solid rgba(212,176,106,0.25); display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; font-size: 2rem; animation: ap-lock-pulse 3s ease-in-out infinite; backdrop-filter: blur(12px); }
+      @keyframes ap-lock-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(212,176,106,0.15), 0 0 40px rgba(212,176,106,0.05); } 50% { box-shadow: 0 0 0 16px rgba(212,176,106,0), 0 0 60px rgba(212,176,106,0.1); } }
+      .ap-locked-label { font-size: 0.6rem; letter-spacing: 0.6em; text-transform: uppercase; color: #D4B06A; font-weight: 600; margin-bottom: 12px; font-family: 'Montserrat', sans-serif; }
+      .ap-locked-title { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: #F0EDE6; line-height: 1.15; margin-bottom: 16px; }
+      @media(min-width:640px) { .ap-locked-title { font-size: 3.5rem; } }
+      .ap-locked-desc { font-size: 0.88rem; color: rgba(240,237,230,0.55); max-width: 420px; margin: 0 auto 36px; line-height: 1.75; font-family: 'Montserrat', sans-serif; }
+      .ap-input-wrap { max-width: 380px; margin: 0 auto; }
+      .ap-password-input { width: 100%; padding: 18px 24px; border-radius: 16px; border: 1px solid rgba(212,176,106,0.2); background: rgba(255,255,255,0.03); color: #F0EDE6; font-size: 0.95rem; font-family: 'Montserrat', sans-serif; outline: none; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); text-align: center; letter-spacing: 0.15em; backdrop-filter: blur(8px); }
+      .ap-password-input::placeholder { color: rgba(240,237,230,0.2); letter-spacing: 0.1em; }
+      .ap-password-input:focus { border-color: #D4B06A; box-shadow: 0 0 0 4px rgba(212,176,106,0.08), 0 0 40px rgba(212,176,106,0.1); background: rgba(212,176,106,0.04); }
+      .ap-error { display: none; font-size: 0.78rem; color: #F07070; margin-top: 12px; font-family: 'Montserrat', sans-serif; animation: ap-shake 0.4s ease; }
+      @keyframes ap-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+      .ap-unlock-btn { width: 100%; padding: 16px 32px; margin-top: 18px; border: none; border-radius: 16px; background: linear-gradient(135deg, #B8924A 0%, #D4B06A 40%, #E8C988 100%); color: #080604; font-size: 0.82rem; font-weight: 700; font-family: 'Montserrat', sans-serif; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); position: relative; overflow: hidden; }
+      .ap-unlock-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent 60%); opacity: 0; transition: opacity 0.3s; }
+      .ap-unlock-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(184,146,74,0.35), 0 0 0 1px rgba(212,176,106,0.3); }
+      .ap-unlock-btn:hover::before { opacity: 1; }
+      .ap-unlock-btn:active { transform: translateY(0); }
+
+      /* Unlocked */
+      .ap-unlocked { position: relative; z-index: 2; text-align: center; padding: 60px 24px 80px; }
+      .ap-particles-layer { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+      .ap-content { position: relative; z-index: 1; }
+
+      /* Stagger reveal */
+      .ap-reveal { opacity: 0; transform: translateY(24px); animation: ap-item-in 0.8s cubic-bezier(0.16,1,0.3,1) forwards; }
+      @keyframes ap-item-in { to { opacity: 1; transform: translateY(0); } }
+
+      .ap-hero-emoji { font-size: 4.5rem; margin-bottom: 12px; filter: drop-shadow(0 0 30px rgba(212,176,106,0.3)); animation: ap-emoji-float 4s ease-in-out infinite; }
+      @keyframes ap-emoji-float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-8px) scale(1.05); } }
+
+      .ap-hero-label { font-size: 0.58rem; letter-spacing: 0.7em; text-transform: uppercase; color: #D4B06A; font-weight: 600; margin-bottom: 16px; font-family: 'Montserrat', sans-serif; }
+      .ap-hero-title { font-family: 'Cormorant Garamond', serif; font-size: 3.2rem; font-weight: 300; line-height: 1.1; margin-bottom: 8px; background: linear-gradient(135deg, #FFF8E7 0%, #E8C988 25%, #D4B06A 50%, #B8924A 75%, #D4B06A 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: ap-shimmer 4s linear infinite; }
+      @media(min-width:640px) { .ap-hero-title { font-size: 4.2rem; } }
+      @keyframes ap-shimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+      .ap-hero-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: rgba(240,237,230,0.5); font-style: italic; margin-bottom: 40px; }
+
+      /* Time badges */
+      .ap-time-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+      .ap-time-badge { padding: 12px 24px; border-radius: 16px; background: rgba(212,176,106,0.06); border: 1px solid rgba(212,176,106,0.18); backdrop-filter: blur(8px); transition: all 0.3s; }
+      .ap-time-badge:hover { background: rgba(212,176,106,0.1); border-color: rgba(212,176,106,0.35); transform: translateY(-2px); }
+      .ap-time-badge span { font-size: 0.82rem; color: #E8C988; font-weight: 500; font-family: 'Montserrat', sans-serif; }
+
+      /* Description card */
+      .ap-desc-card { max-width: 520px; margin: 0 auto 48px; padding: 32px 28px; border-radius: 24px; background: linear-gradient(135deg, rgba(212,176,106,0.04), rgba(139,58,74,0.03)); border: 1px solid rgba(212,176,106,0.1); backdrop-filter: blur(12px); position: relative; }
+      .ap-desc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,176,106,0.25), transparent); }
+      .ap-desc-card p { font-size: 0.92rem; color: rgba(240,237,230,0.8); line-height: 1.85; font-family: 'Montserrat', sans-serif; }
+
+      /* Feature cards */
+      .ap-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 520px; margin: 0 auto 48px; }
+      @media(max-width:480px) { .ap-features { grid-template-columns: 1fr 1fr 1fr; gap: 10px; } }
+      .ap-feature { padding: 28px 16px; border-radius: 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); text-align: center; transition: all 0.35s cubic-bezier(0.16,1,0.3,1); position: relative; overflow: hidden; }
+      .ap-feature::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(212,176,106,0.06), transparent 70%); opacity: 0; transition: opacity 0.3s; }
+      .ap-feature:hover { border-color: rgba(212,176,106,0.2); transform: translateY(-4px); }
+      .ap-feature:hover::before { opacity: 1; }
+      .ap-feature-icon { font-size: 2.2rem; margin-bottom: 12px; }
+      .ap-feature-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #F0EDE6; margin-bottom: 4px; font-family: 'Montserrat', sans-serif; }
+      .ap-feature-desc { font-size: 0.68rem; color: rgba(240,237,230,0.4); font-family: 'Montserrat', sans-serif; }
+
+      /* Venue card */
+      .ap-venue { max-width: 400px; margin: 0 auto 32px; padding: 28px 32px; border-radius: 20px; background: linear-gradient(135deg, rgba(212,176,106,0.06), rgba(139,58,74,0.04)); border: 1px solid rgba(212,176,106,0.15); position: relative; overflow: hidden; }
+      .ap-venue::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,176,106,0.2), transparent); }
+      .ap-venue-label { font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase; color: #D4B06A; font-weight: 600; margin-bottom: 8px; font-family: 'Montserrat', sans-serif; }
+      .ap-venue-name { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; color: #F0EDE6; margin-bottom: 6px; }
+      .ap-venue-hint { font-size: 0.78rem; color: rgba(240,237,230,0.4); font-family: 'Montserrat', sans-serif; }
+
+      .ap-dresscode { font-size: 0.78rem; color: rgba(240,237,230,0.35); font-family: 'Montserrat', sans-serif; letter-spacing: 0.05em; }
+      .ap-dresscode span { color: #D4B06A; }
+
+      /* Floating particles */
+      @keyframes ap-float-up { 0% { opacity: 0; transform: translateY(100%) scale(0.5); } 15% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; transform: translateY(-100vh) scale(1); } }
+      @keyframes ap-confetti-fall { 0% { opacity: 1; transform: translateY(-50px) rotate(0deg); } 100% { opacity: 0; transform: translateY(calc(100vh + 50px)) rotate(720deg); } }
+      @keyframes ap-sparkle-pop { 0%,100% { opacity: 0; transform: scale(0); } 50% { opacity: 0.8; transform: scale(1); } }
+
+      /* Divider line */
+      .ap-divider { width: 60px; height: 1px; background: linear-gradient(to right, transparent, #D4B06A, transparent); margin: 0 auto 40px; }
+    </style>
+
+    <section id="afterparty" class="ap-section">
+      <div class="ap-bg">
+        <div class="ap-bg-gradient"></div>
+        <div class="ap-bg-orb1"></div>
+        <div class="ap-bg-orb2"></div>
+        <div class="ap-bg-orb3"></div>
+        <div class="ap-bg-grid"></div>
+        <div class="ap-bg-noise"></div>
+      </div>
+
+      <!-- Locked State -->
+      <div class="ap-locked" id="partyLocked">
+        <div class="ap-lock-icon">&#128274;</div>
+        <p class="ap-locked-label">Secret Invitation</p>
+        <h2 class="ap-locked-title">Something Special<br>Awaits</h2>
+        <p class="ap-locked-desc">This section is exclusively for our inner circle. Enter the secret password to unlock a very special event.</p>
+        <div class="ap-input-wrap">
+          <input type="password" id="partyPassword" class="ap-password-input" placeholder="Enter password..." autocomplete="off"
+            onkeydown="if(event.key==='Enter')unlockParty()">
+          <p id="partyError" class="ap-error">Incorrect password. Try again.</p>
+          <button onclick="unlockParty()" class="ap-unlock-btn">Unlock &#10024;</button>
         </div>
+      </div>
 
-        <!-- Unlocked State (hidden initially) -->
-        <div id="partyUnlocked" style="display:none;">
-          <!-- Background effects -->
-          <div id="partyParticles" style="position:absolute; inset:0; pointer-events:none; overflow:hidden;"></div>
+      <!-- Unlocked State -->
+      <div class="ap-unlocked" id="partyUnlocked" style="display:none;">
+        <div class="ap-particles-layer" id="partyParticles"></div>
+        <div class="ap-content" id="partyContent">
+          <div class="ap-reveal ap-hero-emoji" style="animation-delay:0s;">&#127881;</div>
+          <p class="ap-reveal ap-hero-label" style="animation-delay:0.1s;">You&rsquo;re Invited</p>
+          <h2 class="ap-reveal ap-hero-title" style="animation-delay:0.2s;">The Grand<br>After Party</h2>
+          <p class="ap-reveal ap-hero-subtitle" style="animation-delay:0.3s;">Where the real celebration begins</p>
+          <div class="ap-reveal ap-divider" style="animation-delay:0.35s;"></div>
 
-          <div class="text-center" id="partyContent">
-            <div style="font-size:5rem; margin-bottom:8px;" class="party-emoji">&#127881;</div>
-            <p style="font-size:0.55rem; letter-spacing:0.6em; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:8px;">You&rsquo;re Invited</p>
-            <h2 class="font-heading text-5xl sm:text-6xl" style="font-weight:300; margin-bottom:4px; background:linear-gradient(135deg, #E8C988, #D4B06A, #B8924A); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">The Grand After Party</h2>
-            <p class="font-heading text-lg" style="color:var(--text-muted); font-style:italic; margin-bottom:32px;">Where the real celebration begins</p>
-
-            <!-- Date & Time -->
-            <div style="display:inline-flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom:32px;">
-              <div style="padding:10px 20px; border-radius:14px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.04)); border:1px solid rgba(212,176,106,0.2);">
-                <span style="font-size:0.78rem; color:var(--gold); font-weight:500;">&#128197; Friday, May 9th</span>
-              </div>
-              <div style="padding:10px 20px; border-radius:14px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.04)); border:1px solid rgba(212,176,106,0.2);">
-                <span style="font-size:0.78rem; color:var(--gold); font-weight:500;">&#127769; 8:00 PM onwards</span>
-              </div>
-            </div>
-
-            <!-- Description -->
-            <div style="max-width:480px; margin:0 auto 36px; padding:24px; border-radius:20px; background:rgba(255,253,248,0.03); border:1px solid rgba(212,176,106,0.1);">
-              <p style="font-size:0.88rem; color:var(--text); line-height:1.8;">After the sacred ceremonies, join us for an unforgettable night of music, dancing, and celebration. This is where we let loose and party with the people who mean the most to us.</p>
-            </div>
-
-            <!-- Info Cards -->
-            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; max-width:480px; margin:0 auto 36px;">
-              <div style="padding:20px 12px; border-radius:16px; background:rgba(255,253,248,0.03); border:1px solid var(--border); text-align:center;">
-                <div style="font-size:1.8rem; margin-bottom:8px;">&#127926;</div>
-                <p style="font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:4px;">Music</p>
-                <p style="font-size:0.68rem; color:var(--text-muted);">DJ &amp; Live</p>
-              </div>
-              <div style="padding:20px 12px; border-radius:16px; background:rgba(255,253,248,0.03); border:1px solid var(--border); text-align:center;">
-                <div style="font-size:1.8rem; margin-bottom:8px;">&#127864;</div>
-                <p style="font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:4px;">Drinks</p>
-                <p style="font-size:0.68rem; color:var(--text-muted);">Open Bar</p>
-              </div>
-              <div style="padding:20px 12px; border-radius:16px; background:rgba(255,253,248,0.03); border:1px solid var(--border); text-align:center;">
-                <div style="font-size:1.8rem; margin-bottom:8px;">&#128131;</div>
-                <p style="font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:4px;">Dance</p>
-                <p style="font-size:0.68rem; color:var(--text-muted);">All Night</p>
-              </div>
-            </div>
-
-            <!-- Location -->
-            <div style="padding:20px 28px; border-radius:16px; background:linear-gradient(135deg, rgba(212,176,106,0.08), rgba(139,58,74,0.06)); border:1px solid rgba(212,176,106,0.15); max-width:360px; margin:0 auto;">
-              <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:4px;">Venue</p>
-              <p class="font-heading text-xl" style="font-weight:400;">Location TBD</p>
-              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Details coming soon &mdash; stay tuned!</p>
-            </div>
-
-            <!-- Dress code hint -->
-            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:24px;">&#10024; Dress to impress &middot; Come ready to dance &#10024;</p>
+          <div class="ap-reveal ap-time-row" style="animation-delay:0.4s;">
+            <div class="ap-time-badge"><span>&#128197; Friday, May 9th</span></div>
+            <div class="ap-time-badge"><span>&#127769; 8:00 PM Onwards</span></div>
           </div>
+
+          <div class="ap-reveal ap-desc-card" style="animation-delay:0.5s;">
+            <p>After the sacred ceremonies, join us for an unforgettable night of music, dancing, and celebration. This is where we let loose and party with the people who mean the most to us.</p>
+          </div>
+
+          <div class="ap-reveal ap-features" style="animation-delay:0.6s;">
+            <div class="ap-feature">
+              <div class="ap-feature-icon">&#127926;</div>
+              <p class="ap-feature-title">Music</p>
+              <p class="ap-feature-desc">DJ &amp; Live</p>
+            </div>
+            <div class="ap-feature">
+              <div class="ap-feature-icon">&#127864;</div>
+              <p class="ap-feature-title">Drinks</p>
+              <p class="ap-feature-desc">Open Bar</p>
+            </div>
+            <div class="ap-feature">
+              <div class="ap-feature-icon">&#128131;</div>
+              <p class="ap-feature-title">Dance</p>
+              <p class="ap-feature-desc">All Night</p>
+            </div>
+          </div>
+
+          <div class="ap-reveal ap-venue" style="animation-delay:0.7s;">
+            <p class="ap-venue-label">Venue</p>
+            <p class="ap-venue-name">Location TBD</p>
+            <p class="ap-venue-hint">Details coming soon &mdash; stay tuned!</p>
+          </div>
+
+          <p class="ap-reveal ap-dresscode" style="animation-delay:0.8s;"><span>&#10024;</span> Dress to impress &middot; Come ready to dance <span>&#10024;</span></p>
         </div>
       </div>
     </section>
-
-    <style>
-      @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-      @keyframes partyReveal { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-      @keyframes sparkle { 0% { opacity: 0; transform: scale(0) rotate(0deg); } 50% { opacity: 1; transform: scale(1) rotate(180deg); } 100% { opacity: 0; transform: scale(0) rotate(360deg); } }
-      @keyframes confettiDrop { 0% { opacity: 1; transform: translateY(-20vh) rotate(0deg); } 100% { opacity: 0; transform: translateY(100vh) rotate(720deg); } }
-      @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
-      .party-emoji { animation: pulse 1.5s ease-in-out infinite; }
-      #partyContent > * { animation: partyReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
-      #partyContent > *:nth-child(2) { animation-delay: 0.1s; }
-      #partyContent > *:nth-child(3) { animation-delay: 0.2s; }
-      #partyContent > *:nth-child(4) { animation-delay: 0.3s; }
-      #partyContent > *:nth-child(5) { animation-delay: 0.4s; }
-      #partyContent > *:nth-child(6) { animation-delay: 0.5s; }
-      #partyContent > *:nth-child(7) { animation-delay: 0.6s; }
-      #partyContent > *:nth-child(8) { animation-delay: 0.7s; }
-      #partyContent > *:nth-child(9) { animation-delay: 0.8s; }
-      #partyContent > *:nth-child(10) { animation-delay: 0.9s; }
-    </style>
 
     <script>
       function unlockParty() {
@@ -1405,37 +1468,50 @@
           spawnPartyEffects();
           localStorage.setItem('partyUnlocked', 'true');
         } else {
-          const err = document.getElementById('partyError');
-          err.style.display = 'block';
-          document.getElementById('partyPassword').style.borderColor = '#E07070';
-          setTimeout(() => { document.getElementById('partyPassword').style.borderColor = 'rgba(212,176,106,0.2)'; }, 1500);
+          document.getElementById('partyError').style.display = 'block';
+          const inp = document.getElementById('partyPassword');
+          inp.style.borderColor = '#F07070';
+          inp.style.boxShadow = '0 0 0 4px rgba(240,112,112,0.1)';
+          setTimeout(() => { inp.style.borderColor = 'rgba(212,176,106,0.2)'; inp.style.boxShadow = 'none'; }, 1800);
         }
       }
 
-      // Auto-unlock if previously unlocked
       if (localStorage.getItem('partyUnlocked') === 'true') {
         document.addEventListener('DOMContentLoaded', () => {
           document.getElementById('partyLocked').style.display = 'none';
           document.getElementById('partyUnlocked').style.display = 'block';
-          setTimeout(spawnPartyEffects, 500);
+          setTimeout(spawnPartyEffects, 300);
         });
       }
 
       function spawnPartyEffects() {
         const container = document.getElementById('partyParticles');
-        // Confetti
-        const colors = ['#D4B06A', '#E8C988', '#B8924A', '#8B3A4A', '#6EC87A', '#E07070', '#6EA8E0', '#fff'];
-        for (let i = 0; i < 50; i++) {
-          const div = document.createElement('div');
-          div.style.cssText = `position:absolute; width:${4 + Math.random()*6}px; height:${4 + Math.random()*6}px; background:${colors[Math.floor(Math.random()*colors.length)]}; border-radius:${Math.random()>0.5?'50%':'2px'}; left:${Math.random()*100}%; top:-10px; opacity:0; animation:confettiDrop ${2+Math.random()*3}s ${Math.random()*2}s ease-in forwards;`;
-          container.appendChild(div);
+        if (!container) return;
+
+        // Floating gold particles
+        for (let i = 0; i < 30; i++) {
+          const p = document.createElement('div');
+          const size = 1.5 + Math.random() * 3;
+          p.style.cssText = `position:absolute; width:${size}px; height:${size}px; border-radius:50%; background:rgba(212,176,106,${0.15 + Math.random()*0.25}); left:${Math.random()*100}%; bottom:-10px; animation:ap-float-up ${8+Math.random()*12}s ${Math.random()*8}s linear infinite;`;
+          container.appendChild(p);
         }
-        // Sparkles
-        for (let i = 0; i < 20; i++) {
-          const spark = document.createElement('div');
-          spark.textContent = '\u2728';
-          spark.style.cssText = `position:absolute; font-size:${10+Math.random()*16}px; left:${Math.random()*100}%; top:${Math.random()*100}%; animation:sparkle ${1+Math.random()*2}s ${Math.random()*3}s ease-in-out infinite;`;
-          container.appendChild(spark);
+
+        // Initial confetti burst
+        const colors = ['#D4B06A','#E8C988','#B8924A','#fff','#8B3A4A','#6EA8E0','#6EC87A','#F0EDE6'];
+        for (let i = 0; i < 60; i++) {
+          const c = document.createElement('div');
+          const w = 3 + Math.random()*6;
+          const h = Math.random() > 0.5 ? w : w * 2.5;
+          c.style.cssText = `position:absolute; width:${w}px; height:${h}px; background:${colors[Math.floor(Math.random()*colors.length)]}; border-radius:${Math.random()>0.5?'50%':'1px'}; left:${Math.random()*100}%; top:-30px; opacity:0; animation:ap-confetti-fall ${2.5+Math.random()*3}s ${Math.random()*1.5}s ease-in forwards;`;
+          container.appendChild(c);
+        }
+
+        // Subtle sparkles
+        for (let i = 0; i < 15; i++) {
+          const s = document.createElement('div');
+          s.textContent = '\u2728';
+          s.style.cssText = `position:absolute; font-size:${8+Math.random()*14}px; left:${Math.random()*100}%; top:${Math.random()*100}%; animation:ap-sparkle-pop ${2+Math.random()*3}s ${Math.random()*5}s ease-in-out infinite; pointer-events:none;`;
+          container.appendChild(s);
         }
       }
     </script>
