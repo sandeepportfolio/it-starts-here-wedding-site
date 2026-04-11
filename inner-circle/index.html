@@ -524,9 +524,9 @@
             <p class="text-xs" style="color: var(--text-muted);">The Question</p>
             <h3 class="font-heading text-2xl font-medium mb-6">Will you be joining us?</h3>
             <div class="space-y-3">
-              <div class="rsvp-option" onclick="selectRsvp(this,'accept')"><div class="flex items-center gap-3"><span style="color:var(--gold);">&#10022;</span><div><p class="text-sm font-medium">Joyfully Accept</p><p class="text-xs" style="color:var(--text-muted);">I'll be there in spirit &amp; soul</p></div></div></div>
-              <div class="rsvp-option" onclick="selectRsvp(this,'tentative')"><div class="flex items-center gap-3"><span style="color:var(--gold);">&#9672;</span><div><p class="text-sm font-medium">Tentatively Yes</p><p class="text-xs" style="color:var(--text-muted);">I'll confirm closer to the date</p></div></div></div>
-              <div class="rsvp-option" onclick="selectRsvp(this,'decline')"><div class="flex items-center gap-3"><span style="color:var(--text-muted);">&#9671;</span><div><p class="text-sm font-medium">Regretfully Decline</p><p class="text-xs" style="color:var(--text-muted);">Sending love from afar</p></div></div></div>
+              <div class="rsvp-option" onclick="selectRsvp(this,'attending')"><div class="flex items-center gap-3"><span style="color:var(--gold);">&#10022;</span><div><p class="text-sm font-medium">Joyfully Accept</p><p class="text-xs" style="color:var(--text-muted);">I'll be there in spirit &amp; soul</p></div></div></div>
+              <div class="rsvp-option" onclick="selectRsvp(this,'pending')"><div class="flex items-center gap-3"><span style="color:var(--gold);">&#9672;</span><div><p class="text-sm font-medium">Tentatively Yes</p><p class="text-xs" style="color:var(--text-muted);">I'll confirm closer to the date</p></div></div></div>
+              <div class="rsvp-option" onclick="selectRsvp(this,'declined')"><div class="flex items-center gap-3"><span style="color:var(--text-muted);">&#9671;</span><div><p class="text-sm font-medium">Regretfully Decline</p><p class="text-xs" style="color:var(--text-muted);">Sending love from afar</p></div></div></div>
             </div>
           </div>
           <div class="rsvp-step" id="rsvp-step-2">
@@ -1760,7 +1760,6 @@
         if (submitBtn) { submitBtn.textContent = 'Upload Photo ✨'; submitBtn.disabled = false; }
       }
     }
-    }
 
     // ---- RSVP ----
     let rsvpResponse = '';
@@ -1769,7 +1768,7 @@
       document.querySelectorAll('.rsvp-option').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
       setTimeout(() => {
-        if (response === 'decline') { document.getElementById('rsvp-confirm-title').textContent = "We'll Miss You"; document.getElementById('rsvp-confirm-msg').textContent = "Thank you for letting us know. We'll keep you in our hearts on the big day."; goRsvpStep(3); }
+        if (response === 'declined') { document.getElementById('rsvp-confirm-title').textContent = "We'll Miss You"; document.getElementById('rsvp-confirm-msg').textContent = "Thank you for letting us know. We'll keep you in our hearts on the big day."; goRsvpStep(3); }
         else goRsvpStep(2);
       }, 300);
     }
@@ -1778,7 +1777,7 @@
       document.getElementById('rsvp-step-' + step).classList.add('active');
       document.getElementById('rsvp-step-label').textContent = 'Step ' + step + ' of 3';
       for (let i = 1; i <= 3; i++) document.getElementById('rsvp-bar-' + i).style.background = i <= step ? 'var(--gold)' : 'var(--border)';
-      if (step === 3 && rsvpResponse !== 'decline') { document.getElementById('rsvp-confirm-title').textContent = 'Thank You!'; document.getElementById('rsvp-confirm-msg').textContent = "Your response has been recorded. We can't wait to celebrate with you!"; }
+      if (step === 3 && rsvpResponse !== 'declined') { document.getElementById('rsvp-confirm-title').textContent = 'Thank You!'; document.getElementById('rsvp-confirm-msg').textContent = "Your response has been recorded. We can't wait to celebrate with you!"; }
     }
 
     // ---- RSVP Submit (Firebase) ----
