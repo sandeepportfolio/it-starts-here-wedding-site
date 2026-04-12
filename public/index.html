@@ -2,93 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Wedding Portal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background-color: #121212; color: #f8f9fa; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .auth-card { background: #1e1e1e; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(212, 176, 106, 0.2); width: 100%; max-width: 400px; border: 1px solid #D4B06A; }
-        .form-control { background: #2c2c2c; border: 1px solid #444; color: #fff; }
-        .form-control:focus { background: #2c2c2c; color: #fff; border-color: #D4B06A; box-shadow: 0 0 0 0.25rem rgba(212, 176, 106, 0.25); }
-        .btn-gold { background-color: #D4B06A; color: #000; font-weight: bold; border: none; min-height: 44px; }
-        .btn-gold:hover { background-color: #b89759; color: #000; }
-        .text-gold { color: #D4B06A; }
-        .toggle-link { color: #D4B06A; cursor: pointer; text-decoration: underline; }
-    </style>
+    <meta http-equiv="refresh" content="0;url=admin.html">
+    <title>Admin Portal</title>
 </head>
 <body>
-
-<div class="auth-card" id="login-card">
-    <h3 class="text-center text-gold mb-4">Admin Login</h3>
-    <form id="login-form">
-        <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" id="login-email" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" id="login-pass" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-gold w-100">Login</button>
-    </form>
-    <p class="text-center mt-3">Need access? <span class="toggle-link" onclick="toggleMode()">Register here</span></p>
-    <div id="login-msg" class="text-center mt-2 text-danger"></div>
-</div>
-
-<div class="auth-card" id="register-card" style="display: none;">
-    <h3 class="text-center text-gold mb-4">Admin Registration</h3>
-    <form id="register-form">
-        <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input type="text" id="reg-name" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Authorized Email</label>
-            <input type="email" id="reg-email" class="form-control" required>
-            <small class="text-muted">Must be pre-approved</small>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" id="reg-pass" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-gold w-100">Register</button>
-    </form>
-    <p class="text-center mt-3">Have an account? <span class="toggle-link" onclick="toggleMode()">Login here</span></p>
-    <div id="reg-msg" class="text-center mt-2"></div>
-</div>
-
-<script>
-    if (localStorage.getItem('adminToken')) window.location.href = '/public/admin.html';
-
-    function toggleMode() {
-        const lp = document.getElementById('login-card');
-        const rp = document.getElementById('register-card');
-        if (lp.style.display === 'none') { lp.style.display = 'block'; rp.style.display = 'none'; }
-        else { lp.style.display = 'none'; rp.style.display = 'block'; }
-    }
-
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const res = await fetch('/api/auth/login', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: document.getElementById('login-email').value, password: document.getElementById('login-pass').value })
-        });
-        const data = await res.json();
-        if (res.ok) { localStorage.setItem('adminToken', data.token); window.location.href = '/public/admin.html'; }
-        else { document.getElementById('login-msg').innerText = data.error; }
-    });
-
-    document.getElementById('register-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const res = await fetch('/api/auth/register', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, password: document.getElementById('reg-pass').value })
-        });
-        const data = await res.json();
-        const msg = document.getElementById('reg-msg');
-        if (res.ok) { msg.className = 'text-success text-center mt-2'; msg.innerText = 'Success! Please login.'; setTimeout(toggleMode, 2000); }
-        else { msg.className = 'text-danger text-center mt-2'; msg.innerText = data.error; }
-    });
-</script>
+    <script>window.location.href = 'admin.html';</script>
+    <p>Redirecting to <a href="admin.html">Admin Portal</a>...</p>
 </body>
 </html>

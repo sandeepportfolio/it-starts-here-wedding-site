@@ -14,31 +14,28 @@
         .nav-tabs .nav-link { color: #ccc; border: none; padding: 1rem 1.5rem; }
         .nav-tabs .nav-link.active { background: transparent; color: #D4B06A; border-bottom: 3px solid #D4B06A; font-weight: bold; }
         .nav-tabs .nav-link:hover { color: #D4B06A; }
-        
         .card { background: #1e1e1e; border: 1px solid #333; border-radius: 10px; margin-bottom: 1rem; }
         .stat-card { border-left: 4px solid #D4B06A; }
         .stat-card .display-4 { color: #D4B06A; font-weight: bold; }
-        
         .table { color: #e0e0e0; border-color: #444; }
         .table th { color: #D4B06A; border-bottom: 2px solid #555; }
         .table td { border-color: #333; vertical-align: middle; }
         .table-responsive { overflow-x: auto; }
-        
         .btn-gold { background-color: #D4B06A; color: #000; font-weight: 500; min-height: 44px; }
         .btn-gold:hover { background-color: #b89759; color: #000; }
         .btn-outline-gold { border-color: #D4B06A; color: #D4B06A; min-height: 44px; }
         .btn-outline-gold:hover { background-color: #D4B06A; color: #000; }
         .btn-icon { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
-
         .form-control, .form-select { background: #2c2c2c; border: 1px solid #444; color: #fff; min-height: 44px; }
         .form-control:focus, .form-select:focus { background: #2c2c2c; color: #fff; border-color: #D4B06A; box-shadow: 0 0 0 0.25rem rgba(212, 176, 106, 0.25); }
-
         .photo-card img { width: 100%; height: 200px; object-fit: cover; border-top-left-radius: 9px; border-top-right-radius: 9px; }
-        
+        .text-gold { color: #D4B06A; }
+        .loading-spinner { display: inline-block; width: 1.2rem; height: 1.2rem; border: 2px solid #D4B06A; border-right-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 0.5rem; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .event-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin: 1px; background: rgba(212,176,106,0.15); color: #D4B06A; }
         @media (max-width: 768px) {
             .nav-tabs { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; padding-bottom: 5px; }
             .nav-tabs .nav-link { white-space: nowrap; padding: 0.8rem 1rem; }
-            .stat-cards { flex-direction: column; }
         }
     </style>
 </head>
@@ -48,8 +45,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#"><i class="bi bi-gem"></i> Admin Portal</a>
         <div class="d-flex align-items-center">
-            <span id="user-name" class="text-light me-3 d-none d-md-inline"></span>
-            <button class="btn btn-sm btn-outline-danger" onclick="logout()">Logout</button>
+            <a href="../" class="btn btn-sm btn-outline-gold"><i class="bi bi-arrow-left"></i> Back to Site</a>
         </div>
     </div>
 </nav>
@@ -59,37 +55,50 @@
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#dashboard" type="button">Dashboard</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#rsvps" type="button" onclick="loadRSVPs()">RSVPs</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#photos" type="button" onclick="loadPhotos()">Photos</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#messages" type="button" onclick="loadMessages()">Messages</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#settings" type="button">Settings</button></li>
     </ul>
 
     <div class="tab-content pb-5">
-        
+
         <!-- DASHBOARD -->
         <div class="tab-pane fade show active" id="dashboard">
-            <div class="row g-3 stat-cards" id="stats-container">
-                <div class="col-md-3">
+            <div class="row g-3" id="stats-container">
+                <div class="col-6 col-md-3">
                     <div class="card stat-card p-3 h-100">
                         <h6 class="text-muted text-uppercase mb-1">Total RSVPs</h6>
-                        <div class="display-4" id="stat-rsvps">0</div>
+                        <div class="display-4" id="stat-rsvps"><span class="loading-spinner"></span></div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
                     <div class="card stat-card p-3 h-100">
                         <h6 class="text-muted text-uppercase mb-1">Attending</h6>
-                        <div class="display-4" id="stat-attending">0</div>
+                        <div class="display-4" id="stat-attending"><span class="loading-spinner"></span></div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-6 col-md-3">
+                    <div class="card stat-card p-3 h-100">
+                        <h6 class="text-muted text-uppercase mb-1">Not Attending</h6>
+                        <div class="display-4" id="stat-not-attending"><span class="loading-spinner"></span></div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
                     <div class="card stat-card p-3 h-100">
                         <h6 class="text-muted text-uppercase mb-1">Total Photos</h6>
-                        <div class="display-4" id="stat-photos">0</div>
+                        <div class="display-4" id="stat-photos"><span class="loading-spinner"></span></div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card stat-card p-3 h-100 border-danger border-left-4">
-                        <h6 class="text-muted text-uppercase mb-1">Pending Photos</h6>
-                        <div class="display-4 text-warning" id="stat-unapproved">0</div>
+            </div>
+
+            <!-- Recent RSVPs on dashboard -->
+            <h5 class="text-gold mt-4 mb-3">Recent RSVPs</h5>
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover m-0">
+                            <thead><tr><th>Name</th><th>Email</th><th>Attending</th><th>Events</th><th>Date</th></tr></thead>
+                            <tbody id="recent-rsvp-body">
+                                <tr><td colspan="5" class="text-center py-4"><span class="loading-spinner"></span> Loading...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -99,10 +108,7 @@
         <div class="tab-pane fade" id="rsvps">
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                 <h4 class="text-gold m-0">RSVP List</h4>
-                <div class="input-group" style="max-width: 300px;">
-                    <input type="text" id="rsvp-search" class="form-control" placeholder="Search name/email..." onkeyup="if(event.key==='Enter') loadRSVPs()">
-                    <button class="btn btn-gold" onclick="loadRSVPs()"><i class="bi bi-search"></i></button>
-                </div>
+                <button class="btn btn-outline-gold" onclick="loadRSVPs()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
             </div>
             <div class="card">
                 <div class="card-body p-0">
@@ -114,12 +120,14 @@
                                     <th>Contact</th>
                                     <th>Attending</th>
                                     <th>+1s</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                                    <th>Events</th>
+                                    <th>Message</th>
+                                    <th>Source</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody id="rsvp-body">
-                                <tr><td colspan="6" class="text-center py-4">Loading...</td></tr>
+                                <tr><td colspan="8" class="text-center py-4"><span class="loading-spinner"></span> Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -130,177 +138,182 @@
         <!-- PHOTOS -->
         <div class="tab-pane fade" id="photos">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="text-gold m-0">Photo Moderation</h4>
+                <h4 class="text-gold m-0">Guest Photos</h4>
                 <button class="btn btn-outline-gold" onclick="loadPhotos()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
             </div>
             <div class="row g-4" id="photos-grid">
-                <div class="col-12 text-center py-4">Loading...</div>
+                <div class="col-12 text-center py-4"><span class="loading-spinner"></span> Loading...</div>
             </div>
-        </div>
-
-        <!-- MESSAGES -->
-        <div class="tab-pane fade" id="messages">
-            <h4 class="text-gold mb-3">Guest Messages</h4>
-            <div class="card">
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover m-0">
-                            <thead><tr><th>Guest</th><th>Message</th><th>Date</th><th>Action</th></tr></thead>
-                            <tbody id="msg-body">
-                                <tr><td colspan="4" class="text-center py-4">Loading...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SETTINGS -->
-        <div class="tab-pane fade" id="settings">
-            <h4 class="text-gold mb-3">System Settings</h4>
-            <!-- Settings intentionally left sparse, add pw change if needed -->
-            <p>Welcome to the admin portal.</p>
         </div>
 
     </div>
 </div>
 
-<script>
-    const token = localStorage.getItem('adminToken');
-    if (!token) window.location.href = '/public/index.html';
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getStorage } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
-    const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+    const firebaseConfig = {
+      apiKey: "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g",
+      authDomain: "it-starts-here-wedding.firebaseapp.com",
+      projectId: "it-starts-here-wedding",
+      storageBucket: "it-starts-here-wedding.appspot.com",
+      messagingSenderId: "36824586549",
+      appId: "1:36824586549:web:711579dbdca5a73ddf147c"
+    };
 
-    async function init() {
-        try {
-            const res = await fetch('/api/auth/me', { headers });
-            if (!res.ok) throw new Error('Auth failed');
-            const user = await res.json();
-            document.getElementById('user-name').innerText = user.name;
-            loadStats();
-        } catch (e) {
-            logout();
-        }
+    let db = null;
+    try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+    } catch (e) {
+        console.warn('Firebase init failed:', e.message);
     }
 
-    function logout() {
-        localStorage.removeItem('adminToken');
-        window.location.href = '/public/index.html';
-    }
-
-    async function loadStats() {
-        try {
-            const res = await fetch('/api/dashboard/stats', { headers });
-            const data = await res.json();
-            document.getElementById('stat-rsvps').innerText = data.rsvpCount || 0;
-            document.getElementById('stat-attending').innerText = data.attendingCount || 0;
-            document.getElementById('stat-photos').innerText = data.photoCount || 0;
-            document.getElementById('stat-unapproved').innerText = data.unapprovedPhotos || 0;
-        } catch(e) { console.error('Stats error', e); }
-    }
-
-    async function loadRSVPs() {
-        const q = document.getElementById('rsvp-search').value;
-        const res = await fetch(`/api/rsvps${q ? '?search='+encodeURIComponent(q) : ''}`, { headers });
-        const data = await res.json();
-        const tbody = document.getElementById('rsvp-body');
-        if (!data.length) return tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No RSVPs found</td></tr>';
-        
-        tbody.innerHTML = data.map(r => `
-            <tr>
-                <td><strong>${r.name}</strong><br><small class="text-muted">${r.dietary_restrictions ? 'Diet: '+escapeHtml(r.dietary_restrictions) : ''}</small></td>
-                <td><small>${escapeHtml(r.email)}<br>${escapeHtml(r.phone || '')}</small></td>
-                <td><span class="badge ${r.attendance==='yes'?'bg-success':(r.attendance==='no'?'bg-danger':'bg-secondary')}">${r.attendance}</span></td>
-                <td>${r.plus_ones}</td>
-                <td>
-                    <select class="form-select form-select-sm w-auto d-inline" onchange="updateRSVPStatus(${r.id}, this.value)">
-                        <option value="pending" ${r.status==='pending'?'selected':''}>Pending</option>
-                        <option value="confirmed" ${r.status==='confirmed'?'selected':''}>Confirmed</option>
-                    </select>
-                </td>
-                <td>
-                    ${r.message ? `<button class="btn btn-sm btn-info btn-icon me-1" title="View Message" onclick="alert('${escapeHtml(r.message.replace(/'/g,"\\'"))}')"><i class="bi bi-chat-text"></i></button>` : ''}
-                    <button class="btn btn-sm btn-danger btn-icon" onclick="deleteRSVP(${r.id})"><i class="bi bi-trash"></i></button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    async function updateRSVPStatus(id, status) {
-        await fetch(`/api/rsvps/${id}`, { method: 'PATCH', headers, body: JSON.stringify({ status }) });
-    }
-
-    async function deleteRSVP(id) {
-        if(!confirm('Are you sure?')) return;
-        await fetch(`/api/rsvps/${id}`, { method: 'DELETE', headers });
-        loadRSVPs(); loadStats();
-    }
-
-    async function loadPhotos() {
-        const res = await fetch('/api/photos', { headers });
-        const data = await res.json();
-        const grid = document.getElementById('photos-grid');
-        if (!data.length) return grid.innerHTML = '<div class="col-12 text-center py-4">No photos uploaded yet</div>';
-
-        grid.innerHTML = data.map(p => `
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="card photo-card h-100 ${p.approved ? 'border-success' : 'border-warning'}">
-                    <img src="${p.url}" alt="Photo">
-                    <div class="card-body p-2">
-                        <small class="d-block text-truncate"><strong>By:</strong> ${escapeHtml(p.uploader_name)}</small>
-                        ${p.caption ? `<small class="d-block text-muted text-truncate">"${escapeHtml(p.caption)}"</small>` : ''}
-                    </div>
-                    <div class="card-footer bg-transparent border-0 p-2 d-flex justify-content-between">
-                        ${p.approved 
-                            ? `<button class="btn btn-sm btn-warning w-50 me-1" onclick="togglePhoto(${p.id}, 0)">Unapprove</button>`
-                            : `<button class="btn btn-sm btn-success w-50 me-1" onclick="togglePhoto(${p.id}, 1)">Approve</button>`
-                        }
-                        <button class="btn btn-sm btn-danger flex-grow-1" onclick="deletePhoto(${p.id})"><i class="bi bi-trash"></i></button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    async function togglePhoto(id, approved) {
-        await fetch(`/api/photos/${id}`, { method: 'PATCH', headers, body: JSON.stringify({ approved }) });
-        loadPhotos(); loadStats();
-    }
-
-    async function deletePhoto(id) {
-        if(!confirm('Delete this photo permanently?')) return;
-        await fetch(`/api/photos/${id}`, { method: 'DELETE', headers });
-        loadPhotos(); loadStats();
-    }
-
-    async function loadMessages() {
-        const res = await fetch('/api/messages', { headers });
-        const data = await res.json();
-        const tbody = document.getElementById('msg-body');
-        if (!data.length) return tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4">No messages yet</td></tr>';
-        
-        tbody.innerHTML = data.map(m => `
-            <tr>
-                <td><strong>${escapeHtml(m.name)}</strong><br><small class="text-muted">${escapeHtml(m.email)}</small></td>
-                <td>${escapeHtml(m.message)}</td>
-                <td style="white-space: nowrap;"><small>${new Date(m.created_at).toLocaleDateString()}</small></td>
-                <td><button class="btn btn-sm btn-danger btn-icon" onclick="deleteMsg(${m.id})"><i class="bi bi-trash"></i></button></td>
-            </tr>
-        `).join('');
-    }
-
-    async function deleteMsg(id) {
-        if(!confirm('Delete message?')) return;
-        await fetch(`/api/messages/${id}`, { method: 'DELETE', headers });
-        loadMessages();
-    }
-
+    // ---- Helpers ----
     function escapeHtml(str) {
         if (!str) return '';
         return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
     }
 
-    init();
+    function formatDate(d) {
+        if (!d) return '';
+        const date = d.toDate ? d.toDate() : new Date(d);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // ---- Load Stats & Recent RSVPs ----
+    async function loadDashboard() {
+        if (!db) {
+            document.getElementById('stat-rsvps').innerText = 'N/A';
+            document.getElementById('stat-attending').innerText = 'N/A';
+            document.getElementById('stat-not-attending').innerText = 'N/A';
+            document.getElementById('stat-photos').innerText = 'N/A';
+            return;
+        }
+
+        try {
+            // Load RSVPs
+            const rsvpSnap = await getDocs(collection(db, 'rsvps'));
+            const rsvps = [];
+            rsvpSnap.forEach(doc => rsvps.push({ id: doc.id, ...doc.data() }));
+
+            const attending = rsvps.filter(r => r.attendance === 'yes' || r.attendance === 'attending').length;
+            const notAttending = rsvps.filter(r => r.attendance === 'no' || r.attendance === 'not attending').length;
+
+            document.getElementById('stat-rsvps').innerText = rsvps.length;
+            document.getElementById('stat-attending').innerText = attending;
+            document.getElementById('stat-not-attending').innerText = notAttending;
+
+            // Show recent 10 RSVPs
+            const sorted = rsvps.sort((a, b) => {
+                const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+                const db2 = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+                return db2 - da;
+            });
+            const recent = sorted.slice(0, 10);
+            const tbody = document.getElementById('recent-rsvp-body');
+            if (!recent.length) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">No RSVPs yet</td></tr>';
+            } else {
+                tbody.innerHTML = recent.map(r => `
+                    <tr>
+                        <td><strong>${escapeHtml(r.name)}</strong></td>
+                        <td><small>${escapeHtml(r.email)}</small></td>
+                        <td><span class="badge ${r.attendance==='yes'||r.attendance==='attending'?'bg-success':(r.attendance==='no'||r.attendance==='not attending'?'bg-danger':'bg-secondary')}">${escapeHtml(r.attendance)}</span></td>
+                        <td>${(r.events || []).map(e => `<span class="event-badge">${escapeHtml(e)}</span>`).join(' ') || '-'}</td>
+                        <td><small>${formatDate(r.createdAt)}</small></td>
+                    </tr>
+                `).join('');
+            }
+
+            // Load photos count
+            const photoSnap = await getDocs(collection(db, 'photos'));
+            document.getElementById('stat-photos').innerText = photoSnap.size;
+        } catch (e) {
+            console.error('Dashboard error:', e);
+            document.getElementById('stat-rsvps').innerText = 'Error';
+        }
+    }
+
+    // ---- Load RSVPs ----
+    window.loadRSVPs = async function() {
+        if (!db) return;
+        const tbody = document.getElementById('rsvp-body');
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4"><span class="loading-spinner"></span> Loading...</td></tr>';
+
+        try {
+            const snap = await getDocs(collection(db, 'rsvps'));
+            const rsvps = [];
+            snap.forEach(doc => rsvps.push({ id: doc.id, ...doc.data() }));
+
+            rsvps.sort((a, b) => {
+                const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+                const db2 = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+                return db2 - da;
+            });
+
+            if (!rsvps.length) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4">No RSVPs found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = rsvps.map(r => `
+                <tr>
+                    <td><strong>${escapeHtml(r.name)}</strong>${r.dietary ? `<br><small class="text-muted">Diet: ${escapeHtml(r.dietary)}</small>` : ''}</td>
+                    <td><small>${escapeHtml(r.email)}<br>${escapeHtml(r.phone || '')}</small></td>
+                    <td><span class="badge ${r.attendance==='yes'||r.attendance==='attending'?'bg-success':(r.attendance==='no'||r.attendance==='not attending'?'bg-danger':'bg-secondary')}">${escapeHtml(r.attendance)}</span></td>
+                    <td>${r.plusOnes || 0}</td>
+                    <td>${(r.events || []).map(e => `<span class="event-badge">${escapeHtml(e)}</span>`).join(' ') || '-'}</td>
+                    <td>${r.message ? `<small class="text-muted">${escapeHtml(r.message.substring(0, 80))}${r.message.length > 80 ? '...' : ''}</small>` : '-'}</td>
+                    <td><small class="text-muted">${escapeHtml(r.source || 'main')}</small></td>
+                    <td style="white-space:nowrap;"><small>${formatDate(r.createdAt)}</small></td>
+                </tr>
+            `).join('');
+        } catch (e) {
+            console.error('RSVP load error:', e);
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-danger">Error loading RSVPs: ${escapeHtml(e.message)}</td></tr>`;
+        }
+    };
+
+    // ---- Load Photos ----
+    window.loadPhotos = async function() {
+        if (!db) return;
+        const grid = document.getElementById('photos-grid');
+        grid.innerHTML = '<div class="col-12 text-center py-4"><span class="loading-spinner"></span> Loading...</div>';
+
+        try {
+            const snap = await getDocs(collection(db, 'photos'));
+            const photos = [];
+            snap.forEach(doc => photos.push({ id: doc.id, ...doc.data() }));
+
+            if (!photos.length) {
+                grid.innerHTML = '<div class="col-12 text-center py-4">No photos uploaded yet</div>';
+                return;
+            }
+
+            grid.innerHTML = photos.map(p => `
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card photo-card h-100">
+                        <img src="${escapeHtml(p.url || p.imageUrl || '')}" alt="Photo" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%23333%22 width=%22200%22 height=%22200%22/><text fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22>No image</text></svg>'">
+                        <div class="card-body p-2">
+                            <small class="d-block text-truncate"><strong>By:</strong> ${escapeHtml(p.uploaderName || p.uploader_name || 'Unknown')}</small>
+                            ${p.caption ? `<small class="d-block text-muted text-truncate">"${escapeHtml(p.caption)}"</small>` : ''}
+                            <small class="d-block text-muted mt-1">${formatDate(p.createdAt || p.uploadedAt)}</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error('Photo load error:', e);
+            grid.innerHTML = `<div class="col-12 text-center py-4 text-danger">Error loading photos: ${escapeHtml(e.message)}</div>`;
+        }
+    };
+
+    // Initialize
+    loadDashboard();
 </script>
 </body>
 </html>
