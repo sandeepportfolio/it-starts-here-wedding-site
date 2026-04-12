@@ -2,158 +2,726 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding Admin Portal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>C&S Wedding — Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #121212; color: #f8f9fa; }
-        .navbar { background-color: #1e1e1e !important; border-bottom: 2px solid #D4B06A; }
-        .navbar-brand { color: #D4B06A !important; font-weight: bold; }
-        .nav-tabs { border-bottom: 1px solid #444; }
-        .nav-tabs .nav-link { color: #ccc; border: none; padding: 1rem 1.5rem; }
-        .nav-tabs .nav-link.active { background: transparent; color: #D4B06A; border-bottom: 3px solid #D4B06A; font-weight: bold; }
-        .nav-tabs .nav-link:hover { color: #D4B06A; }
-        .card { background: #1e1e1e; border: 1px solid #333; border-radius: 10px; margin-bottom: 1rem; }
-        .stat-card { border-left: 4px solid #D4B06A; }
-        .stat-card .display-4 { color: #D4B06A; font-weight: bold; }
-        .table { color: #e0e0e0; border-color: #444; }
-        .table th { color: #D4B06A; border-bottom: 2px solid #555; }
-        .table td { border-color: #333; vertical-align: middle; }
-        .table-responsive { overflow-x: auto; }
-        .btn-gold { background-color: #D4B06A; color: #000; font-weight: 500; min-height: 44px; }
-        .btn-gold:hover { background-color: #b89759; color: #000; }
-        .btn-outline-gold { border-color: #D4B06A; color: #D4B06A; min-height: 44px; }
-        .btn-outline-gold:hover { background-color: #D4B06A; color: #000; }
-        .btn-icon { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
-        .form-control, .form-select { background: #2c2c2c; border: 1px solid #444; color: #fff; min-height: 44px; }
-        .form-control:focus, .form-select:focus { background: #2c2c2c; color: #fff; border-color: #D4B06A; box-shadow: 0 0 0 0.25rem rgba(212, 176, 106, 0.25); }
-        .photo-card img { width: 100%; height: 200px; object-fit: cover; border-top-left-radius: 9px; border-top-right-radius: 9px; }
-        .text-gold { color: #D4B06A; }
-        .loading-spinner { display: inline-block; width: 1.2rem; height: 1.2rem; border: 2px solid #D4B06A; border-right-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 0.5rem; vertical-align: middle; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .event-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin: 1px; background: rgba(212,176,106,0.15); color: #D4B06A; }
-        @media (max-width: 768px) {
-            .nav-tabs { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; padding-bottom: 5px; }
-            .nav-tabs .nav-link { white-space: nowrap; padding: 0.8rem 1rem; }
+        /* ─── Design Tokens ─── */
+        :root {
+            --bg: #0c0b0a;
+            --bg-elevated: #161514;
+            --bg-card: #1a1918;
+            --bg-card-hover: #1f1e1c;
+            --border: rgba(212,176,106,0.08);
+            --border-strong: rgba(212,176,106,0.18);
+            --gold: #d4b06a;
+            --gold-dim: rgba(212,176,106,0.5);
+            --gold-glow: rgba(212,176,106,0.06);
+            --green: #4ade80;
+            --green-dim: rgba(74,222,128,0.12);
+            --red: #f87171;
+            --red-dim: rgba(248,113,113,0.12);
+            --amber: #fbbf24;
+            --amber-dim: rgba(251,191,36,0.12);
+            --text: #f1ede6;
+            --text-secondary: #9a948a;
+            --text-muted: #6b665e;
+            --serif: 'Cormorant Garamond', Georgia, serif;
+            --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --radius: 14px;
+            --radius-sm: 8px;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
+
+        /* ─── Reset & Base ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100dvh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ─── Subtle Background Texture ─── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,176,106,0.03) 0%, transparent 70%);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ─── Header ─── */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            padding: calc(var(--safe-top) + 12px) 20px 12px;
+            background: rgba(12,11,10,0.85);
+            backdrop-filter: blur(24px) saturate(1.6);
+            -webkit-backdrop-filter: blur(24px) saturate(1.6);
+            border-bottom: 1px solid var(--border);
+        }
+        .header-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .header-title {
+            font-family: var(--serif);
+            font-size: 1.35rem; font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.02em;
+        }
+        .header-title span { font-weight: 400; color: var(--text-secondary); font-size: 0.8rem; font-family: var(--sans); margin-left: 8px; }
+        .header-back {
+            display: flex; align-items: center; gap: 6px;
+            color: var(--text-secondary); font-size: 0.8rem; text-decoration: none;
+            padding: 8px 14px; border-radius: 99px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+        .header-back:hover { color: var(--gold); border-color: var(--border-strong); background: var(--gold-glow); }
+        .header-back svg { width: 14px; height: 14px; }
+
+        /* ─── Navigation Tabs ─── */
+        .nav-bar {
+            position: sticky; top: calc(var(--safe-top) + 53px); z-index: 90;
+            background: rgba(12,11,10,0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto; overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .nav-bar::-webkit-scrollbar { display: none; }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; gap: 0; padding: 0 16px;
+        }
+        .nav-tab {
+            position: relative;
+            padding: 14px 20px;
+            font-size: 0.82rem; font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer; white-space: nowrap;
+            transition: color 0.25s ease;
+            border: none; background: none;
+            font-family: var(--sans);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .nav-tab::after {
+            content: ''; position: absolute;
+            bottom: 0; left: 20px; right: 20px; height: 2px;
+            background: var(--gold); border-radius: 2px 2px 0 0;
+            transform: scaleX(0); transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+        }
+        .nav-tab:hover { color: var(--text-secondary); }
+        .nav-tab.active { color: var(--gold); }
+        .nav-tab.active::after { transform: scaleX(1); }
+
+        /* ─── Main Content ─── */
+        .main {
+            position: relative; z-index: 1;
+            max-width: 1200px; margin: 0 auto;
+            padding: 24px 16px calc(var(--safe-bottom) + 32px);
+        }
+        .view { display: none; }
+        .view.active { display: block; animation: fadeUp 0.35s cubic-bezier(0.22,1,0.36,1); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── Stat Cards ─── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: all 0.25s ease;
+            position: relative; overflow: hidden;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-card:hover { border-color: var(--border-strong); background: var(--bg-card-hover); }
+        .stat-label {
+            font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--text-muted); margin-bottom: 8px; font-weight: 500;
+        }
+        .stat-value {
+            font-family: var(--serif); font-size: 2.4rem; font-weight: 600;
+            color: var(--gold); line-height: 1;
+        }
+        .stat-value.loading { font-size: 1rem; color: var(--text-muted); }
+
+        /* ─── Section Headers ─── */
+        .section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin: 32px 0 16px;
+        }
+        .section-title {
+            font-family: var(--serif); font-size: 1.3rem; font-weight: 600;
+            color: var(--text);
+        }
+        .refresh-btn {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border-radius: 99px;
+            font-size: 0.75rem; font-weight: 500; font-family: var(--sans);
+            color: var(--text-secondary);
+            background: var(--bg-card); border: 1px solid var(--border);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .refresh-btn:hover { color: var(--gold); border-color: var(--border-strong); }
+        .refresh-btn svg { width: 14px; height: 14px; }
+        .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ─── RSVP Cards (Mobile-First) ─── */
+        .rsvp-list { display: flex; flex-direction: column; gap: 10px; }
+        .rsvp-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            transition: all 0.2s ease;
+        }
+        .rsvp-card:hover { border-color: var(--border-strong); }
+        .rsvp-card-head {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .rsvp-name {
+            font-family: var(--serif); font-size: 1.1rem; font-weight: 600;
+            color: var(--text); line-height: 1.2;
+        }
+        .rsvp-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 4px 12px; border-radius: 99px;
+            font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+        }
+        .rsvp-badge.attending { background: var(--green-dim); color: var(--green); }
+        .rsvp-badge.not-attending { background: var(--red-dim); color: var(--red); }
+        .rsvp-badge.pending { background: var(--amber-dim); color: var(--amber); }
+        .rsvp-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+        .rsvp-meta {
+            display: flex; flex-wrap: wrap; gap: 6px 16px;
+            font-size: 0.78rem; color: var(--text-secondary);
+        }
+        .rsvp-meta-item { display: flex; align-items: center; gap: 5px; }
+        .rsvp-meta-item svg { width: 13px; height: 13px; opacity: 0.5; flex-shrink: 0; }
+        .rsvp-events {
+            display: flex; flex-wrap: wrap; gap: 5px;
+            margin-top: 10px;
+        }
+        .event-chip {
+            padding: 3px 10px; border-radius: 99px;
+            font-size: 0.65rem; font-weight: 500; letter-spacing: 0.03em;
+            background: var(--gold-glow); color: var(--gold-dim);
+            border: 1px solid var(--border);
+            text-transform: capitalize;
+        }
+        .rsvp-message {
+            margin-top: 10px; padding: 10px 14px;
+            background: rgba(212,176,106,0.03);
+            border-left: 2px solid var(--border-strong);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 0.78rem; color: var(--text-secondary);
+            font-style: italic;
+        }
+        .rsvp-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-top: 10px; padding-top: 10px;
+            border-top: 1px solid var(--border);
+            font-size: 0.7rem; color: var(--text-muted);
+        }
+
+        /* ─── Action Buttons (Edit/Delete) ─── */
+        .rsvp-actions {
+            display: flex; gap: 8px; margin-top: 12px;
+        }
+        .action-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 7px 14px; border-radius: 99px;
+            font-size: 0.7rem; font-weight: 600; font-family: var(--sans);
+            cursor: pointer; transition: all 0.2s ease;
+            border: 1px solid var(--border);
+            letter-spacing: 0.02em;
+        }
+        .action-btn svg { width: 12px; height: 12px; }
+        .action-btn.edit-btn {
+            background: rgba(212,176,106,0.04); color: var(--gold);
+        }
+        .action-btn.edit-btn:hover {
+            background: rgba(212,176,106,0.1); border-color: var(--border-strong);
+        }
+        .action-btn.delete-btn {
+            background: rgba(248,113,113,0.04); color: var(--red);
+            border-color: rgba(248,113,113,0.08);
+        }
+        .action-btn.delete-btn:hover {
+            background: rgba(248,113,113,0.12); border-color: rgba(248,113,113,0.2);
+        }
+        /* Table action buttons */
+        .tbl-action {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s ease;
+            border: 1px solid var(--border); background: transparent;
+        }
+        .tbl-action svg { width: 13px; height: 13px; }
+        .tbl-action.tbl-edit { color: var(--gold); }
+        .tbl-action.tbl-edit:hover { background: rgba(212,176,106,0.08); border-color: var(--border-strong); }
+        .tbl-action.tbl-delete { color: var(--red); border-color: rgba(248,113,113,0.08); }
+        .tbl-action.tbl-delete:hover { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.2); }
+
+        /* ─── Desktop RSVP Table ─── */
+        @media (min-width: 768px) {
+            .rsvp-list { display: none; }
+            .rsvp-table-wrap { display: block; }
+        }
+        @media (max-width: 767px) {
+            .rsvp-table-wrap { display: none; }
+        }
+        .rsvp-table {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius); overflow: hidden;
+        }
+        .rsvp-table th {
+            font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--text-muted); font-weight: 500;
+            padding: 14px 16px; text-align: left;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border);
+        }
+        .rsvp-table td {
+            padding: 14px 16px; font-size: 0.82rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary); vertical-align: middle;
+        }
+        .rsvp-table tr:last-child td { border-bottom: none; }
+        .rsvp-table tr:hover td { background: var(--bg-card-hover); }
+        .rsvp-table .name-cell { color: var(--text); font-weight: 500; }
+
+        /* ─── Photo Grid ─── */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        @media (min-width: 640px) { .photo-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+        @media (min-width: 1024px) { .photo-grid { grid-template-columns: repeat(4, 1fr); } }
+        .photo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.25s ease;
+        }
+        .photo-card:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .photo-card img {
+            width: 100%; aspect-ratio: 1; object-fit: cover;
+            display: block; background: var(--bg-elevated);
+        }
+        .photo-card-info {
+            padding: 10px 12px;
+        }
+        .photo-card-info .by { font-size: 0.72rem; color: var(--text-secondary); font-weight: 500; }
+        .photo-card-info .caption { font-size: 0.7rem; color: var(--text-muted); font-style: italic; margin-top: 2px; }
+        .photo-card-info .date { font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* ─── Empty / Loading States ─── */
+        .empty-state {
+            text-align: center; padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state svg { width: 48px; height: 48px; opacity: 0.3; margin-bottom: 16px; }
+        .empty-state h3 { font-family: var(--serif); font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 6px; }
+        .empty-state p { font-size: 0.82rem; }
+        .loading-pulse {
+            display: inline-block; width: 10px; height: 10px;
+            border-radius: 50%; background: var(--gold);
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+        .loading-pulse:nth-child(2) { animation-delay: 0.15s; }
+        .loading-pulse:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes pulse {
+            0%, 80%, 100% { transform: scale(0.4); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        .loading-row { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 40px; }
+
+        /* ─── Stagger Animations ─── */
+        .stagger > * {
+            opacity: 0; animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        .stagger > *:nth-child(1) { animation-delay: 0.05s; }
+        .stagger > *:nth-child(2) { animation-delay: 0.1s; }
+        .stagger > *:nth-child(3) { animation-delay: 0.15s; }
+        .stagger > *:nth-child(4) { animation-delay: 0.2s; }
+        .stagger > *:nth-child(5) { animation-delay: 0.25s; }
+        .stagger > *:nth-child(6) { animation-delay: 0.3s; }
+        .stagger > *:nth-child(7) { animation-delay: 0.35s; }
+        .stagger > *:nth-child(8) { animation-delay: 0.4s; }
+        .stagger > *:nth-child(n+9) { animation-delay: 0.45s; }
+
+        /* ─── Scrollbar ─── */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+        /* ─── Modal Overlay ─── */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; z-index: 500;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            align-items: center; justify-content: center;
+            padding: 20px;
+            animation: modalFadeIn 0.25s ease;
+        }
+        .modal-overlay.open { display: flex; }
+        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-strong);
+            border-radius: 20px;
+            width: 100%; max-width: 480px;
+            max-height: 90vh; overflow-y: auto;
+            animation: modalSlideUp 0.3s cubic-bezier(0.22,1,0.36,1);
+        }
+        @keyframes modalSlideUp { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: none; } }
+        .modal-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 24px; border-bottom: 1px solid var(--border);
+        }
+        .modal-title {
+            font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: var(--text);
+        }
+        .modal-close {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text-muted); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .modal-close:hover { color: var(--text); border-color: var(--border-strong); }
+        .modal-close svg { width: 16px; height: 16px; }
+        .modal-body { padding: 24px; }
+        .modal-footer {
+            padding: 16px 24px; border-top: 1px solid var(--border);
+            display: flex; gap: 10px; justify-content: flex-end;
+        }
+
+        /* ─── Form Fields ─── */
+        .form-group { margin-bottom: 18px; }
+        .form-label {
+            display: block; font-size: 0.7rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-muted); margin-bottom: 6px;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%; padding: 11px 14px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); color: var(--text);
+            font-family: var(--sans); font-size: 0.85rem;
+            transition: all 0.2s ease; outline: none;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,176,106,0.06);
+        }
+        .form-select { appearance: none; cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a948a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 14px center;
+            padding-right: 36px;
+        }
+        .form-select option { background: var(--bg-elevated); color: var(--text); }
+        .form-textarea { resize: vertical; min-height: 70px; }
+
+        /* ─── Modal Buttons ─── */
+        .btn {
+            padding: 10px 22px; border-radius: 99px;
+            font-size: 0.78rem; font-weight: 600; font-family: var(--sans);
+            cursor: pointer; transition: all 0.2s ease;
+            border: 1px solid var(--border);
+            letter-spacing: 0.02em;
+        }
+        .btn-ghost { background: transparent; color: var(--text-secondary); }
+        .btn-ghost:hover { color: var(--text); border-color: var(--border-strong); }
+        .btn-gold { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+        .btn-gold:hover { background: #c5a35e; }
+        .btn-danger { background: rgba(248,113,113,0.1); color: var(--red); border-color: rgba(248,113,113,0.2); }
+        .btn-danger:hover { background: rgba(248,113,113,0.2); }
+
+        /* ─── Toast ─── */
+        .toast-container {
+            position: fixed; bottom: calc(var(--safe-bottom) + 20px); left: 50%;
+            transform: translateX(-50%); z-index: 600;
+            display: flex; flex-direction: column; gap: 8px; align-items: center;
+            pointer-events: none;
+        }
+        .toast {
+            padding: 12px 22px; border-radius: 99px;
+            font-size: 0.78rem; font-weight: 600;
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-strong);
+            animation: toastIn 0.35s cubic-bezier(0.22,1,0.36,1), toastOut 0.3s ease 2.5s forwards;
+            white-space: nowrap; pointer-events: auto;
+        }
+        .toast.success { background: rgba(74,222,128,0.12); color: var(--green); border-color: rgba(74,222,128,0.2); }
+        .toast.error { background: rgba(248,113,113,0.12); color: var(--red); border-color: rgba(248,113,113,0.2); }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(0.95); } to { opacity: 1; transform: none; } }
+        @keyframes toastOut { to { opacity: 0; transform: translateY(-8px); } }
+
+        /* ─── Confirm Dialog ─── */
+        .confirm-body { text-align: center; padding: 12px 0; }
+        .confirm-icon { margin-bottom: 16px; }
+        .confirm-icon svg { width: 48px; height: 48px; color: var(--red); opacity: 0.7; }
+        .confirm-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+        .confirm-name { color: var(--text); font-weight: 600; }
+        .confirm-footer { justify-content: center; }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#"><i class="bi bi-gem"></i> Admin Portal</a>
-        <div class="d-flex align-items-center">
-            <a href="../" class="btn btn-sm btn-outline-gold"><i class="bi bi-arrow-left"></i> Back to Site</a>
-        </div>
+<!-- Header -->
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">C & S<span>Admin</span></div>
+        <a href="../" class="header-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Wedding Site
+        </a>
+    </div>
+</header>
+
+<!-- Navigation -->
+<nav class="nav-bar">
+    <div class="nav-inner">
+        <button class="nav-tab active" data-view="dashboard">Overview</button>
+        <button class="nav-tab" data-view="rsvps">RSVPs</button>
+        <button class="nav-tab" data-view="photos">Photos</button>
     </div>
 </nav>
 
-<div class="container-fluid mt-3">
-    <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
-        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#dashboard" type="button">Dashboard</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#rsvps" type="button" onclick="loadRSVPs()">RSVPs</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#photos" type="button" onclick="loadPhotos()">Photos</button></li>
-    </ul>
+<!-- Content -->
+<main class="main">
 
-    <div class="tab-content pb-5">
-
-        <!-- DASHBOARD -->
-        <div class="tab-pane fade show active" id="dashboard">
-            <div class="row g-3" id="stats-container">
-                <div class="col-6 col-md-3">
-                    <div class="card stat-card p-3 h-100">
-                        <h6 class="text-muted text-uppercase mb-1">Total RSVPs</h6>
-                        <div class="display-4" id="stat-rsvps"><span class="loading-spinner"></span></div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="card stat-card p-3 h-100">
-                        <h6 class="text-muted text-uppercase mb-1">Attending</h6>
-                        <div class="display-4" id="stat-attending"><span class="loading-spinner"></span></div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="card stat-card p-3 h-100">
-                        <h6 class="text-muted text-uppercase mb-1">Not Attending</h6>
-                        <div class="display-4" id="stat-not-attending"><span class="loading-spinner"></span></div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="card stat-card p-3 h-100">
-                        <h6 class="text-muted text-uppercase mb-1">Total Photos</h6>
-                        <div class="display-4" id="stat-photos"><span class="loading-spinner"></span></div>
-                    </div>
-                </div>
+    <!-- DASHBOARD VIEW -->
+    <div class="view active" id="view-dashboard">
+        <div class="stats-grid stagger" id="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total RSVPs</div>
+                <div class="stat-value" id="stat-rsvps"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></div>
             </div>
-
-            <!-- Recent RSVPs on dashboard -->
-            <h5 class="text-gold mt-4 mb-3">Recent RSVPs</h5>
-            <div class="card">
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover m-0">
-                            <thead><tr><th>Name</th><th>Email</th><th>Attending</th><th>Events</th><th>Date</th></tr></thead>
-                            <tbody id="recent-rsvp-body">
-                                <tr><td colspan="5" class="text-center py-4"><span class="loading-spinner"></span> Loading...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-label">Attending</div>
+                <div class="stat-value" id="stat-attending"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Declined</div>
+                <div class="stat-value" id="stat-not-attending"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Photos</div>
+                <div class="stat-value" id="stat-photos"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></div>
             </div>
         </div>
 
-        <!-- RSVPS -->
-        <div class="tab-pane fade" id="rsvps">
-            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                <h4 class="text-gold m-0">RSVP List</h4>
-                <button class="btn btn-outline-gold" onclick="loadRSVPs()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
-            </div>
-            <div class="card">
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover m-0">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Contact</th>
-                                    <th>Attending</th>
-                                    <th>+1s</th>
-                                    <th>Events</th>
-                                    <th>Message</th>
-                                    <th>Source</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody id="rsvp-body">
-                                <tr><td colspan="8" class="text-center py-4"><span class="loading-spinner"></span> Loading...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <div class="section-header">
+            <div class="section-title">Recent Guests</div>
+        </div>
+        <div id="recent-rsvps">
+            <div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>
+        </div>
+    </div>
+
+    <!-- RSVPS VIEW -->
+    <div class="view" id="view-rsvps">
+        <div class="section-header">
+            <div class="section-title">All RSVPs</div>
+            <button class="refresh-btn" id="rsvp-refresh" onclick="window.loadRSVPs()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                Refresh
+            </button>
         </div>
 
-        <!-- PHOTOS -->
-        <div class="tab-pane fade" id="photos">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="text-gold m-0">Guest Photos</h4>
-                <button class="btn btn-outline-gold" onclick="loadPhotos()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
-            </div>
-            <div class="row g-4" id="photos-grid">
-                <div class="col-12 text-center py-4"><span class="loading-spinner"></span> Loading...</div>
-            </div>
+        <!-- Mobile Cards -->
+        <div class="rsvp-list stagger" id="rsvp-cards">
+            <div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>
         </div>
 
+        <!-- Desktop Table -->
+        <div class="rsvp-table-wrap">
+            <table class="rsvp-table" id="rsvp-table">
+                <thead>
+                    <tr>
+                        <th>Guest</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>+1s</th>
+                        <th>Events</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                        <th style="width:80px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="rsvp-table-body">
+                    <tr><td colspan="8"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PHOTOS VIEW -->
+    <div class="view" id="view-photos">
+        <div class="section-header">
+            <div class="section-title">Guest Photos</div>
+            <button class="refresh-btn" onclick="window.loadPhotos()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                Refresh
+            </button>
+        </div>
+        <div class="photo-grid stagger" id="photos-grid">
+            <div class="loading-row" style="grid-column:1/-1;"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>
+        </div>
+    </div>
+
+</main>
+
+<!-- Edit RSVP Modal -->
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Edit RSVP</div>
+            <button class="modal-close" onclick="closeEditModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="edit-id">
+            <div class="form-group">
+                <label class="form-label">Name</label>
+                <input class="form-input" id="edit-name" type="text">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" id="edit-email" type="email">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input class="form-input" id="edit-phone" type="tel">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Attendance</label>
+                <select class="form-select" id="edit-attendance">
+                    <option value="yes">Attending</option>
+                    <option value="no">Not Attending</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Plus Ones</label>
+                <input class="form-input" id="edit-plusones" type="number" min="0" max="10">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Dietary Requirements</label>
+                <input class="form-input" id="edit-dietary" type="text">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Message</label>
+                <textarea class="form-textarea" id="edit-message"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeEditModal()">Cancel</button>
+            <button class="btn btn-gold" onclick="saveEdit()">Save Changes</button>
+        </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" id="delete-modal">
+    <div class="modal" style="max-width: 380px;">
+        <div class="modal-header">
+            <div class="modal-title">Confirm Delete</div>
+            <button class="modal-close" onclick="closeDeleteModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="confirm-body">
+                <div class="confirm-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                </div>
+                <p class="confirm-text">
+                    Are you sure you want to delete the RSVP for<br>
+                    <span class="confirm-name" id="delete-name"></span>?<br>
+                    <span style="font-size:0.78rem;color:var(--text-muted)">This action cannot be undone.</span>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer confirm-footer">
+            <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn btn-danger" onclick="confirmDelete()">Delete RSVP</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+    // ─── Tab Navigation ───
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            tab.classList.add('active');
+            const viewId = 'view-' + tab.dataset.view;
+            document.getElementById(viewId).classList.add('active');
+            if (tab.dataset.view === 'rsvps') window.loadRSVPs?.();
+            if (tab.dataset.view === 'photos') window.loadPhotos?.();
+        });
+    });
+
+    // ─── Modal helpers ───
+    function closeEditModal() { document.getElementById('edit-modal').classList.remove('open'); }
+    function closeDeleteModal() { document.getElementById('delete-modal').classList.remove('open'); }
+
+    // Close modals on backdrop click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', e => {
+            if (e.target === overlay) overlay.classList.remove('open');
+        });
+    });
+
+    // Close modals on Escape
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            closeEditModal();
+            closeDeleteModal();
+        }
+    });
+</script>
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getFirestore, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-    import { getStorage } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+    import { getFirestore, collection, getDocs, doc, deleteDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g",
@@ -165,154 +733,279 @@
     };
 
     let db = null;
+    let pendingDeleteId = null;
+    let rsvpCache = [];
+
     try {
         const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
-    } catch (e) {
-        console.warn('Firebase init failed:', e.message);
-    }
+    } catch (e) { console.warn('Firebase init failed:', e.message); }
 
-    // ---- Helpers ----
-    function escapeHtml(str) {
+    // ─── Helpers ───
+    function esc(str) {
         if (!str) return '';
-        return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+        return String(str).replace(/[&<>'"]/g, t => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[t]||t));
     }
-
-    function formatDate(d) {
+    function fmtDate(d) {
         if (!d) return '';
-        const date = d.toDate ? d.toDate() : new Date(d);
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const dt = d.toDate ? d.toDate() : new Date(d);
+        return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    function fmtDateFull(d) {
+        if (!d) return '';
+        const dt = d.toDate ? d.toDate() : new Date(d);
+        return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+    function isAttending(a) { return a === 'yes' || a === 'attending'; }
+    function isDeclined(a) { return a === 'no' || a === 'not attending'; }
+    function badgeClass(a) { return isAttending(a) ? 'attending' : isDeclined(a) ? 'not-attending' : 'pending'; }
+    function badgeLabel(a) { return isAttending(a) ? 'Attending' : isDeclined(a) ? 'Declined' : 'Pending'; }
+
+    function sortByDate(arr) {
+        return arr.sort((a, b) => {
+            const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+            const db2 = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+            return db2 - da;
+        });
     }
 
-    // ---- Load Stats & Recent RSVPs ----
-    async function loadDashboard() {
-        if (!db) {
-            document.getElementById('stat-rsvps').innerText = 'N/A';
-            document.getElementById('stat-attending').innerText = 'N/A';
-            document.getElementById('stat-not-attending').innerText = 'N/A';
-            document.getElementById('stat-photos').innerText = 'N/A';
-            return;
-        }
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
 
+    // ─── SVG Icons ───
+    const icons = {
+        mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+        phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+        users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+        calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+        camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>',
+        inbox: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 16,12 14,15 10,15 8,12 2,12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+        edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>',
+        trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>',
+    };
+
+    // ─── Open Edit Modal ───
+    window.openEditModal = function(id) {
+        const r = rsvpCache.find(x => x.id === id);
+        if (!r) return;
+        document.getElementById('edit-id').value = id;
+        document.getElementById('edit-name').value = r.name || '';
+        document.getElementById('edit-email').value = r.email || '';
+        document.getElementById('edit-phone').value = r.phone || '';
+        document.getElementById('edit-dietary').value = r.dietary || '';
+        document.getElementById('edit-message').value = r.message || '';
+        document.getElementById('edit-plusones').value = r.plusOnes || 0;
+        const att = document.getElementById('edit-attendance');
+        if (isAttending(r.attendance)) att.value = 'yes';
+        else if (isDeclined(r.attendance)) att.value = 'no';
+        else att.value = 'pending';
+        document.getElementById('edit-modal').classList.add('open');
+    };
+
+    // ─── Save Edit ───
+    window.saveEdit = async function() {
+        const id = document.getElementById('edit-id').value;
+        if (!id || !db) return;
+        const updates = {
+            name: document.getElementById('edit-name').value.trim(),
+            email: document.getElementById('edit-email').value.trim(),
+            phone: document.getElementById('edit-phone').value.trim(),
+            attendance: document.getElementById('edit-attendance').value,
+            plusOnes: parseInt(document.getElementById('edit-plusones').value) || 0,
+            dietary: document.getElementById('edit-dietary').value.trim(),
+            message: document.getElementById('edit-message').value.trim(),
+        };
         try {
-            // Load RSVPs
+            await updateDoc(doc(db, 'rsvps', id), updates);
+            closeEditModal();
+            showToast('RSVP updated successfully');
+            loadDashboard();
+            window.loadRSVPs();
+        } catch (e) {
+            console.error('Update error:', e);
+            showToast('Failed to update: ' + e.message, 'error');
+        }
+    };
+
+    // ─── Open Delete Modal ───
+    window.openDeleteModal = function(id) {
+        const r = rsvpCache.find(x => x.id === id);
+        if (!r) return;
+        pendingDeleteId = id;
+        document.getElementById('delete-name').textContent = r.name || 'this guest';
+        document.getElementById('delete-modal').classList.add('open');
+    };
+
+    // ─── Confirm Delete ───
+    window.confirmDelete = async function() {
+        if (!pendingDeleteId || !db) return;
+        try {
+            await deleteDoc(doc(db, 'rsvps', pendingDeleteId));
+            closeDeleteModal();
+            pendingDeleteId = null;
+            showToast('RSVP deleted successfully');
+            loadDashboard();
+            window.loadRSVPs();
+        } catch (e) {
+            console.error('Delete error:', e);
+            showToast('Failed to delete: ' + e.message, 'error');
+        }
+    };
+
+    // ─── Dashboard ───
+    async function loadDashboard() {
+        if (!db) return;
+        try {
             const rsvpSnap = await getDocs(collection(db, 'rsvps'));
             const rsvps = [];
-            rsvpSnap.forEach(doc => rsvps.push({ id: doc.id, ...doc.data() }));
+            rsvpSnap.forEach(d => rsvps.push({ id: d.id, ...d.data() }));
+            rsvpCache = rsvps;
+            const attending = rsvps.filter(r => isAttending(r.attendance)).length;
+            const declined = rsvps.filter(r => isDeclined(r.attendance)).length;
 
-            const attending = rsvps.filter(r => r.attendance === 'yes' || r.attendance === 'attending').length;
-            const notAttending = rsvps.filter(r => r.attendance === 'no' || r.attendance === 'not attending').length;
+            document.getElementById('stat-rsvps').textContent = rsvps.length;
+            document.getElementById('stat-attending').textContent = attending;
+            document.getElementById('stat-not-attending').textContent = declined;
 
-            document.getElementById('stat-rsvps').innerText = rsvps.length;
-            document.getElementById('stat-attending').innerText = attending;
-            document.getElementById('stat-not-attending').innerText = notAttending;
-
-            // Show recent 10 RSVPs
-            const sorted = rsvps.sort((a, b) => {
-                const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
-                const db2 = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
-                return db2 - da;
-            });
-            const recent = sorted.slice(0, 10);
-            const tbody = document.getElementById('recent-rsvp-body');
-            if (!recent.length) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">No RSVPs yet</td></tr>';
+            const sorted = sortByDate([...rsvps]);
+            const container = document.getElementById('recent-rsvps');
+            if (!sorted.length) {
+                container.innerHTML = `<div class="empty-state">${icons.inbox}<h3>No RSVPs yet</h3><p>Guests will appear here once they respond.</p></div>`;
             } else {
-                tbody.innerHTML = recent.map(r => `
-                    <tr>
-                        <td><strong>${escapeHtml(r.name)}</strong></td>
-                        <td><small>${escapeHtml(r.email)}</small></td>
-                        <td><span class="badge ${r.attendance==='yes'||r.attendance==='attending'?'bg-success':(r.attendance==='no'||r.attendance==='not attending'?'bg-danger':'bg-secondary')}">${escapeHtml(r.attendance)}</span></td>
-                        <td>${(r.events || []).map(e => `<span class="event-badge">${escapeHtml(e)}</span>`).join(' ') || '-'}</td>
-                        <td><small>${formatDate(r.createdAt)}</small></td>
-                    </tr>
-                `).join('');
+                container.innerHTML = '<div class="rsvp-list stagger">' + sorted.slice(0, 8).map(r => renderRsvpCard(r)).join('') + '</div>';
             }
 
-            // Load photos count
             const photoSnap = await getDocs(collection(db, 'photos'));
-            document.getElementById('stat-photos').innerText = photoSnap.size;
+            document.getElementById('stat-photos').textContent = photoSnap.size;
         } catch (e) {
             console.error('Dashboard error:', e);
-            document.getElementById('stat-rsvps').innerText = 'Error';
+            document.getElementById('stat-rsvps').textContent = '—';
         }
     }
 
-    // ---- Load RSVPs ----
+    // ─── Render RSVP Card (Mobile) ───
+    function renderRsvpCard(r) {
+        const events = (r.events || []).map(e => `<span class="event-chip">${esc(e.replace(/-/g,' '))}</span>`).join('');
+        const message = r.message ? `<div class="rsvp-message">${esc(r.message)}</div>` : '';
+        return `
+        <div class="rsvp-card">
+            <div class="rsvp-card-head">
+                <div class="rsvp-name">${esc(r.name)}</div>
+                <span class="rsvp-badge ${badgeClass(r.attendance)}"><span class="dot"></span>${badgeLabel(r.attendance)}</span>
+            </div>
+            <div class="rsvp-meta">
+                <span class="rsvp-meta-item">${icons.mail}${esc(r.email)}</span>
+                ${r.phone ? `<span class="rsvp-meta-item">${icons.phone}${esc(r.phone)}</span>` : ''}
+                ${r.plusOnes ? `<span class="rsvp-meta-item">${icons.users}+${r.plusOnes} guest${r.plusOnes>1?'s':''}</span>` : ''}
+            </div>
+            ${events ? `<div class="rsvp-events">${events}</div>` : ''}
+            ${message}
+            <div class="rsvp-footer">
+                <span>${esc(r.source || 'main site')}</span>
+                <span>${fmtDateFull(r.createdAt)}</span>
+            </div>
+            <div class="rsvp-actions">
+                <button class="action-btn edit-btn" onclick="openEditModal('${r.id}')">
+                    ${icons.edit} Edit
+                </button>
+                <button class="action-btn delete-btn" onclick="openDeleteModal('${r.id}')">
+                    ${icons.trash} Delete
+                </button>
+            </div>
+        </div>`;
+    }
+
+    // ─── Load RSVPs ───
     window.loadRSVPs = async function() {
         if (!db) return;
-        const tbody = document.getElementById('rsvp-body');
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4"><span class="loading-spinner"></span> Loading...</td></tr>';
+        const cards = document.getElementById('rsvp-cards');
+        const tbody = document.getElementById('rsvp-table-body');
+        cards.innerHTML = '<div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>';
+        tbody.innerHTML = '<tr><td colspan="8"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></td></tr>';
 
         try {
             const snap = await getDocs(collection(db, 'rsvps'));
             const rsvps = [];
-            snap.forEach(doc => rsvps.push({ id: doc.id, ...doc.data() }));
+            snap.forEach(d => rsvps.push({ id: d.id, ...d.data() }));
+            rsvpCache = rsvps;
+            const sorted = sortByDate(rsvps);
 
-            rsvps.sort((a, b) => {
-                const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
-                const db2 = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
-                return db2 - da;
-            });
-
-            if (!rsvps.length) {
-                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4">No RSVPs found</td></tr>';
+            if (!sorted.length) {
+                const empty = `<div class="empty-state">${icons.inbox}<h3>No RSVPs yet</h3><p>Guests will appear here once they respond.</p></div>`;
+                cards.innerHTML = empty;
+                tbody.innerHTML = `<tr><td colspan="8">${empty}</td></tr>`;
                 return;
             }
 
-            tbody.innerHTML = rsvps.map(r => `
+            // Mobile cards
+            cards.innerHTML = sorted.map(r => renderRsvpCard(r)).join('');
+            cards.classList.add('stagger');
+
+            // Desktop table
+            tbody.innerHTML = sorted.map(r => `
                 <tr>
-                    <td><strong>${escapeHtml(r.name)}</strong>${r.dietary ? `<br><small class="text-muted">Diet: ${escapeHtml(r.dietary)}</small>` : ''}</td>
-                    <td><small>${escapeHtml(r.email)}<br>${escapeHtml(r.phone || '')}</small></td>
-                    <td><span class="badge ${r.attendance==='yes'||r.attendance==='attending'?'bg-success':(r.attendance==='no'||r.attendance==='not attending'?'bg-danger':'bg-secondary')}">${escapeHtml(r.attendance)}</span></td>
+                    <td class="name-cell">${esc(r.name)}${r.dietary ? `<br><span style="font-size:0.7rem;color:var(--text-muted)">Diet: ${esc(r.dietary)}</span>` : ''}</td>
+                    <td><span style="font-size:0.78rem;">${esc(r.email)}</span>${r.phone?`<br><span style="font-size:0.72rem;color:var(--text-muted)">${esc(r.phone)}</span>`:''}</td>
+                    <td><span class="rsvp-badge ${badgeClass(r.attendance)}"><span class="dot"></span>${badgeLabel(r.attendance)}</span></td>
                     <td>${r.plusOnes || 0}</td>
-                    <td>${(r.events || []).map(e => `<span class="event-badge">${escapeHtml(e)}</span>`).join(' ') || '-'}</td>
-                    <td>${r.message ? `<small class="text-muted">${escapeHtml(r.message.substring(0, 80))}${r.message.length > 80 ? '...' : ''}</small>` : '-'}</td>
-                    <td><small class="text-muted">${escapeHtml(r.source || 'main')}</small></td>
-                    <td style="white-space:nowrap;"><small>${formatDate(r.createdAt)}</small></td>
+                    <td>${(r.events||[]).map(e=>`<span class="event-chip">${esc(e.replace(/-/g,' '))}</span>`).join(' ')||'—'}</td>
+                    <td style="max-width:200px;"><span style="font-size:0.75rem;color:var(--text-muted)">${r.message?esc(r.message.substring(0,100))+(r.message.length>100?'...':''):'—'}</span></td>
+                    <td style="white-space:nowrap;font-size:0.75rem;color:var(--text-muted)">${fmtDateFull(r.createdAt)}</td>
+                    <td>
+                        <div style="display:flex;gap:6px;">
+                            <button class="tbl-action tbl-edit" onclick="openEditModal('${r.id}')" title="Edit">${icons.edit}</button>
+                            <button class="tbl-action tbl-delete" onclick="openDeleteModal('${r.id}')" title="Delete">${icons.trash}</button>
+                        </div>
+                    </td>
                 </tr>
             `).join('');
         } catch (e) {
             console.error('RSVP load error:', e);
-            tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-danger">Error loading RSVPs: ${escapeHtml(e.message)}</td></tr>`;
+            cards.innerHTML = `<div class="empty-state"><h3>Error</h3><p>${esc(e.message)}</p></div>`;
         }
     };
 
-    // ---- Load Photos ----
+    // ─── Load Photos ───
     window.loadPhotos = async function() {
         if (!db) return;
         const grid = document.getElementById('photos-grid');
-        grid.innerHTML = '<div class="col-12 text-center py-4"><span class="loading-spinner"></span> Loading...</div>';
+        grid.innerHTML = '<div class="loading-row" style="grid-column:1/-1;"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>';
 
         try {
             const snap = await getDocs(collection(db, 'photos'));
             const photos = [];
-            snap.forEach(doc => photos.push({ id: doc.id, ...doc.data() }));
+            snap.forEach(d => photos.push({ id: d.id, ...d.data() }));
 
             if (!photos.length) {
-                grid.innerHTML = '<div class="col-12 text-center py-4">No photos uploaded yet</div>';
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">${icons.camera}<h3>No photos yet</h3><p>Guest uploads will appear here.</p></div>`;
                 return;
             }
 
             grid.innerHTML = photos.map(p => `
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card photo-card h-100">
-                        <img src="${escapeHtml(p.url || p.imageUrl || '')}" alt="Photo" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><rect fill=%22%23333%22 width=%22200%22 height=%22200%22/><text fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22>No image</text></svg>'">
-                        <div class="card-body p-2">
-                            <small class="d-block text-truncate"><strong>By:</strong> ${escapeHtml(p.uploaderName || p.uploader_name || 'Unknown')}</small>
-                            ${p.caption ? `<small class="d-block text-muted text-truncate">"${escapeHtml(p.caption)}"</small>` : ''}
-                            <small class="d-block text-muted mt-1">${formatDate(p.createdAt || p.uploadedAt)}</small>
-                        </div>
+                <div class="photo-card">
+                    <img src="${esc(p.url || p.imageUrl || '')}" alt="Guest photo" loading="lazy"
+                         onerror="this.style.background='var(--bg-elevated)';this.alt='Failed to load'">
+                    <div class="photo-card-info">
+                        <div class="by">${esc(p.uploaderName || p.uploader_name || 'Unknown')}</div>
+                        ${p.caption ? `<div class="caption">"${esc(p.caption)}"</div>` : ''}
+                        <div class="date">${fmtDateFull(p.createdAt || p.uploadedAt)}</div>
                     </div>
                 </div>
             `).join('');
+            grid.classList.add('stagger');
         } catch (e) {
             console.error('Photo load error:', e);
-            grid.innerHTML = `<div class="col-12 text-center py-4 text-danger">Error loading photos: ${escapeHtml(e.message)}</div>`;
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><h3>Error</h3><p>${esc(e.message)}</p></div>`;
         }
     };
 
-    // Initialize
+    // ─── Init ───
     loadDashboard();
 </script>
 </body>
