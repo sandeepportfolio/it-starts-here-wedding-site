@@ -412,14 +412,39 @@
 
     /* ═══════ DRESS CODE ═══════ */
     .dress { position: relative; z-index: 1; padding: 0 24px 72px; }
-    .dress-inner {
-      max-width: 340px; margin: 0 auto; text-align: center;
-      padding: 24px 0;
-      border-top: 1px solid rgba(212,176,106,0.04);
-      border-bottom: 1px solid rgba(212,176,106,0.04);
+    .dress-card {
+      max-width: 400px; margin: 0 auto; text-align: center;
+      padding: 36px 28px; border-radius: 24px;
+      background: var(--surface); border: 1px solid var(--line);
+      position: relative; overflow: hidden;
     }
-    .dress-label { font-size: 8px; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(212,176,106,0.3); margin-bottom: 8px; }
-    .dress-value { font-family: var(--serif); font-size: clamp(22px, 6vw, 28px); font-weight: 300; color: var(--cream); }
+    .dress-card::before {
+      content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,176,106,0.1), transparent);
+    }
+    .dress-visual {
+      font-size: 42px; margin-bottom: 16px;
+      filter: grayscale(0.2);
+    }
+    .dress-label { font-size: 8px; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(212,176,106,0.35); margin-bottom: 10px; }
+    .dress-value { font-family: var(--serif); font-size: clamp(26px, 7vw, 34px); font-weight: 300; color: var(--cream); margin-bottom: 12px; }
+    .dress-desc {
+      font-size: clamp(12.5px, 3.2vw, 14px); color: var(--soft); line-height: 1.7;
+      max-width: 300px; margin: 0 auto;
+    }
+    .dress-swatch {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 16px; padding: 8px 18px; border-radius: 99px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    }
+    .swatch-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #111; border: 1.5px solid rgba(212,176,106,0.2);
+    }
+    .swatch-text {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--faint);
+    }
 
     /* ═══════ BACK LINK ═══════ */
     .back { position: relative; z-index: 1; padding: 0 24px 56px; text-align: center; }
@@ -558,18 +583,10 @@
         </div>
 
         <div class="tl-card sr">
-          <div class="tl-icon">&#127926;</div>
-          <div>
-            <p class="tl-title">Live Music &amp; DJ</p>
-            <p class="tl-desc">Curated beats and live performances all night long. The dance floor opens early.</p>
-          </div>
-        </div>
-
-        <div class="tl-card sr">
           <div class="tl-icon">&#127867;</div>
           <div>
             <p class="tl-title">Drinks on Us</p>
-            <p class="tl-desc">Full open bar with signature cocktails, beer, wine, and non-alcoholic options. Sip, toast, repeat.</p>
+            <p class="tl-desc">Open bar all night. Signature cocktails, beer, and wine&mdash;sip, toast, repeat.</p>
           </div>
         </div>
 
@@ -597,9 +614,15 @@
 
     <!-- DRESS CODE -->
     <section class="dress">
-      <div class="dress-inner sr">
+      <div class="dress-card sr">
+        <div class="dress-visual">&#128374;</div>
         <p class="dress-label">Dress Code</p>
-        <p class="dress-value">Dress to Impress</p>
+        <p class="dress-value">Wear All Black</p>
+        <p class="dress-desc">Keep it sleek, keep it dark. Black tops are a must&mdash;think cocktail chic with an all-black edge.</p>
+        <div class="dress-swatch">
+          <span class="swatch-dot"></span>
+          <span class="swatch-text">Black Only</span>
+        </div>
       </div>
     </section>
 
