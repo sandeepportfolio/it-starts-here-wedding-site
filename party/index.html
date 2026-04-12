@@ -5,809 +5,432 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>The After Party — C & S</title>
   <meta name="description" content="An exclusive evening celebration for Chamanthi & Sandeep's inner circle.">
-  <meta name="theme-color" content="#080510">
+  <meta name="theme-color" content="#060410">
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 
   <style>
-    /* ====== RESET & BASE ====== */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 
-    :root {
-      --bg: #080510;
-      --bg-card: rgba(255,255,255,0.025);
-      --gold: #D4B06A;
-      --gold-light: #E8C988;
-      --gold-dark: #B8924A;
-      --cream: #F0EDE6;
-      --muted: rgba(240,237,230,0.4);
-      --border: rgba(212,176,106,0.08);
-      --font-display: 'Playfair Display', Georgia, serif;
-      --font-body: 'Outfit', system-ui, sans-serif;
-      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    :root{
+      --bg:#060410;--bg2:#0a0818;
+      --card:rgba(255,255,255,0.022);--card-border:rgba(212,176,106,0.07);
+      --gold:#D4B06A;--gold-l:#E8C988;--gold-d:#B8924A;
+      --cream:#F0EDE6;--muted:rgba(240,237,230,0.38);--dim:rgba(240,237,230,0.18);
+      --display:'Playfair Display',Georgia,serif;
+      --body:'Outfit',system-ui,sans-serif;
+      --ease:cubic-bezier(.16,1,.3,1);--ease-out:cubic-bezier(.33,1,.68,1);
     }
 
-    body {
-      background: var(--bg); color: var(--cream);
-      font-family: var(--font-body);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
-      min-height: 100vh; min-height: 100dvh;
+    body{
+      background:var(--bg);color:var(--cream);font-family:var(--body);
+      -webkit-font-smoothing:antialiased;overflow-x:hidden;
+      min-height:100vh;min-height:100dvh;
     }
+    ::selection{background:rgba(212,176,106,.2);color:var(--cream)}
 
-    ::selection { background: rgba(212,176,106,0.2); color: var(--cream); }
+    /* ============ LOCK SCREEN ============ */
+    #lock{
+      position:fixed;inset:0;z-index:200;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--bg);
+      transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);
+    }
+    #lock.bye{opacity:0;transform:scale(1.04);filter:blur(16px);pointer-events:none}
 
-    /* ====== LOCK SCREEN ====== */
-    #lockScreen {
-      position: fixed; inset: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--bg);
-      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
-    }
-    #lockScreen.unlocking {
-      opacity: 0; transform: scale(1.03);
-      pointer-events: none;
-    }
+    .l-ambient{position:absolute;inset:0;overflow:hidden}
+    .l-orb{position:absolute;border-radius:50%;filter:blur(110px);animation:orb-float 20s ease-in-out infinite}
+    .l-orb:nth-child(1){width:420px;height:420px;background:rgba(212,176,106,.055);top:5%;left:15%}
+    .l-orb:nth-child(2){width:350px;height:350px;background:rgba(139,58,74,.04);bottom:8%;right:10%;animation-delay:-8s;animation-duration:26s}
+    .l-orb:nth-child(3){width:260px;height:260px;background:rgba(100,140,220,.025);top:55%;left:55%;animation-delay:-14s;animation-duration:18s}
+    @keyframes orb-float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(35px,-25px) scale(1.08)}66%{transform:translate(-18px,22px) scale(.94)}}
 
-    /* Ambient background for lock */
-    .lock-ambient {
-      position: absolute; inset: 0; overflow: hidden;
-    }
-    .lock-glow {
-      position: absolute; border-radius: 50%; filter: blur(100px);
-      animation: glow-drift 20s ease-in-out infinite;
-    }
-    .lock-glow:nth-child(1) {
-      width: 400px; height: 400px;
-      background: rgba(212,176,106,0.06);
-      top: 10%; left: 20%;
-    }
-    .lock-glow:nth-child(2) {
-      width: 350px; height: 350px;
-      background: rgba(139,58,74,0.04);
-      bottom: 10%; right: 15%;
-      animation-delay: -7s; animation-duration: 25s;
-    }
-    .lock-glow:nth-child(3) {
-      width: 250px; height: 250px;
-      background: rgba(110,168,224,0.03);
-      top: 60%; left: 50%;
-      animation-delay: -12s; animation-duration: 18s;
-    }
-    @keyframes glow-drift {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(40px, -30px) scale(1.1); }
-      66% { transform: translate(-20px, 20px) scale(0.95); }
-    }
+    .l-wrap{position:relative;z-index:1;width:100%;max-width:380px;padding:0 24px;text-align:center}
 
-    .lock-content {
-      position: relative; z-index: 1;
-      width: 100%; max-width: 400px; padding: 0 24px;
-      text-align: center;
-    }
+    .l-rings{position:relative;width:84px;height:84px;margin:0 auto 36px}
+    .l-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(212,176,106,.1);animation:spin 14s linear infinite}
+    .l-ring::after{content:'';position:absolute;top:-2px;left:50%;width:4px;height:4px;border-radius:50%;background:var(--gold);transform:translateX(-50%);box-shadow:0 0 10px rgba(212,176,106,.4)}
+    .l-ring:nth-child(2){inset:13px;animation:spin 19s linear infinite reverse;border-color:rgba(212,176,106,.06)}
+    .l-ring:nth-child(2)::after{width:3px;height:3px;top:-1.5px;background:rgba(212,176,106,.45)}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .l-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:13px;background:rgba(212,176,106,.05);border:1px solid rgba(212,176,106,.14);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+    .l-center svg{width:17px;height:17px;stroke:var(--gold);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 
-    /* Keyhole animation */
-    .lock-visual {
-      position: relative; width: 88px; height: 88px;
-      margin: 0 auto 40px;
-    }
-    .lock-circle {
-      position: absolute; inset: 0; border-radius: 50%;
-      border: 1.5px solid rgba(212,176,106,0.12);
-      animation: ring-rotate 15s linear infinite;
-    }
-    .lock-circle::after {
-      content: ''; position: absolute; top: -2.5px; left: 50%;
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--gold); transform: translateX(-50%);
-      box-shadow: 0 0 12px rgba(212,176,106,0.4);
-    }
-    .lock-circle:nth-child(2) {
-      inset: 14px; animation-direction: reverse; animation-duration: 20s;
-      border-color: rgba(212,176,106,0.06);
-    }
-    .lock-circle:nth-child(2)::after {
-      width: 3px; height: 3px; top: -1.5px;
-      background: rgba(212,176,106,0.5);
-      box-shadow: 0 0 8px rgba(212,176,106,0.3);
-    }
-    @keyframes ring-rotate { to { transform: rotate(360deg); } }
+    .l-label{font-size:.58rem;font-weight:700;letter-spacing:.45em;text-transform:uppercase;color:rgba(212,176,106,.45);margin-bottom:14px}
+    .l-title{font-family:var(--display);font-size:2.2rem;font-weight:400;line-height:1.2;margin-bottom:10px}
+    @media(min-width:640px){.l-title{font-size:2.8rem}}
+    .l-sub{font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:32px;max-width:290px;margin-left:auto;margin-right:auto}
 
-    .lock-icon-center {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 42px; height: 42px; border-radius: 14px;
-      background: rgba(212,176,106,0.06);
-      border: 1px solid rgba(212,176,106,0.15);
-      display: flex; align-items: center; justify-content: center;
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    }
-    .lock-icon-center svg {
-      width: 18px; height: 18px; stroke: var(--gold);
-      fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
-    }
+    .l-field{width:100%;padding:15px 22px;border-radius:14px;border:1px solid rgba(212,176,106,.1);background:rgba(255,255,255,.02);color:var(--cream);font-family:var(--body);font-size:.88rem;font-weight:500;text-align:center;letter-spacing:.2em;outline:none;transition:all .4s var(--ease);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    .l-field::placeholder{color:rgba(240,237,230,.1);letter-spacing:.12em;font-weight:400}
+    .l-field:focus{border-color:rgba(212,176,106,.28);background:rgba(212,176,106,.025);box-shadow:0 0 0 3px rgba(212,176,106,.04),0 8px 24px -8px rgba(212,176,106,.1)}
+    .l-err{display:none;font-size:.72rem;color:#e85656;margin-top:10px;font-weight:500;animation:shake .5s cubic-bezier(.36,.07,.19,.97)}
+    @keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(3px)}30%,50%,70%{transform:translateX(-5px)}40%,60%{transform:translateX(5px)}}
+    .l-btn{width:100%;margin-top:18px;padding:15px 30px;border:none;border-radius:14px;cursor:pointer;font-family:var(--body);font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--bg);background:linear-gradient(135deg,var(--gold-d),var(--gold),var(--gold-l));background-size:200% auto;transition:all .4s var(--ease);position:relative;overflow:hidden}
+    .l-btn::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:left .5s ease}
+    .l-btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px -8px rgba(212,176,106,.3);background-position:right center}
+    .l-btn:hover::after{left:120%}
+    .l-btn:active{transform:translateY(0)}
 
-    .lock-label {
-      font-family: var(--font-body); font-size: 0.6rem;
-      font-weight: 600; letter-spacing: 0.45em; text-transform: uppercase;
-      color: rgba(212,176,106,0.5); margin-bottom: 16px;
-    }
-    .lock-heading {
-      font-family: var(--font-display); font-size: 2.4rem;
-      font-weight: 400; line-height: 1.2; color: var(--cream);
-      margin-bottom: 12px;
-    }
-    @media(min-width:640px) { .lock-heading { font-size: 3rem; } }
-    .lock-sub {
-      font-size: 0.85rem; color: var(--muted); line-height: 1.7;
-      margin-bottom: 36px; max-width: 300px; margin-left: auto; margin-right: auto;
-    }
+    /* ============ MAIN ============ */
+    #main{display:none;opacity:0;transition:opacity 1.2s var(--ease)}
+    #main.on{opacity:1}
 
-    /* Input group */
-    .lock-input-group { position: relative; }
-    .lock-input {
-      width: 100%; padding: 16px 24px; border-radius: 16px;
-      border: 1px solid rgba(212,176,106,0.1);
-      background: rgba(255,255,255,0.025);
-      color: var(--cream); font-family: var(--font-body);
-      font-size: 0.9rem; font-weight: 500;
-      text-align: center; letter-spacing: 0.2em;
-      outline: none; transition: all 0.4s var(--ease);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    }
-    .lock-input::placeholder {
-      color: rgba(240,237,230,0.12); letter-spacing: 0.12em; font-weight: 400;
-    }
-    .lock-input:focus {
-      border-color: rgba(212,176,106,0.3);
-      background: rgba(212,176,106,0.03);
-      box-shadow: 0 0 0 4px rgba(212,176,106,0.05), 0 8px 24px -8px rgba(212,176,106,0.12);
-    }
-    .lock-error {
-      display: none; font-size: 0.75rem; color: #e85656;
-      margin-top: 12px; font-weight: 500;
-      animation: shake 0.5s cubic-bezier(.36,.07,.19,.97);
-    }
-    @keyframes shake {
-      10%,90% { transform: translateX(-2px); }
-      20%,80% { transform: translateX(3px); }
-      30%,50%,70% { transform: translateX(-5px); }
-      40%,60% { transform: translateX(5px); }
-    }
+    #particles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 
-    .lock-btn {
-      width: 100%; margin-top: 20px; padding: 16px 32px;
-      border: none; border-radius: 16px; cursor: pointer;
-      font-family: var(--font-body); font-size: 0.72rem;
-      font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase;
-      color: var(--bg);
-      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
-      background-size: 200% auto;
-      transition: all 0.4s var(--ease);
-      position: relative; overflow: hidden;
+    /* ============ SECTION: HERO ============ */
+    .hero{
+      position:relative;z-index:1;
+      min-height:100vh;min-height:100dvh;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:60px 24px;overflow:hidden;
     }
-    .lock-btn::after {
-      content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s ease;
-    }
-    .lock-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px -8px rgba(212,176,106,0.3);
-      background-position: right center;
-    }
-    .lock-btn:hover::after { left: 120%; }
-    .lock-btn:active { transform: translateY(0); }
-
-    /* ====== MAIN CONTENT ====== */
-    #mainContent {
-      display: none; opacity: 0;
-      transition: opacity 1s var(--ease);
-    }
-    #mainContent.visible { opacity: 1; }
-
-    /* Particles layer */
-    #particles {
-      position: fixed; inset: 0; z-index: 0;
-      pointer-events: none; overflow: hidden;
-    }
-
-    /* ====== HERO SECTION ====== */
-    .hero {
-      position: relative; z-index: 1;
-      min-height: 100vh; min-height: 100dvh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; padding: 60px 24px;
-      overflow: hidden;
-    }
-
-    /* Animated gradient mesh background */
-    .hero-bg {
-      position: absolute; inset: 0; z-index: 0;
-    }
-    .hero-gradient {
-      position: absolute; inset: 0;
+    .hero-bg{position:absolute;inset:0;z-index:0}
+    .hero-grad{
+      position:absolute;inset:0;
       background:
-        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(184,146,74,0.06), transparent 50%),
-        radial-gradient(ellipse 60% 40% at 75% 80%, rgba(139,58,74,0.04), transparent 50%),
-        radial-gradient(ellipse 100% 80% at 50% 50%, rgba(12,6,25,1), var(--bg));
+        radial-gradient(ellipse 80% 50% at 20% 20%,rgba(184,146,74,.06),transparent 50%),
+        radial-gradient(ellipse 60% 40% at 75% 80%,rgba(139,58,74,.04),transparent 50%),
+        radial-gradient(ellipse 100% 80% at 50% 50%,rgba(12,6,25,1),var(--bg));
     }
-    .hero-aurora {
-      position: absolute; inset: 0; opacity: 0.35; mix-blend-mode: screen; overflow: hidden;
-    }
-    .aurora-streak {
-      position: absolute; width: 200%; height: 250px; border-radius: 50%;
-      filter: blur(90px);
-    }
-    .aurora-streak:nth-child(1) {
-      background: linear-gradient(90deg, transparent, rgba(212,176,106,0.12), transparent);
-      top: 15%; left: -50%;
-      animation: aurora-flow 16s ease-in-out infinite;
-    }
-    .aurora-streak:nth-child(2) {
-      background: linear-gradient(90deg, transparent, rgba(180,100,130,0.08), transparent);
-      top: 55%; left: -30%;
-      animation: aurora-flow 22s ease-in-out infinite -6s;
-    }
-    @keyframes aurora-flow {
-      0% { transform: translateX(-15%) rotate(-1deg); }
-      50% { transform: translateX(25%) rotate(1deg); }
-      100% { transform: translateX(-15%) rotate(-1deg); }
-    }
+    .hero-aurora{position:absolute;inset:0;opacity:.35;mix-blend-mode:screen;overflow:hidden}
+    .aur{position:absolute;width:200%;height:250px;border-radius:50%;filter:blur(90px)}
+    .aur:nth-child(1){background:linear-gradient(90deg,transparent,rgba(212,176,106,.12),transparent);top:15%;left:-50%;animation:aur 16s ease-in-out infinite}
+    .aur:nth-child(2){background:linear-gradient(90deg,transparent,rgba(180,100,130,.08),transparent);top:55%;left:-30%;animation:aur 22s ease-in-out infinite -6s}
+    .aur:nth-child(3){background:linear-gradient(90deg,transparent,rgba(100,140,220,.06),transparent);top:35%;left:-40%;animation:aur 19s ease-in-out infinite -3s}
+    @keyframes aur{0%{transform:translateX(-15%) rotate(-1deg)}50%{transform:translateX(25%) rotate(1deg)}100%{transform:translateX(-15%) rotate(-1deg)}}
+    .hero-grain{position:absolute;inset:0;opacity:.02;pointer-events:none;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
+    /* Horizontal light beams */
+    .hero-beams{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .beam{position:absolute;height:1px;width:100%;opacity:0;animation:beam-sweep 8s ease-in-out infinite}
+    .beam:nth-child(1){top:30%;background:linear-gradient(90deg,transparent 20%,rgba(212,176,106,.08) 50%,transparent 80%);animation-delay:0s}
+    .beam:nth-child(2){top:55%;background:linear-gradient(90deg,transparent 30%,rgba(212,176,106,.05) 60%,transparent 90%);animation-delay:3s;animation-duration:10s}
+    .beam:nth-child(3){top:75%;background:linear-gradient(90deg,transparent 10%,rgba(180,100,130,.04) 40%,transparent 70%);animation-delay:5s;animation-duration:12s}
+    @keyframes beam-sweep{0%{opacity:0;transform:translateX(-50%)}25%{opacity:1}75%{opacity:1}100%{opacity:0;transform:translateX(50%)}}
 
-    .hero-grain {
-      position: absolute; inset: 0; opacity: 0.02; pointer-events: none;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-    }
+    .hero-inner{position:relative;z-index:1;max-width:600px}
 
-    .hero-content {
-      position: relative; z-index: 1; max-width: 600px;
-    }
+    /* Stagger reveal with more dramatic motion */
+    .rv{opacity:0;transform:translateY(40px) scale(.97);animation:rv-in 1.1s var(--ease) forwards}
+    @keyframes rv-in{to{opacity:1;transform:translateY(0) scale(1)}}
 
-    /* Stagger reveal */
-    .reveal-up {
-      opacity: 0; transform: translateY(32px);
-      animation: reveal-in 1s var(--ease) forwards;
+    .hero-pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 20px;border-radius:100px;
+      background:rgba(212,176,106,.05);border:1px solid rgba(212,176,106,.1);
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      font-size:.58rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:32px;
     }
-    @keyframes reveal-in { to { opacity: 1; transform: translateY(0); } }
+    .hero-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
 
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 20px; border-radius: 100px;
-      background: rgba(212,176,106,0.06);
-      border: 1px solid rgba(212,176,106,0.1);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      font-size: 0.6rem; font-weight: 700;
-      letter-spacing: 0.4em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 32px;
+    .hero-title{
+      font-family:var(--display);font-weight:400;
+      font-size:clamp(3.2rem,11vw,7rem);
+      line-height:.92;letter-spacing:-.02em;margin-bottom:20px;
+      background:linear-gradient(160deg,#FFF8E7 0%,#E8C988 25%,#D4B06A 50%,#C9A55E 70%,#E8C988 100%);
+      background-size:300% auto;
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      animation:shimmer 8s ease infinite;
     }
-    .hero-badge .dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--gold);
-      animation: dot-pulse 2s ease-in-out infinite;
-    }
-    @keyframes dot-pulse {
-      0%, 100% { opacity: 0.4; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.3); }
-    }
+    .hero-title em{font-style:italic;font-weight:400;-webkit-text-fill-color:transparent}
+    @keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-    .hero-title {
-      font-family: var(--font-display); font-weight: 400;
-      font-size: clamp(3rem, 10vw, 6.5rem);
-      line-height: 0.95; letter-spacing: -0.02em;
-      margin-bottom: 20px;
-      background: linear-gradient(160deg, #FFF8E7 0%, #E8C988 25%, #D4B06A 50%, #C9A55E 70%, #E8C988 100%);
-      background-size: 300% auto;
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: title-shimmer 8s ease infinite;
-    }
-    .hero-title em {
-      font-style: italic; font-weight: 400;
-      -webkit-text-fill-color: transparent;
-    }
-    @keyframes title-shimmer {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    .hero-tag{font-family:var(--display);font-style:italic;font-size:1.15rem;color:var(--muted);margin-bottom:0}
 
-    .hero-tagline {
-      font-family: var(--font-display); font-style: italic;
-      font-size: 1.15rem; color: var(--muted);
-      margin-bottom: 48px;
-    }
+    /* Scroll cue */
+    .scroll-cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:rv-in 1s var(--ease) 1.6s forwards}
+    .scroll-cue span{font-size:.5rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
+    .scroll-bar{width:1px;height:28px;background:rgba(212,176,106,.12);position:relative;overflow:hidden}
+    .scroll-bar::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:50%;background:linear-gradient(to bottom,transparent,var(--gold));animation:drop 2.2s ease-in-out infinite}
+    @keyframes drop{0%{top:-50%}100%{top:150%}}
 
-    /* Scroll indicator */
-    .scroll-hint {
-      position: absolute; bottom: 32px; left: 50%;
-      transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      opacity: 0; animation: reveal-in 1s var(--ease) 1.5s forwards;
-    }
-    .scroll-hint span {
-      font-size: 0.55rem; font-weight: 600;
-      letter-spacing: 0.3em; text-transform: uppercase;
-      color: rgba(240,237,230,0.2);
-    }
-    .scroll-line {
-      width: 1px; height: 32px; background: rgba(212,176,106,0.15);
-      position: relative; overflow: hidden;
-    }
-    .scroll-line::after {
-      content: ''; position: absolute; top: -100%; left: 0;
-      width: 100%; height: 50%;
-      background: linear-gradient(to bottom, transparent, var(--gold));
-      animation: scroll-drop 2s ease-in-out infinite;
-    }
-    @keyframes scroll-drop {
-      0% { top: -50%; } 100% { top: 150%; }
-    }
+    /* ============ SCROLL REVEAL ============ */
+    .sr{opacity:1;transform:none;transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
 
-    /* ====== EVENT DETAILS SECTION ====== */
-    .details-section {
-      position: relative; z-index: 1;
-      padding: 120px 24px;
-    }
+    /* ============ SECTION: TICKET ============ */
+    .sec{position:relative;z-index:1;padding:100px 24px}
+    .sec-inner{max-width:540px;margin:0 auto}
+    .sec-label{font-size:.55rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);opacity:.55;margin-bottom:16px;text-align:center}
 
-    .details-inner {
-      max-width: 560px; margin: 0 auto;
-    }
+    .ticket{position:relative;border-radius:26px;overflow:hidden;background:var(--card);border:1px solid var(--card-border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 40px 80px -20px rgba(0,0,0,.4)}
+    .ticket::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(212,176,106,.18),transparent)}
+    /* Animated shimmer on ticket */
+    .ticket::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(212,176,106,.02),transparent);animation:ticket-gleam 6s ease-in-out infinite}
+    @keyframes ticket-gleam{0%{left:-60%}50%{left:100%}100%{left:100%}}
 
-    /* Section label */
-    .section-label {
-      font-family: var(--font-body); font-size: 0.58rem;
-      font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase;
-      color: var(--gold); opacity: 0.6;
-      margin-bottom: 16px; text-align: center;
-    }
+    .tk-top{padding:36px 28px 28px;text-align:center;position:relative}
+    .tk-top::after{content:'';position:absolute;bottom:0;left:0;right:0;border-bottom:1.5px dashed rgba(212,176,106,.06)}
+    .tk-top::before{content:'';position:absolute;bottom:-8px;left:0;right:0;height:16px;z-index:2;background:radial-gradient(circle 8px at 0 8px,var(--bg) 96%,transparent 100%),radial-gradient(circle 8px at 100% 8px,var(--bg) 96%,transparent 100%)}
+    .tk-date{font-size:.58rem;font-weight:700;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+    .tk-time{font-family:var(--display);font-size:2.8rem;font-weight:400;color:var(--cream);letter-spacing:.02em}
+    .tk-after{font-size:.6rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+    .tk-bot{padding:28px;display:flex;align-items:center;gap:12px;justify-content:center}
+    .tk-ico{width:36px;height:36px;border-radius:10px;background:rgba(212,176,106,.05);border:1px solid rgba(212,176,106,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .tk-ico svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+    .tk-vl{font-size:.5rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:2px}
+    .tk-vn{font-family:var(--display);font-size:1.05rem;color:var(--cream);font-weight:400}
 
-    /* Ticket Card */
-    .ticket {
-      position: relative; border-radius: 28px; overflow: hidden;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.4);
-      margin-bottom: 48px;
-    }
-    .ticket::before {
-      content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(212,176,106,0.2), transparent);
-    }
+    /* ============ SECTION: PROSE ============ */
+    .prose-wrap{max-width:460px;margin:0 auto;text-align:center;padding:0 24px 100px;position:relative;z-index:1}
+    .prose-txt{font-family:var(--display);font-style:italic;font-size:1.15rem;color:rgba(240,237,230,.45);line-height:1.95}
 
-    .ticket-header {
-      padding: 40px 32px 32px; text-align: center;
-      position: relative;
+    /* ============ SECTION: BENTO FEATURES ============ */
+    .bento-sec{position:relative;z-index:1;padding:0 24px 100px}
+    .bento-inner{max-width:540px;margin:0 auto}
+    .bento{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+    .b-card{
+      padding:28px 20px;border-radius:20px;
+      background:var(--card);border:1px solid var(--card-border);
+      position:relative;overflow:hidden;
+      transition:all .45s var(--ease);
     }
-    .ticket-header::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-      border-bottom: 1.5px dashed rgba(212,176,106,0.08);
-    }
-    /* Perforated edge notches */
-    .ticket-header::before {
-      content: ''; position: absolute; bottom: -9px; left: 0; right: 0; height: 18px; z-index: 2;
-      background:
-        radial-gradient(circle 9px at 0 9px, var(--bg) 96%, transparent 100%),
-        radial-gradient(circle 9px at 100% 9px, var(--bg) 96%, transparent 100%);
-    }
+    .b-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 0%,rgba(212,176,106,.03),transparent 60%);opacity:0;transition:opacity .4s}
+    .b-card:hover{border-color:rgba(212,176,106,.12);transform:translateY(-3px);box-shadow:0 16px 40px -12px rgba(0,0,0,.3)}
+    .b-card:hover::before{opacity:1}
+    .b-wide{grid-column:1/-1;text-align:center}
+    .b-icon{font-size:1.8rem;margin-bottom:14px;filter:grayscale(.12) brightness(1.05)}
+    .b-t{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cream);margin-bottom:5px;position:relative;z-index:1}
+    .b-d{font-size:.78rem;color:var(--muted);line-height:1.55;position:relative;z-index:1}
 
-    .ticket-date-label {
-      font-family: var(--font-body); font-size: 0.6rem; font-weight: 700;
-      letter-spacing: 0.35em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 10px;
+    /* ============ SECTION: HIGHLIGHTS ============ */
+    .hl-sec{position:relative;z-index:1;padding:0 24px 100px}
+    .hl-inner{max-width:540px;margin:0 auto}
+    .hl-grid{display:flex;flex-direction:column;gap:10px}
+    .hl-card{
+      display:flex;align-items:flex-start;gap:16px;
+      padding:24px 22px;border-radius:18px;
+      background:var(--card);border:1px solid var(--card-border);
+      transition:all .45s var(--ease);
     }
-    .ticket-time {
-      font-family: var(--font-display); font-size: 3rem; font-weight: 400;
-      color: var(--cream); letter-spacing: 0.02em;
-    }
-    .ticket-onwards {
-      font-size: 0.65rem; font-weight: 600;
-      letter-spacing: 0.3em; text-transform: uppercase;
-      color: var(--muted); margin-top: 4px;
-    }
+    .hl-card:hover{border-color:rgba(212,176,106,.12);transform:translateX(4px)}
+    .hl-emoji{font-size:1.6rem;flex-shrink:0;margin-top:2px}
+    .hl-title{font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--cream);margin-bottom:4px}
+    .hl-desc{font-size:.78rem;color:var(--muted);line-height:1.6}
 
-    .ticket-body {
-      padding: 32px;
-      display: flex; align-items: center; gap: 14px;
-      justify-content: center;
-    }
-    .ticket-venue-icon {
-      width: 40px; height: 40px; border-radius: 12px;
-      background: rgba(212,176,106,0.06);
-      border: 1px solid rgba(212,176,106,0.1);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .ticket-venue-icon svg {
-      width: 16px; height: 16px; stroke: var(--gold);
-      fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
-    }
-    .ticket-venue-text { text-align: left; }
-    .ticket-venue-label {
-      font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.15em; color: var(--muted); margin-bottom: 2px;
-    }
-    .ticket-venue-name {
-      font-family: var(--font-display); font-size: 1.1rem;
-      color: var(--cream); font-weight: 400;
-    }
+    /* ============ SECTION: DRESS CODE ============ */
+    .dc-sec{position:relative;z-index:1;padding:0 24px 100px}
+    .dc-inner{max-width:380px;margin:0 auto;text-align:center;padding:24px 0;border-top:1px solid rgba(212,176,106,.04);border-bottom:1px solid rgba(212,176,106,.04)}
+    .dc-label{font-size:.52rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:rgba(212,176,106,.38);margin-bottom:8px}
+    .dc-val{font-family:var(--display);font-size:1.25rem;color:var(--cream);font-weight:400}
 
-    /* ====== WHAT TO EXPECT ====== */
-    .expect-section {
-      position: relative; z-index: 1;
-      padding: 0 24px 120px;
-    }
-    .expect-inner { max-width: 560px; margin: 0 auto; }
+    /* ============ BACK LINK ============ */
+    .back-sec{position:relative;z-index:1;padding:0 24px 70px;text-align:center}
+    .back-a{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--muted);text-decoration:none;transition:all .3s var(--ease);padding:12px 22px;border-radius:12px;border:1px solid transparent}
+    .back-a:hover{color:var(--gold);border-color:rgba(212,176,106,.1);background:rgba(212,176,106,.025)}
+    .back-a svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-    .bento {
-      display: grid; gap: 12px;
-      grid-template-columns: 1fr 1fr;
-    }
-    .bento-card {
-      padding: 32px 24px; border-radius: 22px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      transition: all 0.4s var(--ease);
-      position: relative; overflow: hidden;
-    }
-    .bento-card::after {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(circle at 30% 0%, rgba(212,176,106,0.03), transparent 60%);
-      opacity: 0; transition: opacity 0.4s;
-    }
-    .bento-card:hover {
-      border-color: rgba(212,176,106,0.1);
-      transform: translateY(-3px);
-      box-shadow: 0 16px 40px -12px rgba(0,0,0,0.3);
-    }
-    .bento-card:hover::after { opacity: 1; }
+    /* ============ ANIMATED DIVIDERS ============ */
+    .glow-line{width:80px;height:1px;margin:0 auto 48px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.25;animation:line-breathe 4s ease-in-out infinite}
+    @keyframes line-breathe{0%,100%{opacity:.15;width:60px}50%{opacity:.35;width:100px}}
 
-    .bento-wide { grid-column: 1 / -1; text-align: center; }
-    .bento-icon {
-      font-size: 2rem; margin-bottom: 16px;
-      filter: grayscale(0.15) brightness(1.05);
-    }
-    .bento-title {
-      font-family: var(--font-body); font-size: 0.68rem;
-      font-weight: 700; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--cream);
-      margin-bottom: 6px; position: relative; z-index: 1;
-    }
-    .bento-desc {
-      font-size: 0.8rem; color: var(--muted); line-height: 1.5;
-      position: relative; z-index: 1;
-    }
+    /* ============ PARTICLES ============ */
+    @keyframes float-up{0%{opacity:0;transform:translateY(100%) scale(.5) rotate(0)}10%{opacity:1}90%{opacity:.5}100%{opacity:0;transform:translateY(-100vh) scale(1) rotate(180deg)}}
+    @keyframes confetti{0%{opacity:1;transform:translateY(-50px) rotate(0) scale(1)}100%{opacity:0;transform:translateY(calc(100vh + 50px)) rotate(1080deg) scale(.4)}}
+    @keyframes glow-p{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:.65;transform:scale(1.5)}}
 
-    /* ====== PROSE SECTION ====== */
-    .prose-section {
-      position: relative; z-index: 1;
-      padding: 0 24px 120px;
-    }
-    .prose-inner {
-      max-width: 480px; margin: 0 auto; text-align: center;
-    }
-    .prose-text {
-      font-family: var(--font-display); font-style: italic;
-      font-size: 1.2rem; color: rgba(240,237,230,0.5);
-      line-height: 1.9;
-    }
+    /* ============ FOOTER ============ */
+    .foot{position:relative;z-index:1;text-align:center;padding:0 24px 40px}
+    .foot p{font-size:.65rem;color:var(--dim);letter-spacing:.08em}
+    .foot span{color:var(--gold)}
 
-    /* ====== DRESS CODE ====== */
-    .dresscode-section {
-      position: relative; z-index: 1;
-      padding: 0 24px 100px;
-    }
-    .dresscode-inner {
-      max-width: 400px; margin: 0 auto; text-align: center;
-      padding: 24px 0;
-      border-top: 1px solid rgba(212,176,106,0.05);
-      border-bottom: 1px solid rgba(212,176,106,0.05);
-    }
-    .dresscode-label {
-      font-size: 0.55rem; font-weight: 700;
-      letter-spacing: 0.4em; text-transform: uppercase;
-      color: rgba(212,176,106,0.4); margin-bottom: 8px;
-    }
-    .dresscode-value {
-      font-family: var(--font-display); font-size: 1.3rem;
-      color: var(--cream); font-weight: 400;
-    }
-
-    /* ====== BACK LINK ====== */
-    .back-section {
-      position: relative; z-index: 1;
-      padding: 0 24px 80px; text-align: center;
-    }
-    .back-link {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 0.75rem; font-weight: 600;
-      letter-spacing: 0.1em; color: var(--muted);
-      text-decoration: none; transition: all 0.3s var(--ease);
-      padding: 12px 24px; border-radius: 12px;
-      border: 1px solid transparent;
-    }
-    .back-link:hover {
-      color: var(--gold); border-color: rgba(212,176,106,0.1);
-      background: rgba(212,176,106,0.03);
-    }
-    .back-link svg {
-      width: 14px; height: 14px; stroke: currentColor;
-      fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    }
-
-    /* ====== SCROLL ANIMATIONS ====== */
-    .fade-in {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
-    }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-    /* ====== FLOATING PARTICLES ====== */
-    @keyframes float-up {
-      0% { opacity: 0; transform: translateY(100%) scale(0.5) rotate(0); }
-      10% { opacity: 1; }
-      90% { opacity: 0.5; }
-      100% { opacity: 0; transform: translateY(-100vh) scale(1) rotate(180deg); }
-    }
-    @keyframes confetti-fall {
-      0% { opacity: 1; transform: translateY(-50px) rotate(0) scale(1); }
-      100% { opacity: 0; transform: translateY(calc(100vh + 50px)) rotate(1080deg) scale(0.4); }
-    }
-    @keyframes glow-breath {
-      0%, 100% { opacity: 0.2; transform: scale(1); }
-      50% { opacity: 0.7; transform: scale(1.4); }
+    @media(max-width:480px){
+      .hero-title{font-size:clamp(2.8rem,12vw,4rem)}
+      .bento{gap:8px}
+      .b-card{padding:22px 16px}
+      .hl-card{padding:20px 18px;gap:12px}
     }
   </style>
 </head>
 <body>
 
-  <!-- ====== LOCK SCREEN ====== -->
-  <div id="lockScreen">
-    <div class="lock-ambient">
-      <div class="lock-glow"></div>
-      <div class="lock-glow"></div>
-      <div class="lock-glow"></div>
-    </div>
-    <div class="lock-content">
-      <div class="lock-visual">
-        <div class="lock-circle"></div>
-        <div class="lock-circle"></div>
-        <div class="lock-icon-center">
-          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
+  <!-- ========== LOCK SCREEN ========== -->
+  <div id="lock">
+    <div class="l-ambient"><div class="l-orb"></div><div class="l-orb"></div><div class="l-orb"></div></div>
+    <div class="l-wrap">
+      <div class="l-rings">
+        <div class="l-ring"></div><div class="l-ring"></div>
+        <div class="l-center"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       </div>
-      <p class="lock-label">Private Event</p>
-      <h1 class="lock-heading">The After Party</h1>
-      <p class="lock-sub">This page is for our inner circle. Enter the password to continue.</p>
-      <div class="lock-input-group">
-        <input type="password" id="pwInput" class="lock-input" placeholder="Enter password" autocomplete="off"
-          onkeydown="if(event.key==='Enter')tryUnlock()">
-        <p id="pwError" class="lock-error">Wrong password. Try again.</p>
-        <button onclick="tryUnlock()" class="lock-btn">Enter</button>
-      </div>
+      <p class="l-label">Private Event</p>
+      <h1 class="l-title">The After Party</h1>
+      <p class="l-sub">This page is for our inner circle. Enter the password to continue.</p>
+      <input type="password" id="pw" class="l-field" placeholder="Enter password" autocomplete="off" onkeydown="if(event.key==='Enter')go()">
+      <p id="err" class="l-err">Wrong password. Try again.</p>
+      <button onclick="go()" class="l-btn">Enter</button>
     </div>
   </div>
 
-  <!-- ====== MAIN CONTENT ====== -->
-  <div id="mainContent">
+  <!-- ========== MAIN ========== -->
+  <div id="main">
     <div id="particles"></div>
 
     <!-- Hero -->
     <section class="hero">
       <div class="hero-bg">
-        <div class="hero-gradient"></div>
-        <div class="hero-aurora">
-          <div class="aurora-streak"></div>
-          <div class="aurora-streak"></div>
-        </div>
+        <div class="hero-grad"></div>
+        <div class="hero-aurora"><div class="aur"></div><div class="aur"></div><div class="aur"></div></div>
+        <div class="hero-beams"><div class="beam"></div><div class="beam"></div><div class="beam"></div></div>
         <div class="hero-grain"></div>
       </div>
-      <div class="hero-content">
-        <div class="reveal-up hero-badge" style="animation-delay:0.1s;">
-          <span class="dot"></span> You're Invited
-        </div>
-        <h1 class="reveal-up hero-title" style="animation-delay:0.25s;">
-          The<br><em>After Party</em>
-        </h1>
-        <p class="reveal-up hero-tagline" style="animation-delay:0.45s;">
-          Where the real celebration begins
-        </p>
+      <div class="hero-inner">
+        <div class="rv hero-pill" style="animation-delay:.1s"><span class="dot"></span> You're Invited</div>
+        <h1 class="rv hero-title" style="animation-delay:.25s">The<br><em>After Party</em></h1>
+        <p class="rv hero-tag" style="animation-delay:.5s">Where the real celebration begins</p>
       </div>
-      <div class="scroll-hint">
-        <span>Scroll</span>
-        <div class="scroll-line"></div>
-      </div>
+      <div class="scroll-cue"><span>Scroll</span><div class="scroll-bar"></div></div>
     </section>
 
-    <!-- Event Details -->
-    <section class="details-section">
-      <div class="details-inner">
-        <p class="section-label fade-in">Event Details</p>
-        <div class="ticket fade-in">
-          <div class="ticket-header">
-            <p class="ticket-date-label">Friday, May 9th, 2026</p>
-            <p class="ticket-time">8:00 PM</p>
-            <p class="ticket-onwards">Onwards</p>
+    <!-- Ticket -->
+    <section class="sec">
+      <div class="sec-inner">
+        <p class="sec-label sr">Event Details</p>
+        <div class="ticket sr">
+          <div class="tk-top">
+            <p class="tk-date">Friday, May 9th, 2026</p>
+            <p class="tk-time">8:00 PM</p>
+            <p class="tk-after">Onwards</p>
           </div>
-          <div class="ticket-body">
-            <div class="ticket-venue-icon">
-              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            </div>
-            <div class="ticket-venue-text">
-              <p class="ticket-venue-label">Venue</p>
-              <p class="ticket-venue-name">Location TBD</p>
-            </div>
+          <div class="tk-bot">
+            <div class="tk-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><p class="tk-vl">Venue</p><p class="tk-vn">Location TBD &mdash; Stay Tuned</p></div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Prose -->
-    <section class="prose-section">
-      <div class="prose-inner fade-in">
-        <p class="prose-text">After the sacred ceremonies, the night is ours. Music, laughter, dancing, and the people who matter most&mdash;all under one roof for a celebration you won't forget.</p>
+    <div class="prose-wrap sr">
+      <div class="glow-line"></div>
+      <p class="prose-txt">After the sacred ceremonies, the night is ours. Music, laughter, dancing, and the people who matter most&mdash;all under one roof for a celebration you won't forget.</p>
+    </div>
+
+    <!-- Bento: What to Expect -->
+    <section class="bento-sec">
+      <div class="bento-inner">
+        <p class="sec-label sr">What to Expect</p>
+        <div class="bento">
+          <div class="b-card sr"><div class="b-icon">&#127926;</div><p class="b-t">Live Music &amp; DJ</p><p class="b-d">Curated beats all night long</p></div>
+          <div class="b-card sr"><div class="b-icon">&#127864;</div><p class="b-t">Open Bar</p><p class="b-d">Cocktails, beer, wine &amp; more</p></div>
+          <div class="b-card sr"><div class="b-icon">&#128131;</div><p class="b-t">Dance Floor</p><p class="b-d">No wallflowers allowed</p></div>
+          <div class="b-card sr"><div class="b-icon">&#127775;</div><p class="b-t">Surprises</p><p class="b-d">You'll have to be there</p></div>
+        </div>
       </div>
     </section>
 
-    <!-- What to Expect -->
-    <section class="expect-section">
-      <div class="expect-inner">
-        <p class="section-label fade-in">What to Expect</p>
-        <div class="bento fade-in">
-          <div class="bento-card">
-            <div class="bento-icon">&#127926;</div>
-            <p class="bento-title">Live Music & DJ</p>
-            <p class="bento-desc">Curated beats all night</p>
+    <!-- Highlights -->
+    <section class="hl-sec">
+      <div class="hl-inner">
+        <p class="sec-label sr">Highlights</p>
+        <div class="hl-grid">
+          <div class="hl-card sr">
+            <div class="hl-emoji">&#127856;</div>
+            <div><p class="hl-title">Cake Cutting Ceremony</p><p class="hl-desc">A sweet moment to celebrate the newlyweds. Join us as Chamanthi &amp; Sandeep cut the cake together.</p></div>
           </div>
-          <div class="bento-card">
-            <div class="bento-icon">&#127864;</div>
-            <p class="bento-title">Open Bar</p>
-            <p class="bento-desc">Signature cocktails & more</p>
+          <div class="hl-card sr">
+            <div class="hl-emoji">&#127867;</div>
+            <div><p class="hl-title">Drinks on Us</p><p class="hl-desc">Full bar with signature cocktails, beer, wine, and non-alcoholic options. Sip, toast, repeat.</p></div>
           </div>
-          <div class="bento-card">
-            <div class="bento-icon">&#128131;</div>
-            <p class="bento-title">Dance Floor</p>
-            <p class="bento-desc">No wallflowers allowed</p>
-          </div>
-          <div class="bento-card">
-            <div class="bento-icon">&#127775;</div>
-            <p class="bento-title">Surprises</p>
-            <p class="bento-desc">You'll have to be there</p>
+          <div class="hl-card sr">
+            <div class="hl-emoji">&#127946;</div>
+            <div><p class="hl-title">Pool &amp; Swimming</p><p class="hl-desc">Feeling adventurous? The pool will be open. Bring your swimwear if you plan to take a dip!</p></div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Dress Code -->
-    <section class="dresscode-section">
-      <div class="dresscode-inner fade-in">
-        <p class="dresscode-label">Dress Code</p>
-        <p class="dresscode-value">Dress to Impress</p>
+    <section class="dc-sec">
+      <div class="dc-inner sr">
+        <p class="dc-label">Dress Code</p>
+        <p class="dc-val">Dress to Impress</p>
       </div>
     </section>
 
     <!-- Back -->
-    <section class="back-section">
-      <a href="../inner-circle/" class="back-link fade-in">
+    <section class="back-sec">
+      <a href="../inner-circle/" class="back-a sr">
         <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
         Back to Wedding Site
       </a>
     </section>
+
+    <!-- Footer -->
+    <div class="foot sr">
+      <div class="glow-line" style="margin-bottom:20px"></div>
+      <p>Chamanthi <span>&amp;</span> Sandeep &middot; May 9, 2026</p>
+    </div>
   </div>
 
   <script>
-    // ---- Password Gate ----
-    const PASSWORD = 'chamuwedsdeep';
-
-    function tryUnlock() {
-      const input = document.getElementById('pwInput');
-      const error = document.getElementById('pwError');
-      if (input.value === PASSWORD) {
-        error.style.display = 'none';
-        const lock = document.getElementById('lockScreen');
-        const main = document.getElementById('mainContent');
-        lock.classList.add('unlocking');
-        setTimeout(() => {
-          lock.style.display = 'none';
-          main.style.display = 'block';
-          requestAnimationFrame(() => {
-            main.classList.add('visible');
-            spawnParticles();
-          });
-          localStorage.setItem('partyUnlocked', 'true');
-        }, 800);
-      } else {
-        error.style.display = 'block';
-        input.style.borderColor = 'rgba(232,86,86,0.3)';
-        input.style.boxShadow = '0 0 0 4px rgba(232,86,86,0.06)';
-        setTimeout(() => {
-          input.style.borderColor = 'rgba(212,176,106,0.1)';
-          input.style.boxShadow = 'none';
-        }, 2000);
+    // ---- Password ----
+    function go(){
+      const v=document.getElementById('pw').value;
+      if(v==='chamuwedsdeep'){
+        document.getElementById('err').style.display='none';
+        const l=document.getElementById('lock'),m=document.getElementById('main');
+        l.classList.add('bye');
+        setTimeout(()=>{l.style.display='none';m.style.display='block';requestAnimationFrame(()=>{m.classList.add('on');fx()});localStorage.setItem('partyUnlocked','true')},900);
+      }else{
+        document.getElementById('err').style.display='block';
+        const f=document.getElementById('pw');
+        f.style.borderColor='rgba(232,86,86,.3)';f.style.boxShadow='0 0 0 3px rgba(232,86,86,.05)';
+        setTimeout(()=>{f.style.borderColor='rgba(212,176,106,.1)';f.style.boxShadow='none'},2000);
       }
     }
 
-    // Auto-unlock if previously unlocked
-    if (localStorage.getItem('partyUnlocked') === 'true') {
-      document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('lockScreen').style.display = 'none';
-        const main = document.getElementById('mainContent');
-        main.style.display = 'block';
-        requestAnimationFrame(() => main.classList.add('visible'));
-        setTimeout(spawnParticles, 300);
+    // Auto-unlock
+    if(localStorage.getItem('partyUnlocked')==='true'){
+      document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById('lock').style.display='none';
+        const m=document.getElementById('main');m.style.display='block';
+        requestAnimationFrame(()=>m.classList.add('on'));
+        setTimeout(fx,300);
       });
     }
 
-    // ---- Scroll Animations (IntersectionObserver) ----
-    document.addEventListener('DOMContentLoaded', () => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
+    // ---- Scroll Reveal (simple & reliable) ----
+    document.addEventListener('DOMContentLoaded',()=>{
+      const els=document.querySelectorAll('.sr');
+      const io=new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          // Always visible — just add a subtle entrance animation
+          if(e.isIntersecting){
+            e.target.style.animation='rv-in .9s cubic-bezier(.16,1,.3,1) forwards';
+            io.unobserve(e.target);
           }
         });
-      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-
-      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+      },{threshold:0.08,rootMargin:'0px 0px -20px 0px'});
+      els.forEach(el=>io.observe(el));
     });
 
     // ---- Particles ----
-    function spawnParticles() {
-      const container = document.getElementById('particles');
-      if (!container) return;
-      container.innerHTML = '';
+    function fx(){
+      const c=document.getElementById('particles');
+      if(!c)return;c.innerHTML='';
 
-      // Floating gold orbs
-      for (let i = 0; i < 20; i++) {
-        const p = document.createElement('div');
-        const size = 2 + Math.random() * 3;
-        const glow = 4 + Math.random() * 8;
-        p.style.cssText = `
-          position:absolute; width:${size}px; height:${size}px; border-radius:50%;
-          background:rgba(212,176,106,${0.15 + Math.random()*0.25});
-          box-shadow:0 0 ${glow}px rgba(212,176,106,${0.08 + Math.random()*0.12});
-          left:${Math.random()*100}%; bottom:-10px;
-          animation:float-up ${12+Math.random()*18}s ${Math.random()*12}s linear infinite;
-        `;
-        container.appendChild(p);
+      // Gold orbs
+      for(let i=0;i<22;i++){
+        const p=document.createElement('div');const s=2+Math.random()*3.5;const g=4+Math.random()*8;
+        p.style.cssText=`position:absolute;width:${s}px;height:${s}px;border-radius:50%;background:rgba(212,176,106,${.15+Math.random()*.25});box-shadow:0 0 ${g}px rgba(212,176,106,${.08+Math.random()*.12});left:${Math.random()*100}%;bottom:-10px;animation:float-up ${11+Math.random()*16}s ${Math.random()*11}s linear infinite`;
+        c.appendChild(p);
       }
-
-      // Initial confetti burst
-      const colors = ['#D4B06A','#E8C988','#B8924A','#F0EDE6','#C9A55E','rgba(255,255,255,0.6)'];
-      for (let i = 0; i < 40; i++) {
-        const c = document.createElement('div');
-        const w = 2 + Math.random()*5;
-        const h = Math.random() > 0.5 ? w : w * 2.5;
-        c.style.cssText = `
-          position:absolute; width:${w}px; height:${h}px;
-          background:${colors[Math.floor(Math.random()*colors.length)]};
-          border-radius:${Math.random()>0.3?'50%':'1px'};
-          left:${Math.random()*100}%; top:-40px; opacity:0;
-          animation:confetti-fall ${3+Math.random()*3}s ${Math.random()*2}s ease-in forwards;
-        `;
-        container.appendChild(c);
+      // Confetti burst
+      const cols=['#D4B06A','#E8C988','#B8924A','#F0EDE6','#C9A55E','rgba(255,255,255,.6)'];
+      for(let i=0;i<45;i++){
+        const d=document.createElement('div');const w=2+Math.random()*5;const h=Math.random()>.5?w:w*2.5;
+        d.style.cssText=`position:absolute;width:${w}px;height:${h}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.3?'50%':'1px'};left:${Math.random()*100}%;top:-40px;opacity:0;animation:confetti ${3+Math.random()*3}s ${Math.random()*2}s ease-in forwards`;
+        c.appendChild(d);
       }
-
       // Glow pulsers
-      for (let i = 0; i < 6; i++) {
-        const g = document.createElement('div');
-        const size = 3 + Math.random()*4;
-        g.style.cssText = `
-          position:absolute; width:${size}px; height:${size}px; border-radius:50%;
-          background:var(--gold);
-          left:${Math.random()*100}%; top:${Math.random()*100}%;
-          animation:glow-breath ${3+Math.random()*4}s ${Math.random()*5}s ease-in-out infinite;
-          pointer-events:none;
-        `;
-        container.appendChild(g);
+      for(let i=0;i<7;i++){
+        const g=document.createElement('div');const s=3+Math.random()*4;
+        g.style.cssText=`position:absolute;width:${s}px;height:${s}px;border-radius:50%;background:var(--gold);left:${Math.random()*100}%;top:${Math.random()*100}%;animation:glow-p ${3+Math.random()*4}s ${Math.random()*5}s ease-in-out infinite;pointer-events:none`;
+        c.appendChild(g);
       }
     }
   </script>
