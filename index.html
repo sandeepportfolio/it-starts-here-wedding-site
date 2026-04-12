@@ -666,6 +666,104 @@
       </div>
     </section>
 
+    <!-- ===== LIVE STREAM ===== -->
+    <section id="livestream" class="py-24 px-6" style="background: var(--bg-alt);">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12 reveal">
+          <p class="section-label mb-2">Witness Our Moment</p>
+          <h2 class="section-title text-4xl sm:text-5xl">Live Stream</h2>
+          <p class="text-sm mt-4 max-w-md mx-auto" style="color:var(--text-muted);">Can't be there in person? Watch every sacred moment unfold, live from Plano, Texas.</p>
+          <div class="section-divider mt-5"></div>
+        </div>
+
+        <div class="reveal" style="border-radius:24px; overflow:hidden; background:var(--bg-card); border:1px solid var(--border); box-shadow: 0 8px 40px rgba(0,0,0,0.06);">
+          <div class="relative" style="aspect-ratio:16/9; background:#0a0a0a; overflow:hidden;">
+            <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 50%, rgba(184,146,74,0.08) 0%, rgba(0,0,0,0.95) 70%);"></div>
+            <div class="absolute inset-0 flex items-center justify-center flex-col" style="gap:16px;">
+              <div style="width:72px; height:72px; border-radius:50%; border:2px solid rgba(184,146,74,0.5); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); background:rgba(184,146,74,0.1); cursor:pointer; transition:all 0.3s;" onmouseover="this.style.background='rgba(184,146,74,0.25)'; this.style.transform='scale(1.08)'" onmouseout="this.style.background='rgba(184,146,74,0.1)'; this.style.transform='scale(1)'">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="margin-left:3px;"><polygon points="5,3 19,12 5,21" fill="rgba(184,146,74,0.9)"/></svg>
+              </div>
+              <p style="color:rgba(255,255,255,0.5); font-size:11px; letter-spacing:0.25em; text-transform:uppercase; font-family:'Montserrat',sans-serif;">Stream begins May 9</p>
+            </div>
+            <div class="absolute" style="top:16px; left:16px; display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:rgba(0,0,0,0.6); backdrop-filter:blur(12px);">
+              <span style="width:8px; height:8px; border-radius:50%; background:#ef4444; box-shadow:0 0 8px #ef4444; display:none;" id="live-dot"></span>
+              <span style="width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.3);" id="offline-dot"></span>
+              <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.7); font-weight:500;">Upcoming</span>
+            </div>
+            <div class="absolute" style="top:16px; right:16px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.1); backdrop-filter:blur(8px);">
+              <span style="font-size:10px; font-weight:600; color:rgba(255,255,255,0.6); letter-spacing:0.05em;">1080p</span>
+            </div>
+          </div>
+
+          <div style="padding:20px 16px 24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
+                <span style="font-size:14px;">&#128197;</span>
+                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">Friday, May 9, 2026</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
+                <span style="font-size:14px;">&#9200;</span>
+                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">8:50 AM CST</span>
+              </div>
+            </div>
+            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; color:var(--text); margin-bottom:8px;">The Sacred Ceremony</h3>
+            <p style="font-size:13px; line-height:1.6; color:var(--text-muted); margin-bottom:20px;">Watch as Chamanthi &amp; Sandeep exchange vows at the beautiful Shree Swaminarayan Gurukul in Plano, Texas. No login required &mdash; just click and watch.</p>
+
+            <div style="display:flex; align-items:center; justify-content:center; gap:8px; padding:20px 12px; border-radius:16px; background:var(--bg-alt); margin-bottom:20px; flex-wrap:wrap;">
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-days>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Days</div>
+              </div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-hours>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Hours</div>
+              </div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-mins>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Mins</div>
+              </div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-secs>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Secs</div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
+                <div style="font-size:20px; margin-bottom:6px;">&#127963;&#65039;</div>
+                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Venue</div>
+                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Gurukul Temple<br>Plano, TX</div>
+              </div>
+              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
+                <div style="font-size:20px; margin-bottom:6px;">&#128241;</div>
+                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Any Device</div>
+                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Phone, Tablet<br>or Desktop</div>
+              </div>
+              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
+                <div style="font-size:20px; margin-bottom:6px;">&#127760;</div>
+                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">No Login</div>
+                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Open link<br>&amp; watch</div>
+              </div>
+            </div>
+
+            <div style="text-align:center; margin-top:24px;">
+              <a href="#" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; font-size:13px; border-radius:14px; pointer-events:none; opacity:0.6;" id="watch-btn">
+                <span>&#128308;</span> Stream Link Available May 9
+              </a>
+              <p style="font-size:10px; color:var(--text-light); margin-top:10px; letter-spacing:0.03em;">A link will appear here when the stream goes live</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal text-center" style="margin-top:20px;">
+          <p style="font-size:10px; color:var(--text-light); line-height:1.6; word-break:break-word;">&#127760; 8:50 AM CST = 9:50 AM EST &middot; 6:50 AM PST &middot; 2:50 PM GMT &middot; 8:20 PM IST</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== OUR STORY - Text-Only Immersive Timeline ===== -->
     <section id="story" class="py-24 px-6">
       <div class="max-w-2xl mx-auto">
@@ -1226,118 +1324,6 @@
             <span class="text-2xl shrink-0">&#128663;</span>
             <div><p class="text-sm font-medium">Getting There</p><p class="text-xs mt-1" style="color: var(--text-muted);">~30 min from DFW Airport &middot; ~45 min from Dallas Love Field. Uber/Lyft available. Complimentary parking at venue.</p></div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== LIVE STREAM ===== -->
-    <section id="livestream" class="py-24 px-6" style="background: var(--bg-alt);">
-      <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-12 reveal">
-          <p class="section-label mb-2">Witness Our Moment</p>
-          <h2 class="section-title text-4xl sm:text-5xl">Live Stream</h2>
-          <p class="text-sm mt-4 max-w-md mx-auto" style="color:var(--text-muted);">Can't be there in person? Watch every sacred moment unfold, live from Plano, Texas.</p>
-          <div class="section-divider mt-5"></div>
-        </div>
-
-        <!-- Stream Player Card -->
-        <div class="reveal" style="border-radius:24px; overflow:hidden; background:var(--bg-card); border:1px solid var(--border); box-shadow: 0 8px 40px rgba(0,0,0,0.06);">
-          <!-- Video Preview Area -->
-          <div class="relative" style="aspect-ratio:16/9; background:#0a0a0a; overflow:hidden;">
-            <!-- Cinematic gradient overlay -->
-            <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 50%, rgba(184,146,74,0.08) 0%, rgba(0,0,0,0.95) 70%);"></div>
-            <!-- Center play icon -->
-            <div class="absolute inset-0 flex items-center justify-center flex-col" style="gap:16px;">
-              <div style="width:72px; height:72px; border-radius:50%; border:2px solid rgba(184,146,74,0.5); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); background:rgba(184,146,74,0.1); cursor:pointer; transition:all 0.3s;" onmouseover="this.style.background='rgba(184,146,74,0.25)'; this.style.transform='scale(1.08)'" onmouseout="this.style.background='rgba(184,146,74,0.1)'; this.style.transform='scale(1)'">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="margin-left:3px;"><polygon points="5,3 19,12 5,21" fill="rgba(184,146,74,0.9)"/></svg>
-              </div>
-              <p style="color:rgba(255,255,255,0.5); font-size:11px; letter-spacing:0.25em; text-transform:uppercase; font-family:'Montserrat',sans-serif;">Stream begins May 9</p>
-            </div>
-            <!-- Live badge (hidden until live) -->
-            <div class="absolute" style="top:16px; left:16px; display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:rgba(0,0,0,0.6); backdrop-filter:blur(12px);">
-              <span style="width:8px; height:8px; border-radius:50%; background:#ef4444; box-shadow:0 0 8px #ef4444; display:none;" id="live-dot"></span>
-              <span style="width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.3);" id="offline-dot"></span>
-              <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.7); font-weight:500;">Upcoming</span>
-            </div>
-            <!-- HD badge -->
-            <div class="absolute" style="top:16px; right:16px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.1); backdrop-filter:blur(8px);">
-              <span style="font-size:10px; font-weight:600; color:rgba(255,255,255,0.6); letter-spacing:0.05em;">1080p</span>
-            </div>
-          </div>
-
-          <!-- Stream Info Panel -->
-          <div style="padding:20px 16px 24px;">
-            <!-- Date & Time Row -->
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
-                <span style="font-size:14px;">&#128197;</span>
-                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">Friday, May 9, 2026</span>
-              </div>
-              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
-                <span style="font-size:14px;">&#9200;</span>
-                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">8:50 AM CST</span>
-              </div>
-            </div>
-
-            <!-- Title -->
-            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; color:var(--text); margin-bottom:8px;">The Sacred Ceremony</h3>
-            <p style="font-size:13px; line-height:1.6; color:var(--text-muted); margin-bottom:20px;">Watch as Chamanthi &amp; Sandeep exchange vows at the beautiful Shree Swaminarayan Gurukul in Plano, Texas. No login required &mdash; just click and watch.</p>
-
-            <!-- Countdown -->
-            <div style="display:flex; align-items:center; justify-content:center; gap:8px; padding:20px 12px; border-radius:16px; background:var(--bg-alt); margin-bottom:20px; flex-wrap:wrap;">
-              <div style="text-align:center; min-width:48px; padding:0 4px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-days>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Days</div>
-              </div>
-              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
-              <div style="text-align:center; min-width:48px; padding:0 4px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-hours>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Hours</div>
-              </div>
-              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
-              <div style="text-align:center; min-width:48px; padding:0 4px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-mins>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Mins</div>
-              </div>
-              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
-              <div style="text-align:center; min-width:48px; padding:0 4px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-secs>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Secs</div>
-              </div>
-            </div>
-
-            <!-- Info Grid -->
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
-              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
-                <div style="font-size:20px; margin-bottom:6px;">&#127963;&#65039;</div>
-                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Venue</div>
-                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Gurukul Temple<br>Plano, TX</div>
-              </div>
-              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
-                <div style="font-size:20px; margin-bottom:6px;">&#128241;</div>
-                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Any Device</div>
-                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Phone, Tablet<br>or Desktop</div>
-              </div>
-              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
-                <div style="font-size:20px; margin-bottom:6px;">&#127760;</div>
-                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">No Login</div>
-                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Open link<br>&amp; watch</div>
-              </div>
-            </div>
-
-            <!-- Watch Button -->
-            <div style="text-align:center; margin-top:24px;">
-              <a href="#" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; font-size:13px; border-radius:14px; pointer-events:none; opacity:0.6;" id="watch-btn">
-                <span>&#128308;</span> Stream Link Available May 9
-              </a>
-              <p style="font-size:10px; color:var(--text-light); margin-top:10px; letter-spacing:0.03em;">A link will appear here when the stream goes live</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Timezone Helper -->
-        <div class="reveal text-center" style="margin-top:20px;">
-          <p style="font-size:10px; color:var(--text-light); line-height:1.6; word-break:break-word;">&#127760; 8:50 AM CST = 9:50 AM EST &middot; 6:50 AM PST &middot; 2:50 PM GMT &middot; 8:20 PM IST</p>
         </div>
       </div>
     </section>
