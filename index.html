@@ -1636,24 +1636,30 @@
         const db = window.firebaseDb();
         const storage = window.firebaseStorage && window.firebaseStorage();
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
-        if (!storage || !window.storageRef || !window.uploadBytes || !window.getDownloadURL) {
-          throw new Error('Firebase Storage not configured.');
-        }
 
-        // Upload optimized image to Firebase Storage, then save URL in Firestore
-        const imageData = await resizeImage(file);
-        const blob = await (await fetch(imageData)).blob();
-        const safeName = (file.name || 'guest-photo.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
-        const storagePath = `guest-photos/main/${Date.now()}-${safeName}`;
-        const fileRef = window.storageRef(storage, storagePath);
-        await window.uploadBytes(fileRef, blob, { contentType: 'image/jpeg' });
-        const imageUrl = await window.getDownloadURL(fileRef);
+        // Always create a compressed image first. Then try Storage, but gracefully
+        // fall back to Firestore-only if Storage permissions/config fail.
+        const imageData = await resizeImage(file, 900, 0.6);
+        let imageUrl = '';
+
+        if (storage && window.storageRef && window.uploadBytes && window.getDownloadURL) {
+          try {
+            const blob = await (await fetch(imageData)).blob();
+            const safeName = (file.name || 'guest-photo.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
+            const storagePath = `guest-photos/main/${Date.now()}-${safeName}`;
+            const fileRef = window.storageRef(storage, storagePath);
+            await window.uploadBytes(fileRef, blob, { contentType: 'image/jpeg' });
+            imageUrl = await window.getDownloadURL(fileRef);
+          } catch (storageErr) {
+            console.warn('Storage upload failed, falling back to Firestore-only:', storageErr);
+          }
+        }
 
         await window.addDoc(window.collection(db, 'photos'), {
           uploaderName: name,
           uploaderEmail: email,
           caption: caption || '',
-          imageUrl: imageUrl,
+          imageUrl: imageUrl || '',
           imageData: imageData,
           approved: false,
           source: 'main-site',
