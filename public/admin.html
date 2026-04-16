@@ -989,7 +989,7 @@
 
             grid.innerHTML = photos.map(p => `
                 <div class="photo-card">
-                    <img src="${esc(p.url || p.imageUrl || '')}" alt="Guest photo" loading="lazy"
+                    <img src="${esc(p.imageData || p.url || p.imageUrl || '')}" alt="Guest photo" loading="lazy"
                          onerror="this.style.background='var(--bg-elevated)';this.alt='Failed to load'">
                     <div class="photo-card-info">
                         <div class="by">${esc(p.uploaderName || p.uploader_name || 'Unknown')}</div>
