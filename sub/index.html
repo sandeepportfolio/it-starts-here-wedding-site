@@ -13,7 +13,7 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-    import { getStorage, ref, uploadBytes } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+    import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g",
@@ -48,6 +48,9 @@
     window.query = query;
     window.orderBy = orderBy;
     window.limit = limit;
+    window.storageRef = ref;
+    window.uploadBytes = uploadBytes;
+    window.getDownloadURL = getDownloadURL;
   </script>
   <style>
     * { box-sizing: border-box; }
@@ -1679,16 +1682,27 @@
 
       try {
         const db = window.firebaseDb();
+        const storage = window.firebaseStorage && window.firebaseStorage();
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
+        if (!storage || !window.storageRef || !window.uploadBytes || !window.getDownloadURL) {
+          throw new Error('Firebase Storage not configured.');
+        }
 
-        // Convert to compressed Base64 (no Firebase Storage needed)
+        // Upload optimized image to Firebase Storage, then save URL in Firestore
         const imageData = await resizeImage(file);
+        const blob = await (await fetch(imageData)).blob();
+        const safeName = (file.name || 'guest-photo.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
+        const storagePath = `guest-photos/sub/${Date.now()}-${safeName}`;
+        const fileRef = window.storageRef(storage, storagePath);
+        await window.uploadBytes(fileRef, blob, { contentType: 'image/jpeg' });
+        const imageUrl = await window.getDownloadURL(fileRef);
 
         await window.addDoc(window.collection(db, 'photos'), {
           uploaderName: name,
           uploaderEmail: email,
           caption: caption || '',
-          imageData: imageData, // base64 string — matches admin portal's expected field
+          imageUrl: imageUrl,
+          imageData: imageData,
           approved: false,
           source: 'sub',
           createdAt: new Date()
