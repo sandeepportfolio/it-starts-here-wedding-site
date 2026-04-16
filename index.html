@@ -188,6 +188,8 @@
     .rsvp-progress { display: flex; gap: 6px; align-items: center; }
     .rsvp-progress .bar { height: 3px; border-radius: 3px; flex: 1; background: var(--border); transition: background 0.4s, box-shadow 0.4s; }
     .rsvp-progress .bar.active { background: linear-gradient(90deg, #B8924A, #D4B06A); box-shadow: 0 0 8px rgba(184,146,74,0.3); }
+    /* On main site, hide bars for the skipped event-selection step (bar 2 = step 2, bar 3 = step 3 on main site map to bar 2+3 in HTML) */
+    .site-main .rsvp-bar-skip { display: none !important; }
     .event-check { cursor: pointer; padding: 14px 16px; border-radius: 10px; border: 1.5px solid var(--border); transition: all 0.25s; display: flex; align-items: center; gap: 12px; }
     .event-check:hover { border-color: var(--gold); }
     .event-check.checked { border-color: var(--gold); background: var(--gold-glow); }
@@ -365,7 +367,29 @@
     .ceremony-map-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; font-size: 0.75rem; color: var(--gold); text-decoration: none; font-weight: 500; transition: color 0.2s; }
     .ceremony-map-link:hover { color: var(--gold-light); text-decoration: underline; }
     .ceremony-modal-cta { padding: 20px 28px 28px; display: flex; justify-content: center; }
-    .ceremony-cal-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+    .ceremony-cal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      background: linear-gradient(135deg, #B8924A 0%, #D4B06A 50%, #B8924A 100%);
+      color: #1A1612;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      font-family: 'Montserrat', sans-serif;
+      box-shadow: 0 4px 20px rgba(184,146,74,0.35), 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.25s ease;
+      border: 1.5px solid rgba(255,255,255,0.15);
+    }
+    .ceremony-cal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(184,146,74,0.45), 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .ceremony-cal-btn svg { flex-shrink: 0; }
 
     /* ─── Floating RSVP Button ─── */
     .fab-rsvp {
@@ -577,8 +601,8 @@
             <div class="text-xs font-medium" style="color: var(--text-muted); letter-spacing:0.08em; text-transform:uppercase;" id="rsvp-step-label">Step 1 of 4</div>
             <div class="rsvp-progress" style="width:120px;">
               <div class="bar active" id="rsvp-bar-1"></div>
-              <div class="bar" id="rsvp-bar-2"></div>
-              <div class="bar" id="rsvp-bar-3"></div>
+              <div class="bar rsvp-bar-skip" id="rsvp-bar-2"></div>
+              <div class="bar rsvp-bar-skip" id="rsvp-bar-3"></div>
               <div class="bar" id="rsvp-bar-4"></div>
             </div>
           </div>
@@ -612,20 +636,12 @@
             <h3 class="font-heading text-2xl font-medium mb-1">Which events will you attend?</h3>
             <p class="text-xs mb-6" style="color:var(--text-muted);">Select all that apply</p>
             <div class="space-y-3">
-              <div class="event-check checked" data-event="pelli-koduku">
-                <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                <div><p class="text-sm font-medium">Pelli Koduku</p><p class="text-xs" style="color:var(--text-muted);">May 8th · 8720 Mandevilla Dr, Plano</p></div>
-              </div>
-              <div class="event-check checked" data-event="pelli-kuthuru">
-                <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                <div><p class="text-sm font-medium">Pelli Kuthuru</p><p class="text-xs" style="color:var(--text-muted);">May 8th · Bride's ceremony</p></div>
-              </div>
-              <div class="event-check checked" data-event="wedding-ceremony">
+              <div class="event-check" data-event="wedding-ceremony">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Wedding Ceremony</p><p class="text-xs" style="color:var(--text-muted);">May 9th · The main event</p></div>
               </div>
             </div>
-            <div class="flex gap-3 pt-5">
+            <div class="flex gap-3" style="padding-top:24px;">
               <button id="rsvp-step1-back" class="btn-outline flex-1" style="border-radius:12px;">&#8592; Back</button>
               <button id="rsvp-step1-next" class="btn-gold flex-1 justify-center" style="border-radius:12px;">Continue &#8594;</button>
             </div>
@@ -645,7 +661,7 @@
               </div>
               <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Dietary Restrictions</label><input type="text" class="form-input" placeholder="Any allergies or preferences" id="rsvp-dietary"></div>
               <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Message for the Couple</label><textarea class="form-input" rows="2" placeholder="Your wishes..." id="rsvp-message" style="resize:none;"></textarea></div>
-              <div class="flex gap-3 pt-3">
+              <div class="flex gap-3" style="padding-top:20px;">
                 <button id="rsvp-back-btn" class="btn-outline flex-1" style="border-radius:12px;">&#8592; Back</button>
                 <button id="rsvp-submit-btn" class="btn-gold flex-1 justify-center" style="border-radius:12px;">Submit RSVP</button>
               </div>
@@ -1364,6 +1380,10 @@
   <script id="main-app-scripts-v2">
     // ---- Theme Toggle ----
     const html = document.documentElement;
+    // Mark body so CSS can distinguish main site (no /sub/) from sub site
+    if (!window.location.pathname.startsWith('/sub/')) {
+      document.body.classList.add('site-main');
+    }
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     if (localStorage.getItem('theme') === 'dark') { html.classList.add('dark'); themeIcon.textContent = '\u2600'; }
@@ -1607,23 +1627,44 @@
       rsvpResponse = response;
       document.querySelectorAll('.rsvp-option').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
+      // On main site, auto-select wedding-ceremony and skip event-selection step
+      var isMainSite = !window.location.pathname.startsWith('/sub/');
+      if (isMainSite && response !== 'declined') {
+        var wc = document.querySelector('[data-event="wedding-ceremony"]');
+        if (wc && !wc.classList.contains('checked')) {
+          wc.classList.add('checked');
+        }
+      }
       setTimeout(() => {
         if (response === 'declined') {
           document.getElementById('rsvp-confirm-title').textContent = "We'll Miss You";
           document.getElementById('rsvp-confirm-msg').textContent = "Thank you for letting us know. We'll keep you in our hearts on the big day.";
-          goRsvpStep(TOTAL_RSVP_STEPS);
+          window.goRsvpStep(TOTAL_RSVP_STEPS);
+        } else if (isMainSite) {
+          window.goRsvpStep(3);
         } else {
-          goRsvpStep(2);
+          window.goRsvpStep(2);
         }
       }, 300);
     };
     window.goRsvpStep = function(step) {
       document.querySelectorAll('.rsvp-step').forEach(s => s.classList.remove('active'));
       document.getElementById('rsvp-step-' + step).classList.add('active');
-      document.getElementById('rsvp-step-label').textContent = 'Step ' + step + ' of ' + TOTAL_RSVP_STEPS;
-      for (let i = 1; i <= TOTAL_RSVP_STEPS; i++) {
-        const bar = document.getElementById('rsvp-bar-' + i);
-        if (bar) bar.style.background = i <= step ? 'var(--gold)' : 'var(--border)';
+      // Main site skips event-selection (step 2), so adjust label
+      var isMainSite = !window.location.pathname.startsWith('/sub/');
+      var adjustedStep = step;
+      var totalSteps = TOTAL_RSVP_STEPS;
+      if (isMainSite) {
+        if (step === 3) adjustedStep = 2; // details is effectively step 2 on main site
+        if (step === 4) adjustedStep = 3; // confirmation is effectively step 3
+        totalSteps = 3;
+      }
+      document.getElementById('rsvp-step-label').textContent = 'Step ' + adjustedStep + ' of ' + totalSteps;
+      // Update progress bars
+      var barCount = isMainSite ? 3 : TOTAL_RSVP_STEPS;
+      for (let i = 1; i <= barCount; i++) {
+        var bar = document.getElementById('rsvp-bar-' + i);
+        if (bar) bar.style.background = i <= adjustedStep ? 'var(--gold)' : 'var(--border)';
       }
       if (step === TOTAL_RSVP_STEPS && rsvpResponse !== 'declined') {
         document.getElementById('rsvp-confirm-title').textContent = 'Thank You!';
@@ -1668,7 +1709,7 @@
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
 
         await window.addDoc(window.collection(db, 'rsvps'), data);
-        goRsvpStep(TOTAL_RSVP_STEPS);
+        window.goRsvpStep(TOTAL_RSVP_STEPS);
       } catch (e) {
         console.error('RSVP error:', e);
         if (errorMsg) { errorMsg.innerText = 'Error submitting RSVP. Please try again. (' + e.message + ')'; errorMsg.classList.remove('hidden'); }
@@ -1772,13 +1813,18 @@
       // RSVP Step 1 navigation
       var s1back = document.getElementById('rsvp-step1-back');
       var s1next = document.getElementById('rsvp-step1-next');
+      var isMainSite = !window.location.pathname.startsWith('/sub/');
       if (s1back) s1back.addEventListener('click', function() { window.goRsvpStep(1); });
-      if (s1next) s1next.addEventListener('click', function() { window.goRsvpStep(3); });
+      if (s1next) s1next.addEventListener('click', function() {
+        // Main site skips event-selection step (step 2), goes directly to details
+        if (isMainSite) { window.goRsvpStep(3); }
+        else { window.goRsvpStep(2); }
+      });
 
-      // RSVP Step 3 navigation
+      // RSVP Step 3 (details) navigation — back always returns to step 1
       var rsvpBack = document.getElementById('rsvp-back-btn');
       var rsvpSubmit = document.getElementById('rsvp-submit-btn');
-      if (rsvpBack) rsvpBack.addEventListener('click', function() { window.goRsvpStep(2); });
+      if (rsvpBack) rsvpBack.addEventListener('click', function() { window.goRsvpStep(1); });
       if (rsvpSubmit) rsvpSubmit.addEventListener('click', function() { window.submitRsvpForm(); });
 
       // Photo upload

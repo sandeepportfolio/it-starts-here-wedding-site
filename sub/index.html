@@ -365,7 +365,29 @@
     .ceremony-map-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; font-size: 0.75rem; color: var(--gold); text-decoration: none; font-weight: 500; transition: color 0.2s; }
     .ceremony-map-link:hover { color: var(--gold-light); text-decoration: underline; }
     .ceremony-modal-cta { padding: 20px 28px 28px; display: flex; justify-content: center; }
-    .ceremony-cal-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+    .ceremony-cal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      background: linear-gradient(135deg, #B8924A 0%, #D4B06A 50%, #B8924A 100%);
+      color: #1A1612;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      font-family: 'Montserrat', sans-serif;
+      box-shadow: 0 4px 20px rgba(184,146,74,0.35), 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.25s ease;
+      border: 1.5px solid rgba(255,255,255,0.15);
+    }
+    .ceremony-cal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(184,146,74,0.45), 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .ceremony-cal-btn svg { flex-shrink: 0; }
   </style>
 </head>
 <body class="font-body antialiased">
@@ -615,30 +637,30 @@
             <h3 class="font-heading text-2xl font-medium mb-1">Which events will you attend?</h3>
             <p class="text-xs mb-6" style="color:var(--text-muted);">Select all that apply</p>
             <div class="space-y-3">
-              <div class="event-check checked" onclick="toggleEventCheck(this)" data-event="mehendi">
+              <div class="event-check" onclick="toggleEventCheck(this)" data-event="mehendi">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Mehendi</p><p class="text-xs" style="color:var(--text-muted);">May 7th · 3129 Lakemont Dr, Little Elm</p></div>
               </div>
-              <div class="event-check checked" onclick="toggleEventCheck(this)" data-event="pelli-koduku">
+              <div class="event-check" onclick="toggleEventCheck(this)" data-event="pelli-koduku">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Pelli Koduku</p><p class="text-xs" style="color:var(--text-muted);">May 8th · 8720 Mandevilla Dr, Plano</p></div>
               </div>
-              <div class="event-check checked" onclick="toggleEventCheck(this)" data-event="pelli-kuthuru">
+              <div class="event-check" onclick="toggleEventCheck(this)" data-event="pelli-kuthuru">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Pelli Kuthuru</p><p class="text-xs" style="color:var(--text-muted);">May 8th · 3129 Lakemont Dr, Little Elm</p></div>
               </div>
-              <div class="event-check checked" onclick="toggleEventCheck(this)" data-event="wedding-ceremony">
+              <div class="event-check" onclick="toggleEventCheck(this)" data-event="wedding-ceremony">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Wedding Ceremony</p><p class="text-xs" style="color:var(--text-muted);">The main event</p></div>
               </div>
-              <div class="event-check checked" onclick="toggleEventCheck(this)" data-event="vratham">
+              <div class="event-check" onclick="toggleEventCheck(this)" data-event="vratham">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Vratham</p><p class="text-xs" style="color:var(--text-muted);">May 10th · 8720 Mandevilla Dr, Plano</p></div>
               </div>
             </div>
-            <div class="flex gap-3 pt-5">
-              <button onclick="goRsvpStep(1)" class="btn-outline flex-1" style="border-radius:12px;">&#8592; Back</button>
-              <button onclick="goRsvpStep(3)" class="btn-gold flex-1 justify-center" style="border-radius:12px;">Continue &#8594;</button>
+            <div class="flex gap-3" style="padding-top:24px;">
+              <button id="rsvp-step1-back" class="btn-outline flex-1" style="border-radius:12px;">&#8592; Back</button>
+              <button id="rsvp-step1-next" class="btn-gold flex-1 justify-center" style="border-radius:12px;">Continue &#8594;</button>
             </div>
           </div>
           <!-- Step 3: Details -->
@@ -656,9 +678,9 @@
               </div>
               <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Dietary Restrictions</label><input type="text" class="form-input" placeholder="Any allergies or preferences" id="rsvp-dietary"></div>
               <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Message for the Couple</label><textarea class="form-input" rows="2" placeholder="Your wishes..." id="rsvp-message" style="resize:none;"></textarea></div>
-              <div class="flex gap-3 pt-3">
-                <button onclick="goRsvpStep(2)" class="btn-outline flex-1" id="rsvp-back-btn" style="border-radius:12px;">&#8592; Back</button>
-                <button onclick="submitRsvpForm()" class="btn-gold flex-1 justify-center" id="rsvp-submit-btn" style="border-radius:12px;">Submit RSVP</button>
+              <div class="flex gap-3" style="padding-top:20px;">
+                <button id="rsvp-back-btn" class="btn-outline flex-1" style="border-radius:12px;">&#8592; Back</button>
+                <button id="rsvp-submit-btn" class="btn-gold flex-1 justify-center" style="border-radius:12px;">Submit RSVP</button>
               </div>
             </div>
             <div id="rsvp-error-msg" class="text-red-500 text-xs mt-3 text-center hidden"></div>
@@ -1801,6 +1823,48 @@
     });
     // Initial run after seal opens
     setTimeout(updateScrollspy, 100);
+
+    // ---- RSVP Event Listeners ----
+    function attachRsvpListeners() {
+      // RSVP Step 1 options
+      document.querySelectorAll('.rsvp-option').forEach(function(el) {
+        el.addEventListener('click', function() {
+          var response = el.getAttribute('data-rsvp');
+          selectRsvp(el, response);
+        });
+        el.style.cursor = 'pointer';
+      });
+
+      // RSVP Step 2 event checks
+      document.querySelectorAll('.event-check').forEach(function(el) {
+        el.addEventListener('click', function() {
+          toggleEventCheck(el);
+        });
+        el.style.cursor = 'pointer';
+      });
+
+      // RSVP Step 1 navigation
+      var s1back = document.getElementById('rsvp-step1-back');
+      var s1next = document.getElementById('rsvp-step1-next');
+      if (s1back) s1back.addEventListener('click', function() { goRsvpStep(1); });
+      if (s1next) s1next.addEventListener('click', function() { goRsvpStep(2); });
+
+      // RSVP Step 3 (details) navigation
+      var rsvpBack = document.getElementById('rsvp-back-btn');
+      var rsvpSubmit = document.getElementById('rsvp-submit-btn');
+      if (rsvpBack) rsvpBack.addEventListener('click', function() { goRsvpStep(2); });
+      if (rsvpSubmit) rsvpSubmit.addEventListener('click', function() { submitRsvpForm(); });
+
+      // Photo upload
+      var photoSubmit = document.getElementById('photo-submit-btn');
+      if (photoSubmit) photoSubmit.addEventListener('click', function() { submitGuestPhoto(); });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', attachRsvpListeners);
+    } else {
+      attachRsvpListeners();
+    }
   </script>
 
   <!-- STANDALONE SCRIPT — no module deps, runs at end of body -->
