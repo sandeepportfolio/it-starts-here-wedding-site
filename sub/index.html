@@ -465,7 +465,7 @@
           <input type="file" id="photo-file-input" accept="image/*" style="display:none;">
         </div>
         <div id="photo-upload-error" style="display:none; font-size:12px; color:#ef4444; text-align:center; padding:10px; border-radius:8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2);"></div>
-        <button onclick="submitGuestPhoto()" id="photo-submit-btn" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; border-radius:14px; margin-top:4px;">
+        <button id="photo-submit-btn" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; border-radius:14px; margin-top:4px;">
           Upload Photo ✨
         </button>
       </div>
@@ -612,19 +612,19 @@
             <h3 class="font-heading text-2xl font-medium mb-1">Will you be joining us?</h3>
             <p class="text-xs mb-6" style="color: var(--text-muted);">Select your response below</p>
             <div class="space-y-3">
-              <div class="rsvp-option" onclick="selectRsvp(this,'attending')">
+              <div class="rsvp-option" data-rsvp="attending">
                 <div class="flex items-center gap-4">
                   <div class="rsvp-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                   <div><p class="text-sm font-medium" style="line-height:1.4;">Joyfully Accept</p><p class="text-xs" style="color:var(--text-muted); margin-top:2px;">We'll be there to celebrate with you</p></div>
                 </div>
               </div>
-              <div class="rsvp-option" onclick="selectRsvp(this,'pending')">
+              <div class="rsvp-option" data-rsvp="pending">
                 <div class="flex items-center gap-4">
                   <div class="rsvp-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                   <div><p class="text-sm font-medium" style="line-height:1.4;">Tentatively Yes</p><p class="text-xs" style="color:var(--text-muted); margin-top:2px;">Will confirm closer to the date</p></div>
                 </div>
               </div>
-              <div class="rsvp-option" onclick="selectRsvp(this,'declined')">
+              <div class="rsvp-option" data-rsvp="declined">
                 <div class="flex items-center gap-4">
                   <div class="rsvp-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                   <div><p class="text-sm font-medium" style="line-height:1.4;">Regretfully Decline</p><p class="text-xs" style="color:var(--text-muted); margin-top:2px;">Sending love from afar</p></div>
@@ -637,23 +637,23 @@
             <h3 class="font-heading text-2xl font-medium mb-1">Which events will you attend?</h3>
             <p class="text-xs mb-6" style="color:var(--text-muted);">Select all that apply</p>
             <div class="space-y-3">
-              <div class="event-check" onclick="toggleEventCheck(this)" data-event="mehendi">
+              <div class="event-check" data-event="mehendi">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Mehendi</p><p class="text-xs" style="color:var(--text-muted);">May 7th · 3129 Lakemont Dr, Little Elm</p></div>
               </div>
-              <div class="event-check" onclick="toggleEventCheck(this)" data-event="pelli-koduku">
+              <div class="event-check" data-event="pelli-koduku">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Pelli Koduku</p><p class="text-xs" style="color:var(--text-muted);">May 8th · 8720 Mandevilla Dr, Plano</p></div>
               </div>
-              <div class="event-check" onclick="toggleEventCheck(this)" data-event="pelli-kuthuru">
+              <div class="event-check" data-event="pelli-kuthuru">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Pelli Kuthuru</p><p class="text-xs" style="color:var(--text-muted);">May 8th · 3129 Lakemont Dr, Little Elm</p></div>
               </div>
-              <div class="event-check" onclick="toggleEventCheck(this)" data-event="wedding-ceremony">
+              <div class="event-check" data-event="wedding-ceremony">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Wedding Ceremony</p><p class="text-xs" style="color:var(--text-muted);">The main event</p></div>
               </div>
-              <div class="event-check" onclick="toggleEventCheck(this)" data-event="vratham">
+              <div class="event-check" data-event="vratham">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Vratham</p><p class="text-xs" style="color:var(--text-muted);">May 10th · 8720 Mandevilla Dr, Plano</p></div>
               </div>
