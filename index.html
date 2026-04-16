@@ -1389,23 +1389,33 @@
     // ---- Countdown ----
     (function initCountdown() {
       const weddingDate = new Date('2026-05-09T08:50:00-05:00');
-      function updateCountdown() {
-        const els = document.querySelectorAll('[data-days],[data-hours],[data-mins],[data-secs]');
-        if (!els.length) return;
-        const diff = weddingDate - new Date();
-        if (diff <= 0) { els.forEach(el => el.textContent = '0'); return; }
-        const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-        document.querySelectorAll('[data-days]').forEach(el => el.textContent = d);
-        document.querySelectorAll('[data-hours]').forEach(el => el.textContent = h);
-        document.querySelectorAll('[data-mins]').forEach(el => el.textContent = m);
-        document.querySelectorAll('[data-secs]').forEach(el => el.textContent = s);
-      }
+      window.__updateCountdown = function() {
+        var daysEls = document.querySelectorAll('[data-days]');
+        var hoursEls = document.querySelectorAll('[data-hours]');
+        var minsEls = document.querySelectorAll('[data-mins]');
+        var secsEls = document.querySelectorAll('[data-secs]');
+        if (!daysEls.length && !hoursEls.length) return;
+        var diff = weddingDate - new Date();
+        if (diff <= 0) {
+          daysEls.forEach(function(el){ el.textContent = '0'; });
+          hoursEls.forEach(function(el){ el.textContent = '0'; });
+          minsEls.forEach(function(el){ el.textContent = '0'; });
+          secsEls.forEach(function(el){ el.textContent = '0'; });
+          return;
+        }
+        var d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+        daysEls.forEach(function(el){ el.textContent = d; });
+        hoursEls.forEach(function(el){ el.textContent = h; });
+        minsEls.forEach(function(el){ el.textContent = m; });
+        secsEls.forEach(function(el){ el.textContent = s; });
+      };
+      var tick = function() { window.__updateCountdown(); };
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', updateCountdown);
-        document.addEventListener('DOMContentLoaded', () => setInterval(updateCountdown, 1000));
+        document.addEventListener('DOMContentLoaded', tick);
+        document.addEventListener('DOMContentLoaded', function() { setInterval(tick, 1000); });
       } else {
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        tick();
+        setInterval(tick, 1000);
       }
     })();
 
@@ -1798,6 +1808,8 @@
       content.style.display = 'block';
       themeToggle.style.display = 'flex';
       heroInner.classList.add('animate');
+      // Force a countdown tick after content becomes visible
+      if (window.__updateCountdown) window.__updateCountdown();
 
       // Init scroll reveals
       var observer = new IntersectionObserver(function(entries) {
