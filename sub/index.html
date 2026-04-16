@@ -1742,6 +1742,7 @@
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
 
         await window.addDoc(window.collection(db, 'rsvps'), data);
+        try { localStorage.setItem('rsvpSubmitted-sub', 'true'); } catch (e) {}
         goRsvpStep(TOTAL_RSVP_STEPS);
       } catch (e) {
         console.error('RSVP error:', e);
@@ -1931,23 +1932,16 @@
   <script>
     (function() {
       var fab = document.getElementById('fab-rsvp');
-      var rsvpSection = document.getElementById('rsvp');
-      var shown = false;
-      function checkFab() {
-        if (!rsvpSection || !fab) return;
-        var rsvpRect = rsvpSection.getBoundingClientRect();
-        var viewH = window.innerHeight;
-        var scrollY = window.scrollY || window.pageYOffset;
-        var rsvpVisible = rsvpRect.top < viewH && rsvpRect.bottom > 0;
-        var pastHero = scrollY > viewH * 0.4;
-        if (pastHero && !rsvpVisible) {
-          if (!shown) { fab.style.display = 'block'; fab.classList.remove('hidden'); shown = true; }
-        } else {
-          if (shown) { fab.classList.add('hidden'); setTimeout(function(){ if(fab.classList.contains('hidden')){ fab.style.display='none'; shown=false; }}, 300); }
-        }
+      if (!fab) return;
+      var submitted = false;
+      try { submitted = localStorage.getItem('rsvpSubmitted-sub') === 'true'; } catch (e) {}
+      if (submitted) {
+        fab.style.display = 'none';
+        fab.classList.add('hidden');
+        return;
       }
-      window.addEventListener('scroll', checkFab, { passive: true });
-      checkFab();
+      fab.style.display = 'block';
+      fab.classList.remove('hidden');
     })();
   </script>
 </body>
