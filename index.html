@@ -12,7 +12,7 @@
   <!-- Firebase configuration -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
     import { getStorage, ref, uploadBytes } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
     const firebaseConfig = {
@@ -44,6 +44,10 @@
     window.firebaseReady = !!db;
     window.addDoc = addDoc;
     window.collection = collection;
+    window.getDocs = getDocs;
+    window.query = query;
+    window.orderBy = orderBy;
+    window.limit = limit;
   </script>
   <style>
     * { box-sizing: border-box; }
@@ -1339,7 +1343,17 @@
     <section id="photos" class="py-20 px-6" style="background:var(--bg-alt);">
       <div class="max-w-3xl mx-auto">
         <div class="text-center mb-10 reveal"><p class="section-label mb-2">Collaborative Memory Wall</p><h2 class="section-title text-4xl sm:text-5xl">Photo Booth</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">Every click captures a story. Share your moments and watch the memory wall come alive.</p><div class="section-divider mt-4"></div></div>
-        <div class="card p-8 text-center reveal"><div class="text-5xl mb-4">&#128247;</div><p class="font-heading text-xl font-medium mb-2">Be the first to capture a moment!</p><p class="text-sm mb-6" style="color:var(--text-muted);">Your photo will kick off the memory wall</p><button class="btn-gold mx-auto">Upload First Photo &#10024;</button></div>
+        <div class="card p-8 text-center reveal"><div class="text-5xl mb-4">&#128247;</div><p class="font-heading text-xl font-medium mb-2">Be the first to capture a moment!</p><p class="text-sm mb-6" style="color:var(--text-muted);">Your photo will kick off the memory wall</p><button class="btn-gold mx-auto" onclick="openPhotoUpload()">Upload First Photo &#10024;</button></div>
+      </div>
+    </section>
+
+    <!-- ===== GUEST UPLOADS ===== -->
+    <section id="guest-uploads" class="py-20 px-6">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Moments</p><h2 class="section-title text-4xl sm:text-5xl">Uploaded Photos by Guests</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">A live collection of guest uploads with names and captions.</p><div class="section-divider mt-4"></div></div>
+        <div id="guest-photos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Loading guest uploads…</p><p class="text-sm" style="color:var(--text-muted);">Photos shared by guests will appear here.</p></div>
+        </div>
       </div>
     </section>
 
@@ -1505,6 +1519,39 @@
     }
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
+    // ---- Guest Uploads Gallery ----
+    async function loadGuestUploads() {
+      const grid = document.getElementById('guest-photos-grid');
+      if (!grid) return;
+      try {
+        const db = window.firebaseDb && window.firebaseDb();
+        if (!db || !window.getDocs || !window.query || !window.orderBy || !window.limit) {
+          grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Guest uploads unavailable</p><p class="text-sm" style="color:var(--text-muted);">Please check back shortly.</p></div>`;
+          return;
+        }
+        const q = window.query(window.collection(db, 'photos'), window.orderBy('createdAt', 'desc'), window.limit(24));
+        const snap = await window.getDocs(q);
+        const photos = [];
+        snap.forEach(doc => photos.push({ id: doc.id, ...doc.data() }));
+        if (!photos.length) {
+          grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">No guest uploads yet</p><p class="text-sm" style="color:var(--text-muted);">Be the first to share a memory.</p></div>`;
+          return;
+        }
+        grid.innerHTML = photos.map(p => `
+          <div class="card overflow-hidden reveal-scale">
+            <img src="${p.imageData || p.imageUrl || p.url || ''}" alt="Guest upload" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; background:var(--bg-alt);">
+            <div style="padding:16px 18px;">
+              <p style="font-weight:600; margin:0 0 6px 0;">${(p.uploaderName || 'Guest').replace(/</g,'&lt;')}</p>
+              ${p.caption ? `<p style="font-size:13px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.5;">${String(p.caption).replace(/</g,'&lt;')}</p>` : ''}
+              <p style="font-size:11px; color:var(--text-light); margin:0; text-transform:uppercase; letter-spacing:0.08em;">Guest Upload</p>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Couldn’t load guest uploads</p><p class="text-sm" style="color:var(--text-muted);">${String(e.message).replace(/</g,'&lt;')}</p></div>`;
+      }
+    }
+
     // ---- Photo Upload Modal ----
     function openPhotoUpload() {
       document.getElementById('photo-upload-modal')?.classList.add('open');
@@ -1603,6 +1650,7 @@
           successEl.querySelector('p').textContent = '✨ Photo uploaded! Thank you for sharing this memory with us.';
           successEl.style.display = 'block';
         }
+        loadGuestUploads();
         if (submitBtn) { submitBtn.textContent = 'Upload Another'; submitBtn.disabled = false; }
 
         // Auto-close after 3 seconds
@@ -1917,6 +1965,7 @@
       fab.style.display = 'block';
       fab.classList.remove('hidden');
     })();
+    loadGuestUploads();
   </script>
 </body>
 </html>
