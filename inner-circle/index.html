@@ -662,6 +662,282 @@
       flex: 1;
     }
     .hotel-info h3 { font-family: 'Cormorant Garamond', serif; font-weight: 500; line-height: 1.3; }
+    .hotel-quick-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 430px;
+      margin: 0 auto 24px;
+    }
+    .hotel-quick-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 10px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,244,237,0.92));
+      text-decoration: none;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      box-shadow: 0 8px 20px rgba(45, 34, 21, 0.04);
+    }
+    .hotel-quick-action:hover {
+      transform: translateY(-2px);
+      border-color: rgba(212,176,106,0.3);
+      box-shadow: 0 14px 28px rgba(45, 34, 21, 0.08);
+    }
+    .hotel-quick-icon {
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+    .hotel-quick-label {
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-align: center;
+    }
+    .hotel-quick-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+    .hotel-venue-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+    .hotel-venue-pill {
+      width: min(100%, 760px);
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 15px 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(184,146,74,0.22);
+      background: linear-gradient(135deg, rgba(212,176,106,0.12), rgba(255,255,255,0.92));
+      box-shadow: 0 10px 24px rgba(45, 34, 21, 0.05);
+    }
+    .hotel-venue-icon {
+      font-size: 0.95rem;
+      line-height: 1.2;
+      padding-top: 2px;
+    }
+    .hotel-venue-copy {
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: var(--text);
+      text-align: left;
+    }
+    .hotel-venue-copy strong {
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .hotel-booking-note {
+      max-width: 640px;
+      margin: 0 auto 24px;
+      padding: 0 6px;
+      text-align: center;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+    }
+    .hotel-featured {
+      position: relative;
+      margin-bottom: 28px;
+      padding: clamp(22px, 4vw, 30px);
+      border-radius: 30px;
+      border: 1px solid rgba(184,146,74,0.24);
+      background: linear-gradient(145deg, rgba(255,252,246,0.98), rgba(249,241,231,0.95));
+      box-shadow: 0 18px 40px rgba(45, 34, 21, 0.07);
+      overflow: hidden;
+    }
+    .hotel-featured::after {
+      content: '';
+      position: absolute;
+      right: -40px;
+      top: -52px;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(212,176,106,0.22), transparent 70%);
+      pointer-events: none;
+    }
+    .hotel-featured-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 20px;
+      align-items: end;
+    }
+    .hotel-featured-label {
+      margin: 0;
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .hotel-featured-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .hotel-featured-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(139,58,74,0.14);
+      background: rgba(255,255,255,0.76);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--burgundy);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .hotel-featured-badge.primary {
+      background: var(--gold);
+      border-color: transparent;
+      color: #1A1612;
+    }
+    .hotel-featured-badge.muted {
+      color: var(--text-muted);
+      border-color: rgba(45,34,21,0.08);
+    }
+    .hotel-featured-title {
+      margin: 16px 0 0;
+      max-width: 11ch;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      line-height: 1.02;
+      color: var(--text);
+    }
+    .hotel-featured-address {
+      margin: 10px 0 0;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      color: var(--text-light);
+    }
+    .hotel-featured-copy {
+      margin: 16px 0 0;
+      max-width: 34ch;
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--text);
+    }
+    .hotel-featured-cta {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+    }
+    .hotel-featured-cta .btn-gold {
+      width: 100%;
+      justify-content: center;
+      padding: 14px 24px;
+      letter-spacing: 0.2em;
+      box-shadow: 0 12px 28px rgba(184,146,74,0.24);
+    }
+    #price-filter {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    #price-filter button {
+      flex: 1 1 calc(50% - 10px);
+      min-width: 132px;
+      min-height: 50px;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.35;
+    }
+    @media (min-width: 768px) {
+      .hotel-featured-grid {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+      .hotel-featured-cta .btn-gold {
+        width: auto;
+      }
+      #price-filter button {
+        flex: 0 0 auto;
+        min-height: auto;
+      }
+    }
+    @media (max-width: 639px) {
+      .hotel-info {
+        padding: 15px 14px 16px;
+      }
+      .hotel-quick-actions {
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .hotel-quick-action {
+        padding: 14px 8px;
+        border-radius: 16px;
+      }
+      .hotel-quick-label {
+        font-size: 0.58rem;
+        letter-spacing: 0.13em;
+      }
+      .hotel-quick-sub {
+        font-size: 0.64rem;
+      }
+      .hotel-venue-pill {
+        padding: 14px 14px;
+        gap: 10px;
+        border-radius: 22px;
+      }
+      .hotel-venue-copy {
+        font-size: 0.76rem;
+        line-height: 1.65;
+      }
+      .hotel-booking-note {
+        padding: 0 4px;
+        font-size: 0.86rem;
+        line-height: 1.72;
+      }
+      .hotel-featured {
+        padding: 20px 18px;
+        border-radius: 26px;
+      }
+      .hotel-featured-title {
+        max-width: none;
+        font-size: 2.15rem;
+        line-height: 1.04;
+      }
+      .hotel-featured-address {
+        font-size: 0.78rem;
+      }
+      .hotel-featured-copy {
+        font-size: 0.96rem;
+        line-height: 1.74;
+      }
+      .hotel-featured-badges {
+        gap: 7px;
+      }
+      .hotel-featured-badge {
+        font-size: 0.64rem;
+        padding: 6px 10px;
+      }
+      #price-filter {
+        gap: 8px;
+      }
+      #price-filter button {
+        min-width: 0;
+        flex: 1 1 calc(50% - 8px);
+        padding: 10px 12px !important;
+        font-size: 10px !important;
+      }
+    }
 
     /* Misc */
     .section-divider { width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto; }
@@ -1423,53 +1699,49 @@ print(“wasssuppp”)</pre>
           <p class="text-sm mt-3 max-w-lg mx-auto" style="color: var(--text-muted);">Handpicked hotels near Shree Swaminarayan Gurukul, including one preferred luxury recommendation for out-of-town guests. Every link verified.</p>
           <div class="section-divider mt-4"></div>
         </div>
-
         <!-- Venue + quick actions -->
-        <div class="flex flex-wrap items-center justify-center gap-3 mb-6 reveal">
-          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
-            <a href="https://www.google.com/maps/dir/?api=1&destination=621+Park+Vista+Rd+Plano+TX+75094" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 8px; border-radius:16px; background:var(--bg-alt); border:1px solid var(--border); text-decoration:none; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.borderColor='var(--gold)';this.style.boxShadow='0 4px 16px rgba(184,146,74,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-              <span style="font-size:24px;">&#128205;</span>
-              <span style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text); text-align:center;">Directions</span>
-              <span style="font-size:9px; color:var(--text-muted);">Google Maps</span>
-            </a>
-            <a href="https://www.airbnb.com/s/Allen--TX/homes?checkin=2026-05-08&checkout=2026-05-10&adults=2" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 8px; border-radius:16px; background:var(--bg-alt); border:1px solid var(--border); text-decoration:none; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.borderColor='#FF5A5F';this.style.boxShadow='0 4px 16px rgba(255,90,95,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-              <span style="font-size:24px;">&#127968;</span>
-              <span style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text); text-align:center;">Airbnb</span>
-              <span style="font-size:9px; color:var(--text-muted);">Browse stays</span>
-            </a>
-            <a href="https://www.booking.com/searchresults.html?ss=Allen%2C+Texas%2C+USA&checkin=2026-05-08&checkout=2026-05-10&group_adults=2" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 8px; border-radius:16px; background:var(--bg-alt); border:1px solid var(--border); text-decoration:none; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.borderColor='#003580';this.style.boxShadow='0 4px 16px rgba(0,53,128,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-              <span style="font-size:24px;">&#128197;</span>
-              <span style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text); text-align:center;">Booking</span>
-              <span style="font-size:9px; color:var(--text-muted);">.com</span>
-            </a>
-          </div>
+        <div class="hotel-quick-actions reveal">
+          <a href="https://www.google.com/maps/dir/?api=1&destination=621+Park+Vista+Rd+Plano+TX+75094" target="_blank" rel="noopener" class="hotel-quick-action">
+            <span class="hotel-quick-icon">&#128205;</span>
+            <span class="hotel-quick-label">Directions</span>
+            <span class="hotel-quick-sub">Google Maps</span>
+          </a>
+          <a href="https://www.airbnb.com/s/Allen--TX/homes?checkin=2026-05-08&checkout=2026-05-10&adults=2" target="_blank" rel="noopener" class="hotel-quick-action">
+            <span class="hotel-quick-icon">&#127968;</span>
+            <span class="hotel-quick-label">Airbnb</span>
+            <span class="hotel-quick-sub">Browse stays</span>
+          </a>
+          <a href="https://www.booking.com/searchresults.html?ss=Allen%2C+Texas%2C+USA&checkin=2026-05-08&checkout=2026-05-10&group_adults=2" target="_blank" rel="noopener" class="hotel-quick-action">
+            <span class="hotel-quick-icon">&#128197;</span>
+            <span class="hotel-quick-label">Booking</span>
+            <span class="hotel-quick-sub">Compare hotels</span>
+          </a>
         </div>
 
         <!-- Distance disclaimer -->
-        <div class="text-center mb-6 reveal">
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px]" style="background: var(--gold-glow); color: var(--gold); border: 1px solid rgba(184,146,74,0.2);">
-            <span>&#128205;</span>
-            <span><strong>Venue:</strong> Shree Swaminarayan Gurukul &middot; 621 Park Vista Rd, Plano TX &nbsp;&bull;&nbsp; All distances verified via Google Maps</span>
+        <div class="hotel-venue-wrap reveal">
+          <div class="hotel-venue-pill">
+            <span class="hotel-venue-icon">&#128205;</span>
+            <div class="hotel-venue-copy"><strong>Venue:</strong> Shree Swaminarayan Gurukul &middot; 621 Park Vista Rd, Plano TX &middot; All distances verified via Google Maps</div>
           </div>
         </div>
 
-        <div class="text-center mb-6 reveal">
-          <p class="text-xs max-w-2xl mx-auto" style="color: var(--text-muted);">We do not have a dedicated hotel block, so if you are traveling with friends, we recommend booking the same hotel or sharing an Airbnb together.</p>
-        </div>
+        <p class="hotel-booking-note reveal">We do not have a dedicated hotel block, so if you are traveling with friends, we recommend booking the same hotel or sharing an Airbnb together.</p>
 
-        <div class="card p-5 sm:p-6 mb-6 reveal" style="border:1px solid rgba(184,146,74,0.28); background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(139,58,74,0.08));">
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="hotel-featured reveal">
+          <div class="hotel-featured-grid">
             <div>
-              <div class="flex items-center gap-2 flex-wrap mb-2">
-                <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background: var(--gold); color: #1A1612;">Preferred for out-of-town guests</span>
-                <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold" style="background: rgba(139,58,74,0.12); color: var(--burgundy); border:1px solid rgba(139,58,74,0.18);">Luxury pick</span>
-                <span class="text-[10px] px-2.5 py-1 rounded-full" style="background: rgba(255,255,255,0.75); color: var(--text-muted); border:1px solid var(--border);">~14 min drive</span>
+              <p class="hotel-featured-label">Preferred stay</p>
+              <div class="hotel-featured-badges">
+                <span class="hotel-featured-badge primary">Out-of-town guests</span>
+                <span class="hotel-featured-badge">Luxury pick</span>
+                <span class="hotel-featured-badge muted">~14 min drive</span>
               </div>
-              <h3 class="font-heading text-2xl font-medium">Hilton Garden Inn Dallas/Allen</h3>
-              <p class="text-xs mt-1" style="color: var(--text-muted);">705 Central Expy S, Allen TX 75013</p>
-              <p class="text-sm mt-3" style="color: var(--text);">Our preferred nearby hotel for out-of-town guests, with a more elevated feel, polished rooms, and an easy drive to the venue for the full wedding weekend.</p>
+              <h3 class="hotel-featured-title">Hilton Garden Inn Dallas/Allen</h3>
+              <p class="hotel-featured-address">705 Central Expy S, Allen TX 75013</p>
+              <p class="hotel-featured-copy">Our preferred nearby hotel for out-of-town guests, with a more elevated feel, polished rooms, and an easy drive to the venue for the full wedding weekend.</p>
             </div>
-            <div class="shrink-0">
+            <div class="hotel-featured-cta">
               <a href="https://www.hilton.com/en/hotels/dalgigi-hilton-garden-inn-allen/" target="_blank" rel="noopener" class="btn-gold">View Preferred Hotel &#8599;</a>
             </div>
           </div>
