@@ -150,6 +150,55 @@
     .story-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; cursor: pointer; }
     .story-dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
 
+
+    /* Story narrative system */
+    .story-narrative-shell { position: relative; display: grid; gap: 18px; }
+    .story-beat { position: relative; overflow: hidden; border-radius: 30px; border: 1px solid rgba(212,176,106,0.18); background: linear-gradient(145deg, rgba(255,255,255,0.97), rgba(250,245,236,0.94)); box-shadow: 0 18px 54px rgba(47,38,26,0.07); padding: clamp(24px, 4vw, 34px); }
+    .story-beat::after { content: ''; position: absolute; inset: auto -40px -60px auto; width: 180px; height: 180px; border-radius: 999px; background: radial-gradient(circle, rgba(212,176,106,0.12), transparent 68%); pointer-events: none; }
+    .story-beat-dark { background: linear-gradient(165deg, rgba(30,26,22,0.99), rgba(60,49,37,0.96)); box-shadow: 0 20px 56px rgba(18,14,10,0.18); }
+    .story-beat-dark::after { background: radial-gradient(circle, rgba(212,176,106,0.18), transparent 70%); }
+    .story-kicker { margin: 0 0 14px; font-size: 10px; letter-spacing: 0.38em; text-transform: uppercase; font-weight: 600; color: var(--gold); }
+    .story-beat-dark .story-kicker { color: rgba(212,176,106,0.95); }
+    .story-opening-grid { display: grid; gap: 18px; }
+    .story-opening-line { margin: 0; font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5.3vw, 3.25rem); line-height: 1.06; color: var(--text); }
+    .story-opening-side { display: grid; gap: 12px; align-content: start; }
+    .story-sentence { position: relative; margin: 0; padding: 16px 18px; border-radius: 22px; border: 1px solid rgba(212,176,106,0.14); background: rgba(255,255,255,0.72); color: var(--text); font-size: 0.98rem; line-height: 1.85; }
+    .story-sentence-soft { background: rgba(245,239,229,0.72); color: var(--text-muted); }
+    .story-sentence-accent { background: linear-gradient(135deg, rgba(212,176,106,0.14), rgba(255,255,255,0.92)); }
+    .story-sentence-quote { border-left: 3px solid var(--gold); background: rgba(255,255,255,0.86); }
+    .story-sentence-focus { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 3.8vw, 2.35rem); line-height: 1.12; }
+    .story-beat-dark .story-sentence-dark { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.08); color: #fffaf2; }
+    .story-beat-dark .story-sentence-dark-soft { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.08); color: rgba(255,250,242,0.78); }
+    .story-beat-dark .story-sentence-dark-accent { background: linear-gradient(145deg, rgba(212,176,106,0.16), rgba(255,255,255,0.08)); border-color: rgba(212,176,106,0.22); color: #fffdf8; }
+    .story-delay-stack, .story-firsts-stack, .story-finale-stack { display: grid; gap: 12px; }
+    .story-pill-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 12px; }
+    .story-mini-card { padding: 14px 16px; border-radius: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); color: #fffaf2; font-size: 0.95rem; line-height: 1.5; }
+    .story-steps { display: grid; gap: 12px; }
+    .story-step-row { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 12px; align-items: start; }
+    .story-step-mark { display: inline-flex; align-items: center; justify-content: center; height: 46px; border-radius: 16px; border: 1px solid rgba(212,176,106,0.16); background: rgba(212,176,106,0.10); color: var(--gold); font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 600; }
+    .story-code-card { border-radius: 24px; overflow: hidden; border: 1px solid rgba(212,176,106,0.14); background: #15120f; }
+    .story-code-top { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+    .story-code-dot { width: 9px; height: 9px; border-radius: 999px; }
+    .story-code-dot.red { background: #ff6b6b; }
+    .story-code-dot.yellow { background: #ffd166; }
+    .story-code-dot.green { background: #06d6a0; }
+    .story-code-body { padding: 18px 18px 20px; }
+    .story-code-label { margin: 0 0 10px; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(212,176,106,0.88); }
+    .story-code-pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace; font-size: 0.92rem; line-height: 1.8; color: #f8f3ea; }
+    .story-finale-prompt { margin: 6px 0 2px; font-size: 1rem; line-height: 1.8; color: #fffaf2; }
+    .story-quote-card { border-radius: 24px; padding: 24px 18px; background: linear-gradient(145deg, rgba(255,255,255,0.10), rgba(212,176,106,0.12)); border: 1px solid rgba(255,255,255,0.10); text-align: center; }
+    .story-quote-line { margin: 0; font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.06; color: #fffdf8; }
+    .story-quote-credit { margin: 14px 0 0; font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(212,176,106,0.92); }
+    .story-ending { margin: 4px 0 0; font-family: 'Cormorant Garamond', serif; font-size: clamp(1.45rem, 3vw, 2rem); color: rgba(255,250,242,0.88); text-align: center; }
+    @media (min-width: 900px) {
+      .story-opening-grid { grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr); align-items: start; }
+    }
+    @media (max-width: 639px) {
+      .story-pill-grid { grid-template-columns: 1fr; }
+      .story-step-row { grid-template-columns: 1fr; }
+      .story-step-mark { width: fit-content; padding: 0 16px; }
+    }
+
     /* Modern Events - Bento Grid */
     .event-bento { display: grid; gap: 16px; grid-template-columns: 1fr; }
     @media(min-width:768px) { .event-bento { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; } .event-bento > :first-child { grid-row: 1 / 3; } }
@@ -699,69 +748,101 @@
         </div>
       </div>
     </section>
-    <!-- ===== OUR STORY - Minimal Luxury ===== -->
-    <section id="story" class="py-24 px-6" style="background:linear-gradient(180deg, rgba(245,239,229,0.16) 0%, rgba(255,255,255,0) 100%);">
-      <div class="max-w-3xl mx-auto">
+    <!-- ===== OUR STORY - Narrative Sequence ===== -->
+    <section id="story" class="py-24 px-6" style="background: linear-gradient(180deg, rgba(245,239,229,0.18) 0%, rgba(255,255,255,0) 100%);">
+      <div class="max-w-4xl mx-auto">
         <div class="text-center mb-14 reveal">
           <p class="section-label mb-2">Our Story</p>
           <h2 class="section-title text-4xl sm:text-5xl">The Beginning</h2>
           <div class="section-divider mt-4"></div>
         </div>
 
-        <div class="reveal" style="border-radius:30px; border:1px solid rgba(212,176,106,0.18); background:linear-gradient(145deg, rgba(255,255,255,0.97), rgba(250,245,236,0.94)); box-shadow:0 18px 54px rgba(47,38,26,0.07); padding:clamp(26px, 5vw, 42px); margin-bottom:20px;">
-          <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0 0 14px; color:var(--gold);">THE OPENING</p>
-          <p class="font-heading text-[2rem] sm:text-[2.7rem] leading-[1.08]" style="margin:0; color:var(--text);">She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
-          <div style="width:72px; height:1px; background:linear-gradient(90deg, var(--gold), rgba(212,176,106,0.15)); margin:22px 0 18px;"></div>
-          <p class="text-base leading-8" style="margin:0 0 10px; color:var(--text);">So she did what any reasonable person would do… reached out.</p>
-          <p class="text-sm sm:text-base leading-8" style="margin:0; color:var(--text-muted);">Sandeep activated his Hall of Fame texting skills and… hard jk. (…kind of.)</p>
-        </div>
-
-        <div style="display:grid; gap:16px;">
-          <div class="reveal stagger" style="--d:0; border-radius:26px; border:1px solid rgba(212,176,106,0.16); background:rgba(255,255,255,0.92); box-shadow:0 14px 40px rgba(47,38,26,0.05); padding:28px 24px 30px;">
-            <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0 0 12px; color:var(--gold);">THE DELAY</p>
-            <p class="font-heading text-2xl sm:text-[2rem] leading-tight" style="margin:0 0 14px; color:var(--text);">His first thought: “wait… she hella cute.”</p>
-            <p class="text-sm sm:text-base leading-8" style="margin:0 0 12px; color:var(--text-muted);">His next move: delay the date by a week because he broke his finger… while… of course, playing basketball 🏀.</p>
-            <p class="text-sm sm:text-base leading-8" style="margin:0 0 12px; color:var(--text);">What Sandeep likes to call it: “yeah, that wasn’t a good opening move.”</p>
-            <p class="text-sm sm:text-base leading-8" style="margin:0; color:var(--text-muted);">A week later, what was supposed to be a quick call somehow stretched into almost four hours. The kind of call where you finish and just sit there like… yeah, that was different.</p>
-          </div>
-
-          <div class="reveal stagger" style="--d:1; border-radius:26px; border:1px solid rgba(212,176,106,0.16); background:linear-gradient(160deg, rgba(32,28,24,0.98), rgba(58,48,37,0.96)); box-shadow:0 18px 46px rgba(18,14,10,0.18); padding:28px 24px 30px;">
-            <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0 0 12px; color:rgba(212,176,106,0.94);">THE CLICK</p>
-            <p class="font-heading text-2xl sm:text-[2rem] leading-tight" style="margin:0 0 12px; color:#fffaf2;">Gym people. School nerds. Both loud in a room. Both chasing something bigger. Same wavelength, just different starting paths.</p>
-            <p class="text-sm sm:text-base leading-8" style="margin:0; color:rgba(255,250,242,0.78);">And since that call? Not a single day without talking.</p>
-          </div>
-
-          <div class="reveal stagger" style="--d:2; border-radius:26px; border:1px solid rgba(212,176,106,0.16); background:rgba(255,255,255,0.94); box-shadow:0 14px 40px rgba(47,38,26,0.05); padding:28px 24px 30px;">
-            <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0 0 12px; color:var(--gold);">THE FIRSTS</p>
-            <p class="font-heading text-2xl sm:text-[2rem] leading-tight" style="margin:0 0 14px; color:var(--text);">They met in person on Christmas Day. Yes, actually December 25th.</p>
-            <p class="text-sm sm:text-base leading-8" style="margin:0 0 14px; color:var(--text-muted);">First date: Windmills in The Colony, TX.</p>
-            <div style="border-radius:22px; overflow:hidden; border:1px solid rgba(212,176,106,0.14); background:#15120f; margin:0 0 14px;">
-              <div style="display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03);">
-                <span style="width:9px; height:9px; border-radius:999px; background:#ff6b6b;"></span>
-                <span style="width:9px; height:9px; border-radius:999px; background:#ffd166;"></span>
-                <span style="width:9px; height:9px; border-radius:999px; background:#06d6a0;"></span>
+        <div class="story-narrative-shell">
+          <div class="story-beat reveal">
+            <p class="story-kicker">THE OPENING</p>
+            <div class="story-opening-grid">
+              <p class="story-opening-line">She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
+              <div class="story-opening-side">
+                <p class="story-sentence story-sentence-accent">So she did what any reasonable person would do… reached out.</p>
+                <p class="story-sentence story-sentence-soft">Sandeep activated his Hall of Fame texting skills and… hard jk. (…kind of.)</p>
               </div>
-              <div style="padding:18px 18px 20px; overflow:auto;">
-                <p style="margin:0 0 10px; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:rgba(212,176,106,0.88);">Early flirting was elite in its own way:</p>
-                <pre style="margin:0; white-space:pre-wrap; word-break:break-word; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace; font-size:0.92rem; line-height:1.8; color:#f8f3ea;">adjective_to_describe_chamu = “beautiful”
+            </div>
+          </div>
+
+          <div class="story-beat reveal stagger" style="--d:0;">
+            <p class="story-kicker">THE DELAY</p>
+            <div class="story-delay-stack">
+              <p class="story-sentence story-sentence-focus">His first thought: “wait… she hella cute.”</p>
+              <p class="story-sentence story-sentence-accent">His next move: delay the date by a week because he broke his finger… while… of course, playing basketball 🏀.</p>
+              <p class="story-sentence story-sentence-quote">What Sandeep likes to call it: “yeah, that wasn’t a good opening move.”</p>
+              <p class="story-sentence story-sentence-soft">A week later, what was supposed to be a quick call somehow stretched into almost four hours. The kind of call where you finish and just sit there like… yeah, that was different.</p>
+            </div>
+          </div>
+
+          <div class="story-beat story-beat-dark reveal stagger" style="--d:1;">
+            <p class="story-kicker">THE CLICK</p>
+            <div class="story-pill-grid">
+              <p class="story-mini-card">Gym people.</p>
+              <p class="story-mini-card">School nerds.</p>
+              <p class="story-mini-card">Both loud in a room.</p>
+              <p class="story-mini-card">Both chasing something bigger.</p>
+            </div>
+            <div class="story-delay-stack">
+              <p class="story-sentence story-sentence-dark">Same wavelength, just different starting paths.</p>
+              <p class="story-sentence story-sentence-dark-accent">And since that call? Not a single day without talking.</p>
+            </div>
+          </div>
+
+          <div class="story-beat reveal stagger" style="--d:2;">
+            <p class="story-kicker">THE FIRSTS</p>
+            <div class="story-steps">
+              <div class="story-step-row">
+                <div class="story-step-mark">01</div>
+                <p class="story-sentence">They met in person on Christmas Day. Yes, actually December 25th.</p>
+              </div>
+              <div class="story-step-row">
+                <div class="story-step-mark">02</div>
+                <p class="story-sentence story-sentence-soft">First date: Windmills in The Colony, TX.</p>
+              </div>
+              <div class="story-step-row">
+                <div class="story-step-mark">03</div>
+                <div class="story-code-card">
+                  <div class="story-code-top">
+                    <span class="story-code-dot red"></span>
+                    <span class="story-code-dot yellow"></span>
+                    <span class="story-code-dot green"></span>
+                  </div>
+                  <div class="story-code-body">
+                    <p class="story-code-label">Early flirting was elite in its own way:</p>
+                    <pre class="story-code-pre">adjective_to_describe_chamu = “beautiful”
 print(“wasssuppp”)</pre>
+                  </div>
+                </div>
+              </div>
+              <div class="story-step-row">
+                <div class="story-step-mark">04</div>
+                <p class="story-sentence">Sandeep called it romance, while Chamu called it Python code.</p>
+              </div>
+              <div class="story-step-row">
+                <div class="story-step-mark">05</div>
+                <p class="story-sentence story-sentence-soft">Then came February 14, 2026. First flowers.</p>
               </div>
             </div>
-            <p class="text-sm sm:text-base leading-8" style="margin:0 0 12px; color:var(--text-muted);">Sandeep called it romance, while Chamu called it Python code.</p>
-            <p class="text-sm sm:text-base leading-8" style="margin:0; color:var(--text-muted);">Then came February 14, 2026. First flowers.</p>
           </div>
 
-          <div class="reveal stagger" style="--d:3; border-radius:30px; border:1px solid rgba(212,176,106,0.18); background:linear-gradient(180deg, rgba(28,24,21,0.98), rgba(63,50,36,0.95)); box-shadow:0 20px 56px rgba(18,14,10,0.18); padding:30px 24px 34px; text-align:center;">
-            <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0 0 14px; color:rgba(212,176,106,0.94);">BEST FRIENDS ENERGY</p>
-            <p class="font-heading text-2xl sm:text-[2rem] leading-tight" style="margin:0 0 14px; color:#fffaf2;">To everyone else, they just look like best friends who’ve known each other forever.</p>
-            <p class="text-sm sm:text-base leading-8" style="margin:0 0 10px; color:rgba(255,250,242,0.78);">Which is funny, because that’s kind of what it is.</p>
-            <p class="text-sm sm:text-base leading-8" style="margin:0 0 18px; color:rgba(255,250,242,0.78);">Best friends first. Real love underneath. Easy laughs, zero effort, the kind of comfort that usually takes years but somehow showed up early.</p>
-            <p class="text-sm sm:text-base leading-8" style="margin:0 0 16px; color:#fffaf2;">The wild part?</p>
-            <div style="border-radius:24px; padding:24px 18px; background:linear-gradient(145deg, rgba(255,255,255,0.10), rgba(212,176,106,0.12)); border:1px solid rgba(255,255,255,0.10); backdrop-filter:blur(14px);">
-              <p class="font-heading text-[1.9rem] sm:text-[2.35rem] leading-tight" style="margin:0; color:#fffdf8;">“We’re just as surprised as you are!”</p>
-              <p class="text-xs tracking-[0.24em] uppercase" style="margin:14px 0 0; color:rgba(212,176,106,0.92);">— Chamanthi and Sandeep</p>
+          <div class="story-beat story-beat-dark reveal stagger" style="--d:3;">
+            <p class="story-kicker">BEST FRIENDS ENERGY</p>
+            <div class="story-finale-stack">
+              <p class="story-sentence story-sentence-dark">To everyone else, they just look like best friends who’ve known each other forever.</p>
+              <p class="story-sentence story-sentence-dark-soft">Which is funny, because that’s kind of what it is.</p>
+              <p class="story-sentence story-sentence-dark-soft">Best friends first. Real love underneath. Easy laughs, zero effort, the kind of comfort that usually takes years but somehow showed up early.</p>
+              <p class="story-finale-prompt">The wild part?</p>
+              <div class="story-quote-card">
+                <p class="story-quote-line">“We’re just as surprised as you are!”</p>
+                <p class="story-quote-credit">— Chamanthi and Sandeep</p>
+              </div>
+              <p class="story-ending">(The Beginning)</p>
             </div>
-            <p class="font-heading text-xl sm:text-2xl" style="margin:18px 0 0; color:rgba(255,250,242,0.88);">(The Beginning)</p>
           </div>
         </div>
       </div>
