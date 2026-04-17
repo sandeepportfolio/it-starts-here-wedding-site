@@ -933,7 +933,7 @@
                 <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Phone</label><input type="tel" class="form-input" placeholder="Your number" id="rsvp-phone"></div>
               </div>
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Email *</label><input type="email" class="form-input" placeholder="your@email.com" id="rsvp-email"></div>
+                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Email</label><input type="email" class="form-input" placeholder="your@email.com" id="rsvp-email"></div>
                 <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Plus Ones</label><input type="number" class="form-input" placeholder="0" min="0" max="10" id="rsvp-plus-ones" value="0"></div>
               </div>
               <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Message for the Couple</label><textarea class="form-input" rows="2" placeholder="Your wishes..." id="rsvp-message" style="resize:none;"></textarea></div>
@@ -2265,8 +2265,8 @@
       const submitBtn = document.getElementById('rsvp-submit-btn');
       const backBtn = document.getElementById('rsvp-back-btn');
 
-      if (!name || !email) {
-        if (errorMsg) { errorMsg.innerText = 'Please fill in your name and email.'; errorMsg.classList.remove('hidden'); }
+      if (!name) {
+        if (errorMsg) { errorMsg.innerText = 'Please fill in your name.'; errorMsg.classList.remove('hidden'); }
         return;
       }
 
