@@ -297,6 +297,7 @@
     /* Misc */
     .section-divider { width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto; }
     html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 96px; }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--text-light); border-radius: 3px; }
@@ -570,7 +571,7 @@
 
     <!-- ===== STICKY NAV ===== -->
     <nav id="sticky-nav" class="sticky top-0 z-[100] glass py-3 px-4" style="border-bottom: 1px solid var(--border);">
-      <div class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none; padding-right: 20px;">
+      <div id="sticky-nav-scroll" class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none; padding-right: 20px;">
         <a href="#rsvp" class="nav-link">RSVP</a>
         <a href="#story" class="nav-link">Our Story</a>
         <a href="#events" class="nav-link">Events</a>
@@ -681,144 +682,48 @@
         </div>
       </div>
     </section>
-
-    <!-- ===== LIVE STREAM ===== -->
-    <section id="livestream" class="py-24 px-6" style="background: var(--bg-alt);">
-      <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-12 reveal">
-          <p class="section-label mb-2">Witness Our Moment</p>
-          <h2 class="section-title text-4xl sm:text-5xl">Live Stream</h2>
-          <p class="text-sm mt-4 max-w-md mx-auto" style="color:var(--text-muted);">Can't be there in person? Watch every sacred moment unfold, live from Plano, Texas.</p>
-          <div class="section-divider mt-5"></div>
-        </div>
-
-        <div class="reveal" style="border-radius:24px; overflow:hidden; background:var(--bg-card); border:1px solid var(--border); box-shadow: 0 8px 40px rgba(0,0,0,0.06);">
-          <div class="relative" style="aspect-ratio:16/9; background:#0a0a0a; overflow:hidden;">
-            <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 50%, rgba(184,146,74,0.08) 0%, rgba(0,0,0,0.95) 70%);"></div>
-            <div class="absolute inset-0 flex items-center justify-center flex-col" style="gap:16px;">
-              <div style="width:72px; height:72px; border-radius:50%; border:2px solid rgba(184,146,74,0.5); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); background:rgba(184,146,74,0.1); cursor:pointer; transition:all 0.3s;" onmouseover="this.style.background='rgba(184,146,74,0.25)'; this.style.transform='scale(1.08)'" onmouseout="this.style.background='rgba(184,146,74,0.1)'; this.style.transform='scale(1)'">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="margin-left:3px;"><polygon points="5,3 19,12 5,21" fill="rgba(184,146,74,0.9)"/></svg>
-              </div>
-              <p style="color:rgba(255,255,255,0.5); font-size:11px; letter-spacing:0.25em; text-transform:uppercase; font-family:'Montserrat',sans-serif;">Stream begins May 9</p>
-            </div>
-            <div class="absolute" style="top:16px; left:16px; display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:rgba(0,0,0,0.6); backdrop-filter:blur(12px);">
-              <span style="width:8px; height:8px; border-radius:50%; background:#ef4444; box-shadow:0 0 8px #ef4444; display:none;" id="live-dot"></span>
-              <span style="width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.3);" id="offline-dot"></span>
-              <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.7); font-weight:500;">Upcoming</span>
-            </div>
-            <div class="absolute" style="top:16px; right:16px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.1); backdrop-filter:blur(8px);">
-              <span style="font-size:10px; font-weight:600; color:rgba(255,255,255,0.6); letter-spacing:0.05em;">1080p</span>
-            </div>
-          </div>
-
-          <div style="padding:20px 16px 24px;">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
-                <span style="font-size:14px;">&#128197;</span>
-                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">Friday, May 9, 2026</span>
-              </div>
-              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
-                <span style="font-size:14px;">&#9200;</span>
-                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">8:50 AM CST</span>
-              </div>
-            </div>
-            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; color:var(--text); margin-bottom:8px;">The Sacred Ceremony</h3>
-            <p style="font-size:13px; line-height:1.6; color:var(--text-muted); margin-bottom:20px;">Watch as Chamanthi &amp; Sandeep exchange vows at the beautiful Shree Swaminarayan Gurukul in Plano, Texas. No login required &mdash; just click and watch.</p>
-
-            <div style="display:flex; align-items:center; justify-content:center; gap:8px; padding:20px 12px; border-radius:16px; background:var(--bg-alt); margin-bottom:20px; flex-wrap:wrap;">
-              <div style="text-align:center; min-width:48px; padding:0 4px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-days>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Days</div>
-              </div>
-              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
-              <div style="text-align:center; min-width:48px; padding:0 4px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-hours>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Hours</div>
-              </div>
-              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
-              <div style="text-align:center; min-width:48px; padding:0 4px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-mins>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Mins</div>
-              </div>
-              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
-              <div style="text-align:center; min-width:48px; padding:0 4px;">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-secs>--</div>
-                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Secs</div>
-              </div>
-            </div>
-
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
-              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
-                <div style="font-size:20px; margin-bottom:6px;">&#127963;&#65039;</div>
-                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Venue</div>
-                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Gurukul Temple<br>Plano, TX</div>
-              </div>
-              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
-                <div style="font-size:20px; margin-bottom:6px;">&#128241;</div>
-                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Any Device</div>
-                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Phone, Tablet<br>or Desktop</div>
-              </div>
-              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
-                <div style="font-size:20px; margin-bottom:6px;">&#127760;</div>
-                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">No Login</div>
-                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Open link<br>&amp; watch</div>
-              </div>
-            </div>
-
-            <div style="text-align:center; margin-top:24px;">
-              <a href="#" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; font-size:13px; border-radius:14px; pointer-events:none; opacity:0.6;" id="watch-btn">
-                <span>&#128308;</span> Stream Link Available May 9
-              </a>
-              <p style="font-size:10px; color:var(--text-light); margin-top:10px; letter-spacing:0.03em;">A link will appear here when the stream goes live</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="reveal text-center" style="margin-top:20px;">
-          <p style="font-size:10px; color:var(--text-light); line-height:1.6; word-break:break-word;">&#127760; 8:50 AM CST = 9:50 AM EST &middot; 6:50 AM PST &middot; 2:50 PM GMT &middot; 8:20 PM IST</p>
-        </div>
-      </div>
-    </section>
-    <!-- ===== OUR STORY - Cinematic Editorial Timeline ===== -->
+    <!-- ===== OUR STORY - Editorial Storytelling ===== -->
     <section id="story" class="py-24 px-6" style="background:
-      radial-gradient(circle at top center, rgba(212,176,106,0.12), transparent 32%),
-      linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(245,239,229,0.36) 48%, rgba(255,255,255,0) 100%);
+      radial-gradient(circle at top center, rgba(212,176,106,0.10), transparent 30%),
+      linear-gradient(180deg, rgba(245,239,229,0.20) 0%, rgba(255,255,255,0) 100%);
     ">
-      <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-16 reveal">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-14 reveal">
           <p class="section-label mb-2">Our Story</p>
           <h2 class="section-title text-4xl sm:text-5xl">The Beginning</h2>
+          <p class="text-sm mt-3 max-w-xl mx-auto" style="color:var(--text-muted);">A softer, cleaner reading experience, with each beat given room to land.</p>
           <div class="section-divider mt-4"></div>
         </div>
 
-        <div class="grid gap-5 lg:grid-cols-12">
-          <div class="lg:col-span-7 reveal" style="position:relative; overflow:hidden; border-radius:30px; border:1px solid rgba(212,176,106,0.22); background:linear-gradient(145deg, rgba(255,255,255,0.96), rgba(250,245,236,0.88)); box-shadow:0 18px 60px rgba(47,38,26,0.10); padding:clamp(24px, 4vw, 42px);">
-            <div style="position:absolute; inset:auto -60px -80px auto; width:220px; height:220px; border-radius:999px; background:radial-gradient(circle, rgba(212,176,106,0.18), transparent 68%);"></div>
-            <div style="position:relative; display:grid; gap:18px;">
-              <p class="font-heading text-[2rem] sm:text-[2.65rem] leading-[1.08]" style="color:var(--text);">She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
-              <div style="display:inline-flex; max-width:fit-content; align-items:center; gap:10px; padding:12px 16px; border-radius:999px; border:1px solid rgba(212,176,106,0.22); background:rgba(212,176,106,0.10); box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);">
-                <span style="width:10px; height:10px; border-radius:999px; background:var(--gold); box-shadow:0 0 0 6px rgba(212,176,106,0.12);"></span>
+        <div style="display:grid; gap:18px;">
+          <div class="reveal" style="position:relative; overflow:hidden; border-radius:30px; border:1px solid rgba(212,176,106,0.20); background:linear-gradient(145deg, rgba(255,255,255,0.97), rgba(250,245,236,0.92)); box-shadow:0 20px 60px rgba(47,38,26,0.08); padding:clamp(24px, 4vw, 40px);">
+            <div style="position:absolute; top:-40px; right:-30px; width:170px; height:170px; border-radius:999px; background:radial-gradient(circle, rgba(212,176,106,0.16), transparent 68%);"></div>
+            <div style="position:relative; display:grid; gap:16px;">
+              <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0; color:var(--gold);">THE OPENING</p>
+              <p class="font-heading text-[2rem] sm:text-[2.55rem] leading-[1.08]" style="margin:0; color:var(--text); max-width:11.5ch;">She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
+              <div style="display:inline-flex; align-items:center; gap:10px; width:fit-content; max-width:100%; padding:12px 16px; border-radius:999px; background:rgba(212,176,106,0.10); border:1px solid rgba(212,176,106,0.18); box-shadow:inset 0 1px 0 rgba(255,255,255,0.62);">
+                <span style="width:9px; height:9px; border-radius:999px; background:var(--gold); box-shadow:0 0 0 6px rgba(212,176,106,0.12);"></span>
                 <p class="text-sm sm:text-base" style="margin:0; color:var(--text);">So she did what any reasonable person would do… reached out.</p>
               </div>
-              <p class="text-sm sm:text-base leading-7" style="margin:0; color:var(--text-muted);">Sandeep activated his Hall of Fame texting skills and… hard jk. (…kind of.)</p>
+              <p class="text-sm sm:text-base leading-7" style="margin:0; color:var(--text-muted); max-width:44rem;">Sandeep activated his Hall of Fame texting skills and… hard jk. (…kind of.)</p>
             </div>
           </div>
 
-          <div class="lg:col-span-5 grid gap-5">
-            <div class="reveal stagger" style="--d:0; border-radius:28px; border:1px solid rgba(212,176,106,0.18); background:rgba(255,255,255,0.88); backdrop-filter:blur(18px); box-shadow:0 16px 50px rgba(47,38,26,0.08); padding:28px 24px;">
-              <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="color:var(--gold);">THE DELAY</p>
+          <div class="grid gap-5 lg:grid-cols-[1.05fr,0.95fr]">
+            <div class="reveal stagger" style="--d:0; border-radius:28px; border:1px solid rgba(212,176,106,0.18); background:rgba(255,255,255,0.92); box-shadow:0 16px 46px rgba(47,38,26,0.07); padding:30px 24px;">
+              <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0; color:var(--gold);">THE DELAY</p>
               <div style="margin-top:14px; display:grid; gap:14px;">
                 <p class="font-heading text-2xl sm:text-[2rem] leading-tight" style="margin:0; color:var(--text);">His first thought: “wait… she hella cute.”</p>
                 <p class="text-sm leading-7" style="margin:0; color:var(--text-muted);">His next move: delay the date by a week because he broke his finger… while… of course, playing basketball 🏀.</p>
-                <div style="padding:14px 16px; border-radius:20px; background:linear-gradient(135deg, rgba(212,176,106,0.10), rgba(255,255,255,0.72)); border:1px solid rgba(212,176,106,0.16);">
+                <div style="padding:14px 16px; border-radius:20px; border:1px solid rgba(212,176,106,0.16); background:linear-gradient(135deg, rgba(212,176,106,0.08), rgba(255,255,255,0.80));">
                   <p class="text-sm leading-7" style="margin:0; color:var(--text);">What Sandeep likes to call it: “yeah, that wasn’t a good opening move.”</p>
                 </div>
                 <p class="text-sm leading-7" style="margin:0; color:var(--text-muted);">A week later, what was supposed to be a quick call somehow stretched into almost four hours. The kind of call where you finish and just sit there like… yeah, that was different.</p>
               </div>
             </div>
 
-            <div class="reveal stagger" style="--d:1; border-radius:28px; overflow:hidden; border:1px solid rgba(212,176,106,0.18); background:linear-gradient(160deg, rgba(28,25,21,0.98), rgba(53,45,35,0.96)); box-shadow:0 18px 50px rgba(18,14,10,0.24); padding:28px 24px;">
-              <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="color:rgba(212,176,106,0.90);">THE CLICK</p>
+            <div class="reveal stagger" style="--d:1; border-radius:28px; overflow:hidden; border:1px solid rgba(212,176,106,0.18); background:linear-gradient(160deg, rgba(27,24,21,0.98), rgba(55,46,36,0.96)); box-shadow:0 18px 50px rgba(18,14,10,0.22); padding:30px 24px;">
+              <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0; color:rgba(212,176,106,0.92);">THE CLICK</p>
               <div style="margin-top:14px; display:grid; gap:14px;">
                 <p class="font-heading text-2xl sm:text-[2rem] leading-tight" style="margin:0; color:#fffaf2;">Gym people. School nerds. Both loud in a room. Both chasing something bigger. Same wavelength, just different starting paths.</p>
                 <p class="text-sm leading-7" style="margin:0; color:rgba(255,250,242,0.76);">And since that call? Not a single day without talking.</p>
@@ -826,12 +731,12 @@
             </div>
           </div>
 
-          <div class="lg:col-span-7 reveal stagger" style="--d:2; border-radius:30px; border:1px solid rgba(212,176,106,0.18); background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,243,236,0.90)); box-shadow:0 18px 55px rgba(47,38,26,0.08); padding:clamp(24px, 4vw, 36px);">
-            <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="color:var(--gold);">THE FIRSTS</p>
+          <div class="reveal stagger" style="--d:2; border-radius:30px; border:1px solid rgba(212,176,106,0.18); background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,243,236,0.92)); box-shadow:0 18px 52px rgba(47,38,26,0.07); padding:clamp(24px, 4vw, 36px);">
+            <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0; color:var(--gold);">THE FIRSTS</p>
             <div style="margin-top:16px; display:grid; gap:14px;">
-              <p class="font-heading text-2xl sm:text-[2.15rem] leading-tight" style="margin:0; color:var(--text);">They met in person on Christmas Day. Yes, actually December 25th. No pressure.</p>
+              <p class="font-heading text-2xl sm:text-[2.1rem] leading-tight" style="margin:0; color:var(--text); max-width:22ch;">They met in person on Christmas Day. Yes, actually December 25th.</p>
               <p class="text-sm leading-7" style="margin:0; color:var(--text-muted);">First date: Windmills in The Colony, TX.</p>
-              <div style="border-radius:24px; overflow:hidden; border:1px solid rgba(212,176,106,0.16); background:#161310; box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);">
+              <div style="border-radius:24px; overflow:hidden; border:1px solid rgba(212,176,106,0.16); background:#15120f; box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);">
                 <div style="display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03);">
                   <span style="width:9px; height:9px; border-radius:999px; background:#ff6b6b;"></span>
                   <span style="width:9px; height:9px; border-radius:999px; background:#ffd166;"></span>
@@ -848,16 +753,16 @@ print(“wasssuppp”)</pre>
             </div>
           </div>
 
-          <div class="lg:col-span-5 reveal stagger" style="--d:3; position:relative; overflow:hidden; border-radius:30px; border:1px solid rgba(212,176,106,0.18); background:linear-gradient(180deg, rgba(32,28,24,0.98), rgba(71,57,39,0.94)); box-shadow:0 22px 60px rgba(18,14,10,0.22); padding:clamp(24px, 4vw, 34px);">
-            <div style="position:absolute; top:-70px; right:-50px; width:180px; height:180px; border-radius:999px; background:radial-gradient(circle, rgba(212,176,106,0.22), transparent 70%);"></div>
-            <div style="position:relative; display:grid; gap:14px;">
-              <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="color:rgba(212,176,106,0.95);">BEST FRIENDS ENERGY</p>
+          <div class="reveal stagger" style="--d:3; position:relative; overflow:hidden; border-radius:30px; border:1px solid rgba(212,176,106,0.18); background:linear-gradient(180deg, rgba(28,24,21,0.98), rgba(63,50,36,0.95)); box-shadow:0 22px 60px rgba(18,14,10,0.20); padding:clamp(24px, 4vw, 34px);">
+            <div style="position:absolute; top:-60px; right:-45px; width:180px; height:180px; border-radius:999px; background:radial-gradient(circle, rgba(212,176,106,0.22), transparent 70%);"></div>
+            <div style="position:relative; display:grid; gap:14px; max-width:42rem;">
+              <p class="text-[10px] tracking-[0.38em] uppercase font-semibold" style="margin:0; color:rgba(212,176,106,0.95);">BEST FRIENDS ENERGY</p>
               <p class="font-heading text-2xl sm:text-[2rem] leading-tight" style="margin:0; color:#fffaf2;">To everyone else, they just look like best friends who’ve known each other forever.</p>
               <p class="text-sm leading-7" style="margin:0; color:rgba(255,250,242,0.78);">Which is funny, because that’s kind of what it is.</p>
               <p class="text-sm leading-7" style="margin:0; color:rgba(255,250,242,0.78);">Best friends first. Real love underneath. Easy laughs, zero effort, the kind of comfort that usually takes years but somehow showed up early.</p>
               <div style="height:1px; background:linear-gradient(90deg, rgba(212,176,106,0), rgba(212,176,106,0.8), rgba(212,176,106,0)); margin:6px 0 2px;"></div>
               <p class="text-sm leading-7" style="margin:0; color:#fffaf2;">The wild part?</p>
-              <div style="border-radius:24px; padding:22px 18px; background:linear-gradient(145deg, rgba(255,255,255,0.10), rgba(212,176,106,0.10)); border:1px solid rgba(255,255,255,0.10); backdrop-filter:blur(14px); text-align:center;">
+              <div style="border-radius:24px; padding:24px 18px; background:linear-gradient(145deg, rgba(255,255,255,0.10), rgba(212,176,106,0.12)); border:1px solid rgba(255,255,255,0.10); backdrop-filter:blur(14px); text-align:center;">
                 <p class="font-heading text-[1.9rem] sm:text-[2.35rem] leading-tight" style="margin:0; color:#fffdf8;">“We’re just as surprised as you are!”</p>
                 <p class="text-xs tracking-[0.24em] uppercase" style="margin:14px 0 0; color:rgba(212,176,106,0.92);">— Chamanthi and Sandeep</p>
               </div>
@@ -1354,6 +1259,106 @@ print(“wasssuppp”)</pre>
             <span class="text-2xl shrink-0">&#128663;</span>
             <div><p class="text-sm font-medium">Getting There</p><p class="text-xs mt-1" style="color: var(--text-muted);"><strong style="color:var(--gold);">We highly recommend renting a car or having one.</strong> The venue is in a residential area with limited ride-share availability. ~30 min from DFW Airport &middot; ~45 min from Dallas Love Field. Complimentary parking at venue.</p></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- ===== LIVE STREAM ===== -->
+    <section id="livestream" class="py-24 px-6" style="background: var(--bg-alt);">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12 reveal">
+          <p class="section-label mb-2">Witness Our Moment</p>
+          <h2 class="section-title text-4xl sm:text-5xl">Live Stream</h2>
+          <p class="text-sm mt-4 max-w-md mx-auto" style="color:var(--text-muted);">Can't be there in person? Watch every sacred moment unfold, live from Plano, Texas.</p>
+          <div class="section-divider mt-5"></div>
+        </div>
+
+        <div class="reveal" style="border-radius:24px; overflow:hidden; background:var(--bg-card); border:1px solid var(--border); box-shadow: 0 8px 40px rgba(0,0,0,0.06);">
+          <div class="relative" style="aspect-ratio:16/9; background:#0a0a0a; overflow:hidden;">
+            <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 50%, rgba(184,146,74,0.08) 0%, rgba(0,0,0,0.95) 70%);"></div>
+            <div class="absolute inset-0 flex items-center justify-center flex-col" style="gap:16px;">
+              <div style="width:72px; height:72px; border-radius:50%; border:2px solid rgba(184,146,74,0.5); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); background:rgba(184,146,74,0.1); cursor:pointer; transition:all 0.3s;" onmouseover="this.style.background='rgba(184,146,74,0.25)'; this.style.transform='scale(1.08)'" onmouseout="this.style.background='rgba(184,146,74,0.1)'; this.style.transform='scale(1)'">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="margin-left:3px;"><polygon points="5,3 19,12 5,21" fill="rgba(184,146,74,0.9)"/></svg>
+              </div>
+              <p style="color:rgba(255,255,255,0.5); font-size:11px; letter-spacing:0.25em; text-transform:uppercase; font-family:'Montserrat',sans-serif;">Stream begins May 9</p>
+            </div>
+            <div class="absolute" style="top:16px; left:16px; display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:rgba(0,0,0,0.6); backdrop-filter:blur(12px);">
+              <span style="width:8px; height:8px; border-radius:50%; background:#ef4444; box-shadow:0 0 8px #ef4444; display:none;" id="live-dot"></span>
+              <span style="width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.3);" id="offline-dot"></span>
+              <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.7); font-weight:500;">Upcoming</span>
+            </div>
+            <div class="absolute" style="top:16px; right:16px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.1); backdrop-filter:blur(8px);">
+              <span style="font-size:10px; font-weight:600; color:rgba(255,255,255,0.6); letter-spacing:0.05em;">1080p</span>
+            </div>
+          </div>
+
+          <div style="padding:20px 16px 24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
+                <span style="font-size:14px;">&#128197;</span>
+                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">Friday, May 9, 2026</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
+                <span style="font-size:14px;">&#9200;</span>
+                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">8:50 AM CST</span>
+              </div>
+            </div>
+            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; color:var(--text); margin-bottom:8px;">The Sacred Ceremony</h3>
+            <p style="font-size:13px; line-height:1.6; color:var(--text-muted); margin-bottom:20px;">Watch as Chamanthi &amp; Sandeep exchange vows at the beautiful Shree Swaminarayan Gurukul in Plano, Texas. No login required &mdash; just click and watch.</p>
+
+            <div style="display:flex; align-items:center; justify-content:center; gap:8px; padding:20px 12px; border-radius:16px; background:var(--bg-alt); margin-bottom:20px; flex-wrap:wrap;">
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-days>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Days</div>
+              </div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-hours>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Hours</div>
+              </div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-mins>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Mins</div>
+              </div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-secs>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Secs</div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
+                <div style="font-size:20px; margin-bottom:6px;">&#127963;&#65039;</div>
+                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Venue</div>
+                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Gurukul Temple<br>Plano, TX</div>
+              </div>
+              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
+                <div style="font-size:20px; margin-bottom:6px;">&#128241;</div>
+                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Any Device</div>
+                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Phone, Tablet<br>or Desktop</div>
+              </div>
+              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
+                <div style="font-size:20px; margin-bottom:6px;">&#127760;</div>
+                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">No Login</div>
+                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Open link<br>&amp; watch</div>
+              </div>
+            </div>
+
+            <div style="text-align:center; margin-top:24px;">
+              <a href="#" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; font-size:13px; border-radius:14px; pointer-events:none; opacity:0.6;" id="watch-btn">
+                <span>&#128308;</span> Stream Link Available May 9
+              </a>
+              <p style="font-size:10px; color:var(--text-light); margin-top:10px; letter-spacing:0.03em;">A link will appear here when the stream goes live</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal text-center" style="margin-top:20px;">
+          <p style="font-size:10px; color:var(--text-light); line-height:1.6; word-break:break-word;">&#127760; 8:50 AM CST = 9:50 AM EST &middot; 6:50 AM PST &middot; 2:50 PM GMT &middot; 8:20 PM IST</p>
         </div>
       </div>
     </section>
@@ -1974,61 +1979,78 @@ print(“wasssuppp”)</pre>
         if (price === 'all' || card.dataset.price === price) { card.style.display = ''; } else { card.style.display = 'none'; }
       });
     }
-
     // ---- Active Nav ----
-    // ---- Scrollspy: highlight active nav link + auto-scroll nav ----
-    const navLinks = document.querySelectorAll('.nav-link');
-    const navScroller = document.getElementById('sticky-nav')?.querySelector('.flex');
-    const sections = Array.from(document.querySelectorAll('section[id]')).filter(s => s.id);
+    const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+    const navScroller = document.getElementById('sticky-nav-scroll');
+    const stickyNav = document.getElementById('sticky-nav');
+    const sections = navLinks
+      .map(link => document.getElementById((link.getAttribute('href') || '').replace('#', '')))
+      .filter(Boolean);
     let scrollspyTick = false;
+    let activeNavId = '';
 
-    function updateScrollspy() {
-      scrollspyTick = false;
-      const scrollY = window.scrollY;
-      const offset = 120; // account for sticky nav height + buffer
-      let activeId = '';
+    function centerNavLink(link, behavior = 'smooth') {
+      if (!link || !navScroller) return;
+      const scrollerRect = navScroller.getBoundingClientRect();
+      const linkRect = link.getBoundingClientRect();
+      const fullyVisible = linkRect.left >= scrollerRect.left + 8 && linkRect.right <= scrollerRect.right - 8;
+      if (fullyVisible) return;
+      const target = link.offsetLeft - (navScroller.clientWidth / 2) + (link.offsetWidth / 2);
+      navScroller.scrollTo({ left: Math.max(0, target), behavior });
+    }
 
-      // Find the section currently in view (last section whose top is above offset)
-      for (let i = sections.length - 1; i >= 0; i--) {
-        if (sections[i].offsetTop - offset <= scrollY) {
-          activeId = sections[i].id;
-          break;
-        }
-      }
-      // If at bottom of page, activate last section
-      if (window.innerHeight + scrollY >= document.body.scrollHeight - 50) {
-        activeId = sections[sections.length - 1]?.id || activeId;
-      }
-
+    function setActiveNav(activeId, options = {}) {
+      const { force = false, behavior = 'smooth' } = options;
+      if (!activeId) return;
+      if (!force && activeId === activeNavId) return;
+      activeNavId = activeId;
       navLinks.forEach(link => {
         const isActive = link.getAttribute('href') === '#' + activeId;
         link.classList.toggle('active', isActive);
-        // Auto-scroll nav to center the active link
-        if (isActive && navScroller) {
-          const linkLeft = link.offsetLeft;
-          const linkWidth = link.offsetWidth;
-          const scrollerWidth = navScroller.offsetWidth;
-          const target = linkLeft - (scrollerWidth / 2) + (linkWidth / 2);
-          navScroller.scrollTo({ left: target, behavior: 'smooth' });
-        }
+        if (isActive) centerNavLink(link, behavior);
       });
     }
 
+    function getActiveSectionId() {
+      if (!sections.length) return '';
+      const navHeight = stickyNav ? stickyNav.offsetHeight : 0;
+      const trigger = navHeight + 28;
+      let activeId = sections[0].id;
+
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= trigger) {
+          activeId = section.id;
+        }
+      }
+
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 32) {
+        activeId = sections[sections.length - 1].id;
+      }
+
+      return activeId;
+    }
+
+    function updateScrollspy() {
+      scrollspyTick = false;
+      setActiveNav(getActiveSectionId(), { behavior: 'smooth' });
+    }
+
     window.addEventListener('scroll', () => {
-      if (!scrollspyTick) { scrollspyTick = true; requestAnimationFrame(updateScrollspy); }
+      if (!scrollspyTick) {
+        scrollspyTick = true;
+        requestAnimationFrame(updateScrollspy);
+      }
     }, { passive: true });
-    // On click, immediately activate the clicked link
+
+    window.addEventListener('resize', () => requestAnimationFrame(updateScrollspy));
+
     navLinks.forEach(link => {
       link.addEventListener('click', () => {
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        if (navScroller) {
-          const target = link.offsetLeft - (navScroller.offsetWidth / 2) + (link.offsetWidth / 2);
-          navScroller.scrollTo({ left: target, behavior: 'smooth' });
-        }
+        const targetId = (link.getAttribute('href') || '').replace('#', '');
+        setActiveNav(targetId, { force: true, behavior: 'smooth' });
       });
     });
-    // Initial run after seal opens
+
     setTimeout(updateScrollspy, 100);
 
     // ---- RSVP Event Listeners (replaces onclick attributes) ----
