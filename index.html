@@ -208,7 +208,7 @@
       position: relative;
       display: grid;
       gap: 18px;
-      max-width: 980px;
+      max-width: 860px;
       margin: 0 auto;
       align-items: start;
     }
@@ -490,11 +490,7 @@
     }
     @media (min-width: 980px) {
       .story-shell {
-        grid-template-columns: minmax(0, 1fr) 240px;
-      }
-      .story-menu {
-        position: sticky;
-        top: 108px;
+        grid-template-columns: minmax(0, 1fr);
       }
     }
     @media (max-width: 979px) {
@@ -1158,19 +1154,6 @@ print(“wasssuppp”)</pre>
                 </section>
               </div>
             </article>
-
-            <aside class="story-menu">
-              <div class="story-menu-card">
-                <p class="story-menu-label">Story guide</p>
-                <div class="story-menu-list">
-                  <button class="story-menu-btn active" type="button" data-story-target="story-opening"><span class="story-menu-num">01</span><span class="story-menu-text"><span class="story-menu-title">The Opening</span><span class="story-menu-sub">where it starts</span></span></button>
-                  <button class="story-menu-btn" type="button" data-story-target="story-delay"><span class="story-menu-num">02</span><span class="story-menu-text"><span class="story-menu-title">The Delay</span><span class="story-menu-sub">bad opening move</span></span></button>
-                  <button class="story-menu-btn" type="button" data-story-target="story-click"><span class="story-menu-num">03</span><span class="story-menu-text"><span class="story-menu-title">The Click</span><span class="story-menu-sub">four-hour turn</span></span></button>
-                  <button class="story-menu-btn" type="button" data-story-target="story-firsts"><span class="story-menu-num">04</span><span class="story-menu-text"><span class="story-menu-title">The Firsts</span><span class="story-menu-sub">Christmas to flowers</span></span></button>
-                  <button class="story-menu-btn" type="button" data-story-target="story-best-friends"><span class="story-menu-num">05</span><span class="story-menu-text"><span class="story-menu-title">Best Friends Energy</span><span class="story-menu-sub">the quote at the end</span></span></button>
-                </div>
-              </div>
-            </aside>
           </div>
         </div>
       </div>
