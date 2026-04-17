@@ -448,18 +448,6 @@
       </div>
       <div style="display:flex; flex-direction:column; gap:14px;" id="photo-upload-form">
         <div>
-          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Your Name *</label>
-          <input type="text" id="photo-uploader-name" class="form-input" placeholder="e.g. Priya Patel" required>
-        </div>
-        <div>
-          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Email *</label>
-          <input type="email" id="photo-uploader-email" class="form-input" placeholder="your@email.com" required>
-        </div>
-        <div>
-          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Caption</label>
-          <input type="text" id="photo-caption" class="form-input" placeholder="Describe this moment...">
-        </div>
-        <div>
           <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Photo *</label>
           <div style="border:2px dashed var(--border); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; background:var(--bg);" id="photo-drop-zone" onclick="document.getElementById('photo-file-input').click()" ondragover="event.preventDefault(); this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="event.preventDefault(); this.style.borderColor='var(--border)'; document.getElementById('photo-file-input').files=event.dataTransfer.files; document.getElementById('photo-file-input').dispatchEvent(new Event('change'))">
             <img id="photo-preview-img" src="" alt="Preview" style="display:none; max-width:100%; max-height:200px; border-radius:8px; margin:0 auto 12px; object-fit:cover;">
@@ -880,7 +868,7 @@
             <div style="font-size:2.5rem; margin-bottom:12px;">&#129776;</div>
             <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 7th &middot; 10:00 AM</p>
             <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Mehendi</h3>
-            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto 10px;">Henna, music, and celebration. Traditional Indian outfits welcome &mdash; lehenga, churidar, or similar. If possible, please avoid pink.</p>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto 10px;">Think color, music, photos, and full Insta energy — plus fun games. <strong style="color:var(--text);">Outfit:</strong> Lehengas are preferred. The bride will be in a gold and pink lehenga, so if possible, please avoid pink.</p>
             <p style="font-size:0.76rem; color:var(--text-muted); line-height:1.7; max-width:280px; margin:0 auto;"><strong style="color:var(--text);">Bridal Mehendi</strong><br>8:00 AM &ndash; 1:00 PM<br><br><strong style="color:var(--text);">Guest Mehendi</strong><br>10:00 AM &ndash; 12:00 PM</p>
             <a href="https://www.google.com/maps/search/?api=1&query=3129+Lakemont+Dr+Little+Elm+TX+75068" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
               <span style="font-size:0.72rem; color:var(--gold);">&#128205; 3129 Lakemont Dr, Little Elm, TX</span>
@@ -891,17 +879,19 @@
             <div style="font-size:2.5rem; margin-bottom:12px;">&#128081;</div>
             <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 8th &middot; 8:30 AM</p>
             <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Pelli Koduku</h3>
-            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A joyful pre-wedding blessing ceremony. Kurtha, lehenga, churidar, or any Indian traditional outfit is perfect &mdash; any color is fine.</p>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A bright, feel-good morning with family, blessings, and plenty of photo moments. <strong style="color:var(--text);">Dress code:</strong> Kurtha, lehenga, churidar, or any Indian traditional outfit. Any color is fine.</p>
             <a href="https://www.google.com/maps/search/?api=1&query=8720+Mandevilla+Dr+Plano+TX+75024" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
               <span style="font-size:0.72rem; color:var(--gold);">&#128205; 8720 Mandevilla Dr, Plano, TX</span>
             </a>
           </div>
           <!-- Pelli Kuthuru -->
           <div class="reveal stagger" style="--d:2; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--bg-card); padding:28px 24px; text-align:center; transition:all 0.3s;">
-            <div style="font-size:2.5rem; margin-bottom:12px;">&#128115;</div>
+            <div style="width:92px; height:92px; margin:0 auto 14px; border-radius:999px; overflow:hidden; border:3px solid rgba(212,176,106,0.35); box-shadow:0 10px 28px rgba(0,0,0,0.12);">
+              <img src="../images/telugu-bride-aesthetic.jpg" alt="Pelli Kuthuru aesthetic portrait" style="width:100%; height:100%; object-fit:cover; object-position:center 24%; display:block;">
+            </div>
             <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 8th &middot; 12:00 PM</p>
             <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Pelli Kuthuru</h3>
-            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A beautiful pre-wedding blessing ceremony. Kurtha, lehenga, churidar, or any Indian traditional outfit is perfect &mdash; any color is fine.</p>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A cozy Telugu bridal celebration with tradition, laughter, fun games, and picture-perfect family moments. <strong style="color:var(--text);">Dress code:</strong> Kurtha, lehenga, churidar, or any Indian traditional outfit. Any color is fine.</p>
             <a href="https://www.google.com/maps/search/?api=1&query=3129+Lakemont+Dr+Little+Elm+TX+75068" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
               <span style="font-size:0.72rem; color:var(--gold);">&#128205; 3129 Lakemont Dr, Little Elm, TX</span>
             </a>
@@ -911,7 +901,7 @@
             <div style="font-size:2.5rem; margin-bottom:12px;">&#128304;</div>
             <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 10th &middot; 5:00 PM</p>
             <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Vratham</h3>
-            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A sacred post-wedding ritual observed by the bride's family, celebrating the completion of the wedding ceremony and the beginning of their new life together.</p>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A calm, meaningful family gathering to close out the wedding weekend beautifully.</p>
             <a href="https://www.google.com/maps/search/?api=1&query=8720+Mandevilla+Dr+Plano+TX+75024" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
               <span style="font-size:0.72rem; color:var(--gold);">&#128205; 8720 Mandevilla Dr, Plano, TX 75024</span>
             </a>
@@ -1411,7 +1401,7 @@
     <!-- ===== GUEST UPLOADS ===== -->
     <section id="guest-uploads" class="py-20 px-6">
       <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Moments</p><h2 class="section-title text-4xl sm:text-5xl">Uploaded Photos by Guests</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">A live collection of guest uploads with names and captions.</p><div class="section-divider mt-4"></div></div>
+        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Moments</p><h2 class="section-title text-4xl sm:text-5xl">Uploaded Photos by Guests</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">A live collection of guest uploads from the celebration.</p><div class="section-divider mt-4"></div></div>
         <div id="guest-photos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Loading guest uploads…</p><p class="text-sm" style="color:var(--text-muted);">Photos shared by guests will appear here.</p></div>
         </div>
@@ -1657,17 +1647,14 @@
     };
 
     async function submitGuestPhoto() {
-      const name = document.getElementById('photo-uploader-name')?.value.trim();
-      const email = document.getElementById('photo-uploader-email')?.value.trim();
-      const caption = document.getElementById('photo-caption')?.value.trim();
       const fileInput = document.getElementById('photo-file-input');
       const file = fileInput?.files[0];
       const errorEl = document.getElementById('photo-upload-error');
       const successEl = document.getElementById('photo-upload-success');
       const submitBtn = document.getElementById('photo-submit-btn');
 
-      if (!name || !email || !file) {
-        if (errorEl) { errorEl.textContent = 'Please fill in your name, email, and select a photo.'; errorEl.style.display = 'block'; }
+      if (!file) {
+        if (errorEl) { errorEl.textContent = 'Please select a photo to upload.'; errorEl.style.display = 'block'; }
         return;
       }
 
@@ -1699,9 +1686,9 @@
         }
 
         await window.addDoc(window.collection(db, 'photos'), {
-          uploaderName: name,
-          uploaderEmail: email,
-          caption: caption || '',
+          uploaderName: 'Guest',
+          uploaderEmail: '',
+          caption: '',
           imageUrl: imageUrl || '',
           imageData: imageData,
           approved: false,

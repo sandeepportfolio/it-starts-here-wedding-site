@@ -1,13 +1,1999 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
-    <meta http-equiv="refresh" content="0; url=/sub/">
-    <link rel="canonical" href="/sub/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You’re Invited | Chamanthi &amp; Sandeep</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%8D%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS (compiled, production-ready) -->
+  <link rel="stylesheet" href="../output.css">
+  <!-- Firebase SDK -->
+  <!-- Firebase configuration -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCI-zsRP85UVOi0DjtiCwWBwQ1djDy741g",
+      authDomain: "it-starts-here-wedding.firebaseapp.com",
+      projectId: "it-starts-here-wedding",
+      storageBucket: "it-starts-here-wedding.appspot.com",
+      messagingSenderId: "36824586549",
+      appId: "1:36824586549:web:711579dbdca5a73ddf147c"
+    };
+
+    let db = null;
+    let storage = null;
+
+    function initFirebase() {
+      try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        storage = getStorage(app);
+      } catch (e) {
+        console.warn('Firebase init failed:', e.message);
+      }
+    }
+    initFirebase();
+
+    // Expose Firebase services globally
+    window.firebaseDb = () => db;
+    window.firebaseStorage = () => storage;
+    window.firebaseReady = !!db;
+    window.addDoc = addDoc;
+    window.collection = collection;
+    window.getDocs = getDocs;
+    window.query = query;
+    window.orderBy = orderBy;
+    window.limit = limit;
+    window.storageRef = ref;
+    window.uploadBytes = uploadBytes;
+    window.getDownloadURL = getDownloadURL;
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Montserrat', sans-serif; margin: 0; }
+    h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; }
+
+    :root {
+      --bg: #FFFDF8; --bg-alt: #FBF8F2; --bg-card: #FFFFFF;
+      --text: #2C2825; --text-muted: #6B6358; --text-light: #7A6F62;
+      --gold: #B8924A; --gold-glow: rgba(184,146,74,0.15);
+      --burgundy: #8B3A4A; --border: #E8DFD1;
+      --shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .dark {
+      --bg: #1A1612; --bg-alt: #231E18; --bg-card: #2A241E;
+      --text: #E8DFD1; --text-muted: #A89A88; --text-light: #8A8278;
+      --gold: #D4B06A; --gold-glow: rgba(212,176,106,0.12);
+      --burgundy: #A94E5F; --border: #3A3228;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+    body { background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; }
+
+    /* Animations */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.95); transition: opacity 0.3s ease, transform 0.3s ease; }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+    .stagger { transition-delay: calc(var(--d, 0) * 70ms); }
+
+    /* Seal */
+    #seal-overlay { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+    #seal-overlay.breaking { animation: sealFadeOut 1.2s ease forwards; }
+    @keyframes sealFadeOut { 0% { opacity:1; } 40% { opacity:1; } 100% { opacity:0; pointer-events:none; } }
+    .seal-bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+    .seal-btn { width: 120px; height: 120px; border-radius: 50%; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; user-select: none; -webkit-user-select: none; touch-action: manipulation; transition: transform 0.15s; border: none; padding: 0; outline: none; }
+    .seal-btn:active { transform: scale(0.92); }
+    @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.8); opacity: 0; } }
+    .pulse-ring { animation: pulse-ring 2s ease-out infinite; }
+    @keyframes sealCrack { 0% { transform: scale(1) rotate(0); opacity:1; } 30% { transform: scale(1.15) rotate(3deg); } 60% { transform: scale(1.3) rotate(-2deg); opacity:0.6; } 100% { transform: scale(2) rotate(5deg); opacity:0; } }
+    .seal-cracking { animation: sealCrack 0.8s ease-out forwards; }
+    @keyframes sparkle { 0% { transform: translate(0,0) scale(1); opacity:1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity:0; } }
+    .sparkle { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: sparkle 0.8s ease-out forwards; pointer-events: none; }
+
+    /* Hero entrance after seal */
+    @keyframes heroEntrance { 0% { opacity:0; transform: translateY(30px) scale(0.97); } 100% { opacity:1; transform: translateY(0) scale(1); } }
+    .hero-entrance > * { opacity: 0; }
+    .hero-entrance.animate > * { animation: heroEntrance 0.6s ease-out forwards; }
+    .hero-entrance.animate > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-entrance.animate > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-entrance.animate > *:nth-child(3) { animation-delay: 0.35s; }
+    .hero-entrance.animate > *:nth-child(4) { animation-delay: 0.5s; }
+    .hero-entrance.animate > *:nth-child(5) { animation-delay: 0.65s; }
+    .hero-entrance.animate > *:nth-child(6) { animation-delay: 0.8s; }
+
+    /* Text contrast panels */
+    .text-panel { background: rgba(255,253,248,0.82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 20px; padding: 32px 28px; }
+    .dark .text-panel { background: rgba(26,22,18,0.82); }
+
+    /* Cards */
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    .dark .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+
+    /* Glass */
+    .glass { background: rgba(255,253,248,0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.3); }
+    .dark .glass { background: rgba(26,22,18,0.75); border: 1px solid rgba(255,255,255,0.08); }
+
+    /* Nav */
+    .nav-link { padding: 6px 16px; border-radius: 20px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.2s; cursor: pointer; white-space: nowrap; color: var(--text-muted); border: 1px solid transparent; }
+    .nav-link:hover, .nav-link.active { color: var(--gold); border-color: var(--gold); background: var(--gold-glow); }
+
+    /* Countdown */
+    .countdown-unit { text-align: center; min-width: 56px; }
+    .countdown-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; line-height: 1; }
+    .countdown-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-top: 4px; }
+
+    /* Modern Story - Horizontal Scroll Timeline */
+    .story-scroll { display: flex; gap: 0; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 20px 0 40px; position: relative; }
+    .story-scroll::-webkit-scrollbar { display: none; }
+    .story-slide { flex: 0 0 85vw; max-width: 420px; scroll-snap-align: center; position: relative; padding: 0 10px; }
+    @media(min-width:768px) { .story-slide { flex: 0 0 400px; } }
+    .story-inner { border-radius: 24px; overflow: hidden; position: relative; height: 100%; min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; padding: 32px 28px; cursor: pointer; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s; border: 1px solid var(--border); }
+    .story-inner:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 24px 48px rgba(0,0,0,0.12); }
+    .dark .story-inner:hover { box-shadow: 0 24px 48px rgba(0,0,0,0.5); }
+    .story-bg { position: absolute; inset: 0; z-index: 0; transition: transform 0.6s ease; }
+    .story-inner:hover .story-bg { transform: scale(1.04); }
+    .story-overlay { position: absolute; inset: 0; z-index: 1; }
+    .story-content { position: relative; z-index: 2; }
+    .story-year-big { font-family: 'Cormorant Garamond', serif; font-size: 6rem; font-weight: 300; line-height: 0.85; color: rgba(255,255,255,0.15); position: absolute; top: 24px; right: 28px; z-index: 2; }
+    .story-chapter { font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 600; }
+    .story-desc { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease; opacity: 0; margin-top: 0; }
+    .story-slide.active .story-desc { max-height: 120px; opacity: 1; margin-top: 12px; }
+    .story-line { position: absolute; bottom: 16px; left: 0; right: 0; height: 3px; z-index: 5; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .story-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; cursor: pointer; }
+    .story-dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
+
+    /* Modern Events - Bento Grid */
+    .event-bento { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media(min-width:768px) { .event-bento { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; } .event-bento > :first-child { grid-row: 1 / 3; } }
+    .event-modern { border-radius: 24px; overflow: hidden; position: relative; cursor: pointer; transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); border: 1px solid var(--border); }
+    .event-modern:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: var(--gold); }
+    .dark .event-modern:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .event-modern-bg { position: absolute; inset: 0; z-index: 0; }
+    .event-modern-overlay { position: absolute; inset: 0; z-index: 1; }
+    .event-modern-content { position: relative; z-index: 2; padding: 28px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .event-number { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300; line-height: 0.85; position: absolute; top: 20px; right: 24px; z-index: 2; }
+    .event-expand { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.4s ease; opacity: 0; }
+    .event-modern.open .event-expand { max-height: 200px; opacity: 1; }
+
+    /* Event cards */
+    .event-card { cursor: pointer; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--bg-card); transition: all 0.25s; }
+    .event-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .event-detail { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .event-card.open .event-detail { max-height: 400px; }
+
+    /* Horizontal Gallery */
+    .gallery-scroll { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 8px 0 20px; scrollbar-width: none; }
+    .gallery-scroll::-webkit-scrollbar { display: none; }
+    .gallery-scroll-item { flex: 0 0 280px; scroll-snap-align: center; border-radius: 16px; overflow: hidden; position: relative; cursor: pointer; aspect-ratio: 3/4; }
+    @media(min-width:640px) { .gallery-scroll-item { flex: 0 0 320px; } }
+    .gallery-scroll-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .gallery-scroll-item:hover img { transform: scale(1.06); }
+    .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px 16px 16px; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); color: #fff; opacity: 0; transition: opacity 0.25s; }
+    .gallery-scroll-item:hover .gallery-caption { opacity: 1; }
+    @media(max-width:639px) { .gallery-caption { opacity: 1; } }
+
+    /* Lightbox */
+    #lightbox { position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.92); display: none; align-items: center; justify-content: center; cursor: pointer; }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 8px; }
+
+    /* RSVP */
+    .rsvp-step { display: none; opacity: 0; transform: translateY(12px); }
+    .rsvp-step.active { display: block; animation: rsvpFadeIn 0.4s ease forwards; }
+    @keyframes rsvpFadeIn { to { opacity: 1; transform: translateY(0); } }
+    .rsvp-option { cursor: pointer; padding: 18px 20px; border-radius: 12px; border: 1.5px solid var(--border); transition: all 0.25s cubic-bezier(.4,0,.2,1); text-align: left; position: relative; overflow: hidden; }
+    .rsvp-option::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(184,146,74,0.08), rgba(212,176,106,0.04)); opacity: 0; transition: opacity 0.25s; }
+    .rsvp-option:hover { border-color: var(--gold); transform: translateX(4px); }
+    .rsvp-option:hover::before { opacity: 1; }
+    .rsvp-option.selected { border-color: var(--gold); background: var(--gold-glow); box-shadow: 0 0 0 1px var(--gold), 0 4px 16px rgba(184,146,74,0.15); }
+    .rsvp-option.selected::before { opacity: 1; }
+    .rsvp-progress { display: flex; gap: 6px; align-items: center; }
+    .rsvp-progress .bar { height: 3px; border-radius: 3px; flex: 1; background: var(--border); transition: background 0.4s, box-shadow 0.4s; }
+    .rsvp-progress .bar.active { background: linear-gradient(90deg, #B8924A, #D4B06A); box-shadow: 0 0 8px rgba(184,146,74,0.3); }
+    .rsvp-check { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border); transition: all 0.25s; flex-shrink: 0; }
+    .rsvp-option.selected .rsvp-check { background: linear-gradient(135deg, #B8924A, #D4B06A); border-color: transparent; }
+    .rsvp-option.selected .rsvp-check svg { opacity: 1; }
+    .rsvp-check svg { width: 12px; height: 12px; opacity: 0; transition: opacity 0.2s; }
+    .event-check { cursor: pointer; padding: 14px 16px; border-radius: 10px; border: 1.5px solid var(--border); transition: all 0.25s; display: flex; align-items: center; gap: 12px; }
+    .event-check:hover { border-color: var(--gold); }
+    .event-check.checked { border-color: var(--gold); background: var(--gold-glow); }
+    .event-check .ec-box { width: 18px; height: 18px; border-radius: 4px; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; transition: all 0.25s; flex-shrink: 0; }
+    .event-check.checked .ec-box { background: linear-gradient(135deg, #B8924A, #D4B06A); border-color: transparent; }
+    .event-check.checked .ec-box svg { opacity: 1; }
+    .event-check .ec-box svg { width: 12px; height: 12px; opacity: 0; transition: opacity 0.2s; }
+
+    /* Form */
+    .form-input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 14px; transition: border-color 0.2s; outline: none; }
+    .form-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
+    .dark .form-input { background: var(--bg-alt); }
+
+    /* Buttons */
+    .btn-gold { background: linear-gradient(135deg, #B8924A, #D4B06A); color: #1A1612; padding: 12px 32px; border-radius: 30px; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; border: none; cursor: pointer; transition: all 0.2s; font-family: 'Montserrat', sans-serif; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(184,146,74,0.35); }
+    .btn-outline { padding: 10px 28px; border-radius: 30px; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; transition: all 0.2s; background: transparent; font-family: 'Montserrat', sans-serif; }
+    .btn-outline:hover { background: var(--gold-glow); }
+
+    /* Hotel, Registry */
+    .hotel-card { display: flex; gap: 16px; padding: 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg-card); transition: all 0.2s; text-decoration: none; color: var(--text); }
+    .hotel-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+
+    /* Hotel image cards — new redesigned style */
+    .hotel-img-card {
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .hotel-img-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+      border-color: var(--gold);
+    }
+    .dark .hotel-img-card:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
+    .hotel-img-wrap {
+      position: relative;
+      height: 160px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #2a3a4a, #1a2a3a);
+    }
+    .hotel-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      display: block;
+    }
+    .hotel-img-card:hover .hotel-img-wrap img { transform: scale(1.04); }
+    .hotel-img-overlay {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      gap: 6px;
+      z-index: 2;
+    }
+    .hotel-brand-bar {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 8px 0 0 0;
+      z-index: 2;
+    }
+    .hotel-badge-topleft {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 3;
+    }
+    .hotel-info {
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .hotel-info h3 { font-family: 'Cormorant Garamond', serif; font-weight: 500; line-height: 1.3; }
+
+    /* Misc */
+    .section-divider { width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto; }
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--text-light); border-radius: 3px; }
+    @media (prefers-reduced-motion: reduce) { .reveal, .reveal-scale { transition: none; opacity: 1; transform: none; } }
+    .section-label { font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; color: var(--text); }
+
+    /* ===== CEREMONY HERO CARD ===== */
+    .ceremony-hero {
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      min-height: 320px;
+      display: flex;
+      align-items: flex-end;
+      border: 1px solid var(--border);
+      transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.35s;
+    }
+    .ceremony-hero:hover {
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 28px 56px rgba(0,0,0,0.18);
+      border-color: rgba(212,176,106,0.4);
+    }
+    .dark .ceremony-hero:hover { box-shadow: 0 28px 56px rgba(0,0,0,0.5); }
+    .ceremony-hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://6b37b55fc9cf23b8013d.cdn6.editmysite.com/uploads/b/9dede0d0-6dcf-11e9-99f9-f9d28ac0251e/Dallas.jpg?width=2400&optimize=medium') center/cover;
+      transition: transform 0.6s ease;
+    }
+    .ceremony-hero:hover .ceremony-hero-bg { transform: scale(1.04); }
+    .ceremony-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(30,18,8,0.97) 0%, rgba(42,24,8,0.7) 40%, rgba(42,24,8,0.3) 70%, transparent 100%);
+    }
+    .ceremony-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 80%, rgba(212,176,106,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .ceremony-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 32px 28px;
+      width: 100%;
+    }
+    .ceremony-emoji { font-size: 2.5rem; margin-bottom: 10px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); }
+    .ceremony-date { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 8px; }
+    .ceremony-title { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 400; color: #fff; line-height: 1.1; margin-bottom: 6px; text-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+    .ceremony-venue { font-size: 0.82rem; color: rgba(255,255,255,0.6); }
+    .ceremony-tap-hint { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 0.7rem; color: rgba(212,176,106,0.7); letter-spacing: 0.1em; text-transform: uppercase; }
+    .ceremony-tap-ring { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(212,176,106,0.4); position: relative; flex-shrink: 0; }
+    .ceremony-tap-ring::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; border: 1.5px solid rgba(212,176,106,0.6); animation: tapPulse 2s ease-in-out infinite; }
+    @keyframes tapPulse { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.15); opacity: 0.2; } }
+
+    /* ===== CEREMONY MODAL ===== */
+    .ceremony-modal { display: none; position: fixed; inset: 0; z-index: 400; align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .ceremony-modal.open { display: flex; }
+    .ceremony-modal-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; width: 100%; max-width: 480px; max-height: 88vh; overflow-y: auto; position: relative; box-shadow: 0 32px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05); animation: ceremonyModalIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    @keyframes ceremonyModalIn { from { opacity: 0; transform: scale(0.88) translateY(24px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .ceremony-modal-close { position: absolute; top: 16px; right: 16px; background: rgba(255,253,248,0.08); border: 1px solid var(--border); color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 5; line-height: 1; }
+    .ceremony-modal-close:hover { background: rgba(255,253,248,0.14); border-color: rgba(212,176,106,0.3); color: var(--gold); }
+    .ceremony-modal-header { padding: 32px 28px 24px; text-align: center; position: relative; }
+    .ceremony-modal-emoji { font-size: 3rem; margin-bottom: 10px; filter: drop-shadow(0 2px 12px rgba(184,146,74,0.3)); }
+    .ceremony-modal-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 400; color: var(--text); margin-bottom: 4px; }
+    .ceremony-modal-date { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+    .ceremony-modal-divider { height: 1px; margin: 0 28px 24px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.3; }
+    .ceremony-modal-body { padding: 0 28px 8px; display: flex; flex-direction: column; gap: 4px; }
+    .ceremony-detail-section { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+    .ceremony-detail-section:last-child { border-bottom: none; }
+    .ceremony-detail-icon { font-size: 1.4rem; flex-shrink: 0; width: 32px; text-align: center; margin-top: 1px; }
+    .ceremony-detail-content { flex: 1; }
+    .ceremony-detail-content h4 { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 500; color: var(--gold); margin-bottom: 3px; }
+    .ceremony-detail-content p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.55; }
+    .ceremony-map-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; font-size: 0.75rem; color: var(--gold); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .ceremony-map-link:hover { color: var(--gold-light); text-decoration: underline; }
+    .ceremony-modal-cta { padding: 20px 28px 28px; display: flex; justify-content: center; }
+    .ceremony-cal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      background: linear-gradient(135deg, #B8924A 0%, #D4B06A 50%, #B8924A 100%);
+      color: #1A1612;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      font-family: 'Montserrat', sans-serif;
+      box-shadow: 0 4px 20px rgba(184,146,74,0.35), 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.25s ease;
+      border: 1.5px solid rgba(255,255,255,0.15);
+    }
+    .ceremony-cal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(184,146,74,0.45), 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .ceremony-cal-btn svg { flex-shrink: 0; }
+  </style>
 </head>
-<body>
-    <p>Redirecting to <a href="/sub/">the sub</a>...</p>
+<body class="font-body antialiased">
+
+  <!-- ===================== SEAL OVERLAY ===================== -->
+  <div id="seal-overlay">
+    <div class="seal-bg" style="background-image: url('https://6b37b55fc9cf23b8013d.cdn6.editmysite.com/uploads/b/9dede0d0-6dcf-11e9-99f9-f9d28ac0251e/Dallas.jpg?width=2400&optimize=medium');"></div>
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 40%, transparent 15%, var(--bg) 70%);"></div>
+    <div class="absolute inset-0" style="background: var(--bg); opacity: 0.5;"></div>
+
+    <div class="relative z-10 flex flex-col items-center gap-8">
+      <div class="text-center" style="text-shadow: 0 1px 12px rgba(0,0,0,0.15);">
+        <p class="text-[9px] tracking-[0.3em] sm:tracking-[0.5em] uppercase font-medium px-4" style="color: var(--text);">You’re Invited</p>
+        <p class="font-heading text-2xl sm:text-3xl font-light mt-2" style="color: var(--text);">Chamanthi &amp; Sandeep</p>
+      </div>
+      <div id="seal-container" class="relative flex items-center justify-center">
+        <div class="absolute rounded-full pulse-ring" style="width: 140px; height: 140px; border: 1px solid var(--gold); opacity: 0.2;"></div>
+        <button id="seal-btn" class="seal-btn" type="button" aria-label="Open wedding invitation" onclick="breakSeal()" style="background: radial-gradient(circle at 32% 28%, #b12548, #691c2f 55%, #3c150f); box-shadow: 0 0 30px 8px rgba(130,23,50,0.4), inset 0 2px 6px rgba(221,60,100,0.2), inset 0 -4px 10px rgba(36,15,20,0.5), 0 24px 50px rgba(0,0,0,0.4);">
+          <span style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">&#128141;</span>
+        </button>
+      </div>
+      <div class="text-center">
+        <p class="text-[10px] tracking-[0.4em] uppercase font-medium" style="color: var(--gold);">Tap to open</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme toggle moved into sticky nav -->
+
+  <!-- ===================== LIGHTBOX ===================== -->
+  <div id="lightbox" onclick="closeLightbox()">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white/70 hover:text-white text-3xl z-10" style="background:none;border:none;cursor:pointer;">&times;</button>
+    <img id="lightbox-img" src="" alt="Gallery photo">
+  </div>
+
+  <!-- ===================== PHOTO UPLOAD MODAL ===================== -->
+  <style>
+    #photo-upload-modal { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
+    #photo-upload-modal.open { display:flex; }
+  </style>
+  <div id="photo-upload-modal" onclick="if(event.target===this)closePhotoUpload()">
+    <div style="background:var(--bg-card); border-radius:24px; max-width:480px; width:100%; padding:36px 32px; position:relative; box-shadow:0 24px 64px rgba(0,0,0,0.3); border:1px solid var(--border); max-height:90vh; overflow-y:auto;">
+      <button onclick="closePhotoUpload()" style="position:absolute; top:16px; right:16px; background:none; border:none; cursor:pointer; font-size:24px; color:var(--text-muted); line-height:1;">&times;</button>
+      <div class="text-center mb-6">
+        <div style="font-size:2.5rem; margin-bottom:8px;">📷</div>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.75rem; font-weight:400; color:var(--text);">Share Your Photo</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Upload a moment from the celebration. Thank you for being part of our story!</p>
+      </div>
+      <div id="photo-upload-success" style="display:none; text-align:center; padding:16px; border-radius:12px; background:rgba(184,146,74,0.12); border:1px solid rgba(184,146,74,0.25); margin-bottom:16px;">
+        <p style="font-size:14px; color:var(--gold); font-weight:500;"></p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px;" id="photo-upload-form">
+        <div>
+          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Photo *</label>
+          <div style="border:2px dashed var(--border); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; background:var(--bg);" id="photo-drop-zone" onclick="document.getElementById('photo-file-input').click()" ondragover="event.preventDefault(); this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="event.preventDefault(); this.style.borderColor='var(--border)'; document.getElementById('photo-file-input').files=event.dataTransfer.files; document.getElementById('photo-file-input').dispatchEvent(new Event('change'))">
+            <img id="photo-preview-img" src="" alt="Preview" style="display:none; max-width:100%; max-height:200px; border-radius:8px; margin:0 auto 12px; object-fit:cover;">
+            <div id="photo-placeholder" style="color:var(--text-muted);">
+              <div style="font-size:1.75rem; margin-bottom:8px;">🖼️</div>
+              <p style="font-size:12px;">Click or drag & drop to select a photo</p>
+              <p style="font-size:10px; color:var(--text-light); margin-top:4px;">JPG, PNG, GIF up to 10MB</p>
+            </div>
+          </div>
+          <input type="file" id="photo-file-input" accept="image/*" style="display:none;">
+        </div>
+        <div id="photo-upload-error" style="display:none; font-size:12px; color:#ef4444; text-align:center; padding:10px; border-radius:8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2);"></div>
+        <button id="photo-submit-btn" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; border-radius:14px; margin-top:4px;">
+          Upload Photo ✨
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <div id="content" style="display: none;">
+
+    <!-- ===== HERO ===== -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div class="absolute inset-0">
+        <img src="https://6b37b55fc9cf23b8013d.cdn6.editmysite.com/uploads/b/9dede0d0-6dcf-11e9-99f9-f9d28ac0251e/Dallas.jpg?width=2400&optimize=medium" alt="Shree Swaminarayan Gurukul" class="w-full h-full object-cover" loading="eager">
+        <div class="absolute inset-0" style="background: var(--bg); opacity: 0.55;"></div>
+        <div class="absolute inset-0" style="background: radial-gradient(ellipse at center, var(--bg) 0%, transparent 100%); opacity: 0.5;"></div>
+        <div class="absolute inset-0" style="background: linear-gradient(to bottom, var(--bg) 0%, transparent 25%, transparent 55%, var(--bg) 100%);"></div>
+      </div>
+      <div class="relative z-10 text-center px-6 py-20 hero-entrance" id="hero-inner">
+        <div class="mb-8">
+          <a href="#rsvp" class="btn-gold">RSVP Now <span>&#10141;</span></a>
+        </div>
+        <div>
+          <p class="section-label mb-3">A Royal Wedding</p>
+        </div>
+        <div>
+          <div class="text-panel inline-block mx-auto mb-4">
+            <h1 class="font-heading text-5xl sm:text-7xl md:text-8xl font-light leading-tight">
+              <span>Chamanthi</span><br>
+              <span style="color: var(--gold);" class="text-4xl sm:text-5xl md:text-6xl">&amp;</span>
+              <span> Sandeep</span>
+            </h1>
+          </div>
+        </div>
+        <div class="flex items-center justify-center gap-3 mt-2">
+          <span class="w-2 h-2 rounded-full" style="background: var(--gold);"></span>
+          <p class="text-xs tracking-[0.3em] uppercase font-medium" style="color: var(--text-muted);">May 9th, 2026</p>
+          <span class="w-2 h-2 rounded-full" style="background: var(--gold);"></span>
+          <p class="text-xs tracking-[0.3em] uppercase font-medium" style="color: var(--text-muted);">Plano, Texas</p>
+        </div>
+        <div id="hero-countdown" class="flex items-center justify-center gap-3 sm:gap-5 mt-8">
+          <div class="countdown-unit"><div class="countdown-num" data-days>--</div><div class="countdown-label">Days</div></div>
+          <span style="color: var(--text-light); font-size: 1.5rem;">:</span>
+          <div class="countdown-unit"><div class="countdown-num" data-hours>--</div><div class="countdown-label">Hours</div></div>
+          <span style="color: var(--text-light); font-size: 1.5rem;">:</span>
+          <div class="countdown-unit"><div class="countdown-num" data-mins>--</div><div class="countdown-label">Mins</div></div>
+          <span style="color: var(--text-light); font-size: 1.5rem;">:</span>
+          <div class="countdown-unit"><div class="countdown-num" data-secs>--</div><div class="countdown-label">Secs</div></div>
+        </div>
+        <div class="mt-8">
+          <button onclick="document.getElementById('content-sections').scrollIntoView({behavior:'smooth'})" class="btn-outline">Enter the Celebration</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STICKY NAV ===== -->
+    <nav id="sticky-nav" class="sticky top-0 z-[100] glass py-3 px-4" style="border-bottom: 1px solid var(--border);">
+      <div class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; padding-right: 20px;">
+        <a href="#rsvp" class="nav-link">RSVP</a>
+        <a href="#story" class="nav-link">Our Story</a>
+        <a href="#events" class="nav-link">Events</a>
+        <a href="#details" class="nav-link">Details</a>
+        <a href="#gallery" class="nav-link">Gallery</a>
+        <a href="#hotels" class="nav-link">Stay</a>
+        <a href="#livestream" class="nav-link">Live</a>
+        <button id="theme-toggle" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0 ml-1" style="display:none; background:var(--gold-glow); border:1px solid var(--border); transition:all 0.2s;" title="Toggle dark mode">
+          <span id="theme-icon" class="text-sm">&#9789;</span>
+        </button>
+      </div>
+    </nav>
+    <style>
+      #sticky-nav .flex::-webkit-scrollbar { display: none; }
+
+      /* ─── Floating RSVP Button ─── */
+      .fab-rsvp {
+        position: fixed; bottom: max(env(safe-area-inset-bottom, 16px), 20px); right: 20px;
+        z-index: 200; display: none;
+        animation: fabIn 0.4s cubic-bezier(.22,1,.36,1) forwards;
+      }
+      .fab-rsvp.hidden { animation: fabOut 0.3s ease forwards; pointer-events: none; }
+      .fab-rsvp a {
+        display: flex; align-items: center; gap: 8px;
+        padding: 14px 24px; border-radius: 99px;
+        background: linear-gradient(135deg, #B8924A, #D4B06A, #EDD9A3);
+        background-size: 200% auto;
+        color: #1A1612; font-family: 'Montserrat', sans-serif;
+        font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+        text-decoration: none;
+        box-shadow: 0 8px 32px rgba(184,146,74,0.35), 0 2px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s cubic-bezier(.22,1,.36,1);
+        position: relative; overflow: hidden;
+      }
+      .fab-rsvp a::before {
+        content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+        animation: fabShimmer 3s ease-in-out infinite;
+      }
+      @keyframes fabShimmer { 0%,100% { left: -100%; } 50% { left: 120%; } }
+      .fab-rsvp a:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 40px rgba(184,146,74,0.45), 0 4px 12px rgba(0,0,0,0.25); background-position: right center; }
+      .fab-rsvp a:active { transform: translateY(0) scale(0.97); }
+      .fab-rsvp a svg { width: 16px; height: 16px; flex-shrink: 0; }
+      .fab-rsvp .fab-pulse {
+        position: absolute; inset: -4px; border-radius: 99px;
+        border: 2px solid rgba(212,176,106,0.4);
+        animation: fabPulseRing 2.5s ease-out infinite;
+      }
+      @keyframes fabIn { from { opacity: 0; transform: translateY(20px) scale(0.9); } to { opacity: 1; transform: none; } }
+      @keyframes fabOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(10px) scale(0.95); } }
+      @keyframes fabPulseRing { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.15); opacity: 0; } }
+
+      /* ─── Enhanced RSVP Section ─── */
+      #rsvp { position: relative; overflow: hidden; }
+      #rsvp::before {
+        content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+        width: 300px; height: 300px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(212,176,106,0.06), transparent 70%);
+        pointer-events: none;
+      }
+    </style>
+
+    <div id="content-sections">
+
+    <!-- ===== RSVP (First Section) ===== -->
+    <section id="rsvp" class="py-20 px-6" style="background: var(--bg-alt);">
+      <div class="max-w-lg mx-auto">
+        <div class="text-center mb-10 reveal">
+          <p class="section-label mb-2">Join Us</p>
+          <h2 class="section-title text-4xl sm:text-5xl">RSVP</h2>
+          <p class="text-sm mt-3" style="color: var(--text-muted);">Kindly respond by April 20th, 2026</p>
+          <div class="section-divider mt-4"></div>
+        </div>
+        <div class="card reveal" id="rsvp-form" style="padding:32px; border-radius:20px;">
+          <!-- Progress -->
+          <div class="flex items-center justify-between mb-8">
+            <div class="text-xs font-medium" style="color: var(--text-muted); letter-spacing:0.08em; text-transform:uppercase;" id="rsvp-step-label">Step 1 of 4</div>
+            <div class="rsvp-progress" style="width:120px;">
+              <div class="bar active" id="rsvp-bar-1"></div>
+              <div class="bar" id="rsvp-bar-2"></div>
+              <div class="bar" id="rsvp-bar-3"></div>
+              <div class="bar" id="rsvp-bar-4"></div>
+            </div>
+          </div>
+          <!-- Step 1: Attendance -->
+          <div class="rsvp-step active" id="rsvp-step-1">
+            <h3 class="font-heading text-2xl font-medium mb-1">Will you be joining us?</h3>
+            <p class="text-xs mb-6" style="color: var(--text-muted);">Select your response below</p>
+            <div class="space-y-3">
+              <div class="rsvp-option" data-rsvp="attending">
+                <div class="flex items-center gap-4">
+                  <div class="rsvp-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div><p class="text-sm font-medium" style="line-height:1.4;">Joyfully Accept</p><p class="text-xs" style="color:var(--text-muted); margin-top:2px;">We'll be there to celebrate with you</p></div>
+                </div>
+              </div>
+              <div class="rsvp-option" data-rsvp="pending">
+                <div class="flex items-center gap-4">
+                  <div class="rsvp-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div><p class="text-sm font-medium" style="line-height:1.4;">Tentatively Yes</p><p class="text-xs" style="color:var(--text-muted); margin-top:2px;">Will confirm closer to the date</p></div>
+                </div>
+              </div>
+              <div class="rsvp-option" data-rsvp="declined">
+                <div class="flex items-center gap-4">
+                  <div class="rsvp-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div><p class="text-sm font-medium" style="line-height:1.4;">Regretfully Decline</p><p class="text-xs" style="color:var(--text-muted); margin-top:2px;">Sending love from afar</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Step 2: Event Selection -->
+          <div class="rsvp-step" id="rsvp-step-2">
+            <h3 class="font-heading text-2xl font-medium mb-1">Which events will you attend?</h3>
+            <p class="text-xs mb-6" style="color:var(--text-muted);">Select all that apply</p>
+            <div class="space-y-3">
+              <div class="event-check" data-event="mehendi">
+                <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div><p class="text-sm font-medium">Mehendi</p><p class="text-xs" style="color:var(--text-muted);">May 7th · 3129 Lakemont Dr, Little Elm</p></div>
+              </div>
+              <div class="event-check" data-event="pelli-koduku">
+                <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div><p class="text-sm font-medium">Pelli Koduku</p><p class="text-xs" style="color:var(--text-muted);">May 8th · 8720 Mandevilla Dr, Plano</p></div>
+              </div>
+              <div class="event-check" data-event="pelli-kuthuru">
+                <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div><p class="text-sm font-medium">Pelli Kuthuru</p><p class="text-xs" style="color:var(--text-muted);">May 8th · 3129 Lakemont Dr, Little Elm</p></div>
+              </div>
+              <div class="event-check" data-event="wedding-ceremony">
+                <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div><p class="text-sm font-medium">Wedding Ceremony</p><p class="text-xs" style="color:var(--text-muted);">The main event</p></div>
+              </div>
+              <div class="event-check" data-event="vratham">
+                <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div><p class="text-sm font-medium">Vratham</p><p class="text-xs" style="color:var(--text-muted);">May 10th · 8720 Mandevilla Dr, Plano</p></div>
+              </div>
+            </div>
+            <div class="flex gap-3" style="padding-top:24px;">
+              <button id="rsvp-step1-back" class="btn-outline flex-1" style="border-radius:12px;">&#8592; Back</button>
+              <button id="rsvp-step1-next" class="btn-gold flex-1 justify-center" style="border-radius:12px;">Continue &#8594;</button>
+            </div>
+          </div>
+          <!-- Step 3: Details -->
+          <div class="rsvp-step" id="rsvp-step-3">
+            <h3 class="font-heading text-2xl font-medium mb-1">Your Details</h3>
+            <p class="text-xs mb-6" style="color:var(--text-muted);">Let us know who's coming</p>
+            <div class="space-y-4">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Full Name *</label><input type="text" class="form-input" placeholder="Your name" id="rsvp-name"></div>
+                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Phone</label><input type="tel" class="form-input" placeholder="Your number" id="rsvp-phone"></div>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Email *</label><input type="email" class="form-input" placeholder="your@email.com" id="rsvp-email"></div>
+                <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Plus Ones</label><input type="number" class="form-input" placeholder="0" min="0" max="10" id="rsvp-plus-ones" value="0"></div>
+              </div>
+              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Dietary Restrictions</label><input type="text" class="form-input" placeholder="Any allergies or preferences" id="rsvp-dietary"></div>
+              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Message for the Couple</label><textarea class="form-input" rows="2" placeholder="Your wishes..." id="rsvp-message" style="resize:none;"></textarea></div>
+              <div class="flex gap-3" style="padding-top:20px;">
+                <button id="rsvp-back-btn" class="btn-outline flex-1" style="border-radius:12px;">&#8592; Back</button>
+                <button id="rsvp-submit-btn" class="btn-gold flex-1 justify-center" style="border-radius:12px;">Submit RSVP</button>
+              </div>
+            </div>
+            <div id="rsvp-error-msg" class="text-red-500 text-xs mt-3 text-center hidden"></div>
+          </div>
+          <!-- Step 4: Confirmation -->
+          <div class="rsvp-step" id="rsvp-step-4">
+            <div class="text-center py-8">
+              <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#B8924A,#D4B06A);display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 4px 24px rgba(184,146,74,0.3);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <h3 class="font-heading text-3xl font-medium mb-2" id="rsvp-confirm-title">Thank You!</h3>
+              <p class="text-sm" style="color:var(--text-muted); max-width:280px; margin:0 auto;" id="rsvp-confirm-msg">Your response has been recorded. We can't wait to celebrate with you!</p>
+              <div class="section-divider mt-6 mb-6"></div>
+              <p class="text-xs" style="color:var(--text-light);">Questions? vnamboori@yahoo.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LIVE STREAM ===== -->
+    <section id="livestream" class="py-24 px-6" style="background: var(--bg-alt);">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12 reveal">
+          <p class="section-label mb-2">Witness Our Moment</p>
+          <h2 class="section-title text-4xl sm:text-5xl">Live Stream</h2>
+          <p class="text-sm mt-4 max-w-md mx-auto" style="color:var(--text-muted);">Can't be there in person? Watch every sacred moment unfold, live from Plano, Texas.</p>
+          <div class="section-divider mt-5"></div>
+        </div>
+
+        <!-- Stream Player Card -->
+        <div class="reveal" style="border-radius:24px; overflow:hidden; background:var(--bg-card); border:1px solid var(--border); box-shadow: 0 8px 40px rgba(0,0,0,0.06);">
+          <!-- Video Preview Area -->
+          <div class="relative" style="aspect-ratio:16/9; background:#0a0a0a; overflow:hidden;">
+            <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 50%, rgba(184,146,74,0.08) 0%, rgba(0,0,0,0.95) 70%);"></div>
+            <div class="absolute inset-0 flex items-center justify-center flex-col" style="gap:16px;">
+              <div style="width:72px; height:72px; border-radius:50%; border:2px solid rgba(184,146,74,0.5); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); background:rgba(184,146,74,0.1); cursor:pointer; transition:all 0.3s;" onmouseover="this.style.background='rgba(184,146,74,0.25)'; this.style.transform='scale(1.08)'" onmouseout="this.style.background='rgba(184,146,74,0.1)'; this.style.transform='scale(1)'">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="margin-left:3px;"><polygon points="5,3 19,12 5,21" fill="rgba(184,146,74,0.9)"/></svg>
+              </div>
+              <p style="color:rgba(255,255,255,0.5); font-size:11px; letter-spacing:0.25em; text-transform:uppercase; font-family:'Montserrat',sans-serif;">Stream begins May 9</p>
+            </div>
+            <div class="absolute" style="top:16px; left:16px; display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:rgba(0,0,0,0.6); backdrop-filter:blur(12px);">
+              <span style="width:8px; height:8px; border-radius:50%; background:#ef4444; box-shadow:0 0 8px #ef4444; display:none;" id="live-dot"></span>
+              <span style="width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.3);" id="offline-dot"></span>
+              <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.7); font-weight:500;">Upcoming</span>
+            </div>
+            <div class="absolute" style="top:16px; right:16px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.1); backdrop-filter:blur(8px);">
+              <span style="font-size:10px; font-weight:600; color:rgba(255,255,255,0.6); letter-spacing:0.05em;">1080p</span>
+            </div>
+          </div>
+
+          <!-- Stream Info Panel -->
+          <div style="padding:20px 16px 24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
+                <span style="font-size:14px;">&#128197;</span>
+                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">Friday, May 9, 2026</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; background:linear-gradient(135deg, rgba(184,146,74,0.12), rgba(184,146,74,0.05)); border:1px solid rgba(184,146,74,0.2);">
+                <span style="font-size:14px;">&#9200;</span>
+                <span style="font-size:11px; font-weight:500; color:var(--gold); letter-spacing:0.03em;">8:50 AM CST</span>
+              </div>
+            </div>
+            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; color:var(--text); margin-bottom:8px;">The Sacred Ceremony</h3>
+            <p style="font-size:13px; line-height:1.6; color:var(--text-muted); margin-bottom:20px;">Watch as Chamanthi &amp; Sandeep exchange vows at the beautiful Shree Swaminarayan Gurukul in Plano, Texas. No login required &mdash; just click and watch.</p>
+
+            <div style="display:flex; align-items:center; justify-content:center; gap:8px; padding:20px 12px; border-radius:16px; background:var(--bg-alt); margin-bottom:20px; flex-wrap:wrap;">
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-days>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Days</div>
+              </div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-hours>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Hours</div>
+              </div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-mins>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Mins</div>
+              </div>
+              <span style="color:var(--gold); font-size:1.2rem; font-weight:200; opacity:0.5; margin-top:-12px;">&#58;</span>
+              <div style="text-align:center; min-width:48px; padding:0 4px;">
+                <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; line-height:1; color:var(--text);" data-secs>--</div>
+                <div style="font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-muted); margin-top:6px;">Secs</div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
+                <div style="font-size:20px; margin-bottom:6px;">&#127963;&#65039;</div>
+                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Venue</div>
+                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Gurukul Temple<br>Plano, TX</div>
+              </div>
+              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
+                <div style="font-size:20px; margin-bottom:6px;">&#128241;</div>
+                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">Any Device</div>
+                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Phone, Tablet<br>or Desktop</div>
+              </div>
+              <div style="text-align:center; padding:14px 8px; border-radius:14px; background:var(--bg-alt); border:1px solid var(--border);">
+                <div style="font-size:20px; margin-bottom:6px;">&#127760;</div>
+                <div style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin-bottom:2px;">No Login</div>
+                <div style="font-size:10px; color:var(--text-muted); line-height:1.4;">Open link<br>&amp; watch</div>
+              </div>
+            </div>
+
+            <div style="text-align:center; margin-top:24px;">
+              <a href="#" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; font-size:13px; border-radius:14px; pointer-events:none; opacity:0.6;" id="watch-btn">
+                <span>&#128308;</span> Stream Link Available May 9
+              </a>
+              <p style="font-size:10px; color:var(--text-light); margin-top:10px; letter-spacing:0.03em;">A link will appear here when the stream goes live</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal text-center" style="margin-top:20px;">
+          <p style="font-size:10px; color:var(--text-light); line-height:1.6; word-break:break-word;">&#127760; 8:50 AM CST = 9:50 AM EST &middot; 6:50 AM PST &middot; 2:50 PM GMT &middot; 8:20 PM IST</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== OUR STORY - Text-Only Immersive Timeline ===== -->
+    <section id="story" class="py-24 px-6">
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-16 reveal">
+          <p class="section-label mb-2">How It All Began</p>
+          <h2 class="section-title text-4xl sm:text-5xl">Our Story</h2>
+          <div class="section-divider mt-4"></div>
+        </div>
+
+        <!-- Timeline with left line -->
+        <div class="relative" style="padding-left: 36px;">
+          <!-- Vertical line -->
+          <div class="absolute left-[11px] top-0 bottom-0 w-px" style="background: linear-gradient(to bottom, var(--gold), var(--border) 30%, var(--border) 70%, var(--gold));"></div>
+
+          <!-- Ch1 -->
+          <div class="relative pb-14 reveal stagger" style="--d:0">
+            <div class="absolute left-[-30px] top-1 w-[14px] h-[14px] rounded-full border-2" style="border-color: var(--gold); background: var(--bg);"></div>
+            <p class="text-[10px] tracking-[0.35em] uppercase font-semibold" style="color: var(--gold);">The Introduction</p>
+            <p class="font-heading text-2xl sm:text-3xl font-light mt-2 leading-snug">Two strangers. One small room. Everything changes.</p>
+            <p class="text-sm leading-relaxed mt-3" style="color: var(--text-muted);">A friend's living room. Light conversation. Casual smiles. Neither of them knew that ordinary evening would become the first sentence of their forever. Sometimes the most extraordinary things wear the quietest beginnings.</p>
+          </div>
+
+          <!-- Ch2 -->
+          <div class="relative pb-14 reveal stagger" style="--d:1">
+            <div class="absolute left-[-30px] top-1 w-[14px] h-[14px] rounded-full border-2" style="border-color: var(--gold); background: var(--bg);"></div>
+            <p class="text-[10px] tracking-[0.35em] uppercase font-semibold" style="color: var(--gold);">The Wait That Taught Them Timing</p>
+            <p class="font-heading text-2xl sm:text-3xl font-light mt-2 leading-snug">What is meant for you will never pass you by.</p>
+            <p class="text-sm leading-relaxed mt-3" style="color: var(--text-muted);">Plans were made. Then unmade. Then remade again. Life kept stepping in with its perfect interruptions — a moved schedule here, a delayed call there. But those quiet gaps did something neither of them expected: they made the eventual meeting feel inevitable. The right people, it turns out, don't slip away — they wait.</p>
+          </div>
+
+          <!-- Ch3 -->
+          <div class="relative pb-14 reveal stagger" style="--d:2">
+            <div class="absolute left-[-30px] top-1 w-[14px] h-[14px] rounded-full border-2" style="border-color: var(--gold); background: var(--bg);"></div>
+            <p class="text-[10px] tracking-[0.35em] uppercase font-semibold" style="color: var(--gold);">The First Conversation</p>
+            <p class="font-heading text-2xl sm:text-3xl font-light mt-2 leading-snug">When the right conversation finds you, hours feel like heartbeats.</p>
+            <p class="text-sm leading-relaxed mt-3" style="color: var(--text-muted);">Three hours vanished like three minutes. Goals, values, discipline, dreams — every topic felt like it had been waiting just for them. She spoke, he listened deeply, and responded with a precision that made her lean in closer. It wasn't just attraction. It was being understood by someone who speaks your language.</p>
+          </div>
+
+          <!-- Ch4 -->
+          <div class="relative pb-14 reveal stagger" style="--d:3">
+            <div class="absolute left-[-30px] top-1 w-[14px] h-[14px] rounded-full border-2" style="border-color: var(--gold); background: var(--bg);"></div>
+            <p class="text-[10px] tracking-[0.35em] uppercase font-semibold" style="color: var(--gold);">Growing Together</p>
+            <p class="font-heading text-2xl sm:text-3xl font-light mt-2 leading-snug">The best relationships don't bloom — they build.</p>
+            <p class="text-sm leading-relaxed mt-3" style="color: var(--text-muted);">Early mornings at the gym. Late-night conversations that ended at 2 AM and left them both smiling. Laughter that came easy. Disagreements that ended in understanding, not distance. They built something brick by brick — steady, intentional, real. And when he knelt, she didn't need a single second to answer.</p>
+          </div>
+
+          <!-- Epilogue -->
+          <div class="relative reveal stagger" style="--d:4">
+            <div class="absolute left-[-30px] top-1 w-[14px] h-[14px] rounded-full" style="background: var(--gold); box-shadow: 0 0 12px rgba(184,146,74,0.4);"></div>
+            <p class="text-[10px] tracking-[0.35em] uppercase font-semibold" style="color: var(--gold);">The Beginning of Forever</p>
+            <p class="font-heading text-2xl sm:text-3xl font-light mt-2 leading-snug" style="color: var(--gold);">The story they almost didn't start — now their favorite chapter.</p>
+            <p class="text-sm leading-relaxed mt-3" style="color: var(--text-muted);">From a chance meeting to a lifetime promise — their story has all the marks of something written in the stars. The delays that almost derailed them. The conversation that changed everything. The love that grew quietly, steadily, and with uncommon certainty. And now, standing on the edge of forever, they can't imagine it any other way.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== EVENTS - Immersive Bento ===== -->
+    <section id="events" class="py-20 px-6" style="background: var(--bg-alt);">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12 reveal">
+          <p class="section-label mb-2">The Celebrations</p>
+          <h2 class="section-title text-4xl sm:text-5xl">Wedding Events</h2>
+          <p class="text-sm mt-3 max-w-md mx-auto" style="color: var(--text-muted);">The sacred journey of Chamanthi &amp; Sandeep — May 7th &ndash; 9th, 2026</p>
+          <div class="section-divider mt-4"></div>
+        </div>
+        <!-- Pre-Wedding Events Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          <!-- Mehendi -->
+          <div class="reveal stagger" style="--d:0; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--bg-card); padding:28px 24px; text-align:center; transition:all 0.3s;">
+            <div style="font-size:2.5rem; margin-bottom:12px;">&#129776;</div>
+            <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 7th &middot; 10:00 AM</p>
+            <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Mehendi</h3>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto 10px;">Think color, music, photos, and full Insta energy — plus fun games. <strong style="color:var(--text);">Outfit:</strong> Lehengas are preferred. The bride will be in a gold and pink lehenga, so if possible, please avoid pink.</p>
+            <p style="font-size:0.76rem; color:var(--text-muted); line-height:1.7; max-width:280px; margin:0 auto;"><strong style="color:var(--text);">Bridal Mehendi</strong><br>8:00 AM &ndash; 1:00 PM<br><br><strong style="color:var(--text);">Guest Mehendi</strong><br>10:00 AM &ndash; 12:00 PM</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=3129+Lakemont+Dr+Little+Elm+TX+75068" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
+              <span style="font-size:0.72rem; color:var(--gold);">&#128205; 3129 Lakemont Dr, Little Elm, TX</span>
+            </a>
+          </div>
+          <!-- Pelli Koduku -->
+          <div class="reveal stagger" style="--d:1; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--bg-card); padding:28px 24px; text-align:center; transition:all 0.3s;">
+            <div style="font-size:2.5rem; margin-bottom:12px;">&#128081;</div>
+            <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 8th &middot; 8:30 AM</p>
+            <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Pelli Koduku</h3>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A bright, feel-good morning with family, blessings, and plenty of photo moments. <strong style="color:var(--text);">Dress code:</strong> Kurtha, lehenga, churidar, or any Indian traditional outfit. Any color is fine.</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=8720+Mandevilla+Dr+Plano+TX+75024" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
+              <span style="font-size:0.72rem; color:var(--gold);">&#128205; 8720 Mandevilla Dr, Plano, TX</span>
+            </a>
+          </div>
+          <!-- Pelli Kuthuru -->
+          <div class="reveal stagger" style="--d:2; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--bg-card); padding:28px 24px; text-align:center; transition:all 0.3s;">
+            <div style="width:92px; height:92px; margin:0 auto 14px; border-radius:999px; overflow:hidden; border:3px solid rgba(212,176,106,0.35); box-shadow:0 10px 28px rgba(0,0,0,0.12);">
+              <img src="../images/telugu-bride-aesthetic.jpg" alt="Pelli Kuthuru aesthetic portrait" style="width:100%; height:100%; object-fit:cover; object-position:center 24%; display:block;">
+            </div>
+            <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 8th &middot; 12:00 PM</p>
+            <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Pelli Kuthuru</h3>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A cozy Telugu bridal celebration with tradition, laughter, fun games, and picture-perfect family moments. <strong style="color:var(--text);">Dress code:</strong> Kurtha, lehenga, churidar, or any Indian traditional outfit. Any color is fine.</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=3129+Lakemont+Dr+Little+Elm+TX+75068" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
+              <span style="font-size:0.72rem; color:var(--gold);">&#128205; 3129 Lakemont Dr, Little Elm, TX</span>
+            </a>
+          </div>
+          <!-- Vratham -->
+          <div class="reveal stagger" style="--d:3; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--bg-card); padding:28px 24px; text-align:center; transition:all 0.3s;">
+            <div style="font-size:2.5rem; margin-bottom:12px;">&#128304;</div>
+            <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 10th &middot; 5:00 PM</p>
+            <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Vratham</h3>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A calm, meaningful family gathering to close out the wedding weekend beautifully.</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=8720+Mandevilla+Dr+Plano+TX+75024" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
+              <span style="font-size:0.72rem; color:var(--gold);">&#128205; 8720 Mandevilla Dr, Plano, TX 75024</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="text-center mb-8 reveal">
+          <p style="font-size:0.6rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--text-light);">&#10022; May 9th &middot; The Main Event &#10022;</p>
+        </div>
+
+        <!-- Wedding Ceremony — Immersive Hero Card -->
+        <div class="ceremony-hero reveal" id="ceremonyHero" onclick="openCeremonyModal()">
+          <div class="ceremony-hero-bg"></div>
+          <div class="ceremony-hero-overlay"></div>
+          <div class="ceremony-glow"></div>
+          <div class="ceremony-hero-content">
+            <div class="ceremony-emoji">&#128141;</div>
+            <div class="ceremony-date">May 9th, 2026 &middot; 8:50 AM</div>
+            <h3 class="ceremony-title">Wedding Ceremony</h3>
+            <p class="ceremony-venue">Shree Swaminarayan Gurukul</p>
+            <div class="ceremony-tap-hint">
+              <div class="ceremony-tap-ring"></div>
+              <span>Tap for details</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ceremony Detail Modal -->
+        <div id="ceremony-modal" class="ceremony-modal" onclick="closeCeremonyModal(event)">
+          <div class="ceremony-modal-card" onclick="event.stopPropagation()">
+            <button class="ceremony-modal-close" onclick="closeCeremonyModal(event)">&times;</button>
+            <div class="ceremony-modal-header">
+              <div class="ceremony-modal-emoji">&#128141;</div>
+              <h2>Wedding Ceremony</h2>
+              <p class="ceremony-modal-date">May 9th, 2026 &middot; 8:50 AM CST</p>
+            </div>
+            <div class="ceremony-modal-divider"></div>
+            <div class="ceremony-modal-body">
+              <!-- Venue -->
+              <div class="ceremony-detail-section">
+                <div class="ceremony-detail-icon">&#128205;</div>
+                <div class="ceremony-detail-content">
+                  <h4>Venue</h4>
+                  <p>Shree Swaminarayan Gurukul</p>
+                  <a href="https://www.google.com/maps/search/?api=1&query=Shree+Swaminarayan+Gurukul+Plano+TX" target="_blank" class="ceremony-map-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Open in Maps
+                  </a>
+                </div>
+              </div>
+              <!-- Time -->
+              <div class="ceremony-detail-section">
+                <div class="ceremony-detail-icon">&#128337;</div>
+                <div class="ceremony-detail-content">
+                  <h4>Ceremony Time</h4>
+                  <p>8:50 AM CST — Starting with the sacred rites</p>
+                  <p style="font-size:0.75rem; color:var(--text-light); margin-top:4px;">Duration: approximately 2 hours</p>
+                </div>
+              </div>
+              <!-- Address -->
+              <div class="ceremony-detail-section">
+                <div class="ceremony-detail-icon">&#128205;</div>
+                <div class="ceremony-detail-content">
+                  <h4>Address</h4>
+                  <p>Shree Swaminarayan Gurukul<br>621 Park Vista Rd, Plano, TX 75094</p>
+                  <a href="https://www.google.com/maps/search/?api=1&query=621+Park+Vista+Rd+Plano+TX+75094" target="_blank" class="ceremony-map-link">Open in Google Maps &#8599;</a>
+                </div>
+              </div>
+              <!-- Dress Code -->
+              <div class="ceremony-detail-section">
+                <div class="ceremony-detail-icon">&#129512;</div>
+                <div class="ceremony-detail-content">
+                  <h4>Dress Code</h4>
+                  <p>Traditional Indian attire. We will be at the temple, so please dress modestly and respectfully.</p>
+                </div>
+              </div>
+              <!-- What to Expect -->
+              <div class="ceremony-detail-section">
+                <div class="ceremony-detail-icon">&#10024;</div>
+                <div class="ceremony-detail-content">
+                  <h4>What to Expect</h4>
+                  <p>Traditional South Indian wedding. Breakfast and lunch will be served. Guests are more than welcome to go and come as they please during the ceremony.</p>
+                </div>
+              </div>
+              <!-- Parking -->
+              <div class="ceremony-detail-section">
+                <div class="ceremony-detail-icon">&#128663;</div>
+                <div class="ceremony-detail-content">
+                  <h4>Parking</h4>
+                  <p>Ample parking available at the venue. Please follow signage and volunteer directions.</p>
+                </div>
+              </div>
+            </div>
+            <div class="ceremony-modal-cta">
+              <a href="https://calendar.google.com/calendar/r/eventedit?text=Wedding+Ceremony+-+Chamanthi+%26+Sandeep&dates=20260509T085000/C20260509T105000&details=Shree+Swaminarayan+Gurukul%2C+Plano+TX&location=Plano%2C+TX" target="_blank" class="btn-gold ceremony-cal-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Add to Calendar
+              </a>
+            </div>
+          </div>
+        </div></div>
+
+    <!-- ===== WEDDING DETAILS - Immersive ===== -->
+    <section id="details" class="relative overflow-hidden">
+      <!-- Full-width venue hero image -->
+      <div class="relative" style="height: 50vh; min-height: 360px;">
+        <img src="https://6b37b55fc9cf23b8013d.cdn6.editmysite.com/uploads/b/9dede0d0-6dcf-11e9-99f9-f9d28ac0251e/Dallas.jpg?width=2400&optimize=medium" alt="Shree Swaminarayan Gurukul" class="w-full h-full object-cover" loading="lazy">
+        <div class="absolute inset-0" style="background: linear-gradient(to bottom, var(--bg) 0%, transparent 30%, transparent 50%, rgba(26,22,18,0.85) 100%);"></div>
+        <div class="absolute bottom-0 left-0 right-0 px-6 pb-10 text-center">
+          <p class="text-[10px] tracking-[0.5em] uppercase font-semibold text-white/50 mb-2 reveal">Save the Date</p>
+          <h2 class="font-heading text-4xl sm:text-5xl md:text-6xl font-light text-white reveal" style="text-shadow: 0 2px 20px rgba(0,0,0,0.4);">May 9th, 2026</h2>
+          <p class="font-heading text-lg text-white/60 mt-2 reveal">Saturday &middot; 8:50 AM</p>
+        </div>
+      </div>
+
+      <!-- Details cards floating over transition -->
+      <div class="px-6 -mt-6 relative z-10 pb-20">
+        <div class="max-w-4xl mx-auto">
+          <!-- Main info strip -->
+          <div class="reveal" style="border-radius: 24px; overflow: hidden; border: 1px solid var(--border); background: var(--bg-card); box-shadow: 0 8px 40px rgba(0,0,0,0.08);">
+            <div class="grid grid-cols-2 sm:grid-cols-4" style="border-bottom: 1px solid var(--border);">
+              <div class="p-6 text-center reveal stagger" style="--d:0; border-right: 1px solid var(--border);">
+                <div class="text-2xl mb-2">&#128197;</div>
+                <p class="font-heading text-xl font-medium">May 9th</p>
+                <p class="text-[10px] tracking-[0.2em] uppercase mt-1" style="color: var(--text-muted);">Saturday, 2026</p>
+              </div>
+              <div class="p-6 text-center reveal stagger" style="--d:1; border-right: 1px solid var(--border);">
+                <div class="text-2xl mb-2">&#128336;</div>
+                <p class="font-heading text-xl font-medium">8:50 AM</p>
+                <p class="text-[10px] tracking-[0.2em] uppercase mt-1" style="color: var(--text-muted);">Sharp</p>
+              </div>
+              <div class="p-6 text-center reveal stagger" style="--d:2; border-right: 1px solid var(--border);">
+                <div class="text-2xl mb-2">&#127963;</div>
+                <p class="font-heading text-xl font-medium leading-snug">Shree Swaminarayan Gurukul</p>
+              </div>
+              <div class="p-6 text-center reveal stagger" style="--d:3">
+                <div class="text-2xl mb-2">&#128205;</div>
+                <p class="font-heading text-xl font-medium">Plano, TX</p>
+                <p class="text-[10px] tracking-[0.2em] uppercase mt-1" style="color: var(--text-muted);">621 Park Vista Rd</p>
+              </div>
+            </div>
+
+            <!-- Venue detail row -->
+            <div class="p-6 flex flex-col sm:flex-row items-center gap-5">
+              <div class="flex items-center gap-5 flex-1">
+                <img src="https://6b37b55fc9cf23b8013d.cdn6.editmysite.com/uploads/b/9dede0d0-6dcf-11e9-99f9-f9d28ac0251e/Dallas.jpg?width=2400&optimize=medium" alt="Venue" class="w-20 h-20 rounded-2xl object-cover shrink-0" loading="lazy" style="box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+                <div>
+                  <p class="text-[10px] tracking-[0.2em] uppercase" style="color: var(--gold);">Venue</p>
+                  <p class="font-heading text-xl font-medium mt-0.5">Shree Swaminarayan Gurukul</p>
+                  <p class="text-xs mt-1" style="color: var(--text-muted);">621 Park Vista Rd &middot; Plano, TX 75094</p>
+                </div>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=Shree+Swaminarayan+Gurukul+621+Park+Vista+Rd+Plano+TX+75094" target="_blank" rel="noopener" class="btn-gold shrink-0">
+                Get Directions <span>&#8599;</span>
+              </a>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GALLERY - Horizontal Scroll ===== -->
+    <section id="gallery" class="py-20 px-6" style="background: var(--bg-alt);">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-10 reveal">
+          <p class="section-label mb-2">The Couple</p>
+          <h2 class="section-title text-4xl sm:text-5xl">Our Story in Photos</h2>
+          <p class="text-sm mt-3 max-w-md mx-auto" style="color: var(--text-muted);">Swipe to explore our journey together.</p>
+          <div class="section-divider mt-4"></div>
+        </div>
+        <div class="gallery-scroll reveal" id="gallery-scroll">
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="../images/gallery-new1.jpg" alt="New Photo" loading="lazy">
+          </div>
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="../images/gallery-new2.jpg" alt="New Photo 2" loading="lazy">
+          </div>
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="../images/gallery-new5.jpg" alt="New Photo 5" loading="lazy">
+          </div>
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="../images/gallery-new8.jpg" alt="Camera fun" loading="lazy">
+          </div>
+          <div class="gallery-scroll-item" onclick="openLightbox(this)">
+            <img src="../images/gallery-new10.jpg" alt="Traditional outfit" loading="lazy">
+          </div>
+        </div>
+        <p class="text-center text-xs mt-2" style="color: var(--text-light);">Swipe or drag &middot; Tap to view full size</p>
+      </div>
+    </section>
+
+    <!-- ===== WHERE TO STAY - Redesigned with Images & Verified Links ===== -->
+    <section id="hotels" class="py-20 px-6">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-8 reveal">
+          <p class="section-label mb-2">Plan Your Stay</p>
+          <h2 class="section-title text-4xl sm:text-5xl">Where to Stay</h2>
+          <p class="text-sm mt-3 max-w-lg mx-auto" style="color: var(--text-muted);">Handpicked hotels near Shree Swaminarayan Gurukul — all within 30 min of the venue. Every link verified.</p>
+          <div class="section-divider mt-4"></div>
+        </div>
+
+        <!-- Venue + quick actions -->
+        <div class="flex flex-wrap items-center justify-center gap-3 mb-6 reveal">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=621+Park+Vista+Rd+Plano+TX+75094" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 8px; border-radius:16px; background:var(--bg-alt); border:1px solid var(--border); text-decoration:none; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.borderColor='var(--gold)';this.style.boxShadow='0 4px 16px rgba(184,146,74,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+              <span style="font-size:24px;">&#128205;</span>
+              <span style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text); text-align:center;">Directions</span>
+              <span style="font-size:9px; color:var(--text-muted);">Google Maps</span>
+            </a>
+            <a href="https://www.airbnb.com/s/Allen--TX/homes?checkin=2026-05-08&checkout=2026-05-10&adults=2" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 8px; border-radius:16px; background:var(--bg-alt); border:1px solid var(--border); text-decoration:none; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.borderColor='#FF5A5F';this.style.boxShadow='0 4px 16px rgba(255,90,95,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+              <span style="font-size:24px;">&#127968;</span>
+              <span style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text); text-align:center;">Airbnb</span>
+              <span style="font-size:9px; color:var(--text-muted);">Browse stays</span>
+            </a>
+            <a href="https://www.booking.com/searchresults.html?ss=Allen%2C+Texas%2C+USA&checkin=2026-05-08&checkout=2026-05-10&group_adults=2" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 8px; border-radius:16px; background:var(--bg-alt); border:1px solid var(--border); text-decoration:none; transition:all 0.2s; cursor:pointer;" onmouseover="this.style.borderColor='#003580';this.style.boxShadow='0 4px 16px rgba(0,53,128,0.12)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+              <span style="font-size:24px;">&#128197;</span>
+              <span style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text); text-align:center;">Booking</span>
+              <span style="font-size:9px; color:var(--text-muted);">.com</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Distance disclaimer -->
+        <div class="text-center mb-6 reveal">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px]" style="background: var(--gold-glow); color: var(--gold); border: 1px solid rgba(184,146,74,0.2);">
+            <span>&#128205;</span>
+            <span><strong>Venue:</strong> Shree Swaminarayan Gurukul &middot; 621 Park Vista Rd, Plano TX &nbsp;&bull;&nbsp; All distances verified via Google Maps</span>
+          </div>
+        </div>
+
+        <!-- Price filter tabs -->
+        <div class="flex gap-2 mb-6 reveal" id="price-filter">
+          <button style="display:inline-flex; align-items:center; gap:5px; padding:8px 16px; border-radius:12px; font-size:11px; font-weight:500; cursor:pointer; transition:all 0.2s; border:1px solid var(--gold); color:var(--gold); background:var(--gold-glow); font-family:'Montserrat',sans-serif; letter-spacing:0.02em;" onclick="filterHotels('all', this)">All</button>
+          <button style="display:inline-flex; align-items:center; gap:5px; padding:8px 16px; border-radius:12px; font-size:11px; font-weight:500; cursor:pointer; transition:all 0.2s; border:1px solid var(--border); color:var(--text-muted); background:var(--bg-card); font-family:'Montserrat',sans-serif; letter-spacing:0.02em;" onclick="filterHotels('budget', this)"><span style="color:#22c55e; font-weight:700;">$</span> Under $100</button>
+          <button style="display:inline-flex; align-items:center; gap:5px; padding:8px 16px; border-radius:12px; font-size:11px; font-weight:500; cursor:pointer; transition:all 0.2s; border:1px solid var(--border); color:var(--text-muted); background:var(--bg-card); font-family:'Montserrat',sans-serif; letter-spacing:0.02em;" onclick="filterHotels('mid', this)"><span style="color:var(--gold); font-weight:700;">$$</span> $100–$180</button>
+          <button style="display:inline-flex; align-items:center; gap:5px; padding:8px 16px; border-radius:12px; font-size:11px; font-weight:500; cursor:pointer; transition:all 0.2s; border:1px solid var(--border); color:var(--text-muted); background:var(--bg-card); font-family:'Montserrat',sans-serif; letter-spacing:0.02em;" onclick="filterHotels('upscale', this)"><span style="color:var(--burgundy); font-weight:700;">$$$</span> $180+</button>
+        </div>
+
+        <!-- ===== CLOSEST (under 5 mi) ===== -->
+        <div class="mb-6 reveal">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-xs font-medium px-3 py-1 rounded-full" style="background: rgba(184,146,74,0.15); color: var(--gold);">&#128205; Under 5 miles from venue</span>
+            <div class="flex-1 h-px" style="background: var(--border);"></div>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2" id="hotel-grid-close">
+            <!-- Courtyard by Marriott Dallas Allen — 3.8 mi -->
+            <a href="https://www.marriott.com/en-us/hotels/dalan-courtyard-dallas-allen-at-the-event-center/" target="_blank" rel="noopener" class="hotel-img-card reveal stagger" style="--d:0" data-price="mid">
+              <div class="hotel-img-wrap">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=480&h=280&fit=crop&q=75" alt="Courtyard by Marriott Dallas Allen" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a3a5c,#2a5a8c)'">
+                <div class="hotel-img-overlay">
+                  <div class="flex items-center gap-1">
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--gold); color: #1A1612;">3.8 mi</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: rgba(255,255,255,0.95); color: var(--text);">&#9733; 4.3</span>
+                  </div>
+                </div>
+                <div class="hotel-brand-bar" style="background: #0078A8;">Marriott</div>
+              </div>
+              <div class="hotel-info">
+                <h3 class="font-heading text-base font-medium">Courtyard by Marriott Dallas Allen</h3>
+                <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">210 E Stacy Rd, Allen TX 75002</p>
+                <div class="flex items-center gap-2 mt-2 flex-wrap">
+                  <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);">$$ Mid-Range</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">Pool &middot; Fitness &middot; Bistro</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-[10px] font-medium" style="color: var(--gold);">Book Now &#8599;</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">~8 min drive</span>
+                </div>
+              </div>
+            </a>
+            <!-- Holiday Inn Express & Suites Dallas NE Allen — 4.2 mi -->
+            <a href="https://www.ihg.com/holidayinnexpress/hotels/us/en/allen/dalat/hoteldetail" target="_blank" rel="noopener" class="hotel-img-card reveal stagger" style="--d:1" data-price="mid">
+              <div class="hotel-img-wrap">
+                <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=480&h=280&fit=crop&q=75" alt="Holiday Inn Express Allen" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#0033A0,#0055CC)'">
+                <div class="hotel-img-overlay">
+                  <div class="flex items-center gap-1">
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--gold); color: #1A1612;">4.2 mi</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: rgba(255,255,255,0.95); color: var(--text);">&#9733; 4.2</span>
+                  </div>
+                </div>
+                <div class="hotel-brand-bar" style="background: #0033A0;">IHG</div>
+              </div>
+              <div class="hotel-info">
+                <h3 class="font-heading text-base font-medium">Holiday Inn Express & Suites Dallas NE Allen</h3>
+                <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">205 N Central Expy, Allen TX 75013</p>
+                <div class="flex items-center gap-2 mt-2 flex-wrap">
+                  <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);">$$ Mid-Range</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">Free Breakfast &middot; Pool</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-[10px] font-medium" style="color: var(--gold);">Book Now &#8599;</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">~9 min drive</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- ===== 5–7 MILES ===== -->
+        <div class="mb-6 reveal">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-xs font-medium px-3 py-1 rounded-full" style="background: rgba(184,146,74,0.1); color: var(--text-muted);">&#128205; 5–7 miles from venue</span>
+            <div class="flex-1 h-px" style="background: var(--border);"></div>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" id="hotel-grid-mid">
+            <!-- Hampton Inn & Suites Dallas Allen — 5.0 mi -->
+            <a href="https://www.hilton.com/en/hotels/dalanhx-hampton-suites-dallas-allen/" target="_blank" rel="noopener" class="hotel-img-card reveal stagger" style="--d:0" data-price="mid">
+              <div class="hotel-img-wrap">
+                <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=480&h=280&fit=crop&q=75" alt="Hampton Inn Allen" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#004C00,#006600)'">
+                <div class="hotel-img-overlay">
+                  <div class="flex items-center gap-1">
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--gold); color: #1A1612;">5.0 mi</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: rgba(255,255,255,0.95); color: var(--text);">&#9733; 4.5</span>
+                  </div>
+                </div>
+                <div class="hotel-badge-topleft" style="background: rgba(139,58,74,0.92); color: #fff; font-size: 9px; padding: 3px 8px; border-radius: 0 0 8px 0; font-weight: 600; letter-spacing: 0.05em;">Top Rated</div>
+                <div class="hotel-brand-bar" style="background: #004C00;">Hilton</div>
+              </div>
+              <div class="hotel-info">
+                <h3 class="font-heading text-base font-medium">Hampton Inn &amp; Suites Dallas Allen</h3>
+                <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">830 W Stacy Rd, Allen TX 75013</p>
+                <div class="flex items-center gap-2 mt-2 flex-wrap">
+                  <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);">$$ Mid-Range</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">Free Breakfast &middot; Pool</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-[10px] font-medium" style="color: var(--gold);">Book Now &#8599;</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">~10 min drive</span>
+                </div>
+              </div>
+            </a>
+            <!-- Hyatt Place Dallas/Allen — 5.3 mi -->
+            <a href="https://www.hyatt.com/hyatt-place/en-US/dfwzo-hyatt-place-dallas-allen" target="_blank" rel="noopener" class="hotel-img-card reveal stagger" style="--d:1" data-price="mid">
+              <div class="hotel-img-wrap">
+                <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=480&h=280&fit=crop&q=75" alt="Hyatt Place Dallas Allen" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#002B55,#0044AA)'">
+                <div class="hotel-img-overlay">
+                  <div class="flex items-center gap-1">
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--gold); color: #1A1612;">5.3 mi</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: rgba(255,255,255,0.95); color: var(--text);">&#9733; 4.3</span>
+                  </div>
+                </div>
+                <div class="hotel-brand-bar" style="background: #002B55;">Hyatt</div>
+              </div>
+              <div class="hotel-info">
+                <h3 class="font-heading text-base font-medium">Hyatt Place Dallas/Allen</h3>
+                <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">333 Central Expy N, Allen TX 75013</p>
+                <div class="flex items-center gap-2 mt-2 flex-wrap">
+                  <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);">$$ Mid-Range</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">Gallery Kitchen &middot; 24hr Fitness</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-[10px] font-medium" style="color: var(--gold);">Book Now &#8599;</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">~11 min drive</span>
+                </div>
+              </div>
+            </a>
+            <!-- Home2 Suites by Hilton North Plano — 6.5 mi -->
+            <a href="https://www.hilton.com/en/hotels/dalskht-home2-suites-north-plano-hwy-75/" target="_blank" rel="noopener" class="hotel-img-card reveal stagger" style="--d:2" data-price="budget">
+              <div class="hotel-img-wrap">
+                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=480&h=280&fit=crop&q=75" alt="Home2 Suites Plano" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#1F5C99,#2A7CC9)'">
+                <div class="hotel-img-overlay">
+                  <div class="flex items-center gap-1">
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--gold); color: #1A1612;">6.5 mi</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: rgba(255,255,255,0.95); color: var(--text);">&#9733; 4.3</span>
+                  </div>
+                </div>
+                <div class="hotel-brand-bar" style="background: #1F5C99;">Hilton</div>
+              </div>
+              <div class="hotel-info">
+                <h3 class="font-heading text-base font-medium">Home2 Suites by Hilton North Plano</h3>
+                <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">3525 Premier Dr, Plano TX 75023</p>
+                <div class="flex items-center gap-2 mt-2 flex-wrap">
+                  <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);">$ Budget Friendly</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">Full Kitchen &middot; Free Breakfast</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-[10px] font-medium" style="color: var(--gold);">Book Now &#8599;</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">~13 min drive</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- ===== 7–10 MILES ===== -->
+        <div class="mb-4 reveal">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-xs font-medium px-3 py-1 rounded-full" style="background: rgba(184,146,74,0.07); color: var(--text-light);">&#128205; 7–10 miles from venue</span>
+            <div class="flex-1 h-px" style="background: var(--border);"></div>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" id="hotel-grid-far">
+            <!-- Hilton Garden Inn Dallas/Allen — 7.0 mi -->
+            <a href="https://www.hilton.com/en/hotels/dalgigi-hilton-garden-inn-allen/" target="_blank" rel="noopener" class="hotel-img-card reveal stagger" style="--d:0" data-price="upscale">
+              <div class="hotel-img-wrap">
+                <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=480&h=280&fit=crop&q=75" alt="Hilton Garden Inn Allen" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#004C00,#1A6B1A)'">
+                <div class="hotel-img-overlay">
+                  <div class="flex items-center gap-1">
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--gold); color: #1A1612;">7.0 mi</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: rgba(255,255,255,0.95); color: var(--text);">&#9733; 4.4</span>
+                  </div>
+                </div>
+                <div class="hotel-badge-topleft" style="background: rgba(184,146,74,0.92); color: #1A1612; font-size: 9px; padding: 3px 8px; border-radius: 0 0 8px 0; font-weight: 600; letter-spacing: 0.05em;">Premium</div>
+                <div class="hotel-brand-bar" style="background: #004C00;">Hilton</div>
+              </div>
+              <div class="hotel-info">
+                <h3 class="font-heading text-base font-medium">Hilton Garden Inn Dallas/Allen</h3>
+                <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">705 Central Expy S, Allen TX 75013</p>
+                <div class="flex items-center gap-2 mt-2 flex-wrap">
+                  <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);">$$$ Upscale</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">Restaurant &middot; Conference Ctr</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-[10px] font-medium" style="color: var(--gold);">Book Now &#8599;</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">~14 min drive</span>
+                </div>
+              </div>
+            </a>
+            <!-- Residence Inn Dallas Plano/The Colony — 7.5 mi -->
+            <a href="https://www.marriott.com/en-us/hotels/dalpl-residence-inn-dallas-plano-the-colony/" target="_blank" rel="noopener" class="hotel-img-card reveal stagger" style="--d:1" data-price="mid">
+              <div class="hotel-img-wrap">
+                <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=480&h=280&fit=crop&q=75" alt="Residence Inn Dallas Plano The Colony" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a3a5c,#2a5a8c)'">
+                <div class="hotel-img-overlay">
+                  <div class="flex items-center gap-1">
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--gold); color: #1A1612;">7.5 mi</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: rgba(255,255,255,0.95); color: var(--text);">&#9733; 4.4</span>
+                  </div>
+                </div>
+                <div class="hotel-brand-bar" style="background: #0078A8;">Marriott</div>
+              </div>
+              <div class="hotel-info">
+                <h3 class="font-heading text-base font-medium">Residence Inn Dallas Plano/The Colony</h3>
+                <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">6600 Cascades Ct, The Colony TX 75056</p>
+                <div class="flex items-center gap-2 mt-2 flex-wrap">
+                  <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);">$$ Mid-Range</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">Full Kitchen &middot; Pool</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-[10px] font-medium" style="color: var(--gold);">Book Now &#8599;</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">~15 min drive</span>
+                </div>
+              </div>
+            </a>
+            <!-- Aloft Plano — 9.0 mi -->
+            <a href="https://www.marriott.com/en-us/hotels/dalak-aloft-plano/" target="_blank" rel="noopener" class="hotel-img-card reveal stagger" style="--d:2" data-price="mid">
+              <div class="hotel-img-wrap">
+                <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=480&h=280&fit=crop&q=75" alt="Aloft Plano" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a3a5c,#2a5a8c)'">
+                <div class="hotel-img-overlay">
+                  <div class="flex items-center gap-1">
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--gold); color: #1A1612;">9.0 mi</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: rgba(255,255,255,0.95); color: var(--text);">&#9733; 4.3</span>
+                  </div>
+                </div>
+                <div class="hotel-badge-topleft" style="background: rgba(100,60,140,0.92); color: #fff; font-size: 9px; padding: 3px 8px; border-radius: 0 0 8px 0; font-weight: 600; letter-spacing: 0.05em;">Trendy</div>
+                <div class="hotel-brand-bar" style="background: #0078A8;">Marriott</div>
+              </div>
+              <div class="hotel-info">
+                <h3 class="font-heading text-base font-medium">Aloft Plano</h3>
+                <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">6853 N Dallas Pkwy, Plano TX 75024</p>
+                <div class="flex items-center gap-2 mt-2 flex-wrap">
+                  <span class="text-[10px] px-2 py-0.5 rounded-full" style="background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border);">$$ Mid-Range</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">W XYZ Bar &middot; Pool</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-[10px] font-medium" style="color: var(--gold);">Book Now &#8599;</span>
+                  <span class="text-[10px]" style="color: var(--text-light);">~18 min drive</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Helpful tips -->
+        <div class="grid sm:grid-cols-2 gap-3 mt-8">
+          <div class="card p-5 flex items-start gap-3 reveal">
+            <span class="text-2xl shrink-0">&#128718;</span>
+            <div><p class="text-sm font-medium">Book Early</p><p class="text-xs mt-1" style="color: var(--text-muted);">May is peak wedding season in DFW. We recommend booking by mid-April for the best rates and availability.</p></div>
+          </div>
+          <div class="card p-5 flex items-start gap-3 reveal">
+            <span class="text-2xl shrink-0">&#128663;</span>
+            <div><p class="text-sm font-medium">Getting There</p><p class="text-xs mt-1" style="color: var(--text-muted);"><strong style="color:var(--gold);">We highly recommend renting a car or having one.</strong> The venue is in a residential area with limited ride-share availability. ~30 min from DFW Airport &middot; ~45 min from Dallas Love Field. Complimentary parking at venue.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PHOTO BOOTH ===== -->
+    <section id="photos" class="py-20 px-6" style="background:var(--bg-alt);">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Collaborative Memory Wall</p><h2 class="section-title text-4xl sm:text-5xl">Photo Booth</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">Every click captures a story. Share your moments and watch the memory wall come alive.</p><div class="section-divider mt-4"></div></div>
+        <div class="card p-8 text-center reveal"><div class="text-5xl mb-4">&#128247;</div><p class="font-heading text-xl font-medium mb-2">Be the first to capture a moment!</p><p class="text-sm mb-6" style="color:var(--text-muted);">Your photo will kick off the memory wall</p><button class="btn-gold mx-auto" onclick="openPhotoUpload()">Upload First Photo &#10024;</button></div>
+      </div>
+    </section>
+
+    <!-- ===== GUEST UPLOADS ===== -->
+    <section id="guest-uploads" class="py-20 px-6">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Moments</p><h2 class="section-title text-4xl sm:text-5xl">Uploaded Photos by Guests</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">A live collection of guest uploads from the celebration.</p><div class="section-divider mt-4"></div></div>
+        <div id="guest-photos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Loading guest uploads…</p><p class="text-sm" style="color:var(--text-muted);">Photos shared by guests will appear here.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GUESTBOOK ===== -->
+    <section id="guestbook" class="py-20 px-6">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Words of Love</p><h2 class="section-title text-4xl sm:text-5xl">Guestbook</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">Leave your wishes, memories, and love for Chamanthi &amp; Sandeep.</p><div class="section-divider mt-4"></div></div>
+        <div class="card p-8 text-center reveal"><div class="text-5xl mb-4">&#128214;</div><p class="font-heading text-xl font-medium mb-2">Be the first to sign!</p><p class="text-sm mb-6" style="color:var(--text-muted);">Leave a heartfelt message for the happy couple</p><button class="btn-gold mx-auto">Write First Message &#10024;</button></div>
+      </div>
+    </section>
+
+
+
+    <!-- After Party moved to standalone page at /party/ -->
+
+    <!-- ===== FOOTER ===== -->
+    <section class="py-20 px-6 relative overflow-hidden" style="background:var(--bg-alt);">
+      <div class="absolute inset-0 opacity-[0.08]"><img src="https://6b37b55fc9cf23b8013d.cdn6.editmysite.com/uploads/b/9dede0d0-6dcf-11e9-99f9-f9d28ac0251e/Dallas.jpg?width=2400&optimize=medium" alt="" class="w-full h-full object-cover" loading="lazy"><div class="absolute inset-0" style="background:var(--bg-alt); opacity:0.92;"></div></div>
+      <div class="relative z-10 max-w-2xl mx-auto text-center">
+        <div class="mb-8 reveal"><img src="https://media.base44.com/images/public/69bc7f08856ed0e55c5c622e/8c1af67ef_DSC01296.jpg" alt="Chamanthi and Sandeep" class="w-full max-w-md mx-auto rounded-2xl object-cover" style="aspect-ratio:3/2;" loading="lazy"></div>
+        <div class="reveal" style="--d:1"><p class="font-heading text-lg italic" style="color:var(--text-muted);">Two hands, one forever.</p></div>
+        <div class="reveal mt-8" style="--d:2">
+          <span class="text-2xl">&#129293;</span>
+          <h2 class="font-heading text-3xl sm:text-4xl font-light mt-3">We can't wait to celebrate with you</h2>
+          <p class="font-heading text-lg mt-3" style="color:var(--gold);">Chamanthi &amp; Sandeep</p>
+          <p class="text-xs mt-2" style="color:var(--text-muted);">May 9th, 2026 &middot; Shree Swaminarayan Gurukul</p>
+        </div>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 reveal" style="--d:3">
+          <a href="#rsvp" class="btn-gold">RSVP Now <span>&#10141;</span></a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Shree+Swaminarayan+Gurukul+621+Park+Vista+Rd+Plano+TX+75094" target="_blank" rel="noopener" class="btn-outline">Get Directions <span>&#8599;</span></a>
+        </div>
+        <p class="text-xs mt-10" style="color:var(--text-light);">Made with love &#9829;</p>
+      </div>
+    </section>
+
+    </div>
+  </div>
+
+  <!-- ===================== JAVASCRIPT ===================== -->
+  <script>
+    // ---- Theme Toggle ----
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    if (localStorage.getItem('theme') === 'dark') { html.classList.add('dark'); themeIcon.textContent = '\u2600'; }
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      const isDark = html.classList.contains('dark');
+      themeIcon.textContent = isDark ? '\u2600' : '\u263D';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // ---- Seal - TAP to break ----
+    // ---- Scroll Reveal ----
+    function initReveals() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+    }
+    if (localStorage.getItem('sealBroken') === 'true') {
+      document.addEventListener('DOMContentLoaded', () => setTimeout(initReveals, 50));
+    }
+
+    // ---- Countdown ----
+    const weddingDate = new Date('2026-05-09T08:50:00-05:00');
+    function updateCountdown() {
+      const diff = weddingDate - new Date();
+      if (diff <= 0) { document.querySelectorAll('[data-days],[data-hours],[data-mins],[data-secs]').forEach(el => el.textContent = '0'); return; }
+      const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+      document.querySelectorAll('[data-days]').forEach(el => el.textContent = d);
+      document.querySelectorAll('[data-hours]').forEach(el => el.textContent = h);
+      document.querySelectorAll('[data-mins]').forEach(el => el.textContent = m);
+      document.querySelectorAll('[data-secs]').forEach(el => el.textContent = s);
+    }
+    updateCountdown(); setInterval(updateCountdown, 1000);
+
+    // ---- Story Horizontal Timeline ----
+    function activateStory(idx) {
+      document.querySelectorAll('.story-slide').forEach((s,i) => s.classList.toggle('active', i === idx));
+      document.querySelectorAll('.story-dot').forEach((d,i) => d.classList.toggle('active', i === idx));
+    }
+    function scrollToStory(idx) {
+      const slides = document.querySelectorAll('.story-slide');
+      if (slides[idx]) slides[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      activateStory(idx);
+    }
+    // Sync dots on scroll
+    const storyScroll = document.getElementById('story-scroll');
+    if (storyScroll) {
+      let storyTick = false;
+      storyScroll.addEventListener('scroll', () => {
+        if (!storyTick) { requestAnimationFrame(() => {
+          const slides = document.querySelectorAll('.story-slide');
+          const cx = storyScroll.scrollLeft + storyScroll.clientWidth / 2;
+          let closest = 0, minDist = Infinity;
+          slides.forEach((s, i) => { const d = Math.abs(s.offsetLeft + s.offsetWidth/2 - cx); if (d < minDist) { minDist = d; closest = i; } });
+          activateStory(closest);
+          storyTick = false;
+        }); storyTick = true; }
+      }, { passive: true });
+    }
+
+    // ---- Events Toggle ----
+    function toggleEvent(card) {
+      const wasOpen = card.classList.contains('open');
+      document.querySelectorAll('.event-modern').forEach(c => c.classList.remove('open'));
+      if (!wasOpen) card.classList.add('open');
+    }
+
+    // ---- Ceremony Modal ----
+    function openCeremonyModal() {
+      const modal = document.getElementById('ceremony-modal');
+      if (!modal) return;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCeremonyModal(e) {
+      if (e && e.target !== e.currentTarget) return;
+      const modal = document.getElementById('ceremony-modal');
+      if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Expose globally for HTML onclick handlers and debugging
+    window.openCeremonyModal = openCeremonyModal;
+    window.closeCeremonyModal = closeCeremonyModal;
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCeremonyModal({ target: document.getElementById('ceremony-modal'), currentTarget: document.getElementById('ceremony-modal') });
+      }
+    });
+
+    // ---- Gallery Lightbox ----
+    function openLightbox(item) {
+      document.getElementById('lightbox-img').src = item.querySelector('img').src;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+    // ---- Guest Uploads Gallery ----
+    async function loadGuestUploads() {
+      const grid = document.getElementById('guest-photos-grid');
+      if (!grid) return;
+      try {
+        const db = window.firebaseDb && window.firebaseDb();
+        if (!db || !window.getDocs || !window.query || !window.orderBy || !window.limit) {
+          grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Guest uploads unavailable</p><p class="text-sm" style="color:var(--text-muted);">Please check back shortly.</p></div>`;
+          return;
+        }
+        const q = window.query(window.collection(db, 'photos'), window.orderBy('createdAt', 'desc'), window.limit(24));
+        const snap = await window.getDocs(q);
+        const photos = [];
+        snap.forEach(doc => photos.push({ id: doc.id, ...doc.data() }));
+        if (!photos.length) {
+          grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">No guest uploads yet</p><p class="text-sm" style="color:var(--text-muted);">Be the first to share a memory.</p></div>`;
+          return;
+        }
+        grid.innerHTML = photos.map(p => `
+          <div class="card overflow-hidden reveal-scale">
+            <img src="${p.imageData || p.imageUrl || p.url || ''}" alt="Guest upload" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; background:var(--bg-alt);">
+            <div style="padding:16px 18px;">
+              ${p.caption ? `<p style="font-size:13px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.5;">${String(p.caption).replace(/</g,'&lt;')}</p>` : ''}
+              <p style="font-size:11px; color:var(--text-light); margin:0; text-transform:uppercase; letter-spacing:0.08em;">Guest Upload</p>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Couldn’t load guest uploads</p><p class="text-sm" style="color:var(--text-muted);">${String(e.message).replace(/</g,'&lt;')}</p></div>`;
+      }
+    }
+
+    // ---- Photo Upload Modal ----
+    function openPhotoUpload() {
+      document.getElementById('photo-upload-modal')?.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closePhotoUpload() {
+      document.getElementById('photo-upload-modal')?.classList.remove('open');
+      document.body.style.overflow = '';
+      // Reset form
+      const form = document.getElementById('photo-upload-form');
+      if (form) form.reset();
+      const preview = document.getElementById('photo-preview-img');
+      if (preview) { preview.src = ''; preview.style.display = 'none'; }
+      const photoErr = document.getElementById('photo-upload-error');
+      if (photoErr) { photoErr.textContent = ''; photoErr.style.display = 'none'; }
+      const photoSucc = document.getElementById('photo-upload-success');
+      if (photoSucc) { photoSucc.style.display = 'none'; }
+    }
+
+    // Preview selected photo
+    document.addEventListener('DOMContentLoaded', () => {
+      const fileInput = document.getElementById('photo-file-input');
+      if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          const preview = document.getElementById('photo-preview-img');
+          if (file && preview) {
+            const reader = new FileReader();
+            reader.onload = (ev) => { preview.src = ev.target.result; preview.style.display = 'block'; };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    });
+
+    // Submit guest photo
+    // Resize image helper (Base64 approach — no Firebase Storage needed)
+    const resizeImage = (file, maxDim = 1200, quality = 0.7) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let { width, height } = img;
+            if (width > maxDim || height > maxDim) {
+              if (width > height) { height = Math.round(height * maxDim / width); width = maxDim; }
+              else { width = Math.round(width * maxDim / height); height = maxDim; }
+            }
+            canvas.width = width; canvas.height = height;
+            canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    };
+
+    async function submitGuestPhoto() {
+      const fileInput = document.getElementById('photo-file-input');
+      const file = fileInput?.files[0];
+      const errorEl = document.getElementById('photo-upload-error');
+      const successEl = document.getElementById('photo-upload-success');
+      const submitBtn = document.getElementById('photo-submit-btn');
+
+      if (!file) {
+        if (errorEl) { errorEl.textContent = 'Please select a photo to upload.'; errorEl.style.display = 'block'; }
+        return;
+      }
+
+      if (errorEl) { errorEl.style.display = 'none'; }
+      if (successEl) { successEl.style.display = 'none'; }
+      if (submitBtn) { submitBtn.textContent = 'Uploading...'; submitBtn.disabled = true; }
+
+      try {
+        const db = window.firebaseDb();
+        const storage = window.firebaseStorage && window.firebaseStorage();
+        if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
+
+        // Always create a compressed image first. Then try Storage, but gracefully
+        // fall back to Firestore-only if Storage permissions/config fail.
+        const imageData = await resizeImage(file, 900, 0.6);
+        let imageUrl = '';
+
+        if (storage && window.storageRef && window.uploadBytes && window.getDownloadURL) {
+          try {
+            const blob = await (await fetch(imageData)).blob();
+            const safeName = (file.name || 'guest-photo.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
+            const storagePath = `guest-photos/sub/${Date.now()}-${safeName}`;
+            const fileRef = window.storageRef(storage, storagePath);
+            await window.uploadBytes(fileRef, blob, { contentType: 'image/jpeg' });
+            imageUrl = await window.getDownloadURL(fileRef);
+          } catch (storageErr) {
+            console.warn('Storage upload failed, falling back to Firestore-only:', storageErr);
+          }
+        }
+
+        await window.addDoc(window.collection(db, 'photos'), {
+          uploaderName: 'Guest',
+          uploaderEmail: '',
+          caption: '',
+          imageUrl: imageUrl || '',
+          imageData: imageData,
+          approved: false,
+          source: 'sub',
+          createdAt: new Date()
+        });
+
+        if (successEl) {
+          successEl.querySelector('p').textContent = '✨ Photo uploaded! Thank you for sharing this memory with us.';
+          successEl.style.display = 'block';
+        }
+        loadGuestUploads();
+        if (submitBtn) { submitBtn.textContent = 'Upload Another'; submitBtn.disabled = false; }
+
+        // Auto-close after 3 seconds
+        setTimeout(closePhotoUpload, 3000);
+      } catch (e) {
+        console.error('Photo upload error:', e);
+        if (errorEl) { errorEl.textContent = 'Upload failed: ' + e.message + '. Please try again.'; errorEl.style.display = 'block'; }
+        if (submitBtn) { submitBtn.textContent = 'Upload Photo ✨'; submitBtn.disabled = false; }
+      }
+    }
+
+    // ---- RSVP (4-step: attendance → events → details → confirm) ----
+    let rsvpResponse = '';
+    const TOTAL_RSVP_STEPS = 4;
+
+    function toggleEventCheck(el) {
+      el.classList.toggle('checked');
+    }
+
+    function getSelectedEvents() {
+      return Array.from(document.querySelectorAll('.event-check.checked')).map(el => el.dataset.event);
+    }
+
+    function selectRsvp(el, response) {
+      rsvpResponse = response;
+      document.querySelectorAll('.rsvp-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      setTimeout(() => {
+        if (response === 'declined') {
+          document.getElementById('rsvp-confirm-title').textContent = "We'll Miss You";
+          document.getElementById('rsvp-confirm-msg').textContent = "Thank you for letting us know. We'll keep you in our hearts on the big day.";
+          goRsvpStep(TOTAL_RSVP_STEPS);
+        } else {
+          goRsvpStep(2);
+        }
+      }, 300);
+    }
+
+    function goRsvpStep(step) {
+      document.querySelectorAll('.rsvp-step').forEach(s => s.classList.remove('active'));
+      document.getElementById('rsvp-step-' + step).classList.add('active');
+      document.getElementById('rsvp-step-label').textContent = 'Step ' + step + ' of ' + TOTAL_RSVP_STEPS;
+      for (let i = 1; i <= TOTAL_RSVP_STEPS; i++) {
+        const bar = document.getElementById('rsvp-bar-' + i);
+        if (bar) { bar.classList.toggle('active', i <= step); }
+      }
+      if (step === TOTAL_RSVP_STEPS && rsvpResponse !== 'declined') {
+        document.getElementById('rsvp-confirm-title').textContent = 'Thank You!';
+        document.getElementById('rsvp-confirm-msg').textContent = "Your response has been recorded. We can't wait to celebrate with you!";
+      }
+    }
+
+    // ---- RSVP Submit (Firebase) ----
+    async function submitRsvpForm() {
+      const name = document.getElementById('rsvp-name')?.value.trim();
+      const email = document.getElementById('rsvp-email')?.value.trim();
+      const phone = document.getElementById('rsvp-phone')?.value.trim();
+      const plusOnes = parseInt(document.getElementById('rsvp-plus-ones')?.value) || 0;
+      const dietary = document.getElementById('rsvp-dietary')?.value.trim();
+      const message = document.getElementById('rsvp-message')?.value.trim();
+      const events = getSelectedEvents();
+      const errorMsg = document.getElementById('rsvp-error-msg');
+      const submitBtn = document.getElementById('rsvp-submit-btn');
+      const backBtn = document.getElementById('rsvp-back-btn');
+
+      if (!name || !email) {
+        if (errorMsg) { errorMsg.innerText = 'Please fill in your name and email.'; errorMsg.classList.remove('hidden'); }
+        return;
+      }
+
+      if (submitBtn) { submitBtn.innerText = 'Submitting...'; submitBtn.disabled = true; }
+      if (backBtn) backBtn.disabled = true;
+      if (errorMsg) errorMsg.classList.add('hidden');
+
+      const data = {
+        name, email, phone,
+        attendance: rsvpResponse,
+        dietary: dietary || '',
+        plusOnes,
+        events,
+        message: message || '',
+        status: 'pending',
+        source: 'sub',
+        createdAt: new Date()
+      };
+
+      try {
+        const db = window.firebaseDb();
+        if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
+
+        await window.addDoc(window.collection(db, 'rsvps'), data);
+        try { localStorage.setItem('rsvpSubmitted-sub', 'true'); } catch (e) {}
+        goRsvpStep(TOTAL_RSVP_STEPS);
+      } catch (e) {
+        console.error('RSVP error:', e);
+        if (errorMsg) { errorMsg.innerText = 'Error submitting RSVP. Please try again. (' + e.message + ')'; errorMsg.classList.remove('hidden'); }
+      } finally {
+        if (submitBtn) { submitBtn.innerText = 'Submit RSVP'; submitBtn.disabled = false; }
+        if (backBtn) backBtn.disabled = false;
+      }
+    }
+
+
+
+    // ---- Hotel Filter ----
+    function filterHotels(price, btn) {
+      document.querySelectorAll('#price-filter button').forEach(b => { b.style.borderColor = 'var(--border)'; b.style.color = 'var(--text-muted)'; b.style.background = 'var(--bg-card)'; });
+      btn.style.borderColor = 'var(--gold)'; btn.style.color = 'var(--gold)'; btn.style.background = 'var(--gold-glow)';
+      // Filter all hotel card grids (new image cards)
+      document.querySelectorAll('.hotel-img-card').forEach(card => {
+        if (price === 'all' || card.dataset.price === price) { card.style.display = ''; } else { card.style.display = 'none'; }
+      });
+      // Also handle legacy .hotel-card links if any remain
+      document.querySelectorAll('.hotel-card').forEach(card => {
+        if (price === 'all' || card.dataset.price === price) { card.style.display = ''; } else { card.style.display = 'none'; }
+      });
+    }
+
+    // ---- Active Nav ----
+    // ---- Scrollspy: highlight active nav link + auto-scroll nav ----
+    const navLinks = document.querySelectorAll('.nav-link');
+    const navScroller = document.getElementById('sticky-nav')?.querySelector('.flex');
+    const sections = Array.from(document.querySelectorAll('section[id]')).filter(s => s.id);
+    let scrollspyTick = false;
+
+    function updateScrollspy() {
+      scrollspyTick = false;
+      const scrollY = window.scrollY;
+      const offset = 120; // account for sticky nav height + buffer
+      let activeId = '';
+
+      // Find the section currently in view (last section whose top is above offset)
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (sections[i].offsetTop - offset <= scrollY) {
+          activeId = sections[i].id;
+          break;
+        }
+      }
+      // If at bottom of page, activate last section
+      if (window.innerHeight + scrollY >= document.body.scrollHeight - 50) {
+        activeId = sections[sections.length - 1]?.id || activeId;
+      }
+
+      navLinks.forEach(link => {
+        const isActive = link.getAttribute('href') === '#' + activeId;
+        link.classList.toggle('active', isActive);
+        // Auto-scroll nav to center the active link
+        if (isActive && navScroller) {
+          const linkLeft = link.offsetLeft;
+          const linkWidth = link.offsetWidth;
+          const scrollerWidth = navScroller.offsetWidth;
+          const target = linkLeft - (scrollerWidth / 2) + (linkWidth / 2);
+          navScroller.scrollTo({ left: target, behavior: 'smooth' });
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!scrollspyTick) { scrollspyTick = true; requestAnimationFrame(updateScrollspy); }
+    }, { passive: true });
+    // On click, immediately activate the clicked link
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        if (navScroller) {
+          const target = link.offsetLeft - (navScroller.offsetWidth / 2) + (link.offsetWidth / 2);
+          navScroller.scrollTo({ left: target, behavior: 'smooth' });
+        }
+      });
+    });
+    // Initial run after seal opens
+    setTimeout(updateScrollspy, 100);
+
+    // ---- RSVP Event Listeners ----
+    function attachRsvpListeners() {
+      // RSVP Step 1 options
+      document.querySelectorAll('.rsvp-option').forEach(function(el) {
+        el.addEventListener('click', function() {
+          var response = el.getAttribute('data-rsvp');
+          selectRsvp(el, response);
+        });
+        el.style.cursor = 'pointer';
+      });
+
+      // RSVP Step 2 event checks
+      document.querySelectorAll('.event-check').forEach(function(el) {
+        el.addEventListener('click', function() {
+          toggleEventCheck(el);
+        });
+        el.style.cursor = 'pointer';
+      });
+
+      // RSVP Step 1 navigation
+      var s1back = document.getElementById('rsvp-step1-back');
+      var s1next = document.getElementById('rsvp-step1-next');
+      if (s1back) s1back.addEventListener('click', function() { goRsvpStep(1); });
+      if (s1next) s1next.addEventListener('click', function() { goRsvpStep(3); });
+
+      // RSVP Step 3 (details) navigation
+      var rsvpBack = document.getElementById('rsvp-back-btn');
+      var rsvpSubmit = document.getElementById('rsvp-submit-btn');
+      if (rsvpBack) rsvpBack.addEventListener('click', function() { goRsvpStep(2); });
+      if (rsvpSubmit) rsvpSubmit.addEventListener('click', function() { submitRsvpForm(); });
+
+      // Photo upload
+      var photoSubmit = document.getElementById('photo-submit-btn');
+      if (photoSubmit) photoSubmit.addEventListener('click', function() { submitGuestPhoto(); });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', attachRsvpListeners);
+    } else {
+      attachRsvpListeners();
+    }
+  </script>
+
+  <!-- STANDALONE SCRIPT — no module deps, runs at end of body -->
+  <script>
+    // ---- Seal opener ----
+    function breakSeal() {
+      var overlay = document.getElementById('seal-overlay');
+      var content = document.getElementById('content');
+      var themeToggle = document.getElementById('theme-toggle');
+      var heroInner = document.getElementById('hero-inner');
+
+      if (overlay.style.display === 'none') return;
+      overlay.style.display = 'none';
+      content.style.display = 'block';
+      themeToggle.style.display = 'flex';
+      heroInner.classList.add('animate');
+
+      // Init scroll reveals
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+      }, { threshold: 0.05 });
+      document.querySelectorAll('.reveal, .reveal-scale').forEach(function(el) { observer.observe(el); });
+
+      localStorage.setItem('sealBroken', 'true');
+    }
+
+    function initRevealObserver() {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+      }, { threshold: 0.05 });
+      document.querySelectorAll('.reveal, .reveal-scale').forEach(function(el) { obs.observe(el); });
+    }
+
+    // Skip seal if already broken
+    if (localStorage.getItem('sealBroken') === 'true') {
+      var s = document.getElementById('seal-overlay');
+      var c = document.getElementById('content');
+      var t = document.getElementById('theme-toggle');
+      var h = document.getElementById('hero-inner');
+      if (s) s.style.display = 'none';
+      if (c) c.style.display = 'block';
+      if (t) t.style.display = 'flex';
+      if (h) { h.classList.remove('hero-entrance'); h.querySelectorAll(':scope > *').forEach(function(el) { el.style.opacity = '1'; }); }
+      // Set up reveal observer directly — don't rely on DOMContentLoaded timing
+      setTimeout(initRevealObserver, 30);
+    }
+
+    // Failsafe: ensure all reveal elements become visible after 2 seconds
+    setTimeout(function() {
+      document.querySelectorAll('.reveal:not(.visible), .reveal-scale:not(.visible)').forEach(function(el) {
+        el.classList.add('visible');
+      });
+    }, 2000);
+  </script>
+
+  <!-- Floating RSVP Button -->
+  <div class="fab-rsvp" id="fab-rsvp">
+    <span class="fab-pulse"></span>
+    <a href="#rsvp">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4z"/></svg>
+      RSVP Now
+    </a>
+  </div>
+  <script>
+    (function() {
+      var fab = document.getElementById('fab-rsvp');
+      if (!fab) return;
+      var submitted = false;
+      try { submitted = localStorage.getItem('rsvpSubmitted-sub') === 'true'; } catch (e) {}
+      if (submitted) {
+        fab.style.display = 'none';
+        fab.classList.add('hidden');
+        return;
+      }
+      fab.style.display = 'block';
+      fab.classList.remove('hidden');
+    })();
+    loadGuestUploads();
+  </script>
 </body>
 </html>

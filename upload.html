@@ -111,17 +111,7 @@
       <div id="form-container">
         <div class="info-strip">
           <span>&#128247;</span>
-          <p>Your photo will be reviewed before appearing in the gallery. Please only share photos you're comfortable with us displaying.</p>
-        </div>
-
-        <div class="form-group">
-          <label>Your Name *</label>
-          <input type="text" id="uploader-name" class="form-input" placeholder="e.g. Priya Patel" required>
-        </div>
-
-        <div class="form-group">
-          <label>Email *</label>
-          <input type="email" id="uploader-email" class="form-input" placeholder="your@email.com" required>
+          <p>Your photo will be reviewed before appearing in the gallery.</p>
         </div>
 
         <div class="form-group">
@@ -246,8 +236,6 @@
 
     // Submit
     window.submitPhoto = async function() {
-      const name = document.getElementById('uploader-name').value.trim();
-      const email = document.getElementById('uploader-email').value.trim();
       const caption = document.getElementById('photo-caption').value.trim();
       const file = fileInput.files[0];
       const errorEl = document.getElementById('error-msg');
@@ -255,8 +243,8 @@
       const formContainer = document.getElementById('form-container');
       const submitBtn = document.getElementById('submit-btn');
 
-      if (!name || !email || !file) {
-        errorEl.textContent = 'Please fill in your name, email, and select a photo.';
+      if (!file) {
+        errorEl.textContent = 'Please select a photo.';
         errorEl.classList.add('show');
         return;
       }
@@ -273,8 +261,8 @@
         const base64String = await resizeImage(file);
 
         await addDoc(collection(db, 'photos'), {
-          uploaderName: name,
-          uploaderEmail: email,
+          uploaderName: 'Guest',
+          uploaderEmail: '',
           caption: caption || '',
           imageData: base64String, // store base64 directly
           approved: false,
