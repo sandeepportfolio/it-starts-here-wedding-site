@@ -1577,7 +1577,7 @@
         }
         grid.innerHTML = photos.map(p => `
           <div class="card overflow-hidden reveal-scale">
-            <img src="${p.imageData || p.imageUrl || p.url || ''}" alt="Guest upload" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; background:var(--bg-alt);">
+            <img src="${p.imageData || p.imageUrl || p.url || ''}" alt="Guest upload" style="width:100%; aspect-ratio:3/4; object-fit:cover; object-position:center; display:block; background:var(--bg-alt);">
             <div style="padding:16px 18px;">
               ${p.caption ? `<p style="font-size:13px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.5;">${String(p.caption).replace(/</g,'&lt;')}</p>` : ''}
               <p style="font-size:11px; color:var(--text-light); margin:0; text-transform:uppercase; letter-spacing:0.08em;">Guest Upload</p>
