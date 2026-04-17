@@ -114,10 +114,6 @@
           <p>Your photo will be reviewed before appearing in the gallery.</p>
         </div>
 
-        <div class="form-group">
-          <label>Caption</label>
-          <input type="text" id="photo-caption" class="form-input" placeholder="Describe this moment...">
-        </div>
 
         <div class="form-group">
           <label>Photo *</label>
@@ -236,7 +232,6 @@
 
     // Submit
     window.submitPhoto = async function() {
-      const caption = document.getElementById('photo-caption').value.trim();
       const file = fileInput.files[0];
       const errorEl = document.getElementById('error-msg');
       const successEl = document.getElementById('success-banner');
@@ -263,7 +258,7 @@
         await addDoc(collection(db, 'photos'), {
           uploaderName: 'Guest',
           uploaderEmail: '',
-          caption: caption || '',
+          caption: '',
           imageData: base64String, // store base64 directly
           approved: false,
           createdAt: new Date()
