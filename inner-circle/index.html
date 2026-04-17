@@ -346,15 +346,19 @@
     .story-section-head {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 12px;
       flex-wrap: wrap;
+    }
+    .story-section-head:empty {
+      display: none;
     }
     .story-section-title-wrap {
       display: inline-flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      min-height: 1px;
     }
     .story-section-index {
       display: inline-flex;
@@ -1080,11 +1084,8 @@
               <div class="story-sections">
                 <section class="story-section" id="story-opening" data-story-section>
                   <div class="story-section-head">
-                    <div class="story-section-title-wrap">
-                      <span class="story-section-index">01</span>
-                      <p class="story-section-kicker">The Opening</p>
-                    </div>
-                    <span class="story-section-status">1 of 5</span>
+                    
+                    
                   </div>
                   <div class="story-section-copy">
                     <p class="story-section-lead">She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
@@ -1096,10 +1097,9 @@
                 <section class="story-section" id="story-delay" data-story-section>
                   <div class="story-section-head">
                     <div class="story-section-title-wrap">
-                      <span class="story-section-index">02</span>
                       <p class="story-section-kicker">THE DELAY</p>
                     </div>
-                    <span class="story-section-status">2 of 5</span>
+                    
                   </div>
                   <div class="story-section-copy">
                     <p>His first thought: “wait… she hella cute.”</p>
@@ -1112,10 +1112,9 @@
                 <section class="story-section" id="story-click" data-story-section>
                   <div class="story-section-head">
                     <div class="story-section-title-wrap">
-                      <span class="story-section-index">03</span>
                       <p class="story-section-kicker">THE CLICK</p>
                     </div>
-                    <span class="story-section-status">3 of 5</span>
+                    
                   </div>
                   <div class="story-section-copy">
                     <p>Gym people. School nerds. Both loud in a room. Both chasing something bigger. Same wavelength, just different starting paths.</p>
@@ -1126,10 +1125,9 @@
                 <section class="story-section" id="story-firsts" data-story-section>
                   <div class="story-section-head">
                     <div class="story-section-title-wrap">
-                      <span class="story-section-index">04</span>
                       <p class="story-section-kicker">THE FIRSTS</p>
                     </div>
-                    <span class="story-section-status">4 of 5</span>
+                    
                   </div>
                   <div class="story-section-copy">
                     <p>They met in person on Christmas Day. Yes, actually December 25th. No pressure.</p>
@@ -1152,10 +1150,9 @@ print(“wasssuppp”)</pre>
                 <section class="story-section" id="story-best-friends" data-story-section>
                   <div class="story-section-head">
                     <div class="story-section-title-wrap">
-                      <span class="story-section-index">05</span>
                       <p class="story-section-kicker">BEST FRIENDS ENERGY</p>
                     </div>
-                    <span class="story-section-status">5 of 5</span>
+                    
                   </div>
                   <div class="story-section-copy">
                     <p>To everyone else, they just look like best friends who’ve known each other forever.</p>
