@@ -1651,24 +1651,39 @@
     // Submit guest photo
     // Resize image helper (Base64 approach — no Firebase Storage needed)
     const resizeImage = (file, maxDim = 700, quality = 0.5) => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let { width, height } = img;
-            if (width > maxDim || height > maxDim) {
-              if (width > height) { height = Math.round(height * maxDim / width); width = maxDim; }
-              else { width = Math.round(width * maxDim / height); height = maxDim; }
-            }
-            canvas.width = width; canvas.height = height;
-            canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', quality));
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+      return new Promise(async (resolve, reject) => {
+        try {
+          const loadImageFallback = () => new Promise((res, rej) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const img = new Image();
+              img.onload = () => res(img);
+              img.onerror = () => rej(new Error('Could not read image.'));
+              img.src = e.target.result;
+            };
+            reader.onerror = () => rej(new Error('Could not read image.'));
+            reader.readAsDataURL(file);
+          });
+
+          const source = window.createImageBitmap
+            ? await window.createImageBitmap(file, { imageOrientation: 'from-image' })
+            : await loadImageFallback();
+
+          let { width, height } = source;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) { height = Math.round(height * maxDim / width); width = maxDim; }
+            else { width = Math.round(width * maxDim / height); height = maxDim; }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext('2d').drawImage(source, 0, 0, width, height);
+          if (typeof source.close === 'function') source.close();
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        } catch (err) {
+          reject(err);
+        }
       });
     };
 
