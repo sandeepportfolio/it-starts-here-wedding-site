@@ -1506,12 +1506,16 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
     // ---- Guest Uploads Gallery ----
-    async function loadGuestUploads() {
+    async function loadGuestUploads(retryCount = 0) {
       const grid = document.getElementById('guest-photos-grid');
       if (!grid) return;
       try {
         const db = window.firebaseDb && window.firebaseDb();
-        if (!db || !window.getDocs || !window.query || !window.orderBy || !window.limit) {
+        if (!db || !window.getDocs || !window.query || !window.orderBy || !window.limit || !window.collection) {
+          if (retryCount < 12) {
+            window.setTimeout(() => loadGuestUploads(retryCount + 1), 400);
+            return;
+          }
           grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Guest uploads unavailable</p><p class="text-sm" style="color:var(--text-muted);">Please check back shortly.</p></div>`;
           return;
         }
@@ -1545,32 +1549,56 @@
     function closePhotoUpload() {
       document.getElementById('photo-upload-modal')?.classList.remove('open');
       document.body.style.overflow = '';
-      // Reset form
-      const form = document.getElementById('photo-upload-form');
-      if (form) form.reset();
+      const fileInput = document.getElementById('photo-file-input');
+      if (fileInput) fileInput.value = '';
       const preview = document.getElementById('photo-preview-img');
+      const placeholder = document.getElementById('photo-placeholder');
       if (preview) { preview.src = ''; preview.style.display = 'none'; }
+      if (placeholder) { placeholder.style.display = ''; }
       const photoErr = document.getElementById('photo-upload-error');
       if (photoErr) { photoErr.textContent = ''; photoErr.style.display = 'none'; }
       const photoSucc = document.getElementById('photo-upload-success');
       if (photoSucc) { photoSucc.style.display = 'none'; }
+      const submitBtn = document.getElementById('photo-submit-btn');
+      if (submitBtn) { submitBtn.textContent = 'Upload Photo ✨'; submitBtn.disabled = false; }
     }
 
     // Preview selected photo
     document.addEventListener('DOMContentLoaded', () => {
       const fileInput = document.getElementById('photo-file-input');
-      if (fileInput) {
+      if (fileInput && !fileInput.dataset.boundPreview) {
+        fileInput.dataset.boundPreview = 'true';
         fileInput.addEventListener('change', (e) => {
           const file = e.target.files[0];
           const preview = document.getElementById('photo-preview-img');
+          const placeholder = document.getElementById('photo-placeholder');
           if (file && preview) {
             const reader = new FileReader();
-            reader.onload = (ev) => { preview.src = ev.target.result; preview.style.display = 'block'; };
+            reader.onload = (ev) => {
+              preview.src = ev.target.result;
+              preview.style.display = 'block';
+              if (placeholder) placeholder.style.display = 'none';
+            };
             reader.readAsDataURL(file);
+          } else {
+            if (preview) { preview.src = ''; preview.style.display = 'none'; }
+            if (placeholder) placeholder.style.display = '';
           }
         });
       }
     });
+
+    function withTimeout(promise, ms, message) {
+      let timer = null;
+      return Promise.race([
+        promise,
+        new Promise((_, reject) => {
+          timer = window.setTimeout(() => reject(new Error(message)), ms);
+        })
+      ]).finally(() => {
+        if (timer) window.clearTimeout(timer);
+      });
+    }
 
     // Submit guest photo
     // Resize image helper (Base64 approach — no Firebase Storage needed)
@@ -1616,45 +1644,58 @@
         const db = window.firebaseDb();
         const storage = window.firebaseStorage && window.firebaseStorage();
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
+        if (!window.addDoc || !window.collection) throw new Error('Photo saving is not ready yet. Please try again in a moment.');
+        if (!file.type || !file.type.startsWith('image/')) throw new Error('Please choose an image file.');
+        if (file.size > 10 * 1024 * 1024) throw new Error('Please choose a photo under 10MB.');
 
-        // Always create a compressed image first. Then try Storage, but gracefully
-        // fall back to Firestore-only if Storage permissions/config fail.
-        const imageData = await resizeImage(file, 700, 0.5);
+        let imageData = await resizeImage(file, 700, 0.5);
+        if (imageData.length > 900000) {
+          imageData = await resizeImage(file, 560, 0.45);
+        }
+        if (imageData.length > 980000) {
+          throw new Error('This photo is still too large after compression. Please choose a smaller image.');
+        }
+
+        const currentPath = window.location.pathname;
+        const source = currentPath.startsWith('/sub/') ? 'sub' : currentPath.startsWith('/inner-circle/') ? 'inner-circle' : 'main-site';
+        const storageFolder = source === 'main-site' ? 'main' : source;
         let imageUrl = '';
+        let useInlineImage = true;
 
         if (storage && window.storageRef && window.uploadBytes && window.getDownloadURL) {
           try {
-            const blob = await (await fetch(imageData)).blob();
+            const blob = await withTimeout((async () => (await fetch(imageData)).blob())(), 4000, 'Photo processing took too long.');
             const safeName = (file.name || 'guest-photo.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
-            const storagePath = `guest-photos/main/${Date.now()}-${safeName}`;
+            const storagePath = `guest-photos/${storageFolder}/${Date.now()}-${safeName}`;
             const fileRef = window.storageRef(storage, storagePath);
-            await window.uploadBytes(fileRef, blob, { contentType: 'image/jpeg' });
-            imageUrl = await window.getDownloadURL(fileRef);
+            await withTimeout(window.uploadBytes(fileRef, blob, { contentType: 'image/jpeg' }), 10000, 'Photo upload timed out.');
+            imageUrl = await withTimeout(window.getDownloadURL(fileRef), 4000, 'Could not fetch the uploaded photo.');
+            useInlineImage = !imageUrl;
           } catch (storageErr) {
             console.warn('Storage upload failed, falling back to Firestore-only:', storageErr);
           }
         }
 
-        await window.addDoc(window.collection(db, 'photos'), {
+        await withTimeout(window.addDoc(window.collection(db, 'photos'), {
           uploaderName: 'Guest',
           uploaderEmail: '',
           caption: '',
           imageUrl: imageUrl || '',
-          imageData: imageUrl ? '' : imageData,
-          approved: false,
-          source: 'main-site',
+          imageData: useInlineImage ? imageData : '',
+          approved: true,
+          source,
           createdAt: new Date()
-        });
+        }), 8000, 'Saving your photo took too long.');
 
         if (successEl) {
           successEl.querySelector('p').textContent = '✨ Photo uploaded! Thank you for sharing this memory with us.';
           successEl.style.display = 'block';
         }
         loadGuestUploads();
-        if (submitBtn) { submitBtn.textContent = 'Upload Another'; submitBtn.disabled = false; }
+        if (submitBtn) { submitBtn.textContent = 'Uploaded ✨'; submitBtn.disabled = false; }
 
-        // Auto-close after 3 seconds
-        setTimeout(closePhotoUpload, 3000);
+        // Auto-close after a short beat
+        setTimeout(closePhotoUpload, 2000);
       } catch (e) {
         console.error('Photo upload error:', e);
         if (errorEl) { errorEl.textContent = 'Upload failed: ' + e.message + '. Please try again.'; errorEl.style.display = 'block'; }
