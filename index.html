@@ -204,10 +204,16 @@
       display: grid;
       gap: 18px;
     }
-    .story-journey {
+    .story-shell {
       position: relative;
-      max-width: 820px;
+      display: grid;
+      gap: 18px;
+      max-width: 980px;
       margin: 0 auto;
+      align-items: start;
+    }
+    .story-main {
+      position: relative;
       padding: clamp(22px, 4vw, 34px);
       border-radius: 26px;
       border: 1px solid rgba(212,176,106,0.14);
@@ -215,7 +221,7 @@
       box-shadow: 0 18px 44px rgba(47,38,26,0.06);
       overflow: hidden;
     }
-    .story-journey::after {
+    .story-main::after {
       content: '';
       position: absolute;
       right: -54px;
@@ -226,80 +232,129 @@
       background: radial-gradient(circle, rgba(212,176,106,0.14), transparent 72%);
       pointer-events: none;
     }
-    .story-progress {
+    .story-menu {
       position: relative;
       z-index: 1;
       display: grid;
-      gap: 14px;
-      margin-bottom: 20px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid rgba(212,176,106,0.12);
+      gap: 10px;
+      align-content: start;
     }
-    .story-progress-label {
-      margin: 0;
-      font-size: 0.66rem;
-      letter-spacing: 0.32em;
+    .story-menu-card {
+      border-radius: 24px;
+      border: 1px solid rgba(212,176,106,0.14);
+      background: rgba(255,255,255,0.82);
+      box-shadow: 0 16px 36px rgba(47,38,26,0.05);
+      padding: 16px 14px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .story-menu-label {
+      margin: 0 0 12px;
+      font-size: 0.64rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       font-weight: 700;
       color: var(--gold);
     }
-    .story-progress-list {
+    .story-menu-list {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .story-menu-btn {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
       gap: 10px;
+      align-items: center;
+      width: 100%;
+      padding: 10px 10px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      background: transparent;
+      text-align: left;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      color: inherit;
     }
-    .story-progress-step {
-      display: grid;
-      gap: 6px;
-      padding: 12px 12px 10px;
-      border-radius: 18px;
-      border: 1px solid rgba(212,176,106,0.14);
-      background: rgba(255,255,255,0.62);
-      min-height: 78px;
+    .story-menu-btn:hover {
+      background: rgba(212,176,106,0.08);
+      border-color: rgba(212,176,106,0.12);
     }
-    .story-progress-number {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      line-height: 1;
+    .story-menu-btn.active {
+      background: linear-gradient(135deg, rgba(212,176,106,0.14), rgba(255,255,255,0.88));
+      border-color: rgba(212,176,106,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
+    }
+    .story-menu-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,176,106,0.16);
+      background: rgba(212,176,106,0.08);
       color: var(--gold);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
     }
-    .story-progress-title {
-      font-size: 0.68rem;
+    .story-menu-btn.active .story-menu-num {
+      background: var(--gold);
+      color: #fffdf8;
+      border-color: var(--gold);
+    }
+    .story-menu-text {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+    .story-menu-title {
+      font-size: 0.7rem;
       line-height: 1.45;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--text-light);
     }
-    .story-chunks {
+    .story-menu-btn.active .story-menu-title {
+      color: var(--text);
+    }
+    .story-menu-sub {
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: var(--text-muted);
+    }
+    .story-sections {
       position: relative;
       z-index: 1;
       display: grid;
       gap: 14px;
     }
-    .story-chunk {
+    .story-section {
       display: grid;
       gap: 10px;
       padding: 18px 0;
       border-top: 1px solid rgba(212,176,106,0.1);
+      scroll-margin-top: 120px;
     }
-    .story-chunk:first-child {
+    .story-section:first-child {
       border-top: none;
       padding-top: 0;
     }
-    .story-chunk-head {
+    .story-section-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
     }
-    .story-chunk-title-wrap {
+    .story-section-title-wrap {
       display: inline-flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
-    .story-chunk-index {
+    .story-section-index {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -314,7 +369,7 @@
       text-transform: uppercase;
       font-weight: 700;
     }
-    .story-chunk-kicker {
+    .story-section-kicker {
       margin: 0;
       font-size: 0.72rem;
       letter-spacing: 0.28em;
@@ -322,41 +377,41 @@
       font-weight: 700;
       color: var(--gold);
     }
-    .story-chunk-progress {
+    .story-section-status {
       font-size: 0.72rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-light);
     }
-    .story-chunk-copy {
+    .story-section-copy {
       display: grid;
       gap: 10px;
     }
-    .story-chunk-copy p {
+    .story-section-copy p {
       margin: 0;
       font-size: 0.97rem;
       line-height: 1.84;
       color: var(--text-muted);
     }
-    .story-chunk-lead {
+    .story-section-lead {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.4rem, 2.8vw, 1.9rem) !important;
+      font-size: clamp(1.42rem, 2.8vw, 1.95rem) !important;
       line-height: 1.2 !important;
       color: var(--text) !important;
       max-width: 28ch;
     }
-    .story-chunk-accent,
-    .story-chunk-highlight {
+    .story-section-accent,
+    .story-section-highlight {
       padding-left: 14px;
       border-left: 2px solid rgba(212,176,106,0.42);
       color: var(--text) !important;
       font-family: 'Cormorant Garamond', serif;
     }
-    .story-chunk-accent {
-      font-size: clamp(1.1rem, 2vw, 1.35rem) !important;
-      line-height: 1.36 !important;
+    .story-section-accent {
+      font-size: clamp(1.08rem, 2vw, 1.34rem) !important;
+      line-height: 1.38 !important;
     }
-    .story-chunk-highlight {
+    .story-section-highlight {
       font-size: clamp(1.18rem, 2.15vw, 1.45rem) !important;
       line-height: 1.3 !important;
     }
@@ -423,20 +478,34 @@
       font-size: 1.08rem;
       color: rgba(255,250,242,0.82);
     }
-    @media (max-width: 820px) {
-      .story-progress-list {
+    @media (min-width: 980px) {
+      .story-shell {
+        grid-template-columns: minmax(0, 1fr) 240px;
+      }
+      .story-menu {
+        position: sticky;
+        top: 108px;
+      }
+    }
+    @media (max-width: 979px) {
+      .story-menu-card {
+        padding: 12px;
+      }
+      .story-menu-list {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        display: grid;
       }
     }
     @media (max-width: 639px) {
       #hero .text-panel { padding: 24px 20px; }
       #hero-countdown { flex-wrap: wrap; }
       .nav-link { padding: 8px 12px; font-size: 11px; }
-      .story-journey { border-radius: 20px; padding: 20px 18px; }
-      .story-progress-list { grid-template-columns: 1fr; }
-      .story-progress-step { min-height: auto; }
-      .story-chunk { padding: 16px 0; }
-      .story-chunk-lead { max-width: none; }
+      .story-main { border-radius: 20px; padding: 20px 18px; }
+      .story-menu-list { grid-template-columns: 1fr; }
+      .story-section { padding: 16px 0; }
+      .story-section-lead { max-width: none; }
+      .story-menu-btn { grid-template-columns: 30px minmax(0, 1fr); }
+      .story-menu-num { width: 30px; height: 30px; }
     }
 
     /* Modern Events - Bento Grid */
@@ -972,7 +1041,7 @@
     </section>
     <!-- ===== OUR STORY - Storyboard Refresh ===== -->
     <section id="story" class="py-24 px-6" style="background: linear-gradient(180deg, rgba(245,239,229,0.18) 0%, rgba(255,255,255,0) 100%);">
-      <div class="max-w-4xl mx-auto">
+      <div class="max-w-5xl mx-auto">
         <div class="text-center mb-12 reveal">
           <p class="section-label mb-2">Our Story</p>
           <h2 class="section-title text-3xl sm:text-4xl">Our Story</h2>
@@ -980,112 +1049,116 @@
         </div>
 
         <div class="story-storyboard">
-          <article class="story-journey reveal">
-            <div class="story-progress">
-              <p class="story-progress-label">A guided read</p>
-              <div class="story-progress-list">
-                <div class="story-progress-step"><span class="story-progress-number">01</span><span class="story-progress-title">The Opening</span></div>
-                <div class="story-progress-step"><span class="story-progress-number">02</span><span class="story-progress-title">The Delay</span></div>
-                <div class="story-progress-step"><span class="story-progress-number">03</span><span class="story-progress-title">The Click</span></div>
-                <div class="story-progress-step"><span class="story-progress-number">04</span><span class="story-progress-title">The Firsts</span></div>
-                <div class="story-progress-step"><span class="story-progress-number">05</span><span class="story-progress-title">Best Friends Energy</span></div>
-              </div>
-            </div>
-
-            <div class="story-chunks">
-              <section class="story-chunk">
-                <div class="story-chunk-head">
-                  <div class="story-chunk-title-wrap">
-                    <span class="story-chunk-index">01</span>
-                    <p class="story-chunk-kicker">The Opening</p>
-                  </div>
-                  <span class="story-chunk-progress">1 of 5</span>
-                </div>
-                <div class="story-chunk-copy">
-                  <p class="story-chunk-lead">She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
-                  <p>So she did what any reasonable person would do… reached out.</p>
-                  <p class="story-chunk-accent">Sandeep activated his Hall of Fame texting skills and… hard jk. (…kind of.)</p>
-                </div>
-              </section>
-
-              <section class="story-chunk">
-                <div class="story-chunk-head">
-                  <div class="story-chunk-title-wrap">
-                    <span class="story-chunk-index">02</span>
-                    <p class="story-chunk-kicker">THE DELAY</p>
-                  </div>
-                  <span class="story-chunk-progress">2 of 5</span>
-                </div>
-                <div class="story-chunk-copy">
-                  <p>His first thought: “wait… she hella cute.”</p>
-                  <p>His next move: delay the date by a week because he broke his finger… while… of course, playing basketball 🏀.</p>
-                  <p>What Sandeep likes to call it: “yeah, that wasn’t a good opening move.”</p>
-                  <p>A week later, what was supposed to be a quick call somehow stretched into almost four hours. The kind of call where you finish and just sit there like… yeah, that was different.</p>
-                </div>
-              </section>
-
-              <section class="story-chunk">
-                <div class="story-chunk-head">
-                  <div class="story-chunk-title-wrap">
-                    <span class="story-chunk-index">03</span>
-                    <p class="story-chunk-kicker">THE CLICK</p>
-                  </div>
-                  <span class="story-chunk-progress">3 of 5</span>
-                </div>
-                <div class="story-chunk-copy">
-                  <p>Gym people. School nerds. Both loud in a room. Both chasing something bigger. Same wavelength, just different starting paths.</p>
-                  <p class="story-chunk-highlight">And since that call? Not a single day without talking.</p>
-                </div>
-              </section>
-
-              <section class="story-chunk">
-                <div class="story-chunk-head">
-                  <div class="story-chunk-title-wrap">
-                    <span class="story-chunk-index">04</span>
-                    <p class="story-chunk-kicker">THE FIRSTS</p>
-                  </div>
-                  <span class="story-chunk-progress">4 of 5</span>
-                </div>
-                <div class="story-chunk-copy">
-                  <p>They met in person on Christmas Day. Yes, actually December 25th. No pressure.</p>
-                  <p>First date: Windmills in The Colony, TX.</p>
-                  <p>Early flirting was elite in its own way:</p>
-                  <div class="story-code-shell">
-                    <div class="story-code-top">
-                      <span class="story-code-dot red"></span>
-                      <span class="story-code-dot yellow"></span>
-                      <span class="story-code-dot green"></span>
+          <div class="story-shell reveal">
+            <article class="story-main">
+              <div class="story-sections">
+                <section class="story-section" id="story-opening" data-story-section>
+                  <div class="story-section-head">
+                    <div class="story-section-title-wrap">
+                      <span class="story-section-index">01</span>
+                      <p class="story-section-kicker">The Opening</p>
                     </div>
-                    <pre class="story-code-pre">adjective_to_describe_chamu = “beautiful”
-print(“wasssuppp”)</pre>
+                    <span class="story-section-status">1 of 5</span>
                   </div>
-                  <p>Sandeep called it romance, while Chamu called it Python code.</p>
-                  <p>Then came February 14, 2026. First flowers.</p>
-                </div>
-              </section>
+                  <div class="story-section-copy">
+                    <p class="story-section-lead">She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
+                    <p>So she did what any reasonable person would do… reached out.</p>
+                    <p class="story-section-accent">Sandeep would probably like it on record that this is where his Hall of Fame texting run began. The truth? It took a second… and then, kind of, it did.</p>
+                  </div>
+                </section>
 
-              <section class="story-chunk">
-                <div class="story-chunk-head">
-                  <div class="story-chunk-title-wrap">
-                    <span class="story-chunk-index">05</span>
-                    <p class="story-chunk-kicker">BEST FRIENDS ENERGY</p>
+                <section class="story-section" id="story-delay" data-story-section>
+                  <div class="story-section-head">
+                    <div class="story-section-title-wrap">
+                      <span class="story-section-index">02</span>
+                      <p class="story-section-kicker">THE DELAY</p>
+                    </div>
+                    <span class="story-section-status">2 of 5</span>
                   </div>
-                  <span class="story-chunk-progress">5 of 5</span>
+                  <div class="story-section-copy">
+                    <p>His first thought: “wait… she hella cute.”</p>
+                    <p>His next move: delay the date by a week because he broke his finger… while… of course, playing basketball 🏀.</p>
+                    <p class="story-section-accent">In Sandeep’s own review of the situation, it was not exactly an all-time opening move.</p>
+                    <p>A week later, what was supposed to be a quick call somehow stretched into almost four hours. The kind of call where you finish and just sit there like… yeah, that was different.</p>
+                  </div>
+                </section>
+
+                <section class="story-section" id="story-click" data-story-section>
+                  <div class="story-section-head">
+                    <div class="story-section-title-wrap">
+                      <span class="story-section-index">03</span>
+                      <p class="story-section-kicker">THE CLICK</p>
+                    </div>
+                    <span class="story-section-status">3 of 5</span>
+                  </div>
+                  <div class="story-section-copy">
+                    <p>Gym people. School nerds. Both loud in a room. Both chasing something bigger. Same wavelength, just different starting paths.</p>
+                    <p class="story-section-highlight">And after that call, the rhythm changed completely, because not a single day passed without them talking.</p>
+                  </div>
+                </section>
+
+                <section class="story-section" id="story-firsts" data-story-section>
+                  <div class="story-section-head">
+                    <div class="story-section-title-wrap">
+                      <span class="story-section-index">04</span>
+                      <p class="story-section-kicker">THE FIRSTS</p>
+                    </div>
+                    <span class="story-section-status">4 of 5</span>
+                  </div>
+                  <div class="story-section-copy">
+                    <p>They met in person on Christmas Day. Yes, actually December 25th. No pressure.</p>
+                    <p>First date: Windmills in The Colony, TX.</p>
+                    <p>Early flirting was elite in its own way:</p>
+                    <div class="story-code-shell">
+                      <div class="story-code-top">
+                        <span class="story-code-dot red"></span>
+                        <span class="story-code-dot yellow"></span>
+                        <span class="story-code-dot green"></span>
+                      </div>
+                      <pre class="story-code-pre">adjective_to_describe_chamu = “beautiful”
+print(“wasssuppp”)</pre>
+                    </div>
+                    <p>Sandeep called it romance, while Chamu called it Python code.</p>
+                    <p>Then came February 14, 2026. First flowers.</p>
+                  </div>
+                </section>
+
+                <section class="story-section" id="story-best-friends" data-story-section>
+                  <div class="story-section-head">
+                    <div class="story-section-title-wrap">
+                      <span class="story-section-index">05</span>
+                      <p class="story-section-kicker">BEST FRIENDS ENERGY</p>
+                    </div>
+                    <span class="story-section-status">5 of 5</span>
+                  </div>
+                  <div class="story-section-copy">
+                    <p>To everyone else, they just look like best friends who’ve known each other forever.</p>
+                    <p>Which is funny, because that’s kind of what it is.</p>
+                    <p>Best friends first. Real love underneath. Easy laughs, zero effort, the kind of comfort that usually takes years but somehow showed up early.</p>
+                    <p class="story-section-highlight">The wild part?</p>
+                  </div>
+                  <div class="story-quote-panel">
+                    <p class="story-quote-line">“We’re just as surprised as you are!”</p>
+                    <p class="story-quote-credit">— Chamanthi and Sandeep</p>
+                    <p class="story-quote-ending">(The Beginning)</p>
+                  </div>
+                </section>
+              </div>
+            </article>
+
+            <aside class="story-menu">
+              <div class="story-menu-card">
+                <p class="story-menu-label">Story guide</p>
+                <div class="story-menu-list">
+                  <button class="story-menu-btn active" type="button" data-story-target="story-opening"><span class="story-menu-num">01</span><span class="story-menu-text"><span class="story-menu-title">The Opening</span><span class="story-menu-sub">where it starts</span></span></button>
+                  <button class="story-menu-btn" type="button" data-story-target="story-delay"><span class="story-menu-num">02</span><span class="story-menu-text"><span class="story-menu-title">The Delay</span><span class="story-menu-sub">bad opening move</span></span></button>
+                  <button class="story-menu-btn" type="button" data-story-target="story-click"><span class="story-menu-num">03</span><span class="story-menu-text"><span class="story-menu-title">The Click</span><span class="story-menu-sub">four-hour turn</span></span></button>
+                  <button class="story-menu-btn" type="button" data-story-target="story-firsts"><span class="story-menu-num">04</span><span class="story-menu-text"><span class="story-menu-title">The Firsts</span><span class="story-menu-sub">Christmas to flowers</span></span></button>
+                  <button class="story-menu-btn" type="button" data-story-target="story-best-friends"><span class="story-menu-num">05</span><span class="story-menu-text"><span class="story-menu-title">Best Friends Energy</span><span class="story-menu-sub">the quote at the end</span></span></button>
                 </div>
-                <div class="story-chunk-copy">
-                  <p>To everyone else, they just look like best friends who’ve known each other forever.</p>
-                  <p>Which is funny, because that’s kind of what it is.</p>
-                  <p>Best friends first. Real love underneath. Easy laughs, zero effort, the kind of comfort that usually takes years but somehow showed up early.</p>
-                  <p class="story-chunk-highlight">The wild part?</p>
-                </div>
-                <div class="story-quote-panel">
-                  <p class="story-quote-line">“We’re just as surprised as you are!”</p>
-                  <p class="story-quote-credit">— Chamanthi and Sandeep</p>
-                  <p class="story-quote-ending">(The Beginning)</p>
-                </div>
-              </section>
-            </div>
-          </article>
+              </div>
+            </aside>
+          </div>
         </div>
       </div>
     </section>
@@ -1819,6 +1892,37 @@ print(“wasssuppp”)</pre>
         }); storyTick = true; }
       }, { passive: true });
     }
+
+    // ---- Story Guide ----
+    function initStoryGuide() {
+      const sections = Array.from(document.querySelectorAll('[data-story-section]'));
+      const buttons = Array.from(document.querySelectorAll('.story-menu-btn[data-story-target]'));
+      if (!sections.length || !buttons.length) return;
+
+      const setActive = (id) => {
+        buttons.forEach((btn) => btn.classList.toggle('active', btn.dataset.storyTarget === id));
+      };
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.storyTarget);
+          if (!target) return;
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setActive(btn.dataset.storyTarget);
+        });
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible && visible.target && visible.target.id) setActive(visible.target.id);
+      }, { threshold: [0.2, 0.45, 0.7], rootMargin: '-18% 0px -45% 0px' });
+
+      sections.forEach((section) => observer.observe(section));
+    }
+
+    document.addEventListener('DOMContentLoaded', initStoryGuide);
 
     // ---- Events Toggle ----
     function toggleEvent(card) {
