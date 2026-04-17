@@ -202,205 +202,175 @@
     /* Story refresh */
     .story-storyboard {
       display: grid;
-      gap: 18px;
+      gap: 16px;
     }
-    .story-panel {
+    .story-editor {
       position: relative;
-      overflow: hidden;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: clamp(22px, 4vw, 34px);
       border-radius: 24px;
-      border: 1px solid rgba(212,176,106,0.16);
-      background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(248,241,230,0.95));
-      box-shadow: 0 16px 42px rgba(47,38,26,0.07);
-      padding: clamp(20px, 4vw, 30px);
+      border: 1px solid rgba(212,176,106,0.14);
+      background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(249,244,236,0.96));
+      box-shadow: 0 16px 40px rgba(47,38,26,0.06);
+      overflow: hidden;
     }
-    .story-panel::before {
+    .story-editor::after {
       content: '';
       position: absolute;
-      inset: 0 0 auto 0;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(212,176,106,0), rgba(212,176,106,0.45), rgba(212,176,106,0));
-    }
-    .story-panel::after {
-      content: '';
-      position: absolute;
-      right: -52px;
-      bottom: -70px;
-      width: 170px;
-      height: 170px;
+      right: -46px;
+      top: -46px;
+      width: 150px;
+      height: 150px;
       border-radius: 999px;
       background: radial-gradient(circle, rgba(212,176,106,0.14), transparent 72%);
       pointer-events: none;
     }
-    .story-panel-hero {
-      padding: clamp(22px, 5vw, 34px);
+    .story-flow-intro,
+    .story-flow-section,
+    .story-flow-quote {
+      position: relative;
+      z-index: 1;
     }
-    .story-panel-soft {
-      background: linear-gradient(145deg, rgba(252,248,241,0.98), rgba(245,239,229,0.96));
-    }
-    .story-panel-dark {
-      background: linear-gradient(160deg, rgba(28,23,18,0.99), rgba(62,46,34,0.96));
-      border-color: rgba(212,176,106,0.2);
-      box-shadow: 0 18px 48px rgba(18,14,10,0.16);
-    }
-    .story-panel-dark::before,
-    .story-panel-quote::before {
-      background: linear-gradient(90deg, rgba(212,176,106,0), rgba(212,176,106,0.55), rgba(212,176,106,0));
-    }
-    .story-panel-dark::after,
-    .story-panel-quote::after {
-      background: radial-gradient(circle, rgba(212,176,106,0.18), transparent 72%);
-    }
-    .story-panel-quote {
-      background: linear-gradient(160deg, rgba(27,21,17,0.99), rgba(82,56,41,0.96));
-      border-color: rgba(212,176,106,0.22);
-      color: #fffdf8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100%;
-      text-align: center;
-    }
-    .story-hero-grid,
-    .story-section-grid,
-    .story-pair-grid {
-      display: grid;
-      gap: 18px;
-    }
-    .story-eyebrow {
-      margin: 0 0 14px;
-      font-size: 10px;
-      letter-spacing: 0.34em;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--gold);
-    }
-    .story-panel-dark .story-eyebrow,
-    .story-panel-quote .story-eyebrow {
-      color: rgba(212,176,106,0.96);
-    }
-    .story-copy-stack {
+    .story-flow-intro {
       display: grid;
       gap: 12px;
+      margin-bottom: 16px;
     }
-    .story-copy-stack p {
+    .story-flow-intro p,
+    .story-flow-copy p {
       margin: 0;
-      font-size: 0.98rem;
-      line-height: 1.82;
+      font-size: 0.97rem;
+      line-height: 1.86;
       color: var(--text-muted);
     }
-    .story-panel-dark .story-copy-stack p,
-    .story-panel-quote p {
-      color: rgba(255,250,242,0.86);
-    }
-    .story-hero-copy > p:first-child {
+    .story-flow-lead {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.9rem, 4vw, 2.7rem);
-      line-height: 1.1;
-      color: var(--text);
+      font-size: clamp(1.55rem, 3vw, 2.1rem) !important;
+      line-height: 1.18 !important;
+      color: var(--text) !important;
+      max-width: 24ch;
     }
-    .story-panel-dark .story-highlight-line,
-    .story-panel-dark .story-quote-callout,
-    .story-panel-dark .story-prompt {
-      color: #fffdf8;
-      border-left-color: rgba(212,176,106,0.55);
-    }
-    .story-accent-line,
-    .story-quote-callout,
-    .story-highlight-line,
-    .story-prompt {
-      padding-left: 16px;
-      border-left: 2px solid rgba(212,176,106,0.4);
-      color: var(--text);
-    }
-    .story-accent-line {
+    .story-flow-accent {
+      color: var(--text) !important;
+      padding-left: 14px;
+      border-left: 2px solid rgba(212,176,106,0.42);
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.4rem, 3vw, 1.9rem) !important;
-      line-height: 1.24 !important;
+      font-size: clamp(1.15rem, 2.2vw, 1.4rem) !important;
+      line-height: 1.35 !important;
     }
-    .story-highlight-line {
+    .story-flow-divider {
+      height: 1px;
+      margin: 8px 0 2px;
+      background: linear-gradient(90deg, transparent, rgba(212,176,106,0.34), transparent);
+    }
+    .story-flow-section {
+      display: grid;
+      gap: 10px;
+      padding: 18px 0;
+      border-top: 1px solid rgba(212,176,106,0.12);
+    }
+    .story-flow-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .story-flow-kicker {
+      margin: 0;
+      font-size: 0.66rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .story-flow-mark {
+      width: 28px;
+      height: 1px;
+      background: rgba(212,176,106,0.3);
+    }
+    .story-flow-copy {
+      display: grid;
+      gap: 10px;
+    }
+    .story-flow-highlight {
+      color: var(--text) !important;
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.35rem, 3vw, 1.85rem) !important;
-      line-height: 1.22 !important;
+      font-size: clamp(1.2rem, 2.3vw, 1.45rem) !important;
+      line-height: 1.3 !important;
+      padding-left: 14px;
+      border-left: 2px solid rgba(212,176,106,0.42);
     }
-    .story-prompt {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.2rem, 2.6vw, 1.5rem) !important;
-    }
-    .story-code-card {
-      border-radius: 22px;
+    .story-flow-code-wrap {
+      margin-top: 4px;
+      border-radius: 18px;
       overflow: hidden;
       border: 1px solid rgba(212,176,106,0.14);
       background: #15120f;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
     }
-    .story-code-top {
+    .story-flow-code-top {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-bottom: 1px solid rgba(255,255,255,0.08);
       background: rgba(255,255,255,0.03);
     }
     .story-code-dot {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 999px;
     }
     .story-code-dot.red { background: #ff6b6b; }
     .story-code-dot.yellow { background: #ffd166; }
     .story-code-dot.green { background: #06d6a0; }
-    .story-code-pre {
+    .story-flow-code {
       margin: 0;
-      padding: 18px;
+      padding: 16px 16px 18px;
       white-space: pre-wrap;
       word-break: break-word;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-      font-size: 0.94rem;
-      line-height: 1.85;
+      font-size: 0.9rem;
+      line-height: 1.8;
       color: #f8f3ea;
     }
-    .story-quote-shell {
-      display: grid;
-      gap: 14px;
-      width: 100%;
+    .story-flow-quote {
+      margin-top: 4px;
+      padding: clamp(20px, 4vw, 28px);
+      border-radius: 22px;
+      background: linear-gradient(160deg, rgba(27,21,17,0.99), rgba(82,56,41,0.96));
+      border: 1px solid rgba(212,176,106,0.22);
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(18,14,10,0.14);
     }
-    .story-quote-line {
+    .story-flow-quote-line {
       margin: 0;
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      line-height: 1.06;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      line-height: 1.08;
       color: #fffdf8;
     }
-    .story-quote-credit {
-      margin: 0;
-      font-size: 0.76rem;
+    .story-flow-quote-credit {
+      margin: 12px 0 0;
+      font-size: 0.74rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: rgba(212,176,106,0.95);
     }
-    .story-ending-note {
-      margin: 0;
+    .story-flow-ending {
+      margin: 10px 0 0;
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+      font-size: 1.12rem;
       color: rgba(255,250,242,0.82);
-    }
-    @media (min-width: 900px) {
-      .story-hero-grid,
-      .story-pair-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .story-section-grid {
-        grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
-        align-items: start;
-      }
     }
     @media (max-width: 639px) {
       #hero .text-panel { padding: 24px 20px; }
       #hero-countdown { flex-wrap: wrap; }
       .nav-link { padding: 8px 12px; font-size: 11px; }
-      .story-panel { border-radius: 22px; }
-      .story-hero-copy > p:first-child { max-width: 13ch; }
-      .story-code-pre { font-size: 0.9rem; }
+      .story-editor { border-radius: 20px; padding: 20px 18px; }
+      .story-flow-section { padding: 16px 0; }
+      .story-flow-lead { max-width: none; }
     }
 
     /* Modern Events - Bento Grid */
@@ -956,84 +926,86 @@
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-12 reveal">
           <p class="section-label mb-2">Our Story</p>
-          <h2 class="section-title text-4xl sm:text-5xl">Our Story</h2>
+          <h2 class="section-title text-3xl sm:text-4xl">Our Story</h2>
           <div class="section-divider mt-5"></div>
         </div>
 
         <div class="story-storyboard">
-          <article class="story-panel story-panel-hero reveal">
-            <div class="story-hero-grid">
-              <div class="story-copy-stack story-hero-copy">
-                <p>She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
-                <p>So she did what any reasonable person would do… reached out.</p>
-              </div>
-              <div class="story-copy-stack">
-                <p class="story-accent-line">Sandeep activated his Hall of Fame texting skills and… hard jk. (…kind of.)</p>
-              </div>
+          <article class="story-editor reveal">
+            <div class="story-flow-intro">
+              <p class="story-flow-lead">She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
+              <p>So she did what any reasonable person would do… reached out.</p>
+              <p class="story-flow-accent">Sandeep activated his Hall of Fame texting skills and… hard jk. (…kind of.)</p>
             </div>
-          </article>
 
-          <div class="story-pair-grid">
-            <article class="story-panel reveal">
-              <p class="story-eyebrow">THE DELAY</p>
-              <div class="story-copy-stack">
+            <div class="story-flow-divider"></div>
+
+            <section class="story-flow-section">
+              <div class="story-flow-head">
+                <p class="story-flow-kicker">THE DELAY</p>
+                <span class="story-flow-mark"></span>
+              </div>
+              <div class="story-flow-copy">
                 <p>His first thought: “wait… she hella cute.”</p>
                 <p>His next move: delay the date by a week because he broke his finger… while… of course, playing basketball 🏀.</p>
-                <p class="story-quote-callout">What Sandeep likes to call it: “yeah, that wasn’t a good opening move.”</p>
+                <p>What Sandeep likes to call it: “yeah, that wasn’t a good opening move.”</p>
                 <p>A week later, what was supposed to be a quick call somehow stretched into almost four hours. The kind of call where you finish and just sit there like… yeah, that was different.</p>
               </div>
-            </article>
+            </section>
 
-            <article class="story-panel story-panel-dark reveal stagger" style="--d:0;">
-              <p class="story-eyebrow">THE CLICK</p>
-              <div class="story-copy-stack">
-                <p>Gym people. School nerds. Both loud in a room. Both chasing something bigger. Same wavelength, just different starting paths.</p>
-                <p class="story-highlight-line">And since that call? Not a single day without talking.</p>
+            <section class="story-flow-section">
+              <div class="story-flow-head">
+                <p class="story-flow-kicker">THE CLICK</p>
+                <span class="story-flow-mark"></span>
               </div>
-            </article>
-          </div>
+              <div class="story-flow-copy">
+                <p>Gym people. School nerds. Both loud in a room. Both chasing something bigger. Same wavelength, just different starting paths.</p>
+                <p class="story-flow-highlight">And since that call? Not a single day without talking.</p>
+              </div>
+            </section>
 
-          <article class="story-panel reveal stagger" style="--d:1;">
-            <div class="story-section-grid">
-              <div class="story-copy-stack">
-                <p class="story-eyebrow">THE FIRSTS</p>
+            <section class="story-flow-section">
+              <div class="story-flow-head">
+                <p class="story-flow-kicker">THE FIRSTS</p>
+                <span class="story-flow-mark"></span>
+              </div>
+              <div class="story-flow-copy">
                 <p>They met in person on Christmas Day. Yes, actually December 25th. No pressure.</p>
                 <p>First date: Windmills in The Colony, TX.</p>
                 <p>Early flirting was elite in its own way:</p>
+                <div class="story-flow-code-wrap">
+                  <div class="story-flow-code-top">
+                    <span class="story-code-dot red"></span>
+                    <span class="story-code-dot yellow"></span>
+                    <span class="story-code-dot green"></span>
+                  </div>
+                  <pre class="story-flow-code">adjective_to_describe_chamu = “beautiful”
+print(“wasssuppp”)</pre>
+                </div>
                 <p>Sandeep called it romance, while Chamu called it Python code.</p>
                 <p>Then came February 14, 2026. First flowers.</p>
               </div>
-              <div class="story-code-card">
-                <div class="story-code-top">
-                  <span class="story-code-dot red"></span>
-                  <span class="story-code-dot yellow"></span>
-                  <span class="story-code-dot green"></span>
-                </div>
-                <pre class="story-code-pre">adjective_to_describe_chamu = “beautiful”
-print(“wasssuppp”)</pre>
-              </div>
-            </div>
-          </article>
+            </section>
 
-          <div class="story-pair-grid">
-            <article class="story-panel story-panel-soft reveal stagger" style="--d:2;">
-              <p class="story-eyebrow">BEST FRIENDS ENERGY</p>
-              <div class="story-copy-stack">
+            <section class="story-flow-section">
+              <div class="story-flow-head">
+                <p class="story-flow-kicker">BEST FRIENDS ENERGY</p>
+                <span class="story-flow-mark"></span>
+              </div>
+              <div class="story-flow-copy">
                 <p>To everyone else, they just look like best friends who’ve known each other forever.</p>
                 <p>Which is funny, because that’s kind of what it is.</p>
                 <p>Best friends first. Real love underneath. Easy laughs, zero effort, the kind of comfort that usually takes years but somehow showed up early.</p>
-                <p class="story-prompt">The wild part?</p>
+                <p class="story-flow-highlight">The wild part?</p>
               </div>
-            </article>
+            </section>
 
-            <article class="story-panel story-panel-quote reveal stagger" style="--d:3;">
-              <div class="story-quote-shell">
-                <p class="story-quote-line">“We’re just as surprised as you are!”</p>
-                <p class="story-quote-credit">— Chamanthi and Sandeep</p>
-                <p class="story-ending-note">(The Beginning)</p>
-              </div>
-            </article>
-          </div>
+            <div class="story-flow-quote">
+              <p class="story-flow-quote-line">“We’re just as surprised as you are!”</p>
+              <p class="story-flow-quote-credit">— Chamanthi and Sandeep</p>
+              <p class="story-flow-ending">(The Beginning)</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
