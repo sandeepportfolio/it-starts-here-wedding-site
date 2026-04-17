@@ -1399,9 +1399,9 @@
     <!-- ===== GUEST UPLOADS ===== -->
     <section id="guest-uploads" class="py-20 px-6">
       <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Moments</p><h2 class="section-title text-4xl sm:text-5xl">Uploaded Photos by Guests</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">A live collection of guest uploads from the celebration.</p><div class="section-divider mt-4"></div></div>
-        <div id="guest-photos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Loading guest uploads…</p><p class="text-sm" style="color:var(--text-muted);">Photos shared by guests will appear here.</p></div>
+        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Moments</p><h2 class="section-title text-4xl sm:text-5xl">Uploaded Photos by Guests</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">A live collection of guest uploads from the celebration.</p><p class="text-xs mt-3" style="color:var(--text-light);">Swipe right to browse all guest uploads.</p><div class="section-divider mt-4"></div></div>
+        <div id="guest-photos-grid" class="reveal" style="display:flex; gap:24px; overflow-x:auto; overflow-y:hidden; padding:4px 2px 14px; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none;">
+          <div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Loading guest uploads…</p><p class="text-sm" style="color:var(--text-muted);">Photos shared by guests will appear here.</p></div>
         </div>
       </div>
     </section>
@@ -1564,7 +1564,7 @@
             window.setTimeout(() => loadGuestUploads(retryCount + 1), 400);
             return;
           }
-          grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Guest uploads unavailable</p><p class="text-sm" style="color:var(--text-muted);">Please check back shortly.</p></div>`;
+          grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Guest uploads unavailable</p><p class="text-sm" style="color:var(--text-muted);">Please check back shortly.</p></div>`;
           return;
         }
         const q = window.query(window.collection(db, 'photos'), window.orderBy('createdAt', 'desc'), window.limit(24));
@@ -1572,11 +1572,11 @@
         const photos = [];
         snap.forEach(doc => photos.push({ id: doc.id, ...doc.data() }));
         if (!photos.length) {
-          grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">No guest uploads yet</p><p class="text-sm" style="color:var(--text-muted);">Be the first to share a memory.</p></div>`;
+          grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">No guest uploads yet</p><p class="text-sm" style="color:var(--text-muted);">Be the first to share a memory.</p></div>`;
           return;
         }
         grid.innerHTML = photos.map(p => `
-          <div class="card overflow-hidden reveal-scale">
+          <div class="card overflow-hidden reveal-scale" style="flex:0 0 min(82vw, 320px); max-width:320px; scroll-snap-align:center;">
             <img src="${p.imageData || p.imageUrl || p.url || ''}" alt="Guest upload" style="width:100%; aspect-ratio:4/3; object-fit:cover; object-position:center; display:block; background:var(--bg-alt);">
             <div style="padding:16px 18px;">
               ${p.caption ? `<p style="font-size:13px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.5;">${String(p.caption).replace(/</g,'&lt;')}</p>` : ''}
@@ -1585,7 +1585,7 @@
           </div>
         `).join('');
       } catch (e) {
-        grid.innerHTML = `<div class="card p-8 text-center" style="grid-column:1/-1;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Couldn’t load guest uploads</p><p class="text-sm" style="color:var(--text-muted);">${String(e.message).replace(/</g,'&lt;')}</p></div>`;
+        grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Couldn’t load guest uploads</p><p class="text-sm" style="color:var(--text-muted);">${String(e.message).replace(/</g,'&lt;')}</p></div>`;
       }
     }
 
