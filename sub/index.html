@@ -199,6 +199,216 @@
       .story-step-mark { width: fit-content; padding: 0 16px; }
     }
 
+    /* Story refresh */
+    .story-storyboard { display: grid; gap: 22px; }
+    .story-intro-card,
+    .story-card,
+    .story-closing-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      border: 1px solid rgba(212,176,106,0.18);
+      box-shadow: 0 18px 50px rgba(47,38,26,0.08);
+    }
+    .story-intro-card {
+      padding: clamp(24px, 5vw, 38px);
+      background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(248,241,230,0.96));
+    }
+    .story-intro-card::after,
+    .story-closing-card::after {
+      content: '';
+      position: absolute;
+      right: -48px;
+      bottom: -72px;
+      width: 190px;
+      height: 190px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(212,176,106,0.18), transparent 70%);
+      pointer-events: none;
+    }
+    .story-intro-grid { display: grid; gap: 18px; }
+    .story-story-title {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 5vw, 3.3rem);
+      line-height: 1.04;
+      color: var(--text);
+    }
+    .story-story-copy {
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.82;
+      color: var(--text-muted);
+    }
+    .story-metrics {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-content: start;
+    }
+    .story-metric {
+      padding: 16px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(212,176,106,0.16);
+      background: rgba(255,255,255,0.7);
+      text-align: left;
+    }
+    .story-metric-value {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      line-height: 1;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .story-metric-label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+    .story-timeline {
+      position: relative;
+      display: grid;
+      gap: 16px;
+      padding-left: 24px;
+    }
+    .story-timeline::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 9px;
+      width: 1px;
+      background: linear-gradient(180deg, rgba(212,176,106,0.18), rgba(139,58,74,0.35), rgba(212,176,106,0.08));
+    }
+    .story-card {
+      padding: 22px 20px 22px 22px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(248,241,230,0.94));
+    }
+    .story-card-dark {
+      background: linear-gradient(160deg, rgba(28,23,18,0.99), rgba(62,46,34,0.96));
+      border-color: rgba(212,176,106,0.2);
+      box-shadow: 0 20px 56px rgba(18,14,10,0.18);
+    }
+    .story-card::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 28px;
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      border: 2px solid var(--bg);
+      background: var(--gold);
+      box-shadow: 0 0 0 5px rgba(212,176,106,0.18);
+    }
+    .story-card-tag {
+      margin: 0 0 10px;
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .story-card-title {
+      margin: 0 0 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.75rem, 4vw, 2.35rem);
+      line-height: 1.05;
+      color: var(--text);
+    }
+    .story-card-dark .story-card-title,
+    .story-card-dark .story-story-copy,
+    .story-card-dark .story-chip { color: #fffaf2; }
+    .story-card-dark .story-story-copy { color: rgba(255,250,242,0.82); }
+    .story-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .story-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(212,176,106,0.12);
+      border: 1px solid rgba(212,176,106,0.16);
+      font-size: 0.78rem;
+      color: var(--text);
+    }
+    .story-inline-code {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 20px;
+      background: #15120f;
+      border: 1px solid rgba(212,176,106,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    .story-inline-code span {
+      display: block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #f8f3ea;
+      word-break: break-word;
+    }
+    .story-closing-card {
+      padding: clamp(26px, 5vw, 40px);
+      background: linear-gradient(160deg, rgba(28,23,18,0.99), rgba(74,51,38,0.96));
+      color: #fffdf8;
+    }
+    .story-closing-grid { display: grid; gap: 18px; align-items: center; }
+    .story-closing-quote {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      line-height: 0.98;
+      color: #fffdf8;
+    }
+    .story-closing-note {
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.85;
+      color: rgba(255,250,242,0.82);
+    }
+    .story-closing-credit {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.74rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(212,176,106,0.95);
+    }
+    .story-mobile-divider {
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(90deg, transparent, rgba(212,176,106,0.32), transparent);
+      margin: 6px 0;
+    }
+    @media (min-width: 900px) {
+      .story-intro-grid { grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr); }
+      .story-closing-grid { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
+    }
+    @media (max-width: 639px) {
+      #hero .text-panel { padding: 24px 20px; }
+      #hero-countdown { flex-wrap: wrap; }
+      .nav-link { padding: 8px 12px; font-size: 11px; }
+      .story-intro-card,
+      .story-card,
+      .story-closing-card { border-radius: 24px; }
+      .story-metrics { grid-template-columns: 1fr; }
+      .story-story-title { max-width: 11ch; }
+    }
+
     /* Modern Events - Bento Grid */
     .event-bento { display: grid; gap: 16px; grid-template-columns: 1fr; }
     @media(min-width:768px) { .event-bento { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; } .event-bento > :first-child { grid-row: 1 / 3; } }
@@ -726,7 +936,6 @@
                 <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Email *</label><input type="email" class="form-input" placeholder="your@email.com" id="rsvp-email"></div>
                 <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Plus Ones</label><input type="number" class="form-input" placeholder="0" min="0" max="10" id="rsvp-plus-ones" value="0"></div>
               </div>
-              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Dietary Restrictions</label><input type="text" class="form-input" placeholder="Any allergies or preferences" id="rsvp-dietary"></div>
               <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Message for the Couple</label><textarea class="form-input" rows="2" placeholder="Your wishes..." id="rsvp-message" style="resize:none;"></textarea></div>
               <div class="flex gap-3" style="padding-top:20px;">
                 <button id="rsvp-back-btn" class="btn-outline flex-1" style="border-radius:12px;">&#8592; Back</button>
@@ -748,100 +957,113 @@
         </div>
       </div>
     </section>
-    <!-- ===== OUR STORY - Narrative Sequence ===== -->
+    <!-- ===== OUR STORY - Storyboard Refresh ===== -->
     <section id="story" class="py-24 px-6" style="background: linear-gradient(180deg, rgba(245,239,229,0.18) 0%, rgba(255,255,255,0) 100%);">
-      <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-14 reveal">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-12 reveal">
           <p class="section-label mb-2">Our Story</p>
-          <h2 class="section-title text-4xl sm:text-5xl">The Beginning</h2>
-          <div class="section-divider mt-4"></div>
+          <h2 class="section-title text-4xl sm:text-5xl">A Love Story With Great Timing, Bad Timing, and a Very Strong Recovery</h2>
+          <p class="mt-4 max-w-2xl mx-auto text-sm sm:text-base" style="color: var(--text-muted);">It started with curiosity, turned into a four-hour conversation, and somehow became the kind of comfort people usually need years to build.</p>
+          <div class="section-divider mt-5"></div>
         </div>
 
-        <div class="story-narrative-shell">
-          <div class="story-beat reveal">
-            <p class="story-kicker">THE OPENING</p>
-            <div class="story-opening-grid">
-              <p class="story-opening-line">She noticed the guy known for his AI agent setup, slightly controversial takes, and randomly asking if his friends were down to hoop at 9 PM.</p>
-              <div class="story-opening-side">
-                <p class="story-sentence story-sentence-accent">So she did what any reasonable person would do… reached out.</p>
-                <p class="story-sentence story-sentence-soft">Sandeep activated his Hall of Fame texting skills and… hard jk. (…kind of.)</p>
+        <div class="story-storyboard">
+          <div class="story-intro-card reveal">
+            <p class="story-kicker">THE QUICK VERSION</p>
+            <div class="story-intro-grid">
+              <div class="space-y-4">
+                <h3 class="story-story-title">One message. One broken finger. One call that changed everything.</h3>
+                <p class="story-story-copy">Chamanthi noticed the guy known for AI agents, slightly controversial takes, and random late-night hoop plans, and decided to reach out. Sandeep almost fumbled the opening by pushing the first date a week after breaking his finger playing basketball, but the recovery arc was elite.</p>
               </div>
-            </div>
-          </div>
-
-          <div class="story-beat reveal stagger" style="--d:0;">
-            <p class="story-kicker">THE DELAY</p>
-            <div class="story-delay-stack">
-              <p class="story-sentence story-sentence-focus">His first thought: “wait… she hella cute.”</p>
-              <p class="story-sentence story-sentence-accent">His next move: delay the date by a week because he broke his finger… while… of course, playing basketball 🏀.</p>
-              <p class="story-sentence story-sentence-quote">What Sandeep likes to call it: “yeah, that wasn’t a good opening move.”</p>
-              <p class="story-sentence story-sentence-soft">A week later, what was supposed to be a quick call somehow stretched into almost four hours. The kind of call where you finish and just sit there like… yeah, that was different.</p>
-            </div>
-          </div>
-
-          <div class="story-beat story-beat-dark reveal stagger" style="--d:1;">
-            <p class="story-kicker">THE CLICK</p>
-            <div class="story-pill-grid">
-              <p class="story-mini-card">Gym people.</p>
-              <p class="story-mini-card">School nerds.</p>
-              <p class="story-mini-card">Both loud in a room.</p>
-              <p class="story-mini-card">Both chasing something bigger.</p>
-            </div>
-            <div class="story-delay-stack">
-              <p class="story-sentence story-sentence-dark">Same wavelength, just different starting paths.</p>
-              <p class="story-sentence story-sentence-dark-accent">And since that call? Not a single day without talking.</p>
-            </div>
-          </div>
-
-          <div class="story-beat reveal stagger" style="--d:2;">
-            <p class="story-kicker">THE FIRSTS</p>
-            <div class="story-steps">
-              <div class="story-step-row">
-                <div class="story-step-mark">01</div>
-                <p class="story-sentence">They met in person on Christmas Day. Yes, actually December 25th.</p>
-              </div>
-              <div class="story-step-row">
-                <div class="story-step-mark">02</div>
-                <p class="story-sentence story-sentence-soft">First date: Windmills in The Colony, TX.</p>
-              </div>
-              <div class="story-step-row">
-                <div class="story-step-mark">03</div>
-                <div class="story-code-card">
-                  <div class="story-code-top">
-                    <span class="story-code-dot red"></span>
-                    <span class="story-code-dot yellow"></span>
-                    <span class="story-code-dot green"></span>
-                  </div>
-                  <div class="story-code-body">
-                    <p class="story-code-label">Early flirting was elite in its own way:</p>
-                    <pre class="story-code-pre">adjective_to_describe_chamu = “beautiful”
-print(“wasssuppp”)</pre>
-                  </div>
+              <div class="story-metrics">
+                <div class="story-metric">
+                  <span class="story-metric-value">1</span>
+                  <span class="story-metric-label">unexpected DM</span>
+                </div>
+                <div class="story-metric">
+                  <span class="story-metric-value">4h</span>
+                  <span class="story-metric-label">first call</span>
+                </div>
+                <div class="story-metric">
+                  <span class="story-metric-value">0</span>
+                  <span class="story-metric-label">days without talking since</span>
                 </div>
               </div>
-              <div class="story-step-row">
-                <div class="story-step-mark">04</div>
-                <p class="story-sentence">Sandeep called it romance, while Chamu called it Python code.</p>
-              </div>
-              <div class="story-step-row">
-                <div class="story-step-mark">05</div>
-                <p class="story-sentence story-sentence-soft">Then came February 14, 2026. First flowers.</p>
-              </div>
             </div>
           </div>
 
-          <div class="story-beat story-beat-dark reveal stagger" style="--d:3;">
-            <p class="story-kicker">BEST FRIENDS ENERGY</p>
-            <div class="story-finale-stack">
-              <p class="story-sentence story-sentence-dark">To everyone else, they just look like best friends who’ve known each other forever.</p>
-              <p class="story-sentence story-sentence-dark-soft">Which is funny, because that’s kind of what it is.</p>
-              <p class="story-sentence story-sentence-dark-soft">Best friends first. Real love underneath. Easy laughs, zero effort, the kind of comfort that usually takes years but somehow showed up early.</p>
-              <p class="story-finale-prompt">The wild part?</p>
-              <div class="story-quote-card">
-                <p class="story-quote-line">“We’re just as surprised as you are!”</p>
-                <p class="story-quote-credit">— Chamanthi and Sandeep</p>
+          <div class="story-timeline">
+            <article class="story-card reveal">
+              <p class="story-card-tag">Chapter 01</p>
+              <h3 class="story-card-title">The Opening</h3>
+              <p class="story-story-copy">She saw a guy who was funny, ambitious, a little chaotic, and clearly had opinions. So she did the smart thing and reached out first.</p>
+              <div class="story-chip-row">
+                <span class="story-chip">AI agent guy</span>
+                <span class="story-chip">late-night hoop invites</span>
+                <span class="story-chip">bold first move</span>
               </div>
-              <p class="story-ending">(The Beginning)</p>
+            </article>
+
+            <article class="story-card reveal stagger" style="--d:0;">
+              <p class="story-card-tag">Chapter 02</p>
+              <h3 class="story-card-title">The Delay</h3>
+              <p class="story-story-copy">Sandeep's immediate reaction was basically, "wait... she hella cute." His next move was objectively less impressive: delaying the date a week because he broke his finger playing basketball. Not ideal, but memorable.</p>
+              <div class="story-chip-row">
+                <span class="story-chip">cute panic</span>
+                <span class="story-chip">injured reserve list</span>
+                <span class="story-chip">bad opening move</span>
+              </div>
+            </article>
+
+            <article class="story-card story-card-dark reveal stagger" style="--d:1;">
+              <p class="story-card-tag">Chapter 03</p>
+              <h3 class="story-card-title">The Click</h3>
+              <p class="story-story-copy">What was supposed to be a quick call somehow stretched into almost four hours. Same energy, same ambition, same loud-in-a-room personality, same nerdy streak. After that, talking every day just became the default.</p>
+              <div class="story-chip-row">
+                <span class="story-chip">gym people</span>
+                <span class="story-chip">school nerds</span>
+                <span class="story-chip">same wavelength</span>
+              </div>
+            </article>
+
+            <article class="story-card reveal stagger" style="--d:2;">
+              <p class="story-card-tag">Chapter 04</p>
+              <h3 class="story-card-title">The Firsts</h3>
+              <p class="story-story-copy">They met in person on Christmas Day, had their first date at Windmills in The Colony, and then delivered one of the funniest flirting arcs in history: part romance, part Python script.</p>
+              <div class="story-inline-code">
+                <span>adjective_to_describe_chamu = "beautiful"</span>
+                <span>print("wasssuppp")</span>
+              </div>
+              <div class="story-chip-row">
+                <span class="story-chip">Christmas Day meetup</span>
+                <span class="story-chip">Windmills first date</span>
+                <span class="story-chip">February 14 flowers</span>
+              </div>
+            </article>
+
+            <article class="story-card story-card-dark reveal stagger" style="--d:3;">
+              <p class="story-card-tag">Chapter 05</p>
+              <h3 class="story-card-title">The Real Part</h3>
+              <p class="story-story-copy">To everyone else, they already look like best friends who have known each other forever. That is the magic of it. Best-friends energy first, real love underneath, easy laughter everywhere, and a comfort level that showed up way earlier than expected.</p>
+              <div class="story-chip-row">
+                <span class="story-chip">best friends energy</span>
+                <span class="story-chip">effortless comfort</span>
+                <span class="story-chip">the beginning</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="story-closing-card reveal stagger" style="--d:4;">
+            <div class="story-closing-grid">
+              <div>
+                <p class="story-kicker">THE PART THAT STILL MAKES EVERYONE SMILE</p>
+                <p class="story-closing-quote">"We’re just as surprised as you are."</p>
+              </div>
+              <div class="space-y-4">
+                <p class="story-closing-note">Some stories arrive slowly. This one showed up all at once: funny, easy, surprisingly certain, and impossible to ignore. That is what you are being invited into, not just a ceremony, but the next chapter of something that already feels deeply real.</p>
+                <div class="story-mobile-divider"></div>
+                <span class="story-closing-credit">Chamanthi and Sandeep • just getting started</span>
+              </div>
             </div>
           </div>
         </div>
@@ -2037,7 +2259,6 @@ print(“wasssuppp”)</pre>
       const email = document.getElementById('rsvp-email')?.value.trim();
       const phone = document.getElementById('rsvp-phone')?.value.trim();
       const plusOnes = parseInt(document.getElementById('rsvp-plus-ones')?.value) || 0;
-      const dietary = document.getElementById('rsvp-dietary')?.value.trim();
       const message = document.getElementById('rsvp-message')?.value.trim();
       const events = getSelectedEvents();
       const errorMsg = document.getElementById('rsvp-error-msg');
@@ -2056,7 +2277,6 @@ print(“wasssuppp”)</pre>
       const data = {
         name, email, phone,
         attendance: rsvpResponse,
-        dietary: dietary || '',
         plusOnes,
         events,
         message: message || '',
