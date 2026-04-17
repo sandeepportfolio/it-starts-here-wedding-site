@@ -123,7 +123,8 @@
 
     /* Nav */
     .nav-link { padding: 6px 16px; border-radius: 20px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.2s; cursor: pointer; white-space: nowrap; color: var(--text-muted); border: 1px solid transparent; }
-    .nav-link:hover, .nav-link.active { color: var(--gold); border-color: var(--gold); background: var(--gold-glow); }
+    .nav-link:hover:not(.active) { color: var(--text); border-color: rgba(212,176,106,0.16); background: rgba(212,176,106,0.06); }
+    .nav-link.active { color: var(--gold); border-color: var(--gold); background: var(--gold-glow); }
 
     /* Countdown */
     .countdown-unit { text-align: center; min-width: 56px; }
