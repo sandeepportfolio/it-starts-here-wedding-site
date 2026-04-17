@@ -12,7 +12,7 @@
   <!-- Firebase configuration -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, doc, updateDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
     import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
     const firebaseConfig = {
@@ -48,6 +48,9 @@
     window.query = query;
     window.orderBy = orderBy;
     window.limit = limit;
+    window.doc = doc;
+    window.updateDoc = updateDoc;
+    window.onSnapshot = onSnapshot;
     window.storageRef = ref;
     window.uploadBytes = uploadBytes;
     window.getDownloadURL = getDownloadURL;
@@ -488,29 +491,30 @@
       <button onclick="closePhotoUpload()" style="position:absolute; top:16px; right:16px; background:none; border:none; cursor:pointer; font-size:24px; color:var(--text-muted); line-height:1;">&times;</button>
       <div class="text-center mb-6">
         <div style="font-size:2.5rem; margin-bottom:8px;">📷</div>
-        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.75rem; font-weight:400; color:var(--text);">Share Your Photo</h3>
-        <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Upload a moment from the celebration. Thank you for being part of our story!</p>
-        <p style="font-size:11px; color:var(--text-light); margin-top:8px;">Photo uploads can take up to a minute, please hang tight after tapping upload.</p>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.75rem; font-weight:400; color:var(--text);">Share Your Photos</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Upload moments from the celebration. You can select multiple photos at once.</p>
+        <p style="font-size:11px; color:var(--text-light); margin-top:8px;">New uploads sync across all wedding pages automatically, and each photo should show up as soon as it finishes uploading.</p>
       </div>
       <div id="photo-upload-success" style="display:none; text-align:center; padding:16px; border-radius:12px; background:rgba(184,146,74,0.12); border:1px solid rgba(184,146,74,0.25); margin-bottom:16px;">
         <p style="font-size:14px; color:var(--gold); font-weight:500;"></p>
       </div>
       <div style="display:flex; flex-direction:column; gap:14px;" id="photo-upload-form">
         <div>
-          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Photo *</label>
+          <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Photos *</label>
           <div style="border:2px dashed var(--border); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; background:var(--bg);" id="photo-drop-zone" onclick="document.getElementById('photo-file-input').click()" ondragover="event.preventDefault(); this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="event.preventDefault(); this.style.borderColor='var(--border)'; document.getElementById('photo-file-input').files=event.dataTransfer.files; document.getElementById('photo-file-input').dispatchEvent(new Event('change'))">
             <img id="photo-preview-img" src="" alt="Preview" style="display:none; max-width:100%; max-height:200px; border-radius:8px; margin:0 auto 12px; object-fit:cover;">
             <div id="photo-placeholder" style="color:var(--text-muted);">
               <div style="font-size:1.75rem; margin-bottom:8px;">🖼️</div>
-              <p style="font-size:12px;">Click or drag & drop to select a photo</p>
-              <p style="font-size:10px; color:var(--text-light); margin-top:4px;">JPG, PNG, GIF up to 10MB</p>
+              <p style="font-size:12px;">Click or drag & drop to select photos</p>
+              <p style="font-size:10px; color:var(--text-light); margin-top:4px;">JPG, PNG, GIF up to 10MB each, up to 10 at once</p>
             </div>
           </div>
-          <input type="file" id="photo-file-input" accept="image/*" style="display:none;">
+          <div id="photo-selection-summary" style="display:none; font-size:11px; color:var(--text-muted); text-align:center; margin-top:10px;"></div>
+          <input type="file" id="photo-file-input" accept="image/*" multiple style="display:none;">
         </div>
         <div id="photo-upload-error" style="display:none; font-size:12px; color:#ef4444; text-align:center; padding:10px; border-radius:8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2);"></div>
         <button type="button" id="photo-submit-btn" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; border-radius:14px; margin-top:4px;">
-          Upload Photo ✨
+          Upload Photos ✨
         </button>
       </div>
     </div>
@@ -1504,12 +1508,32 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
     // ---- Guest Uploads Gallery ----
+    let guestUploadsUnsubscribe = null;
+
+    function renderGuestUploads(photos) {
+      const grid = document.getElementById('guest-photos-grid');
+      if (!grid) return;
+      if (!photos.length) {
+        grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">No guest uploads yet</p><p class="text-sm" style="color:var(--text-muted);">Be the first to share a memory.</p></div>`;
+        return;
+      }
+      grid.innerHTML = photos.map(p => `
+        <div class="card overflow-hidden reveal-scale" style="flex:0 0 min(82vw, 320px); max-width:320px; scroll-snap-align:center;">
+          <img src="${p.imageData || p.imageUrl || p.url || ''}" alt="Guest upload" style="width:100%; aspect-ratio:4/3; object-fit:cover; object-position:center; display:block; background:var(--bg-alt);">
+          <div style="padding:16px 18px;">
+            ${p.caption ? `<p style="font-size:13px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.5;">${String(p.caption).replace(/</g,'&lt;')}</p>` : ''}
+            <p style="font-size:11px; color:var(--text-light); margin:0; text-transform:uppercase; letter-spacing:0.08em;">Guest Upload</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
     async function loadGuestUploads(retryCount = 0) {
       const grid = document.getElementById('guest-photos-grid');
       if (!grid) return;
       try {
         const db = window.firebaseDb && window.firebaseDb();
-        if (!db || !window.getDocs || !window.query || !window.orderBy || !window.limit || !window.collection) {
+        if (!db || !window.onSnapshot || !window.query || !window.orderBy || !window.limit || !window.collection) {
           if (retryCount < 12) {
             window.setTimeout(() => loadGuestUploads(retryCount + 1), 400);
             return;
@@ -1517,23 +1541,21 @@
           grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Guest uploads unavailable</p><p class="text-sm" style="color:var(--text-muted);">Please check back shortly.</p></div>`;
           return;
         }
+        if (guestUploadsUnsubscribe) return;
         const q = window.query(window.collection(db, 'photos'), window.orderBy('createdAt', 'desc'), window.limit(24));
-        const snap = await window.getDocs(q);
-        const photos = [];
-        snap.forEach(doc => photos.push({ id: doc.id, ...doc.data() }));
-        if (!photos.length) {
-          grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">No guest uploads yet</p><p class="text-sm" style="color:var(--text-muted);">Be the first to share a memory.</p></div>`;
-          return;
-        }
-        grid.innerHTML = photos.map(p => `
-          <div class="card overflow-hidden reveal-scale" style="flex:0 0 min(82vw, 320px); max-width:320px; scroll-snap-align:center;">
-            <img src="${p.imageData || p.imageUrl || p.url || ''}" alt="Guest upload" style="width:100%; aspect-ratio:4/3; object-fit:cover; object-position:center; display:block; background:var(--bg-alt);">
-            <div style="padding:16px 18px;">
-              ${p.caption ? `<p style="font-size:13px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.5;">${String(p.caption).replace(/</g,'&lt;')}</p>` : ''}
-              <p style="font-size:11px; color:var(--text-light); margin:0; text-transform:uppercase; letter-spacing:0.08em;">Guest Upload</p>
-            </div>
-          </div>
-        `).join('');
+        guestUploadsUnsubscribe = window.onSnapshot(q, (snap) => {
+          const photos = [];
+          snap.forEach((photoDoc) => {
+            const data = photoDoc.data() || {};
+            if (data.approved === false) return;
+            photos.push({ id: photoDoc.id, ...data });
+          });
+          renderGuestUploads(photos);
+        }, (e) => {
+          console.error('Guest uploads listener error:', e);
+          grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Couldn’t load guest uploads</p><p class="text-sm" style="color:var(--text-muted);">${String(e.message).replace(/</g,'&lt;')}</p></div>`;
+          guestUploadsUnsubscribe = null;
+        });
       } catch (e) {
         grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Couldn’t load guest uploads</p><p class="text-sm" style="color:var(--text-muted);">${String(e.message).replace(/</g,'&lt;')}</p></div>`;
       }
@@ -1551,14 +1573,16 @@
       if (fileInput) fileInput.value = '';
       const preview = document.getElementById('photo-preview-img');
       const placeholder = document.getElementById('photo-placeholder');
+      const summary = document.getElementById('photo-selection-summary');
       if (preview) { preview.src = ''; preview.style.display = 'none'; }
       if (placeholder) { placeholder.style.display = ''; }
+      if (summary) { summary.textContent = ''; summary.style.display = 'none'; }
       const photoErr = document.getElementById('photo-upload-error');
       if (photoErr) { photoErr.textContent = ''; photoErr.style.display = 'none'; }
       const photoSucc = document.getElementById('photo-upload-success');
       if (photoSucc) { photoSucc.style.display = 'none'; }
       const submitBtn = document.getElementById('photo-submit-btn');
-      if (submitBtn) { submitBtn.textContent = 'Upload Photo ✨'; submitBtn.disabled = false; }
+      if (submitBtn) { submitBtn.textContent = 'Upload Photos ✨'; submitBtn.disabled = false; }
     }
 
     // Preview selected photo
@@ -1567,20 +1591,29 @@
       if (fileInput && !fileInput.dataset.boundPreview) {
         fileInput.dataset.boundPreview = 'true';
         fileInput.addEventListener('change', (e) => {
-          const file = e.target.files[0];
+          const files = Array.from(e.target.files || []);
+          const file = files[0];
           const preview = document.getElementById('photo-preview-img');
           const placeholder = document.getElementById('photo-placeholder');
+          const summary = document.getElementById('photo-selection-summary');
           if (file && preview) {
             const reader = new FileReader();
             reader.onload = (ev) => {
               preview.src = ev.target.result;
               preview.style.display = 'block';
               if (placeholder) placeholder.style.display = 'none';
+              if (summary) {
+                summary.textContent = files.length > 1
+                  ? `${files.length} photos selected. They’ll upload together and sync across all 3 sites.`
+                  : file.name;
+                summary.style.display = 'block';
+              }
             };
             reader.readAsDataURL(file);
           } else {
             if (preview) { preview.src = ''; preview.style.display = 'none'; }
             if (placeholder) placeholder.style.display = '';
+            if (summary) { summary.textContent = ''; summary.style.display = 'none'; }
           }
         });
       }
@@ -1598,9 +1631,7 @@
       });
     }
 
-    // Submit guest photo
-    // Resize image helper (Base64 approach — no Firebase Storage needed)
-    window.resizeImage = function(file, maxDim = 700, quality = 0.5) {
+    window.createResizedCanvas = function(file, maxDim = 700) {
       return new Promise(async (resolve, reject) => {
         try {
           const loadImageFallback = () => new Promise((res, rej) => {
@@ -1630,89 +1661,137 @@
           canvas.height = height;
           canvas.getContext('2d').drawImage(source, 0, 0, width, height);
           if (typeof source.close === 'function') source.close();
-          resolve(canvas.toDataURL('image/jpeg', quality));
+          resolve(canvas);
         } catch (err) {
           reject(err);
         }
       });
     };
 
+    window.resizeImage = async function(file, maxDim = 700, quality = 0.5) {
+      const canvas = await window.createResizedCanvas(file, maxDim);
+      return canvas.toDataURL('image/jpeg', quality);
+    };
+
+    window.resizeImageBlob = async function(file, maxDim = 1400, quality = 0.72) {
+      const canvas = await window.createResizedCanvas(file, maxDim);
+      return await new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob);
+          else reject(new Error('Could not process image.'));
+        }, 'image/jpeg', quality);
+      });
+    };
+
     window.submitGuestPhoto = async function() {
       const fileInput = document.getElementById('photo-file-input');
-      const file = fileInput?.files[0];
+      const files = Array.from(fileInput?.files || []);
       const errorEl = document.getElementById('photo-upload-error');
       const successEl = document.getElementById('photo-upload-success');
       const submitBtn = document.getElementById('photo-submit-btn');
 
-      if (!file) {
-        if (errorEl) { errorEl.textContent = 'Please select a photo to upload.'; errorEl.style.display = 'block'; }
+      if (!files.length) {
+        if (errorEl) { errorEl.textContent = 'Please select at least one photo to upload.'; errorEl.style.display = 'block'; }
         return;
       }
 
       if (errorEl) { errorEl.style.display = 'none'; }
       if (successEl) { successEl.style.display = 'none'; }
-      if (submitBtn) { submitBtn.textContent = 'Uploading...'; submitBtn.disabled = true; }
+      if (submitBtn) { submitBtn.textContent = `Uploading 0/${files.length}...`; submitBtn.disabled = true; }
 
       try {
         const db = window.firebaseDb();
         const storage = window.firebaseStorage && window.firebaseStorage();
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
         if (!window.addDoc || !window.collection) throw new Error('Photo saving is not ready yet. Please try again in a moment.');
-        if (!file.type || !file.type.startsWith('image/')) throw new Error('Please choose an image file.');
-        if (file.size > 10 * 1024 * 1024) throw new Error('Please choose a photo under 10MB.');
-
-        let imageData = await resizeImage(file, 700, 0.5);
-        if (imageData.length > 900000) {
-          imageData = await resizeImage(file, 560, 0.45);
-        }
-        if (imageData.length > 980000) {
-          throw new Error('This photo is still too large after compression. Please choose a smaller image.');
-        }
+        if (files.length > 10) throw new Error('Please upload up to 10 photos at a time.');
 
         const currentPath = window.location.pathname;
         const source = currentPath.startsWith('/sub/') ? 'sub' : currentPath.startsWith('/inner-circle/') ? 'inner-circle' : 'main-site';
-        const storageFolder = source === 'main-site' ? 'main' : source;
-        let imageUrl = '';
-        let useInlineImage = true;
+        let uploadedCount = 0;
+        const failures = [];
 
-        if (storage && window.storageRef && window.uploadBytes && window.getDownloadURL) {
-          try {
-            const blob = await withTimeout((async () => (await fetch(imageData)).blob())(), 4000, 'Photo processing took too long.');
-            const safeName = (file.name || 'guest-photo.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
-            const storagePath = `guest-photos/${storageFolder}/${Date.now()}-${safeName}`;
-            const fileRef = window.storageRef(storage, storagePath);
-            await withTimeout(window.uploadBytes(fileRef, blob, { contentType: 'image/jpeg' }), 10000, 'Photo upload timed out.');
-            imageUrl = await withTimeout(window.getDownloadURL(fileRef), 4000, 'Could not fetch the uploaded photo.');
-            useInlineImage = !imageUrl;
-          } catch (storageErr) {
-            console.warn('Storage upload failed, falling back to Firestore-only:', storageErr);
+        const updateProgress = () => {
+          if (submitBtn) submitBtn.textContent = `Uploading ${uploadedCount}/${files.length}...`;
+        };
+
+        const uploadSinglePhoto = async (file, index) => {
+          if (!file.type || !file.type.startsWith('image/')) throw new Error(`${file.name || 'File'} is not an image.`);
+          if (file.size > 10 * 1024 * 1024) throw new Error(`${file.name || 'A photo'} is larger than 10MB.`);
+
+          let previewData = await resizeImage(file, 720, 0.5);
+          if (previewData.length > 900000) previewData = await resizeImage(file, 560, 0.42);
+          if (previewData.length > 980000) throw new Error(`${file.name || 'This photo'} is too large after compression.`);
+
+          const photoRef = await withTimeout(window.addDoc(window.collection(db, 'photos'), {
+            uploaderName: 'Guest',
+            uploaderEmail: '',
+            caption: '',
+            imageUrl: '',
+            imageData: previewData,
+            approved: true,
+            source,
+            uploadStatus: 'processing',
+            createdAt: new Date()
+          }), 6000, 'Saving your photo took too long.');
+
+          if (storage && window.storageRef && window.uploadBytes && window.getDownloadURL && window.updateDoc && window.doc) {
+            try {
+              const uploadBlob = await window.resizeImageBlob(file, 1400, 0.72);
+              const safeName = (file.name || 'guest-photo.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
+              const storagePath = `guest-photos/shared/${Date.now()}-${index}-${safeName}`;
+              const fileRef = window.storageRef(storage, storagePath);
+              await withTimeout(window.uploadBytes(fileRef, uploadBlob, { contentType: 'image/jpeg' }), 15000, 'Photo upload timed out.');
+              const imageUrl = await withTimeout(window.getDownloadURL(fileRef), 5000, 'Could not fetch the uploaded photo.');
+              await withTimeout(window.updateDoc(window.doc(db, 'photos', photoRef.id), {
+                imageUrl,
+                imageData: '',
+                uploadStatus: 'ready'
+              }), 6000, 'Finalizing your photo took too long.');
+            } catch (storageErr) {
+              console.warn('Storage upload failed, keeping inline preview in Firestore:', storageErr);
+            }
           }
-        }
+        };
 
-        await withTimeout(window.addDoc(window.collection(db, 'photos'), {
-          uploaderName: 'Guest',
-          uploaderEmail: '',
-          caption: '',
-          imageUrl: imageUrl || '',
-          imageData: useInlineImage ? imageData : '',
-          approved: true,
-          source,
-          createdAt: new Date()
-        }), 8000, 'Saving your photo took too long.');
+        let nextIndex = 0;
+        const workerCount = Math.min(3, files.length);
+        await Promise.all(Array.from({ length: workerCount }, async () => {
+          while (nextIndex < files.length) {
+            const currentIndex = nextIndex++;
+            const file = files[currentIndex];
+            try {
+              await uploadSinglePhoto(file, currentIndex);
+              uploadedCount += 1;
+              updateProgress();
+            } catch (fileErr) {
+              console.error('Photo upload error:', fileErr);
+              failures.push(`${file.name || `Photo ${currentIndex + 1}`}: ${fileErr.message}`);
+            }
+          }
+        }));
+
+        if (!uploadedCount) throw new Error(failures[0] || 'No photos were uploaded.');
 
         if (successEl) {
-          successEl.querySelector('p').textContent = '✨ Photo uploaded! Thank you for sharing this memory with us.';
+          successEl.querySelector('p').textContent = failures.length
+            ? `✨ ${uploadedCount} of ${files.length} photos uploaded. The rest can be tried again.`
+            : `✨ ${uploadedCount} photo${uploadedCount === 1 ? '' : 's'} uploaded and synced across all wedding sites.`;
           successEl.style.display = 'block';
         }
-        loadGuestUploads();
-        if (submitBtn) { submitBtn.textContent = 'Uploaded ✨'; submitBtn.disabled = false; }
+        if (errorEl && failures.length) {
+          errorEl.innerHTML = failures.slice(0, 3).map(msg => String(msg).replace(/</g, '&lt;')).join('<br>');
+          errorEl.style.display = 'block';
+        }
+        if (submitBtn) { submitBtn.textContent = failures.length ? 'Upload More Photos ✨' : 'Uploaded ✨'; submitBtn.disabled = false; }
 
-        // Auto-close after a short beat
-        setTimeout(closePhotoUpload, 2000);
+        if (!failures.length) {
+          setTimeout(closePhotoUpload, 1800);
+        }
       } catch (e) {
         console.error('Photo upload error:', e);
         if (errorEl) { errorEl.textContent = 'Upload failed: ' + e.message + '. Please try again.'; errorEl.style.display = 'block'; }
-        if (submitBtn) { submitBtn.textContent = 'Upload Photo ✨'; submitBtn.disabled = false; }
+        if (submitBtn) { submitBtn.textContent = 'Upload Photos ✨'; submitBtn.disabled = false; }
       }
     }
 
