@@ -12,7 +12,7 @@
   <!-- Firebase configuration -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, doc, updateDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, doc, updateDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
     import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
     const firebaseConfig = {
@@ -51,6 +51,7 @@
     window.doc = doc;
     window.updateDoc = updateDoc;
     window.onSnapshot = onSnapshot;
+    window.serverTimestamp = serverTimestamp;
     window.storageRef = ref;
     window.uploadBytes = uploadBytes;
     window.getDownloadURL = getDownloadURL;
@@ -1980,6 +1981,43 @@
     </div>
   </div>
 
+  <!-- ===================== GUESTBOOK MODAL ===================== -->
+  <style>
+    #guestbook-modal { display:none; position:fixed; inset:0; z-index:310; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
+    #guestbook-modal.open { display:flex; }
+  </style>
+  <div id="guestbook-modal" onclick="if(event.target===this)closeGuestbookModal()">
+    <div style="background:var(--bg-card); border-radius:24px; max-width:520px; width:100%; padding:36px 32px; position:relative; box-shadow:0 24px 64px rgba(0,0,0,0.3); border:1px solid var(--border); max-height:90vh; overflow-y:auto;">
+      <button type="button" onclick="closeGuestbookModal()" style="position:absolute; top:16px; right:16px; background:none; border:none; cursor:pointer; font-size:24px; color:var(--text-muted); line-height:1;">&times;</button>
+      <div class="text-center mb-6">
+        <div style="font-size:2.5rem; margin-bottom:8px;">&#128221;</div>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.9rem; font-weight:400; color:var(--text);">Sign the Guestbook</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:6px;">Leave a little love for Chamanthi &amp; Sandeep. Your note will be saved to their guestbook.</p>
+      </div>
+      <div id="guestbook-success" style="display:none; text-align:center; padding:16px; border-radius:12px; background:rgba(184,146,74,0.12); border:1px solid rgba(184,146,74,0.25); margin-bottom:16px;">
+        <p style="font-size:14px; color:var(--gold); font-weight:500;"></p>
+      </div>
+      <div id="guestbook-form" style="display:flex; flex-direction:column; gap:14px;">
+        <div>
+          <label for="guestbook-name" style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Name *</label>
+          <input id="guestbook-name" type="text" placeholder="Your name" style="width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:14px; outline:none;">
+        </div>
+        <div>
+          <label for="guestbook-email" style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Email</label>
+          <input id="guestbook-email" type="email" placeholder="Optional" style="width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:14px; outline:none;">
+        </div>
+        <div>
+          <label for="guestbook-message" style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Message *</label>
+          <textarea id="guestbook-message" rows="5" placeholder="Write your message here..." style="width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:14px; outline:none; resize:vertical; min-height:132px;"></textarea>
+        </div>
+        <div id="guestbook-error" style="display:none; font-size:12px; color:#ef4444; text-align:center; padding:10px; border-radius:8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2);"></div>
+        <button type="button" id="guestbook-submit-btn" class="btn-gold" style="width:100%; justify-content:center; padding:14px 32px; border-radius:14px; margin-top:4px;">
+          Submit Message &#10024;
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===================== MAIN CONTENT ===================== -->
   <div id="content" style="display: none;">
 
@@ -2915,7 +2953,7 @@ print(“wasssuppp”)</pre>
     <section id="guestbook" class="py-20 px-6">
       <div class="max-w-3xl mx-auto">
         <div class="text-center mb-10 reveal"><p class="section-label mb-2">Words of Love</p><h2 class="section-title text-4xl sm:text-5xl">Guestbook</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">Leave your wishes, memories, and love for Chamanthi &amp; Sandeep.</p><div class="section-divider mt-4"></div></div>
-        <div class="card p-8 text-center reveal"><div class="text-5xl mb-4">&#128214;</div><p class="font-heading text-xl font-medium mb-2">Be the first to sign!</p><p class="text-sm mb-6" style="color:var(--text-muted);">Leave a heartfelt message for the happy couple</p><button class="btn-gold mx-auto">Write First Message &#10024;</button></div>
+        <div class="card p-8 text-center reveal"><div class="text-5xl mb-4">&#128214;</div><p class="font-heading text-xl font-medium mb-2" id="guestbook-empty-title">Be the first to sign!</p><p class="text-sm mb-6" style="color:var(--text-muted);" id="guestbook-empty-copy">Leave a heartfelt message for the happy couple</p><button type="button" class="btn-gold mx-auto" id="guestbook-open-btn" onclick="openGuestbookModal()">Write First Message &#10024;</button></div>
       </div>
     </section>
 
@@ -3404,6 +3442,96 @@ print(“wasssuppp”)</pre>
       const submitBtn = document.getElementById('photo-submit-btn');
       if (submitBtn) { submitBtn.textContent = 'Upload Photos ✨'; submitBtn.disabled = false; }
     }
+
+    function openGuestbookModal() {
+      document.getElementById('guestbook-modal')?.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeGuestbookModal() {
+      document.getElementById('guestbook-modal')?.classList.remove('open');
+      document.body.style.overflow = '';
+      const errorEl = document.getElementById('guestbook-error');
+      if (errorEl) { errorEl.textContent = ''; errorEl.style.display = 'none'; }
+      const successEl = document.getElementById('guestbook-success');
+      if (successEl) successEl.style.display = 'none';
+      const form = document.getElementById('guestbook-form');
+      if (form) form.style.display = 'flex';
+      const submitBtn = document.getElementById('guestbook-submit-btn');
+      if (submitBtn) { submitBtn.textContent = 'Submit Message ✨'; submitBtn.disabled = false; }
+      const nameEl = document.getElementById('guestbook-name');
+      const emailEl = document.getElementById('guestbook-email');
+      const messageEl = document.getElementById('guestbook-message');
+      if (nameEl) nameEl.value = '';
+      if (emailEl) emailEl.value = '';
+      if (messageEl) messageEl.value = '';
+    }
+    window.openGuestbookModal = openGuestbookModal;
+    window.closeGuestbookModal = closeGuestbookModal;
+
+    window.submitGuestbookMessage = async function() {
+      const nameEl = document.getElementById('guestbook-name');
+      const emailEl = document.getElementById('guestbook-email');
+      const messageEl = document.getElementById('guestbook-message');
+      const errorEl = document.getElementById('guestbook-error');
+      const successEl = document.getElementById('guestbook-success');
+      const formEl = document.getElementById('guestbook-form');
+      const submitBtn = document.getElementById('guestbook-submit-btn');
+
+      const name = nameEl?.value.trim() || '';
+      const email = emailEl?.value.trim() || '';
+      const message = messageEl?.value.trim() || '';
+
+      if (!name || !message) {
+        if (errorEl) {
+          errorEl.textContent = 'Please fill in your name and message.';
+          errorEl.style.display = 'block';
+        }
+        return;
+      }
+
+      if (errorEl) { errorEl.textContent = ''; errorEl.style.display = 'none'; }
+      if (submitBtn) { submitBtn.textContent = 'Sending...'; submitBtn.disabled = true; }
+
+      try {
+        const db = window.firebaseDb();
+        if (!db || !window.addDoc || !window.collection) throw new Error('Guestbook is not ready yet. Please try again in a moment.');
+
+        const currentPath = window.location.pathname;
+        const source = currentPath.startsWith('/sub/') ? 'sub' : currentPath.startsWith('/inner-circle/') ? 'inner-circle' : 'main-site';
+
+        await withTimeout(window.addDoc(window.collection(db, 'messages'), {
+          name,
+          email,
+          message,
+          source,
+          createdAt: window.serverTimestamp ? window.serverTimestamp() : new Date()
+        }), 10000, 'Submitting your message took too long.');
+
+        if (successEl) {
+          const p = successEl.querySelector('p');
+          if (p) p.textContent = 'Your guestbook message is in. Thank you ✨';
+          successEl.style.display = 'block';
+        }
+        if (formEl) formEl.style.display = 'none';
+
+        const titleEl = document.getElementById('guestbook-empty-title');
+        const copyEl = document.getElementById('guestbook-empty-copy');
+        const openBtn = document.getElementById('guestbook-open-btn');
+        if (titleEl) titleEl.textContent = 'Thanks for signing!';
+        if (copyEl) copyEl.textContent = 'Your message has been sent to Chamanthi and Sandeep.';
+        if (openBtn) openBtn.textContent = 'Write Another Message ✨';
+
+        window.setTimeout(() => {
+          closeGuestbookModal();
+        }, 1200);
+      } catch (err) {
+        if (errorEl) {
+          errorEl.textContent = String(err.message || 'Could not submit your message right now.');
+          errorEl.style.display = 'block';
+        }
+        if (submitBtn) { submitBtn.textContent = 'Submit Message ✨'; submitBtn.disabled = false; }
+      }
+    };
 
 
     window.MAX_GUEST_PHOTO_UPLOADS = 15;
@@ -4000,6 +4128,10 @@ print(“wasssuppp”)</pre>
       // Photo upload
       var photoSubmit = document.getElementById('photo-submit-btn');
       if (photoSubmit) photoSubmit.addEventListener('click', function() { window.submitGuestPhoto(); });
+
+      // Guestbook
+      var guestbookSubmit = document.getElementById('guestbook-submit-btn');
+      if (guestbookSubmit) guestbookSubmit.addEventListener('click', function() { window.submitGuestbookMessage(); });
     }
 
     if (document.readyState === 'loading') {
