@@ -2144,7 +2144,7 @@
                 <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Full Name *</label><input type="text" class="form-input" placeholder="Your name" id="rsvp-name"></div>
                 <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Phone</label><input type="tel" class="form-input" placeholder="Your number" id="rsvp-phone"></div>
               </div>
-              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Plus Ones</label><input type="number" class="form-input" placeholder="0" min="0" max="10" id="rsvp-plus-ones" value="0"></div>
+              <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Total Guests</label><input type="number" class="form-input" placeholder="1" min="1" max="11" id="rsvp-plus-ones" value="1"></div>
               <div><label class="text-xs font-medium mb-1 block" style="color:var(--text-muted);">Message for the Couple</label><textarea class="form-input" rows="2" placeholder="Your wishes..." id="rsvp-message" style="resize:none;"></textarea></div>
               <div class="flex gap-3" style="padding-top:20px;">
                 <button id="rsvp-back-btn" class="btn-outline flex-1" style="border-radius:12px;">&#8592; Back</button>
@@ -3960,7 +3960,8 @@ print(“wasssuppp”)</pre>
     async function submitRsvpForm() {
       const name = document.getElementById('rsvp-name')?.value.trim();
       const phone = document.getElementById('rsvp-phone')?.value.trim();
-      const plusOnes = parseInt(document.getElementById('rsvp-plus-ones')?.value) || 0;
+      const totalGuests = Math.min(Math.max(parseInt(document.getElementById('rsvp-plus-ones')?.value) || 1, 1), 11);
+      const plusOnes = totalGuests - 1;
       const message = document.getElementById('rsvp-message')?.value.trim();
       const events = getSelectedEvents();
       const errorMsg = document.getElementById('rsvp-error-msg');
