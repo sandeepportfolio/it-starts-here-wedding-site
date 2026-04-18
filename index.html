@@ -3440,6 +3440,8 @@ print(“wasssuppp”)</pre>
       const submitBtn = document.getElementById('photo-submit-btn');
       if (submitBtn) { submitBtn.textContent = 'Upload Photos ✨'; submitBtn.disabled = false; }
     }
+    window.openPhotoUpload = openPhotoUpload;
+    window.closePhotoUpload = closePhotoUpload;
 
     function openGuestbookModal() {
       document.getElementById('guestbook-modal')?.classList.add('open');
