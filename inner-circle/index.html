@@ -848,27 +848,6 @@
       background: linear-gradient(to top, rgba(18,14,10,0.58), rgba(18,14,10,0));
       pointer-events: none;
     }
-    .guest-collage-index {
-      position: absolute;
-      left: 10px;
-      bottom: 10px;
-      z-index: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 34px;
-      padding: 5px 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.18);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.2);
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: #fff;
-    }
     .guest-status-card,
     .guest-loading-card {
       display: grid;
@@ -1168,13 +1147,6 @@
       }
       .guest-collage-frame {
         border-radius: 14px;
-      }
-      .guest-collage-index {
-        left: 8px;
-        bottom: 8px;
-        min-width: 30px;
-        padding: 4px 7px;
-        font-size: 0.56rem;
       }
       .guest-status-card,
       .guest-loading-card {
@@ -3385,7 +3357,6 @@ print(“wasssuppp”)</pre>
                 <button type="button" class="guest-collage-item" onclick="openGuestUploadsLightbox(${photo._globalIndex})" aria-label="Open guest upload ${photo._globalIndex + 1} of ${photos.length}">
                   <span class="guest-collage-frame">
                     <img src="${src}" alt="Guest upload ${photo._globalIndex + 1}" loading="lazy">
-                    <span class="guest-collage-index">${photo._globalIndex + 1}</span>
                   </span>
                 </button>`;
             }).join('')}
