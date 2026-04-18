@@ -1697,7 +1697,7 @@
     .section-divider { width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto; }
     html { scroll-behavior: smooth; }
     section[id] { scroll-margin-top: 96px; }
-    #livestream-focus { scroll-margin-top: 48px; }
+    .nav-focus-anchor { scroll-margin-top: 48px; }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--text-light); border-radius: 3px; }
@@ -1917,10 +1917,6 @@
           <input id="guestbook-name" type="text" placeholder="Your name" style="width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:14px; outline:none;">
         </div>
         <div>
-          <label for="guestbook-email" style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Email</label>
-          <input id="guestbook-email" type="email" placeholder="Optional" style="width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:14px; outline:none;">
-        </div>
-        <div>
           <label for="guestbook-message" style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Message *</label>
           <textarea id="guestbook-message" rows="5" placeholder="Write your message here..." style="width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:14px; outline:none; resize:vertical; min-height:132px;"></textarea>
         </div>
@@ -1983,13 +1979,13 @@
     <!-- ===== STICKY NAV ===== -->
     <nav id="sticky-nav" class="sticky top-0 z-[100] glass py-3 px-4" style="border-bottom: 1px solid var(--border);">
       <div class="max-w-6xl mx-auto flex items-center gap-2 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; padding-right: 20px;">
-        <a href="#rsvp" class="nav-link">RSVP</a>
-        <a href="#story" class="nav-link">Our Story</a>
-        <a href="#events" class="nav-link">Events</a>
-        <a href="#details" class="nav-link">Details</a>
-        <a href="#gallery" class="nav-link">Gallery</a>
-        <a href="#hotels" class="nav-link">Stay</a>
-        <a href="#livestream" class="nav-link">Live</a>
+        <a href="#rsvp-focus" class="nav-link">RSVP</a>
+        <a href="#story-focus" class="nav-link">Our Story</a>
+        <a href="#events-focus" class="nav-link">Events</a>
+        <a href="#details-focus" class="nav-link">Details</a>
+        <a href="#gallery-focus" class="nav-link">Gallery</a>
+        <a href="#hotels-focus" class="nav-link">Stay</a>
+        <a href="#livestream-focus" class="nav-link">Live</a>
         <button id="theme-toggle" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0 ml-1" style="display:none; background:var(--gold-glow); border:1px solid var(--border); transition:all 0.2s;" title="Toggle dark mode">
           <span id="theme-icon" class="text-sm">&#9789;</span>
         </button>
@@ -2066,7 +2062,7 @@
     <!-- ===== RSVP (First Section) ===== -->
     <section id="rsvp" class="py-20 px-6" style="background: var(--bg-alt);">
       <div class="max-w-lg mx-auto">
-        <div class="text-center mb-10 reveal">
+        <div class="text-center mb-10 reveal nav-focus-anchor" id="rsvp-focus">
           <p class="section-label mb-2">Join Us</p>
           <h2 class="section-title text-4xl sm:text-5xl">RSVP</h2>
           <p class="text-sm mt-3" style="color: var(--text-muted);">Kindly respond by April 20th, 2026</p>
@@ -2176,7 +2172,7 @@
     <!-- ===== OUR STORY - Storyboard Refresh ===== -->
     <section id="story" class="py-24 px-6" style="background: linear-gradient(180deg, rgba(245,239,229,0.18) 0%, rgba(255,255,255,0) 100%);">
       <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-12 reveal">
+        <div class="text-center mb-12 reveal nav-focus-anchor" id="story-focus">
           <p class="section-label mb-2">Our Story</p>
           <h2 class="section-title text-3xl sm:text-4xl">Our Story</h2>
           <div class="section-divider mt-5"></div>
@@ -2280,7 +2276,7 @@ print(“wasssuppp”)</pre>
     <!-- ===== EVENTS - Immersive Bento ===== -->
     <section id="events" class="py-20 px-6" style="background: var(--bg-alt);">
       <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-12 reveal">
+        <div class="text-center mb-12 reveal nav-focus-anchor" id="events-focus">
           <p class="section-label mb-2">The Celebrations</p>
           <h2 class="section-title text-4xl sm:text-5xl">Wedding Events</h2>
           <p class="text-sm mt-3 max-w-md mx-auto" style="color: var(--text-muted);">The sacred journey of Chamanthi &amp; Sandeep — May 7th &ndash; 9th, 2026</p>
@@ -2436,7 +2432,7 @@ print(“wasssuppp”)</pre>
       <div class="relative" style="height: 50vh; min-height: 360px;">
         <img src="https://6b37b55fc9cf23b8013d.cdn6.editmysite.com/uploads/b/9dede0d0-6dcf-11e9-99f9-f9d28ac0251e/Dallas.jpg?width=2400&optimize=medium" alt="Shree Swaminarayan Gurukul" class="w-full h-full object-cover" loading="lazy">
         <div class="absolute inset-0" style="background: linear-gradient(to bottom, var(--bg) 0%, transparent 30%, transparent 50%, rgba(26,22,18,0.85) 100%);"></div>
-        <div class="absolute bottom-0 left-0 right-0 px-6 pb-10 text-center">
+        <div class="absolute bottom-0 left-0 right-0 px-6 pb-10 text-center nav-focus-anchor" id="details-focus">
           <p class="text-[10px] tracking-[0.5em] uppercase font-semibold text-white/50 mb-2 reveal">Save the Date</p>
           <h2 class="font-heading text-4xl sm:text-5xl md:text-6xl font-light text-white reveal" style="text-shadow: 0 2px 20px rgba(0,0,0,0.4);">May 9th, 2026</h2>
           <p class="font-heading text-lg text-white/60 mt-2 reveal">Saturday &middot; 8:50 AM</p>
@@ -2494,7 +2490,7 @@ print(“wasssuppp”)</pre>
     <!-- ===== GALLERY - Horizontal Scroll ===== -->
     <section id="gallery" class="py-20 px-6" style="background: var(--bg-alt);">
       <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-10 reveal">
+        <div class="text-center mb-10 reveal nav-focus-anchor" id="gallery-focus">
           <p class="section-label mb-2">The Couple</p>
           <h2 class="section-title text-4xl sm:text-5xl">Our Story in Photos</h2>
           <p class="text-sm mt-3 max-w-md mx-auto" style="color: var(--text-muted);">Swipe to explore our journey together.</p>
@@ -2521,7 +2517,7 @@ print(“wasssuppp”)</pre>
     <!-- ===== WHERE TO STAY - Redesigned with Images & Verified Links ===== -->
     <section id="hotels" class="py-20 px-6">
       <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-8 reveal">
+        <div class="text-center mb-8 reveal nav-focus-anchor" id="hotels-focus">
           <p class="section-label mb-2">Plan Your Stay</p>
           <h2 class="section-title text-4xl sm:text-5xl">Where to Stay</h2>
           <p class="text-sm mt-3 max-w-lg mx-auto" style="color: var(--text-muted);">Handpicked hotels near Shree Swaminarayan Gurukul, including one preferred luxury recommendation for out-of-town guests. Every link verified.</p>
@@ -2841,7 +2837,7 @@ print(“wasssuppp”)</pre>
     <!-- ===== LIVE STREAM ===== -->
     <section id="livestream" class="py-24 px-6" style="background: var(--bg-alt);">
       <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-12 reveal" id="livestream-focus">
+        <div class="text-center mb-12 reveal nav-focus-anchor" id="livestream-focus">
           <p class="section-label mb-2">Witness Our Moment</p>
           <h2 class="section-title text-4xl sm:text-5xl">Live Stream</h2>
           <p class="text-sm mt-4 max-w-md mx-auto" style="color:var(--text-muted);">Can't be there in person? Watch every sacred moment unfold, live from Plano, Texas.</p>
@@ -3487,10 +3483,8 @@ print(“wasssuppp”)</pre>
       const submitBtn = document.getElementById('guestbook-submit-btn');
       if (submitBtn) { submitBtn.textContent = 'Submit Message ✨'; submitBtn.disabled = false; }
       const nameEl = document.getElementById('guestbook-name');
-      const emailEl = document.getElementById('guestbook-email');
       const messageEl = document.getElementById('guestbook-message');
       if (nameEl) nameEl.value = '';
-      if (emailEl) emailEl.value = '';
       if (messageEl) messageEl.value = '';
     }
     window.openGuestbookModal = openGuestbookModal;
@@ -3498,7 +3492,6 @@ print(“wasssuppp”)</pre>
 
     window.submitGuestbookMessage = async function() {
       const nameEl = document.getElementById('guestbook-name');
-      const emailEl = document.getElementById('guestbook-email');
       const messageEl = document.getElementById('guestbook-message');
       const errorEl = document.getElementById('guestbook-error');
       const successEl = document.getElementById('guestbook-success');
@@ -3506,7 +3499,6 @@ print(“wasssuppp”)</pre>
       const submitBtn = document.getElementById('guestbook-submit-btn');
 
       const name = nameEl?.value.trim() || '';
-      const email = emailEl?.value.trim() || '';
       const message = messageEl?.value.trim() || '';
 
       if (!name || !message) {
@@ -3529,7 +3521,6 @@ print(“wasssuppp”)</pre>
 
         await withTimeout(window.addDoc(window.collection(db, 'messages'), {
           name,
-          email,
           message,
           source,
           createdAt: window.serverTimestamp ? window.serverTimestamp() : new Date()
@@ -3751,7 +3742,7 @@ print(“wasssuppp”)</pre>
       return canvas.toDataURL('image/jpeg', quality);
     };
 
-    window.resizeImageBlob = async function(file, maxDim = 1400, quality = 0.72) {
+    window.resizeImageBlob = async function(file, maxDim = 2200, quality = 0.88) {
       const canvas = await window.createResizedCanvas(file, maxDim);
       return await new Promise((resolve, reject) => {
         canvas.toBlob((blob) => {
@@ -3820,7 +3811,7 @@ print(“wasssuppp”)</pre>
 
           finalizationTasks.push((async () => {
             try {
-              const uploadBlob = await window.resizeImageBlob(file, 1600, 0.74);
+              const uploadBlob = await window.resizeImageBlob(file, 2200, 0.88);
               const safeName = (file.name || 'guest-photo.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
               const storagePath = `guest-photos/shared/${Date.now()}-${index}-${safeName}`;
               const fileRef = window.storageRef(storage, storagePath);
@@ -3843,8 +3834,9 @@ print(“wasssuppp”)</pre>
           if (!window.isLikelyImageFile(file)) throw new Error(`${file.name || 'File'} is not a supported image.`);
           if (file.size > 10 * 1024 * 1024) throw new Error(`${file.name || 'A photo'} is larger than 10MB.`);
 
-          let previewData = await resizeImage(file, 720, 0.48);
-          if (previewData.length > 820000) previewData = await resizeImage(file, 560, 0.4);
+          let previewData = await resizeImage(file, 1080, 0.72);
+          if (previewData.length > 820000) previewData = await resizeImage(file, 900, 0.64);
+          if (previewData.length > 900000) previewData = await resizeImage(file, 760, 0.58);
           if (previewData.length > 950000) throw new Error(`${file.name || 'This photo'} is too large after compression.`);
 
           const photoRef = await withTimeout(window.addDoc(window.collection(db, 'photos'), {
