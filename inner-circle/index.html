@@ -1135,17 +1135,58 @@
         border-radius: 24px;
         padding: 10px;
       }
+      .guest-uploads-shell::before,
+      .guest-uploads-shell::after {
+        top: 10px;
+        bottom: 10px;
+        width: 34px;
+        height: auto;
+      }
+      .guest-uploads-shell::before {
+        left: 10px;
+        right: auto;
+        background: linear-gradient(to right, rgba(247,243,236,0.98), rgba(247,243,236,0));
+      }
+      .guest-uploads-shell::after {
+        right: 10px;
+        left: auto;
+        background: linear-gradient(to left, rgba(247,243,236,0.98), rgba(247,243,236,0));
+      }
+      .dark .guest-uploads-shell::before {
+        background: linear-gradient(to right, rgba(24,19,15,0.98), rgba(24,19,15,0));
+      }
+      .dark .guest-uploads-shell::after {
+        background: linear-gradient(to left, rgba(24,19,15,0.98), rgba(24,19,15,0));
+      }
       .guest-photos-grid {
-        column-count: 2;
-        column-gap: 12px;
-        max-height: 58vh;
-        padding: 2px 2px 10px;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(78%, 78%);
+        gap: 12px;
+        column-count: auto;
+        column-gap: 0;
+        max-height: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 2px 20px 10px 2px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+      }
+      .guest-photos-grid::-webkit-scrollbar {
+        display: none;
       }
       .guest-collage-item {
-        margin-bottom: 12px;
+        margin-bottom: 0;
+        scroll-snap-align: start;
       }
       .guest-collage-frame {
         border-radius: 18px;
+      }
+      .guest-status-card,
+      .guest-loading-card {
+        min-height: 280px;
       }
       .guest-collage-meta {
         left: 12px;
@@ -2915,12 +2956,12 @@ print(“wasssuppp”)</pre>
         <div class="photo-booth-gallery-head reveal">
           <div class="photo-booth-gallery-copy">
             <p class="photo-booth-note-label" style="margin-top:0;">Live Photo Wall</p>
-            <p class="text-sm mt-3" style="color:var(--text-muted);">Guest uploads appear here in a scrolling collage so the page stays polished while the photo wall keeps growing.</p>
+            <p class="text-sm mt-3" style="color:var(--text-muted);">Guest uploads appear here in a swipeable collage so guests can quickly spot newly uploaded photos while the page stays polished.</p>
             <p class="photo-booth-refresh-note"><strong>Refresh the website to see recently uploaded photos.</strong></p>
           </div>
           <div class="photo-booth-gallery-pills">
             <span class="photo-booth-gallery-pill"><span aria-hidden="true">&#10023;</span>Tap any photo to expand</span>
-            <span class="photo-booth-gallery-pill"><span aria-hidden="true">&#8597;</span>Scroll inside the collage</span>
+            <span class="photo-booth-gallery-pill"><span aria-hidden="true">&#8596;</span>Swipe through every upload</span>
           </div>
         </div>
 
@@ -3187,12 +3228,19 @@ print(“wasssuppp”)</pre>
       const shell = document.getElementById('guest-uploads-shell');
       const grid = document.getElementById('guest-photos-grid');
       if (!shell || !grid) return;
-      const hasOverflow = grid.scrollHeight - grid.clientHeight > 16;
-      const canScrollUp = hasOverflow && grid.scrollTop > 10;
-      const canScrollDown = hasOverflow && (grid.scrollTop + grid.clientHeight < grid.scrollHeight - 10);
+      const mobileSwipeLayout = window.matchMedia('(max-width: 639px)').matches;
+      const hasOverflow = mobileSwipeLayout
+        ? (grid.scrollWidth - grid.clientWidth > 16)
+        : (grid.scrollHeight - grid.clientHeight > 16);
+      const canScrollPrev = mobileSwipeLayout
+        ? (hasOverflow && grid.scrollLeft > 10)
+        : (hasOverflow && grid.scrollTop > 10);
+      const canScrollNext = mobileSwipeLayout
+        ? (hasOverflow && (grid.scrollLeft + grid.clientWidth < grid.scrollWidth - 10))
+        : (hasOverflow && (grid.scrollTop + grid.clientHeight < grid.scrollHeight - 10));
       shell.classList.toggle('is-scrollable', hasOverflow);
-      shell.classList.toggle('can-scroll-up', canScrollUp);
-      shell.classList.toggle('can-scroll-down', canScrollDown);
+      shell.classList.toggle('can-scroll-up', canScrollPrev);
+      shell.classList.toggle('can-scroll-down', canScrollNext);
     }
 
     function initGuestUploadsSwipeHint() {
