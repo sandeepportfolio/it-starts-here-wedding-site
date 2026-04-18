@@ -549,6 +549,130 @@
     .gallery-scroll-item:hover img { transform: scale(1.06); }
     .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px 16px 16px; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); color: #fff; opacity: 0; transition: opacity 0.25s; }
     .gallery-scroll-item:hover .gallery-caption { opacity: 1; }
+    .photo-booth-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+    .photo-booth-intro,
+    .photo-booth-note {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+    }
+    .photo-booth-intro {
+      background: linear-gradient(135deg, rgba(184,146,74,0.16), rgba(255,255,255,0.92));
+      border: 1px solid rgba(184,146,74,0.22);
+      box-shadow: 0 18px 40px rgba(45,34,21,0.08);
+    }
+    .dark .photo-booth-intro {
+      background: linear-gradient(135deg, rgba(184,146,74,0.18), rgba(28,22,18,0.94));
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+    }
+    .photo-booth-intro::after {
+      content: '';
+      position: absolute;
+      inset: auto -60px -80px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(184,146,74,0.16), rgba(184,146,74,0));
+      pointer-events: none;
+    }
+    .photo-booth-icon {
+      width: 68px;
+      height: 68px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      font-size: 2rem;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(184,146,74,0.2);
+      box-shadow: 0 10px 24px rgba(45,34,21,0.08);
+    }
+    .dark .photo-booth-icon {
+      background: rgba(255,255,255,0.06);
+      box-shadow: none;
+    }
+    .photo-booth-eyebrow,
+    .photo-booth-note-label {
+      margin: 14px 0 0;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .photo-booth-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .photo-booth-live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(184,146,74,0.2);
+      background: rgba(255,255,255,0.72);
+      color: var(--text);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .dark .photo-booth-live-pill {
+      background: rgba(255,255,255,0.06);
+    }
+    .photo-booth-live-pill span {
+      color: #2fbf71;
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+    .photo-booth-note {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+    .photo-booth-note-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .photo-booth-note-item {
+      display: grid;
+      gap: 4px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: var(--bg-alt);
+      border: 1px solid rgba(184,146,74,0.1);
+    }
+    .photo-booth-note-item strong {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .photo-booth-note-item span {
+      font-size: 0.78rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+    .photo-booth-gallery-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 18px;
+    }
+    .photo-booth-gallery-copy {
+      max-width: 680px;
+    }
+    .photo-booth-gallery-copy p:last-child {
+      margin-bottom: 0;
+    }
     .guest-uploads-shell {
       position: relative;
     }
@@ -641,7 +765,20 @@
       0%, 100% { transform: translateX(0); opacity: 0.9; }
       50% { transform: translateX(4px); opacity: 1; }
     }
+    @media (max-width: 900px) {
+      .photo-booth-layout {
+        grid-template-columns: 1fr;
+      }
+    }
     @media (max-width: 639px) {
+      .photo-booth-actions {
+        align-items: stretch;
+      }
+      .photo-booth-actions .btn-gold,
+      .photo-booth-live-pill {
+        width: 100%;
+        justify-content: center;
+      }
       .guest-photos-grid {
         gap: 18px;
         padding-bottom: 16px;
@@ -2222,19 +2359,41 @@ print(“wasssuppp”)</pre>
 
     <!-- ===== PHOTO BOOTH ===== -->
     <section id="photos" class="py-20 px-6" style="background:var(--bg-alt);">
-      <div class="max-w-3xl mx-auto">
-        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Collaborative Memory Wall</p><h2 class="section-title text-4xl sm:text-5xl">Photo Booth</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">Every click captures a story. Share your moments and watch the memory wall come alive.</p><div class="section-divider mt-4"></div></div>
-        <div class="card p-8 text-center reveal"><div class="text-5xl mb-4">&#128247;</div><p class="font-heading text-xl font-medium mb-2">Be the first to capture a moment!</p><p class="text-sm mb-6" style="color:var(--text-muted);">Your photo will kick off the memory wall</p><button class="btn-gold mx-auto" onclick="openPhotoUpload()">Upload First Photo &#10024;</button></div>
-      </div>
-    </section>
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Live Memories</p><h2 class="section-title text-4xl sm:text-5xl">Photo Booth</h2><p class="text-sm mt-3 max-w-2xl mx-auto" style="color:var(--text-muted);">Snap a moment, upload it in seconds, and watch photos go live here for everyone to view throughout the celebration.</p><p class="text-xs mt-3" style="color:var(--text-light);">Swipe through the live gallery to see the latest guest uploads.</p><div class="section-divider mt-4"></div></div>
 
-    <!-- ===== GUEST UPLOADS ===== -->
-    <section id="guest-uploads" class="py-20 px-6">
-      <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Moments</p><h2 class="section-title text-4xl sm:text-5xl">Uploaded Photos by Guests</h2><p class="text-sm mt-3 max-w-md mx-auto" style="color:var(--text-muted);">A live collection of guest uploads from the celebration.</p><p class="text-xs mt-3" style="color:var(--text-light);">Swipe right to browse all guest uploads.</p><div class="section-divider mt-4"></div></div>
+        <div class="photo-booth-layout mb-8">
+          <div class="photo-booth-intro card p-8 reveal">
+            <div class="photo-booth-icon">&#128247;</div>
+            <p class="photo-booth-eyebrow">Upload a moment</p>
+            <h3 class="font-heading text-2xl sm:text-3xl font-medium mt-3">One shared photo booth, one live gallery</h3>
+            <p class="text-sm mt-4 max-w-xl" style="color:var(--text-muted);">Take a photo or upload one from your phone. Once it is shared, it will appear live here for everyone to view and relive together.</p>
+            <div class="photo-booth-actions">
+              <button class="btn-gold" onclick="openPhotoUpload()">Upload Photos &#10024;</button>
+              <span class="photo-booth-live-pill"><span aria-hidden="true">&#9679;</span>Live for everyone to view</span>
+            </div>
+          </div>
+
+          <div class="photo-booth-note card p-6 reveal">
+            <p class="photo-booth-note-label">How it works</p>
+            <div class="photo-booth-note-list">
+              <div class="photo-booth-note-item"><strong>Share instantly</strong><span>Upload from your phone in just a few taps, right from the celebration.</span></div>
+              <div class="photo-booth-note-item"><strong>View together</strong><span>Photos appear live here so everyone can browse the shared memory wall.</span></div>
+              <div class="photo-booth-note-item"><strong>Keep swiping</strong><span>New moments keep filling the gallery as the day unfolds.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="photo-booth-gallery-head reveal">
+          <div class="photo-booth-gallery-copy">
+            <p class="photo-booth-note-label" style="margin-top:0;">Live Photo Wall</p>
+            <p class="text-sm mt-3" style="color:var(--text-muted);">Guest uploads appear here live for everyone to view, revisit, and keep swiping through.</p>
+          </div>
+        </div>
+
         <div class="guest-uploads-shell reveal" id="guest-uploads-shell">
           <div id="guest-photos-grid" class="guest-photos-grid">
-            <div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Loading guest uploads…</p><p class="text-sm" style="color:var(--text-muted);">Photos shared by guests will appear here.</p></div>
+            <div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Loading photo booth moments…</p><p class="text-sm" style="color:var(--text-muted);">Photos shared by guests will appear live here for everyone to view.</p></div>
           </div>
           <div class="guest-swipe-indicator" id="guest-swipe-indicator" aria-hidden="true">
             <div class="guest-swipe-pill">
@@ -2459,7 +2618,7 @@ print(“wasssuppp”)</pre>
       const grid = document.getElementById('guest-photos-grid');
       if (!grid) return;
       if (!photos.length) {
-        grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">No guest uploads yet</p><p class="text-sm" style="color:var(--text-muted);">Be the first to share a memory.</p></div>`;
+        grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">No photo booth moments yet</p><p class="text-sm" style="color:var(--text-muted);">Be the first to upload one. It will appear live here for everyone to view.</p></div>`;
         updateGuestUploadsSwipeHint();
         return;
       }
@@ -2486,7 +2645,7 @@ print(“wasssuppp”)</pre>
             window.setTimeout(() => loadGuestUploads(retryCount + 1), 400);
             return;
           }
-          grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Guest uploads unavailable</p><p class="text-sm" style="color:var(--text-muted);">Please check back shortly.</p></div>`;
+          grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Photo booth gallery unavailable</p><p class="text-sm" style="color:var(--text-muted);">Please check back shortly. Shared photos will appear live here once the gallery reconnects.</p></div>`;
           updateGuestUploadsSwipeHint();
           return;
         }
