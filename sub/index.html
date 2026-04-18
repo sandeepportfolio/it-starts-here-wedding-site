@@ -1867,7 +1867,7 @@
             <div id="photo-placeholder" style="color:var(--text-muted);">
               <div style="font-size:1.75rem; margin-bottom:8px;">🖼️</div>
               <p style="font-size:12px;">Tap, click, or drag photos here</p>
-              <p style="font-size:10px; color:var(--text-light); margin-top:4px;">iPhone and Android supported. Select multiple now, or add more before uploading. After choosing photos, tap Done or ✓ in your picker, then tap Upload Photos below. JPG, PNG, GIF, HEIC up to 10MB each, up to 20 total.</p>
+              <p style="font-size:10px; color:var(--text-light); margin-top:4px;">iPhone and Android supported. Select multiple now, or add more before uploading. After choosing photos, tap Done or ✓ in your picker, then tap Upload Photos below. JPG, PNG, GIF, HEIC up to 10MB each, up to 15 total.</p>
             </div>
           </div>
           <div id="photo-selection-summary" style="display:none; font-size:11px; color:var(--text-muted); text-align:center; margin-top:10px;"></div>
@@ -2906,6 +2906,7 @@ print(“wasssuppp”)</pre>
               <button class="btn-gold" onclick="openPhotoUpload()">Upload Photos &#10024;</button>
               <span class="photo-booth-live-pill"><span aria-hidden="true">&#9679;</span>Live for everyone to view</span>
             </div>
+            <p style="font-size:11px; font-weight:800; letter-spacing:0.03em; color:var(--burgundy); margin-top:12px;">Upload 15 photos at once.</p>
           </div>
 
           <div class="photo-booth-note card p-6 reveal">
@@ -3414,7 +3415,7 @@ print(“wasssuppp”)</pre>
       const fileInput = document.getElementById('photo-file-input');
       if (fileInput) fileInput.value = '';
       window.selectedGuestPhotoFiles = [];
-    window.MAX_GUEST_PHOTO_UPLOADS = 20;
+    window.MAX_GUEST_PHOTO_UPLOADS = 15;
 
     window.openGuestPhotoPicker = function(event) {
       if (event) {
