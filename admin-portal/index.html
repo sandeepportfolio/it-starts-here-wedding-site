@@ -239,12 +239,73 @@
       gap: 14px;
     }
     .photo-card {
+      position: relative;
       background: var(--card-bg); border: 1px solid var(--border);
       border-radius: 14px; overflow: hidden; transition: all 0.25s;
     }
     .photo-card:hover { border-color: rgba(212,176,106,0.25); transform: translateY(-2px); }
+    .photo-card.selected {
+      border-color: rgba(212,176,106,0.5);
+      box-shadow: 0 0 0 2px rgba(212,176,106,0.2);
+    }
+    .photo-card-media {
+      all: unset;
+      display: block;
+      width: 100%;
+      cursor: zoom-in;
+    }
+    .photo-card.selecting .photo-card-media {
+      cursor: pointer;
+    }
     .photo-card img {
-      width: 100%; aspect-ratio: 1; object-fit: cover; cursor: pointer; display: block;
+      width: 100%; aspect-ratio: 1; object-fit: cover; cursor: inherit; display: block;
+    }
+    .photo-select-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,253,248,0.18);
+      background: rgba(8,8,10,0.72);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+      backdrop-filter: blur(10px);
+    }
+    .photo-select-btn.active {
+      background: var(--gold);
+      color: #0a0805;
+      border-color: var(--gold);
+    }
+    .photo-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,253,248,0.03);
+    }
+    .photo-toolbar[hidden] { display: none; }
+    .photo-toolbar-count {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .photo-toolbar-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .photo-info { padding: 10px 12px; }
     .photo-info h4 { font-size: 0.82rem; margin-bottom: 2px; }
@@ -474,6 +535,15 @@
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
       <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);font-weight:400;">Photo Submissions</h3>
     </div>
+    <div class="photo-toolbar" id="photoToolbar" hidden>
+      <div class="photo-toolbar-count" id="photoSelectionCount">0 photos</div>
+      <div class="photo-toolbar-actions">
+        <button class="btn btn-secondary btn-small" type="button" id="photoSelectionToggleBtn" onclick="app.togglePhotoSelectionMode()">Select</button>
+        <button class="btn btn-secondary btn-small" type="button" id="photoSelectAllBtn" onclick="app.toggleSelectAllPhotos()" disabled>Select All</button>
+        <button class="btn btn-info btn-small" type="button" id="photoDownloadSelectedBtn" onclick="app.downloadSelectedPhotos()" disabled>Download Selected</button>
+        <button class="btn btn-danger btn-small" type="button" id="photoDeleteSelectedBtn" onclick="app.deleteSelectedPhotos()" disabled>Delete Selected</button>
+      </div>
+    </div>
     <div class="photos-grid" id="photosGrid"></div>
   </div>
 
@@ -557,7 +627,9 @@
 
   const state = {
     rsvps: [], photos: [], messages: [],
-    rsvpFilter: 'all', rsvpSearch: '', msgSearch: ''
+    rsvpFilter: 'all', rsvpSearch: '', msgSearch: '',
+    photoSelectionMode: false,
+    selectedPhotoIds: new Set()
   };
 
   // ===== PARTICLES =====
@@ -618,6 +690,14 @@
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  function getPhotoUrl(photo) {
+    return photo.imageData || photo.url || photo.imageUrl || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%231a1a1e%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23555%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E';
+  }
+
+  function safeFileName(value) {
+    return String(value || 'photo').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'photo';
+  }
+
   // ===== RENDERERS =====
   function renderRsvpItem(rsvp) {
     const badgeMap = { attending: 'badge-attending', declined: 'badge-declined', pending: 'badge-pending' };
@@ -660,15 +740,20 @@
     const approved = photo.approved;
     const statusClass = approved === true ? 'badge-attending' : approved === false ? 'badge-declined' : 'badge-pending';
     const statusText = approved === true ? 'Approved' : approved === false ? 'Rejected' : 'Pending';
+    const selected = state.selectedPhotoIds.has(photo.id);
     return `
-      <div class="photo-card" data-id="${photo.id}">
-        <img src="${photo.imageData || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%231a1a1e%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23555%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2248%22%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E'}" alt="Wedding photo" loading="lazy" onclick="app.openLightbox(this.src)">
+      <div class="photo-card ${state.photoSelectionMode ? 'selecting' : ''} ${selected ? 'selected' : ''}" data-id="${photo.id}">
+        <button class="photo-card-media" type="button" onclick="app.handlePhotoPrimaryAction('${photo.id}')">
+          <img src="${getPhotoUrl(photo)}" alt="Wedding photo" loading="lazy">
+        </button>
+        <button class="photo-select-btn ${selected ? 'active' : ''}" type="button" onclick="event.stopPropagation();app.togglePhotoSelection('${photo.id}')">${selected ? '&#10003;' : ''}</button>
         <div class="photo-info">
           <h4>${escHtml(photo.uploaderName) || 'Anonymous'}</h4>
           <p>${escHtml(photo.caption) || 'No caption'}</p>
           <p style="margin-top:6px;"><span class="badge ${statusClass}">${statusText}</span></p>
         </div>
         <div class="photo-actions">
+          <button class="btn btn-info btn-small" onclick="app.downloadPhoto('${photo.id}')">Download</button>
           <button class="btn btn-success btn-small" onclick="app.approvePhoto('${photo.id}')" ${approved === true ? 'disabled style="opacity:0.4"' : ''}>\u2713</button>
           <button class="btn btn-danger btn-small" onclick="app.rejectPhoto('${photo.id}')" ${approved === false ? 'disabled style="opacity:0.4"' : ''}>\u2717</button>
           <button class="btn btn-ghost btn-small" onclick="app.deletePhoto('${photo.id}')">\ud83d\uddd1</button>
@@ -817,10 +902,15 @@
 
     renderPhotos() {
       const grid = document.getElementById('photosGrid');
+      state.selectedPhotoIds = new Set([...state.selectedPhotoIds].filter(id => state.photos.some(photo => photo.id === id)));
       if (!state.photos.length) {
+        state.selectedPhotoIds.clear();
+        state.photoSelectionMode = false;
+        this.updatePhotoToolbar();
         grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">\ud83d\udcf7</div><h4>No photos yet</h4><p>Photos uploaded by guests will appear here.</p></div>`;
         return;
       }
+      this.updatePhotoToolbar();
       grid.innerHTML = state.photos.map(p => renderPhotoItem(p)).join('');
     },
 
@@ -963,6 +1053,94 @@
     },
 
     // ===== PHOTO CRUD =====
+    updatePhotoToolbar() {
+      const toolbar = document.getElementById('photoToolbar');
+      const count = document.getElementById('photoSelectionCount');
+      const selectBtn = document.getElementById('photoSelectionToggleBtn');
+      const selectAllBtn = document.getElementById('photoSelectAllBtn');
+      const downloadBtn = document.getElementById('photoDownloadSelectedBtn');
+      const deleteBtn = document.getElementById('photoDeleteSelectedBtn');
+      if (!toolbar || !count || !selectBtn || !selectAllBtn || !downloadBtn || !deleteBtn) return;
+
+      const total = state.photos.length;
+      const selected = state.selectedPhotoIds.size;
+      toolbar.hidden = total === 0;
+      count.textContent = selected > 0 ? `${selected} selected` : `${total} photo${total === 1 ? '' : 's'}`;
+      selectBtn.textContent = state.photoSelectionMode ? 'Cancel Selection' : 'Select';
+      selectAllBtn.disabled = total === 0;
+      selectAllBtn.textContent = selected > 0 && selected === total ? 'Clear All' : 'Select All';
+      downloadBtn.disabled = selected === 0;
+      deleteBtn.disabled = selected === 0;
+    },
+
+    handlePhotoPrimaryAction(id) {
+      if (state.photoSelectionMode) {
+        this.togglePhotoSelection(id);
+        return;
+      }
+      const photo = state.photos.find(p => p.id === id);
+      if (photo) this.openLightbox(getPhotoUrl(photo));
+    },
+
+    togglePhotoSelectionMode(force) {
+      state.photoSelectionMode = typeof force === 'boolean' ? force : !state.photoSelectionMode;
+      if (!state.photoSelectionMode) state.selectedPhotoIds.clear();
+      this.updatePhotoToolbar();
+      this.renderPhotos();
+    },
+
+    togglePhotoSelection(id) {
+      if (!state.photoSelectionMode) state.photoSelectionMode = true;
+      if (state.selectedPhotoIds.has(id)) state.selectedPhotoIds.delete(id);
+      else state.selectedPhotoIds.add(id);
+      this.updatePhotoToolbar();
+      this.renderPhotos();
+    },
+
+    toggleSelectAllPhotos() {
+      if (!state.photos.length) return;
+      state.photoSelectionMode = true;
+      if (state.selectedPhotoIds.size === state.photos.length) state.selectedPhotoIds.clear();
+      else state.selectedPhotoIds = new Set(state.photos.map(photo => photo.id));
+      this.updatePhotoToolbar();
+      this.renderPhotos();
+    },
+
+    async downloadPhotoBlob(photo) {
+      const response = await fetch(getPhotoUrl(photo));
+      if (!response.ok) throw new Error(`Download failed (${response.status})`);
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = `${safeFileName(photo.uploaderName || 'guest')}-${String(photo.id).slice(0, 6)}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 1500);
+    },
+
+    async downloadPhoto(id) {
+      const photo = state.photos.find(p => p.id === id);
+      if (!photo) return;
+      try {
+        await this.downloadPhotoBlob(photo);
+        showToast('Photo download started', 'info');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
+    async downloadSelectedPhotos() {
+      const photos = state.photos.filter(photo => state.selectedPhotoIds.has(photo.id));
+      if (!photos.length) return;
+      try {
+        for (const photo of photos) {
+          await this.downloadPhotoBlob(photo);
+          await new Promise(resolve => setTimeout(resolve, 150));
+        }
+        showToast(`Started ${photos.length} download${photos.length === 1 ? '' : 's'}`, 'info');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    },
+
     async approvePhoto(id) {
       try {
         await db.collection('photos').doc(id).update({ approved: true });
@@ -981,7 +1159,21 @@
       this.showConfirm('Delete Photo?', 'This will permanently remove this photo.', async () => {
         try {
           await db.collection('photos').doc(id).delete();
+          state.selectedPhotoIds.delete(id);
           showToast('Photo deleted');
+        } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+      });
+    },
+
+    deleteSelectedPhotos() {
+      const ids = [...state.selectedPhotoIds];
+      if (!ids.length) return;
+      this.showConfirm('Delete selected photos?', `This will permanently remove ${ids.length} selected photo${ids.length === 1 ? '' : 's'}.`, async () => {
+        try {
+          await Promise.all(ids.map(id => db.collection('photos').doc(id).delete()));
+          state.selectedPhotoIds.clear();
+          state.photoSelectionMode = false;
+          showToast(`Deleted ${ids.length} photo${ids.length === 1 ? '' : 's'}`);
         } catch (err) { showToast('Failed: ' + err.message, 'error'); }
       });
     },

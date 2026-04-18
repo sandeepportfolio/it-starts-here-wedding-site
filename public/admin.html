@@ -397,6 +397,111 @@
         .photo-card .tbl-action:hover {
             transform: scale(1.04);
         }
+        .photo-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(212,176,106,0.03);
+        }
+        .photo-toolbar[hidden] { display: none; }
+        .photo-toolbar-count {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        .photo-toolbar-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .photo-toolbar-actions .refresh-btn[disabled] {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        .photo-card.selecting,
+        .photo-card.selected {
+            border-color: var(--border-strong);
+        }
+        .photo-card.selected {
+            box-shadow: 0 0 0 2px rgba(212,176,106,0.28), 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .photo-card-image-btn {
+            all: unset;
+            position: absolute;
+            inset: 0;
+            cursor: zoom-in;
+            display: block;
+        }
+        .photo-card.selecting .photo-card-image-btn {
+            cursor: pointer;
+        }
+        .photo-card-select {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(8,7,6,0.72);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            z-index: 3;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .photo-card-select.selected {
+            background: var(--gold);
+            color: var(--bg);
+            border-color: var(--gold);
+        }
+        .photo-card-select:focus-visible,
+        .photo-card-image-btn:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+        }
+        .photo-lightbox .photo-lightbox-dialog {
+            position: relative;
+            width: min(94vw, 1080px);
+            max-height: 92vh;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(18,17,16,0.96);
+            border: 1px solid var(--border-strong);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .photo-lightbox img {
+            width: 100%;
+            max-height: 78vh;
+            object-fit: contain;
+            border-radius: 14px;
+            background: var(--bg-card);
+        }
+        .photo-lightbox-meta {
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            text-align: center;
+        }
+        .photo-lightbox .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+            background: rgba(8,7,6,0.72);
+        }
         @media (max-width: 639px) {
             .photo-card-info {
                 padding: 22px 7px 7px;
@@ -670,6 +775,15 @@
                 Refresh
             </button>
         </div>
+        <div class="photo-toolbar" id="photo-toolbar" hidden>
+            <div class="photo-toolbar-count" id="photo-selection-count">0 photos</div>
+            <div class="photo-toolbar-actions">
+                <button class="refresh-btn" type="button" id="photo-select-toggle" onclick="window.togglePhotoSelectionMode()">Select</button>
+                <button class="refresh-btn" type="button" id="photo-select-all" onclick="window.toggleSelectAllPhotos()" disabled>Select All</button>
+                <button class="refresh-btn" type="button" id="photo-download-selected" onclick="window.downloadSelectedPhotos()" disabled>Download Selected</button>
+                <button class="refresh-btn" type="button" id="photo-delete-selected" onclick="window.deleteSelectedPhotos()" disabled>Delete Selected</button>
+            </div>
+        </div>
         <div class="photo-grid stagger" id="photos-grid">
             <div class="loading-row" style="grid-column:1/-1;"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>
         </div>
@@ -770,6 +884,17 @@
     </div>
 </div>
 
+<!-- Photo Lightbox -->
+<div class="modal-overlay photo-lightbox" id="photo-lightbox">
+    <div class="photo-lightbox-dialog">
+        <button class="modal-close" onclick="closePhotoLightbox()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <img id="photo-lightbox-img" src="" alt="Expanded guest photo">
+        <div class="photo-lightbox-meta" id="photo-lightbox-meta"></div>
+    </div>
+</div>
+
 <!-- Toast Container -->
 <div class="toast-container" id="toast-container"></div>
 
@@ -791,6 +916,7 @@
     // ─── Modal helpers ───
     function closeEditModal() { document.getElementById('edit-modal').classList.remove('open'); }
     function closeDeleteModal() { document.getElementById('delete-modal').classList.remove('open'); }
+    function closePhotoLightbox() { document.getElementById('photo-lightbox').classList.remove('open'); }
 
     // Close modals on backdrop click
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
@@ -804,6 +930,7 @@
         if (e.key === 'Escape') {
             closeEditModal();
             closeDeleteModal();
+            closePhotoLightbox();
         }
     });
 </script>
@@ -824,6 +951,9 @@
     let pendingDeleteId = null;
     let rsvpCache = [];
     let messageCache = [];
+    let photoCache = [];
+    let selectedPhotoIds = new Set();
+    let photoSelectionMode = false;
 
     try {
         const app = initializeApp(firebaseConfig);
@@ -867,18 +997,152 @@
         setTimeout(() => toast.remove(), 3000);
     }
 
-    window.deletePhoto = async function(id) {
+    function getPhotoUrl(photo) {
+        return photo?.imageData || photo?.url || photo?.imageUrl || '';
+    }
+
+    function getPhotoLabel(photo) {
+        return photo?.uploaderName || photo?.uploader_name || 'Guest';
+    }
+
+    function safeFileName(value) {
+        return String(value || 'photo').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'photo';
+    }
+
+    function updatePhotoToolbar() {
+        const toolbar = document.getElementById('photo-toolbar');
+        const count = document.getElementById('photo-selection-count');
+        const toggle = document.getElementById('photo-select-toggle');
+        const selectAll = document.getElementById('photo-select-all');
+        const downloadBtn = document.getElementById('photo-download-selected');
+        const deleteBtn = document.getElementById('photo-delete-selected');
+        if (!toolbar || !count || !toggle || !selectAll || !downloadBtn || !deleteBtn) return;
+
+        const total = photoCache.length;
+        const selected = selectedPhotoIds.size;
+        toolbar.hidden = total === 0;
+        count.textContent = selected > 0 ? `${selected} selected` : `${total} photo${total === 1 ? '' : 's'}`;
+        toggle.textContent = photoSelectionMode ? 'Cancel Selection' : 'Select';
+        selectAll.disabled = total === 0;
+        selectAll.textContent = selected > 0 && selected === total ? 'Clear All' : 'Select All';
+        downloadBtn.disabled = selected === 0;
+        deleteBtn.disabled = selected === 0;
+    }
+
+    async function downloadPhotoFile(photo) {
+        const url = getPhotoUrl(photo);
+        if (!url) throw new Error('Missing photo URL');
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Download failed (${response.status})`);
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = objectUrl;
+        link.download = `${safeFileName(getPhotoLabel(photo))}-${String(photo.id || 'photo').slice(0, 6)}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 1500);
+    }
+
+    window.openPhotoLightbox = function(id) {
+        const photo = photoCache.find(p => p.id === id);
+        if (!photo) return;
+        const overlay = document.getElementById('photo-lightbox');
+        const img = document.getElementById('photo-lightbox-img');
+        const meta = document.getElementById('photo-lightbox-meta');
+        if (!overlay || !img || !meta) return;
+        img.src = getPhotoUrl(photo);
+        img.alt = `${getPhotoLabel(photo)} uploaded photo`;
+        meta.textContent = [getPhotoLabel(photo), photo.caption || '', fmtDateFull(photo.createdAt || photo.uploadedAt)].filter(Boolean).join(' • ');
+        overlay.classList.add('open');
+    };
+
+    window.togglePhotoSelection = function(id, event) {
+        event?.stopPropagation();
+        if (!photoSelectionMode) photoSelectionMode = true;
+        if (selectedPhotoIds.has(id)) selectedPhotoIds.delete(id);
+        else selectedPhotoIds.add(id);
+        updatePhotoToolbar();
+        window.loadPhotos();
+    };
+
+    window.togglePhotoSelectionMode = function(force) {
+        photoSelectionMode = typeof force === 'boolean' ? force : !photoSelectionMode;
+        if (!photoSelectionMode) selectedPhotoIds.clear();
+        updatePhotoToolbar();
+        window.loadPhotos();
+    };
+
+    window.toggleSelectAllPhotos = function() {
+        if (!photoCache.length) return;
+        photoSelectionMode = true;
+        if (selectedPhotoIds.size === photoCache.length) selectedPhotoIds.clear();
+        else selectedPhotoIds = new Set(photoCache.map(photo => photo.id));
+        updatePhotoToolbar();
+        window.loadPhotos();
+    };
+
+    window.downloadPhoto = async function(id, event) {
+        event?.stopPropagation();
+        const photo = photoCache.find(p => p.id === id);
+        if (!photo) return;
+        try {
+            await downloadPhotoFile(photo);
+            showToast('Photo download started');
+        } catch (e) {
+            console.error('Photo download error:', e);
+            showToast('Failed to download photo: ' + e.message, 'error');
+        }
+    };
+
+    window.downloadSelectedPhotos = async function() {
+        const selected = photoCache.filter(photo => selectedPhotoIds.has(photo.id));
+        if (!selected.length) return;
+        try {
+            for (const photo of selected) {
+                await downloadPhotoFile(photo);
+                await new Promise(resolve => setTimeout(resolve, 150));
+            }
+            showToast(`Started ${selected.length} download${selected.length === 1 ? '' : 's'}`);
+        } catch (e) {
+            console.error('Batch download error:', e);
+            showToast('Failed to download selected photos: ' + e.message, 'error');
+        }
+    };
+
+    window.deletePhoto = async function(id, event) {
+        event?.stopPropagation();
         if (!id || !db) return;
         const ok = window.confirm('Delete this guest photo? This will remove it from all three wedding sites.');
         if (!ok) return;
         try {
             await deleteDoc(doc(db, 'photos', id));
+            selectedPhotoIds.delete(id);
             showToast('Guest photo deleted');
             loadDashboard();
             window.loadPhotos();
         } catch (e) {
             console.error('Photo delete error:', e);
             showToast('Failed to delete photo: ' + e.message, 'error');
+        }
+    };
+
+    window.deleteSelectedPhotos = async function() {
+        if (!db || selectedPhotoIds.size === 0) return;
+        const ids = Array.from(selectedPhotoIds);
+        const ok = window.confirm(`Delete ${ids.length} selected photo${ids.length === 1 ? '' : 's'}? This cannot be undone.`);
+        if (!ok) return;
+        try {
+            await Promise.all(ids.map(id => deleteDoc(doc(db, 'photos', id))));
+            selectedPhotoIds.clear();
+            photoSelectionMode = false;
+            showToast(`Deleted ${ids.length} photo${ids.length === 1 ? '' : 's'}`);
+            loadDashboard();
+            window.loadPhotos();
+        } catch (e) {
+            console.error('Batch delete error:', e);
+            showToast('Failed to delete selected photos: ' + e.message, 'error');
         }
     };
 
@@ -904,6 +1168,7 @@
         users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
         calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
         camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>',
+        download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
         inbox: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 16,12 14,15 10,15 8,12 2,12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
         edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>',
         trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>',
@@ -1135,29 +1400,48 @@
             const snap = await getDocs(collection(db, 'photos'));
             const photos = [];
             snap.forEach(d => photos.push({ id: d.id, ...d.data() }));
+            photoCache = photos.sort((a, b) => {
+                const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || a.uploadedAt || 0);
+                const db2 = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || b.uploadedAt || 0);
+                return db2 - da;
+            });
+            selectedPhotoIds = new Set([...selectedPhotoIds].filter(id => photoCache.some(photo => photo.id === id)));
 
-            if (!photos.length) {
+            if (!photoCache.length) {
+                selectedPhotoIds.clear();
+                photoSelectionMode = false;
+                updatePhotoToolbar();
                 grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">${icons.camera}<h3>No photos yet</h3><p>Guest uploads will appear here.</p></div>`;
                 return;
             }
 
-            grid.innerHTML = photos.map(p => `
-                <div class="photo-card">
-                    <img src="${esc(p.imageData || p.url || p.imageUrl || '')}" alt="Guest photo" loading="lazy"
-                         onerror="this.style.background='var(--bg-elevated)';this.alt='Failed to load'">
+            updatePhotoToolbar();
+            grid.innerHTML = photoCache.map(photo => {
+                const url = esc(getPhotoUrl(photo));
+                const selected = selectedPhotoIds.has(photo.id);
+                return `
+                <div class="photo-card ${photoSelectionMode ? 'selecting' : ''} ${selected ? 'selected' : ''}">
+                    <button class="photo-card-image-btn" type="button" onclick="${photoSelectionMode ? `togglePhotoSelection('${photo.id}', event)` : `openPhotoLightbox('${photo.id}')`}" aria-label="${photoSelectionMode ? 'Select photo' : 'Expand photo'}">
+                        <img src="${url}" alt="Guest photo" loading="lazy"
+                             onerror="this.style.background='var(--bg-elevated)';this.alt='Failed to load'">
+                    </button>
+                    <button class="photo-card-select ${selected ? 'selected' : ''}" type="button" onclick="togglePhotoSelection('${photo.id}', event)" aria-label="${selected ? 'Deselect photo' : 'Select photo'}">${selected ? '&#10003;' : ''}</button>
                     <div class="photo-card-actions">
-                        <button class="tbl-action tbl-delete" onclick="deletePhoto('${p.id}')" title="Delete photo">${icons.trash}</button>
+                        <button class="tbl-action" onclick="downloadPhoto('${photo.id}', event)" title="Download photo">${icons.download}</button>
+                        <button class="tbl-action tbl-delete" onclick="deletePhoto('${photo.id}', event)" title="Delete photo">${icons.trash}</button>
                     </div>
                     <div class="photo-card-info">
-                        <div class="by">${esc(p.uploaderName || p.uploader_name || 'Unknown')}</div>
-                        ${p.caption ? `<div class="caption">"${esc(p.caption)}"</div>` : ''}
-                        <div class="date">${fmtDateFull(p.createdAt || p.uploadedAt)}</div>
+                        <div class="by">${esc(getPhotoLabel(photo))}</div>
+                        ${photo.caption ? `<div class="caption">"${esc(photo.caption)}"</div>` : ''}
+                        <div class="date">${fmtDateFull(photo.createdAt || photo.uploadedAt)}</div>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
             grid.classList.add('stagger');
         } catch (e) {
             console.error('Photo load error:', e);
+            updatePhotoToolbar();
             grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><h3>Error</h3><p>${esc(e.message)}</p></div>`;
         }
     };
