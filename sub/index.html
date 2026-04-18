@@ -4057,6 +4057,25 @@ print(“wasssuppp”)</pre>
       setActiveNav(getActiveSectionId(), { behavior: 'smooth' });
     }
 
+    function scrollToNavTarget(target, behavior = 'smooth') {
+      if (!target) return;
+      const navHeight = stickyNav ? stickyNav.offsetHeight : 0;
+      const targetTop = window.scrollY + target.getBoundingClientRect().top;
+      const top = Math.max(0, targetTop - navHeight - 6);
+      window.scrollTo({ top, behavior });
+    }
+
+    function syncHashTarget(behavior = 'auto') {
+      const targetId = decodeURIComponent((window.location.hash || '').replace('#', ''));
+      if (!targetId) return;
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      scrollToNavTarget(target, behavior);
+      if (navLinks.some(link => link.getAttribute('href') === '#' + targetId)) {
+        setActiveNav(targetId, { force: true, behavior: 'auto' });
+      }
+    }
+
     window.addEventListener('scroll', () => {
       if (!scrollspyTick) {
         scrollspyTick = true;
@@ -4067,10 +4086,24 @@ print(“wasssuppp”)</pre>
     window.addEventListener('resize', () => requestAnimationFrame(updateScrollspy));
 
     navLinks.forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', event => {
         const targetId = (link.getAttribute('href') || '').replace('#', '');
+        const target = document.getElementById(targetId);
+        if (!target) return;
+        event.preventDefault();
+        if (window.location.hash !== '#' + targetId) {
+          history.replaceState(null, '', '#' + targetId);
+        }
         setActiveNav(targetId, { force: true, behavior: 'smooth' });
+        scrollToNavTarget(target, 'smooth');
       });
+    });
+
+    window.addEventListener('hashchange', () => syncHashTarget('smooth'));
+    window.addEventListener('load', () => {
+      if (window.location.hash) {
+        setTimeout(() => syncHashTarget('auto'), 0);
+      }
     });
 
     setTimeout(updateScrollspy, 100);
