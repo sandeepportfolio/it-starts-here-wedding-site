@@ -3557,6 +3557,24 @@ print(“wasssuppp”)</pre>
 
     window.MAX_GUEST_PHOTO_UPLOADS = 15;
 
+    window.openGuestPhotoPicker = function(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      const fileInput = document.getElementById('photo-file-input');
+      if (!fileInput) return;
+      try {
+        if (typeof fileInput.showPicker === 'function') {
+          fileInput.showPicker();
+          return;
+        }
+      } catch (err) {
+        console.warn('showPicker unavailable, falling back to click:', err);
+      }
+      fileInput.click();
+    };
+
     window.selectedGuestPhotoFiles = [];
 
     window.getGuestPhotoFileKey = function(file) {
