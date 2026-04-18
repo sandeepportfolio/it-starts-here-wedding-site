@@ -322,33 +322,89 @@
         /* ─── Photo Grid ─── */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
         }
-        @media (min-width: 640px) { .photo-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
-        @media (min-width: 1024px) { .photo-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 640px) { .photo-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; } }
+        @media (min-width: 900px) { .photo-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+        @media (min-width: 1200px) { .photo-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
         .photo-card {
+            position: relative;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: 12px;
             overflow: hidden;
             transition: all 0.25s ease;
+            aspect-ratio: 1;
+            min-width: 0;
         }
         .photo-card:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
         .photo-card img {
-            width: 100%; aspect-ratio: 1; object-fit: cover;
+            width: 100%; height: 100%; object-fit: cover;
             display: block; background: var(--bg-elevated);
         }
         .photo-card-info {
-            padding: 10px 12px;
+            position: absolute;
+            inset: auto 0 0 0;
+            padding: 28px 8px 8px;
+            background: linear-gradient(to top, rgba(8,7,6,0.9), rgba(8,7,6,0.04));
+            pointer-events: none;
         }
-        .photo-card-info .by { font-size: 0.72rem; color: var(--text-secondary); font-weight: 500; }
-        .photo-card-info .caption { font-size: 0.7rem; color: var(--text-muted); font-style: italic; margin-top: 2px; }
-        .photo-card-info .date { font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; }
+        .photo-card-info .by {
+            font-size: 0.66rem;
+            color: var(--text);
+            font-weight: 600;
+            line-height: 1.2;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.45);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .photo-card-info .caption {
+            font-size: 0.6rem;
+            color: rgba(241,237,230,0.76);
+            font-style: italic;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .photo-card-info .date {
+            font-size: 0.56rem;
+            color: rgba(241,237,230,0.58);
+            margin-top: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         .photo-card-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
             display: flex;
             justify-content: flex-end;
-            margin-top: 10px;
+            margin-top: 0;
+            z-index: 2;
+        }
+        .photo-card .tbl-action {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: rgba(8,7,6,0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .photo-card .tbl-action:hover {
+            transform: scale(1.04);
+        }
+        @media (max-width: 639px) {
+            .photo-card-info {
+                padding: 22px 7px 7px;
+            }
+            .photo-card-info .caption,
+            .photo-card-info .date {
+                display: none;
+            }
         }
 
         /* ─── Empty / Loading States ─── */
@@ -1011,13 +1067,13 @@
                 <div class="photo-card">
                     <img src="${esc(p.imageData || p.url || p.imageUrl || '')}" alt="Guest photo" loading="lazy"
                          onerror="this.style.background='var(--bg-elevated)';this.alt='Failed to load'">
+                    <div class="photo-card-actions">
+                        <button class="tbl-action tbl-delete" onclick="deletePhoto('${p.id}')" title="Delete photo">${icons.trash}</button>
+                    </div>
                     <div class="photo-card-info">
                         <div class="by">${esc(p.uploaderName || p.uploader_name || 'Unknown')}</div>
                         ${p.caption ? `<div class="caption">"${esc(p.caption)}"</div>` : ''}
                         <div class="date">${fmtDateFull(p.createdAt || p.uploadedAt)}</div>
-                        <div class="photo-card-actions">
-                            <button class="tbl-action tbl-delete" onclick="deletePhoto('${p.id}')" title="Delete photo">${icons.trash}</button>
-                        </div>
                     </div>
                 </div>
             `).join('');
