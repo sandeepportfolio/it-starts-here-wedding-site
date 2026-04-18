@@ -164,6 +164,45 @@
       text-transform: uppercase;
       color: var(--soft);
     }
+    .party-location-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .party-location-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 132px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(212,176,106,0.14);
+      background: rgba(255,255,255,0.03);
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: all 0.25s var(--spring);
+    }
+    .party-location-link:hover {
+      transform: translateY(-1px);
+      border-color: rgba(212,176,106,0.28);
+      color: var(--gold);
+      background: rgba(212,176,106,0.07);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.16);
+    }
+    .party-location-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+    }
 
     /* ─── DIVIDER ─── */
     .div { height: 1px; background: linear-gradient(90deg, transparent, rgba(212,176,106,0.12), transparent); margin: 0 0 40px; }
@@ -244,6 +283,16 @@
           </div>
           <p class="party-location-name">337 Sugarbush Ln</p>
           <p class="party-location-note">Pull up for the after-party energy</p>
+          <div class="party-location-actions">
+            <a class="party-location-link" href="https://maps.apple.com/?q=337%20Sugarbush%20Ln" target="_blank" rel="noopener noreferrer" aria-label="Open party location in Apple Maps">
+              <svg viewBox="0 0 24 24"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              Apple Maps
+            </a>
+            <a class="party-location-link" href="https://www.google.com/maps/search/?api=1&query=337%20Sugarbush%20Ln" target="_blank" rel="noopener noreferrer" aria-label="Open party location in Google Maps">
+              <svg viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M12 3a15.3 15.3 0 0 1 4 9 15.3 15.3 0 0 1-4 9 15.3 15.3 0 0 1-4-9 15.3 15.3 0 0 1 4-9Z"/><path d="M12 3a15.3 15.3 0 0 0-4 9 15.3 15.3 0 0 0 4 9"/></svg>
+              Google Maps
+            </a>
+          </div>
         </div>
       </section>
 
