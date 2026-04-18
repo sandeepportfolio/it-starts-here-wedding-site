@@ -1699,6 +1699,7 @@
     .section-divider { width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0 auto; }
     html { scroll-behavior: smooth; }
     section[id] { scroll-margin-top: 96px; }
+    #livestream-focus { scroll-margin-top: 96px; }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--text-light); border-radius: 3px; }
@@ -2801,7 +2802,7 @@ print(“wasssuppp”)</pre>
     <!-- ===== LIVE STREAM ===== -->
     <section id="livestream" class="py-24 px-6" style="background: var(--bg-alt);">
       <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-12 reveal">
+        <div class="text-center mb-12 reveal" id="livestream-focus">
           <p class="section-label mb-2">Witness Our Moment</p>
           <h2 class="section-title text-4xl sm:text-5xl">Live Stream</h2>
           <p class="text-sm mt-4 max-w-md mx-auto" style="color:var(--text-muted);">Can't be there in person? Watch every sacred moment unfold, live from Plano, Texas.</p>
@@ -4198,7 +4199,7 @@ print(“wasssuppp”)</pre>
 
   <!-- Floating Action Buttons -->
   <div class="fab-rsvp" id="fab-rsvp">
-    <a href="#livestream" class="fab-secondary">
+    <a href="#livestream-focus" class="fab-secondary">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="15" height="10" rx="2"/><path d="m22 8-5 4 5 4V8Z"/></svg>
       Live Stream
     </a>
