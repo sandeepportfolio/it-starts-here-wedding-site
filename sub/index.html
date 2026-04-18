@@ -730,39 +730,39 @@
     .guest-uploads-shell::after {
       content: '';
       position: absolute;
-      left: 14px;
-      right: 14px;
-      height: 28px;
+      top: 14px;
+      bottom: 14px;
+      width: 34px;
       z-index: 2;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.22s ease;
     }
     .guest-uploads-shell::before {
-      top: 14px;
-      background: linear-gradient(to bottom, rgba(247,243,236,0.96), rgba(247,243,236,0));
+      left: 14px;
+      background: linear-gradient(to right, rgba(247,243,236,0.98), rgba(247,243,236,0));
     }
     .guest-uploads-shell::after {
-      bottom: 14px;
-      background: linear-gradient(to top, rgba(247,243,236,0.98), rgba(247,243,236,0));
+      right: 14px;
+      background: linear-gradient(to left, rgba(247,243,236,0.98), rgba(247,243,236,0));
     }
     .dark .guest-uploads-shell::before {
-      background: linear-gradient(to bottom, rgba(24,19,15,0.96), rgba(24,19,15,0));
+      background: linear-gradient(to right, rgba(24,19,15,0.98), rgba(24,19,15,0));
     }
     .dark .guest-uploads-shell::after {
-      background: linear-gradient(to top, rgba(24,19,15,0.98), rgba(24,19,15,0));
+      background: linear-gradient(to left, rgba(24,19,15,0.98), rgba(24,19,15,0));
     }
     .guest-uploads-shell.can-scroll-up::before,
     .guest-uploads-shell.can-scroll-down::after {
       opacity: 1;
     }
     .guest-photos-grid {
-      column-count: 4;
-      column-gap: 16px;
-      max-height: min(72vh, 760px);
+      display: grid;
+      gap: 18px;
+      max-height: min(76vh, 820px);
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 4px 4px 14px;
+      padding: 4px 4px 12px;
       overscroll-behavior: contain;
       scrollbar-width: thin;
       scrollbar-color: rgba(184,146,74,0.42) transparent;
@@ -777,16 +777,36 @@
     .guest-photos-grid::-webkit-scrollbar-track {
       background: transparent;
     }
+    .guest-collage-row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(220px, 240px);
+      gap: 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 22px 10px 2px;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .guest-collage-row::-webkit-scrollbar {
+      display: none;
+    }
+    .guest-collage-row:nth-child(even) {
+      padding-left: 26px;
+    }
     .guest-collage-item {
       display: block;
       width: 100%;
-      margin: 0 0 16px;
+      margin: 0;
       padding: 0;
       border: 0;
       background: transparent;
       cursor: pointer;
       break-inside: avoid;
       text-align: left;
+      scroll-snap-align: start;
     }
     .guest-collage-frame {
       position: relative;
@@ -1139,47 +1159,26 @@
       .guest-uploads-shell::after {
         top: 10px;
         bottom: 10px;
-        width: 34px;
-        height: auto;
+        width: 30px;
       }
       .guest-uploads-shell::before {
         left: 10px;
-        right: auto;
-        background: linear-gradient(to right, rgba(247,243,236,0.98), rgba(247,243,236,0));
       }
       .guest-uploads-shell::after {
         right: 10px;
-        left: auto;
-        background: linear-gradient(to left, rgba(247,243,236,0.98), rgba(247,243,236,0));
-      }
-      .dark .guest-uploads-shell::before {
-        background: linear-gradient(to right, rgba(24,19,15,0.98), rgba(24,19,15,0));
-      }
-      .dark .guest-uploads-shell::after {
-        background: linear-gradient(to left, rgba(24,19,15,0.98), rgba(24,19,15,0));
       }
       .guest-photos-grid {
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(78%, 78%);
+        gap: 14px;
+        max-height: 68vh;
+        padding: 2px 2px 10px;
+      }
+      .guest-collage-row {
+        grid-auto-columns: minmax(74%, 74%);
         gap: 12px;
-        column-count: auto;
-        column-gap: 0;
-        max-height: none;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding: 2px 20px 10px 2px;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-x: contain;
-        scrollbar-width: none;
+        padding: 2px 18px 8px 2px;
       }
-      .guest-photos-grid::-webkit-scrollbar {
-        display: none;
-      }
-      .guest-collage-item {
-        margin-bottom: 0;
-        scroll-snap-align: start;
+      .guest-collage-row:nth-child(even) {
+        padding-left: 14px;
       }
       .guest-collage-frame {
         border-radius: 18px;
@@ -2956,12 +2955,12 @@ print(“wasssuppp”)</pre>
         <div class="photo-booth-gallery-head reveal">
           <div class="photo-booth-gallery-copy">
             <p class="photo-booth-note-label" style="margin-top:0;">Live Photo Wall</p>
-            <p class="text-sm mt-3" style="color:var(--text-muted);">Guest uploads appear here in a swipeable collage so guests can quickly spot newly uploaded photos while the page stays polished.</p>
+            <p class="text-sm mt-3" style="color:var(--text-muted);">Guest uploads appear here in multiple swipeable collages so guests can browse lane by lane and quickly spot newly uploaded photos.</p>
             <p class="photo-booth-refresh-note"><strong>Refresh the website to see recently uploaded photos.</strong></p>
           </div>
           <div class="photo-booth-gallery-pills">
             <span class="photo-booth-gallery-pill"><span aria-hidden="true">&#10023;</span>Tap any photo to expand</span>
-            <span class="photo-booth-gallery-pill"><span aria-hidden="true">&#8596;</span>Swipe through every upload</span>
+            <span class="photo-booth-gallery-pill"><span aria-hidden="true">&#8596;</span>Swipe each collage lane</span>
           </div>
         </div>
 
@@ -3224,20 +3223,33 @@ print(“wasssuppp”)</pre>
       return 'guest-collage-frame--portrait';
     }
 
+    function buildGuestUploadsRows(photos) {
+      const rows = [];
+      const pattern = [5, 4, 5, 4];
+      let start = 0;
+      let rowIndex = 0;
+      while (start < photos.length) {
+        const desired = pattern[rowIndex % pattern.length];
+        const slice = photos.slice(start, start + desired).map((photo, localIndex) => ({
+          ...photo,
+          _globalIndex: start + localIndex,
+        }));
+        rows.push(slice);
+        start += desired;
+        rowIndex += 1;
+      }
+      return rows;
+    }
+
     function updateGuestUploadsSwipeHint() {
       const shell = document.getElementById('guest-uploads-shell');
       const grid = document.getElementById('guest-photos-grid');
+      const rows = Array.from(document.querySelectorAll('.guest-collage-row'));
       if (!shell || !grid) return;
-      const mobileSwipeLayout = window.matchMedia('(max-width: 639px)').matches;
-      const hasOverflow = mobileSwipeLayout
-        ? (grid.scrollWidth - grid.clientWidth > 16)
-        : (grid.scrollHeight - grid.clientHeight > 16);
-      const canScrollPrev = mobileSwipeLayout
-        ? (hasOverflow && grid.scrollLeft > 10)
-        : (hasOverflow && grid.scrollTop > 10);
-      const canScrollNext = mobileSwipeLayout
-        ? (hasOverflow && (grid.scrollLeft + grid.clientWidth < grid.scrollWidth - 10))
-        : (hasOverflow && (grid.scrollTop + grid.clientHeight < grid.scrollHeight - 10));
+      const scrollTargets = rows.length ? rows : [grid];
+      const hasOverflow = scrollTargets.some((row) => (row.scrollWidth - row.clientWidth > 16));
+      const canScrollPrev = scrollTargets.some((row) => row.scrollLeft > 10);
+      const canScrollNext = scrollTargets.some((row) => (row.scrollLeft + row.clientWidth < row.scrollWidth - 10));
       shell.classList.toggle('is-scrollable', hasOverflow);
       shell.classList.toggle('can-scroll-up', canScrollPrev);
       shell.classList.toggle('can-scroll-down', canScrollNext);
@@ -3245,18 +3257,25 @@ print(“wasssuppp”)</pre>
 
     function initGuestUploadsSwipeHint() {
       const grid = document.getElementById('guest-photos-grid');
-      if (!grid || grid.dataset.scrollStateBound === 'true') {
+      if (!grid) {
         updateGuestUploadsSwipeHint();
         return;
       }
-      grid.dataset.scrollStateBound = 'true';
       const sync = () => window.requestAnimationFrame(updateGuestUploadsSwipeHint);
-      grid.addEventListener('scroll', sync, { passive: true });
-      window.addEventListener('resize', sync, { passive: true });
-      if ('ResizeObserver' in window) {
-        const observer = new ResizeObserver(sync);
-        observer.observe(grid);
+      if (grid.dataset.scrollStateBound !== 'true') {
+        grid.dataset.scrollStateBound = 'true';
+        window.addEventListener('resize', sync, { passive: true });
+        if ('ResizeObserver' in window) {
+          const observer = new ResizeObserver(sync);
+          observer.observe(grid);
+        }
       }
+      document.querySelectorAll('.guest-collage-row').forEach((row, index) => {
+        if (row.dataset.scrollStateBound === 'true') return;
+        row.dataset.scrollStateBound = 'true';
+        row.dataset.rowIndex = String(index);
+        row.addEventListener('scroll', sync, { passive: true });
+      });
       sync();
     }
 
@@ -3390,21 +3409,25 @@ print(“wasssuppp”)</pre>
         updateGuestUploadsSwipeHint();
         return;
       }
-      grid.innerHTML = photos.map((photo, index) => {
-        const src = photo.imageData || photo.imageUrl || photo.url || '';
-        const caption = escapeGuestUploadHtml(photo.caption || 'Tap to expand');
-        const frameClass = getGuestCollageFrameClass(index, photos.length);
-        return `
-          <button type="button" class="guest-collage-item" onclick="openGuestUploadsLightbox(${index})" aria-label="Open guest upload ${index + 1} of ${photos.length}">
-            <span class="guest-collage-frame ${frameClass}">
-              <img src="${src}" alt="Guest upload ${index + 1}" loading="lazy">
-              <span class="guest-collage-meta">
-                <span class="guest-collage-label">Guest upload</span>
-                <span class="guest-collage-caption">${caption}</span>
-              </span>
-            </span>
-          </button>`;
-      }).join('');
+      const rows = buildGuestUploadsRows(photos);
+      grid.innerHTML = rows.map((row, rowIndex) => `
+        <div class="guest-collage-row" aria-label="Swipeable guest uploads collage ${rowIndex + 1} of ${rows.length}">
+          ${row.map((photo, itemIndex) => {
+            const src = photo.imageData || photo.imageUrl || photo.url || '';
+            const caption = escapeGuestUploadHtml(photo.caption || 'Tap to expand');
+            const frameClass = getGuestCollageFrameClass(photo._globalIndex, photos.length);
+            return `
+              <button type="button" class="guest-collage-item" onclick="openGuestUploadsLightbox(${photo._globalIndex})" aria-label="Open guest upload ${photo._globalIndex + 1} of ${photos.length}">
+                <span class="guest-collage-frame ${frameClass}">
+                  <img src="${src}" alt="Guest upload ${photo._globalIndex + 1}" loading="lazy">
+                  <span class="guest-collage-meta">
+                    <span class="guest-collage-label">Collage ${rowIndex + 1}</span>
+                    <span class="guest-collage-caption">${caption}</span>
+                  </span>
+                </span>
+              </button>`;
+          }).join('')}
+        </div>`).join('');
       initGuestUploadsSwipeHint();
       window.setTimeout(updateGuestUploadsSwipeHint, 80);
     }
