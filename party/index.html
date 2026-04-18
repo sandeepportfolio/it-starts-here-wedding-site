@@ -121,6 +121,49 @@
       text-shadow: 0 0 60px rgba(212,176,106,0.06);
       margin-top: 8px;
     }
+    .party-location {
+      margin: 30px auto 0;
+      max-width: 360px;
+      padding: 18px 18px 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(212,176,106,0.1);
+      background: linear-gradient(180deg, rgba(212,176,106,0.08), rgba(255,255,255,0.02));
+      box-shadow: 0 22px 54px rgba(0,0,0,0.18);
+      text-align: center;
+    }
+    .party-location-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.88;
+    }
+    .party-location-tag svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+    }
+    .party-location-name {
+      font-family: var(--serif);
+      font-size: clamp(24px, 7vw, 32px);
+      line-height: 1.08;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+    .party-location-note {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
 
     /* ─── DIVIDER ─── */
     .div { height: 1px; background: linear-gradient(90deg, transparent, rgba(212,176,106,0.12), transparent); margin: 0 0 40px; }
@@ -193,6 +236,14 @@
         <div class="sr" style="transition-delay:.3s">
           <p class="hero-date">Saturday</p>
           <p class="hero-time">9 PM</p>
+        </div>
+        <div class="party-location sr" style="transition-delay:.4s">
+          <div class="party-location-tag">
+            <svg viewBox="0 0 24 24"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            Party Location
+          </div>
+          <p class="party-location-name">337 Sugarbush Ln</p>
+          <p class="party-location-note">Pull up for the after-party energy</p>
         </div>
       </section>
 
