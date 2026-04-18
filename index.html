@@ -662,10 +662,11 @@
     }
     .photo-booth-gallery-head {
       display: flex;
-      align-items: end;
+      align-items: flex-end;
       justify-content: space-between;
       gap: 16px;
       margin: 0 0 18px;
+      flex-wrap: wrap;
     }
     .photo-booth-gallery-copy {
       max-width: 680px;
@@ -673,101 +674,435 @@
     .photo-booth-gallery-copy p:last-child {
       margin-bottom: 0;
     }
+    .photo-booth-gallery-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .photo-booth-gallery-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(184,146,74,0.18);
+      background: rgba(255,255,255,0.74);
+      color: var(--text);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      box-shadow: 0 10px 24px rgba(45,34,21,0.06);
+    }
+    .dark .photo-booth-gallery-pill {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(212,176,106,0.18);
+      box-shadow: none;
+    }
+    .photo-booth-gallery-pill span {
+      color: var(--gold);
+      font-size: 0.9rem;
+      line-height: 1;
+    }
     .guest-uploads-shell {
       position: relative;
+      border-radius: 30px;
+      border: 1px solid rgba(184,146,74,0.14);
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(249,244,236,0.96));
+      box-shadow: 0 20px 46px rgba(45,34,21,0.08);
+      padding: 14px;
+      overflow: hidden;
     }
-    .guest-photos-grid {
-      display: flex;
-      gap: 24px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 4px 2px 18px;
-      scroll-snap-type: x mandatory;
-      scroll-padding-inline: 2px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+    .dark .guest-uploads-shell {
+      background: linear-gradient(180deg, rgba(30,24,19,0.96), rgba(24,19,15,0.98));
+      box-shadow: 0 20px 46px rgba(0,0,0,0.26);
     }
-    .guest-photos-grid::-webkit-scrollbar { display: none; }
+    .guest-uploads-shell::before,
     .guest-uploads-shell::after {
       content: '';
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 18px;
-      width: 56px;
-      border-radius: 0 26px 26px 0;
-      background: linear-gradient(to right, rgba(247,243,236,0), rgba(247,243,236,0.92));
+      left: 14px;
+      right: 14px;
+      height: 28px;
+      z-index: 2;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.22s ease;
     }
-    .guest-uploads-shell.is-scrollable:not(.at-end)::after {
-      opacity: 1;
+    .guest-uploads-shell::before {
+      top: 14px;
+      background: linear-gradient(to bottom, rgba(247,243,236,0.96), rgba(247,243,236,0));
+    }
+    .guest-uploads-shell::after {
+      bottom: 14px;
+      background: linear-gradient(to top, rgba(247,243,236,0.98), rgba(247,243,236,0));
+    }
+    .dark .guest-uploads-shell::before {
+      background: linear-gradient(to bottom, rgba(24,19,15,0.96), rgba(24,19,15,0));
     }
     .dark .guest-uploads-shell::after {
-      background: linear-gradient(to right, rgba(22,18,14,0), rgba(22,18,14,0.92));
+      background: linear-gradient(to top, rgba(24,19,15,0.98), rgba(24,19,15,0));
     }
-    .guest-swipe-indicator {
-      position: absolute;
-      right: 14px;
-      bottom: 26px;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.22s ease, transform 0.22s ease;
-    }
-    .guest-uploads-shell.is-scrollable:not(.at-end) .guest-swipe-indicator {
+    .guest-uploads-shell.can-scroll-up::before,
+    .guest-uploads-shell.can-scroll-down::after {
       opacity: 1;
-      transform: translateY(0);
     }
-    .guest-swipe-pill {
+    .guest-photos-grid {
+      column-count: 4;
+      column-gap: 16px;
+      max-height: min(72vh, 760px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 4px 4px 14px;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(184,146,74,0.42) transparent;
+    }
+    .guest-photos-grid::-webkit-scrollbar {
+      width: 8px;
+    }
+    .guest-photos-grid::-webkit-scrollbar-thumb {
+      background: rgba(184,146,74,0.34);
+      border-radius: 999px;
+    }
+    .guest-photos-grid::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .guest-collage-item {
+      display: block;
+      width: 100%;
+      margin: 0 0 16px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      break-inside: avoid;
+      text-align: left;
+    }
+    .guest-collage-frame {
+      position: relative;
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 24px;
+      background: var(--bg-alt);
+      border: 1px solid rgba(184,146,74,0.14);
+      box-shadow: 0 14px 32px rgba(45,34,21,0.08);
+      transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+    .dark .guest-collage-frame {
+      box-shadow: 0 14px 32px rgba(0,0,0,0.22);
+    }
+    .guest-collage-item:hover .guest-collage-frame,
+    .guest-collage-item:focus-visible .guest-collage-frame {
+      transform: translateY(-3px);
+      border-color: rgba(184,146,74,0.32);
+      box-shadow: 0 22px 40px rgba(45,34,21,0.14);
+    }
+    .guest-collage-item:focus-visible {
+      outline: none;
+    }
+    .guest-collage-item:focus-visible .guest-collage-frame {
+      box-shadow: 0 0 0 3px rgba(184,146,74,0.2), 0 22px 40px rgba(45,34,21,0.16);
+    }
+    .guest-collage-frame--portrait { aspect-ratio: 3 / 4; }
+    .guest-collage-frame--square { aspect-ratio: 1 / 1; }
+    .guest-collage-frame--landscape { aspect-ratio: 4 / 3; }
+    .guest-collage-frame--hero { aspect-ratio: 4 / 5; }
+    .guest-collage-frame img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+    .guest-collage-item:hover img,
+    .guest-collage-item:focus-visible img {
+      transform: scale(1.04);
+    }
+    .guest-collage-frame::after {
+      content: '';
+      position: absolute;
+      inset: 35% 0 0;
+      background: linear-gradient(to top, rgba(18,14,10,0.72), rgba(18,14,10,0));
+      pointer-events: none;
+    }
+    .guest-collage-meta {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 1;
+      display: grid;
+      gap: 5px;
+      color: #fff;
+    }
+    .guest-collage-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: rgba(255,255,255,0.86);
+    }
+    .guest-collage-caption {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.95);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .guest-status-card,
+    .guest-loading-card {
+      display: grid;
+      gap: 20px;
+      padding: clamp(22px, 4vw, 34px);
+      border-radius: 26px;
+      border: 1px solid rgba(184,146,74,0.16);
+      background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(249,244,236,0.94));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+      break-inside: avoid;
+      min-height: 320px;
+    }
+    .dark .guest-status-card,
+    .dark .guest-loading-card {
+      background: linear-gradient(145deg, rgba(36,28,22,0.98), rgba(28,22,17,0.96));
+    }
+    .guest-status-card {
+      align-items: center;
+      justify-items: center;
+      text-align: center;
+    }
+    .guest-status-icon {
+      width: 70px;
+      height: 70px;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid rgba(184,146,74,0.16);
+      background: rgba(184,146,74,0.1);
+      font-size: 1.9rem;
+      color: var(--gold);
+    }
+    .guest-status-card h3,
+    .guest-loading-copy h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.7rem, 3.1vw, 2.2rem);
+      font-weight: 500;
+      color: var(--text);
+      margin: 0;
+    }
+    .guest-status-card p,
+    .guest-loading-copy p {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .guest-loading-head {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .guest-loading-emblem {
+      width: 74px;
+      height: 74px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 999px;
       border: 1px solid rgba(184,146,74,0.22);
-      background: rgba(255,252,246,0.92);
-      box-shadow: 0 10px 24px rgba(45,34,21,0.08);
+      background: radial-gradient(circle, rgba(212,176,106,0.26), rgba(212,176,106,0.06));
+      color: var(--gold);
+      font-size: 1.6rem;
+      box-shadow: 0 0 0 10px rgba(184,146,74,0.06);
+    }
+    .guest-loading-kicker {
+      margin: 0 0 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .guest-loading-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .guest-loading-tile {
+      border-radius: 20px;
+      background: linear-gradient(110deg, rgba(184,146,74,0.08) 8%, rgba(255,255,255,0.78) 18%, rgba(184,146,74,0.08) 33%);
+      background-size: 220% 100%;
+      border: 1px solid rgba(184,146,74,0.12);
+      min-height: 88px;
+    }
+    .dark .guest-loading-tile {
+      background: linear-gradient(110deg, rgba(184,146,74,0.08) 8%, rgba(255,255,255,0.08) 18%, rgba(184,146,74,0.08) 33%);
+      background-size: 220% 100%;
+    }
+    .guest-loading-tile--tall { min-height: 152px; }
+    .guest-loading-tile--wide { grid-column: span 2; }
+    @media (prefers-reduced-motion: no-preference) {
+      .guest-loading-emblem {
+        animation: guestLoadingPulse 2.2s ease-in-out infinite;
+      }
+      .guest-loading-tile {
+        animation: guestLoadingShimmer 1.8s linear infinite;
+      }
+    }
+    @keyframes guestLoadingPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 10px rgba(184,146,74,0.06); }
+      50% { transform: scale(1.04); box-shadow: 0 0 0 16px rgba(184,146,74,0.09); }
+    }
+    @keyframes guestLoadingShimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -20% 0; }
+    }
+    .guest-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 310;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(12,9,7,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .guest-lightbox.open {
+      display: flex;
+    }
+    .guest-lightbox-dialog {
+      width: min(92vw, 1100px);
+      display: grid;
+      gap: 16px;
+      align-items: center;
+    }
+    .guest-lightbox-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      border-radius: 28px;
+    }
+    .guest-lightbox-track::-webkit-scrollbar {
+      display: none;
+    }
+    .guest-lightbox-slide {
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+    .guest-lightbox-slide img {
+      width: auto;
+      max-width: 100%;
+      max-height: min(74vh, 820px);
+      object-fit: contain;
+      border-radius: 28px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.34);
+      background: rgba(255,255,255,0.04);
+    }
+    .guest-lightbox-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: #f8f3eb;
+    }
+    .guest-lightbox-kicker {
+      margin: 0 0 6px;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.62);
+    }
+    .guest-lightbox-caption {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.9);
+      max-width: 760px;
+    }
+    .guest-lightbox-count {
+      flex-shrink: 0;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      font-size: 0.74rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.78);
+    }
+    .guest-lightbox-close,
+    .guest-lightbox-nav {
+      position: absolute;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
     }
-    .dark .guest-swipe-pill {
-      background: rgba(28,22,18,0.88);
-      border-color: rgba(212,176,106,0.2);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+    .guest-lightbox-close:hover,
+    .guest-lightbox-nav:hover {
+      background: rgba(255,255,255,0.14);
+      transform: translateY(-1px);
     }
-    .guest-swipe-label {
-      font-size: 0.62rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .dark .guest-swipe-label {
-      color: #f6efe4;
-    }
-    .guest-swipe-arrows {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--gold);
-      font-size: 0.85rem;
+    .guest-lightbox-close {
+      top: 22px;
+      right: 22px;
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      font-size: 1.8rem;
       line-height: 1;
     }
-    @media (prefers-reduced-motion: no-preference) {
-      .guest-swipe-arrows span:last-child {
-        animation: guestSwipeArrow 1.25s ease-in-out infinite;
-      }
+    .guest-lightbox-nav {
+      top: 50%;
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      transform: translateY(-50%);
+      font-size: 1.4rem;
     }
-    @keyframes guestSwipeArrow {
-      0%, 100% { transform: translateX(0); opacity: 0.9; }
-      50% { transform: translateX(4px); opacity: 1; }
+    .guest-lightbox-nav:hover {
+      transform: translateY(calc(-50% - 1px));
+    }
+    .guest-lightbox-nav[disabled] {
+      opacity: 0.35;
+      cursor: default;
+      transform: translateY(-50%);
+    }
+    .guest-lightbox-nav--prev { left: 22px; }
+    .guest-lightbox-nav--next { right: 22px; }
+    @media (max-width: 1100px) {
+      .guest-photos-grid {
+        column-count: 3;
+      }
     }
     @media (max-width: 900px) {
       .photo-booth-layout {
         grid-template-columns: 1fr;
+      }
+      .guest-lightbox-dialog {
+        width: min(94vw, 900px);
       }
     }
     @media (max-width: 639px) {
@@ -779,26 +1114,88 @@
         width: 100%;
         justify-content: center;
       }
+      .photo-booth-gallery-pills {
+        width: 100%;
+      }
+      .photo-booth-gallery-pill {
+        width: 100%;
+        justify-content: center;
+      }
+      .guest-uploads-shell {
+        border-radius: 24px;
+        padding: 10px;
+      }
       .guest-photos-grid {
-        gap: 18px;
-        padding-bottom: 16px;
+        column-count: 2;
+        column-gap: 12px;
+        max-height: 58vh;
+        padding: 2px 2px 10px;
       }
-      .guest-uploads-shell::after {
+      .guest-collage-item {
+        margin-bottom: 12px;
+      }
+      .guest-collage-frame {
+        border-radius: 18px;
+      }
+      .guest-collage-meta {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+      }
+      .guest-collage-caption {
+        font-size: 0.76rem;
+      }
+      .guest-loading-head {
+        align-items: flex-start;
+      }
+      .guest-loading-emblem {
+        width: 62px;
+        height: 62px;
+        font-size: 1.35rem;
+      }
+      .guest-loading-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .guest-lightbox {
+        padding: 16px 12px;
+      }
+      .guest-lightbox-dialog {
+        width: 100%;
+        gap: 12px;
+      }
+      .guest-lightbox-slide {
+        padding: 4px;
+      }
+      .guest-lightbox-slide img {
+        max-height: 66vh;
+        border-radius: 20px;
+      }
+      .guest-lightbox-meta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .guest-lightbox-count {
+        align-self: flex-start;
+      }
+      .guest-lightbox-close {
+        top: 14px;
+        right: 14px;
         width: 46px;
-        bottom: 16px;
+        height: 46px;
       }
-      .guest-swipe-indicator {
-        right: 10px;
-        bottom: 22px;
+      .guest-lightbox-nav {
+        width: 44px;
+        height: 44px;
+        top: auto;
+        bottom: 18px;
+        transform: none;
       }
-      .guest-swipe-pill {
-        gap: 6px;
-        padding: 7px 10px;
+      .guest-lightbox-nav:hover,
+      .guest-lightbox-nav[disabled] {
+        transform: none;
       }
-      .guest-swipe-label {
-        font-size: 0.56rem;
-        letter-spacing: 0.14em;
-      }
+      .guest-lightbox-nav--prev { left: 14px; }
+      .guest-lightbox-nav--next { right: 14px; }
     }
     @media(max-width:639px) { .gallery-caption { opacity: 1; } }
 
@@ -1401,6 +1798,22 @@
   <div id="lightbox" onclick="closeLightbox()">
     <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white/70 hover:text-white text-3xl z-10" style="background:none;border:none;cursor:pointer;">&times;</button>
     <img id="lightbox-img" src="" alt="Gallery photo">
+  </div>
+
+  <div id="guest-lightbox" class="guest-lightbox" onclick="closeGuestUploadsLightbox(event)">
+    <button type="button" class="guest-lightbox-close" onclick="closeGuestUploadsLightbox()" aria-label="Close guest photo viewer">&times;</button>
+    <button type="button" class="guest-lightbox-nav guest-lightbox-nav--prev" id="guest-lightbox-prev" onclick="stepGuestUploadsLightbox(-1, event)" aria-label="Previous guest photo">&#10094;</button>
+    <div class="guest-lightbox-dialog" onclick="event.stopPropagation()">
+      <div class="guest-lightbox-track" id="guest-lightbox-track"></div>
+      <div class="guest-lightbox-meta">
+        <div>
+          <p class="guest-lightbox-kicker">Live photo wall</p>
+          <p class="guest-lightbox-caption" id="guest-lightbox-caption">Shared live by a wedding guest</p>
+        </div>
+        <div class="guest-lightbox-count" id="guest-lightbox-count">1 / 1</div>
+      </div>
+    </div>
+    <button type="button" class="guest-lightbox-nav guest-lightbox-nav--next" id="guest-lightbox-next" onclick="stepGuestUploadsLightbox(1, event)" aria-label="Next guest photo">&#10095;</button>
   </div>
 
   <!-- ===================== PHOTO UPLOAD MODAL ===================== -->
@@ -2323,14 +2736,14 @@ print(“wasssuppp”)</pre>
     <!-- ===== PHOTO BOOTH ===== -->
     <section id="photos" class="py-20 px-6" style="background:var(--bg-alt);">
       <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Live Memories</p><h2 class="section-title text-4xl sm:text-5xl">Photo Booth</h2><p class="text-sm mt-3 max-w-2xl mx-auto" style="color:var(--text-muted);">Snap a moment, upload it in seconds, and watch photos go live here for everyone to view throughout the celebration.</p><p class="text-xs mt-3" style="color:var(--text-light);">Swipe through the live gallery to see the latest guest uploads.</p><div class="section-divider mt-4"></div></div>
+        <div class="text-center mb-10 reveal"><p class="section-label mb-2">Shared Live Memories</p><h2 class="section-title text-4xl sm:text-5xl">Photo Booth</h2><p class="text-sm mt-3 max-w-2xl mx-auto" style="color:var(--text-muted);">Snap a moment, upload it in seconds, and watch photos go live here for everyone to view throughout the celebration.</p><p class="text-xs mt-3" style="color:var(--text-light);">The collage scrolls inside this section, and every photo can be expanded into a swipeable full-screen view.</p><div class="section-divider mt-4"></div></div>
 
         <div class="photo-booth-layout mb-8">
           <div class="photo-booth-intro card p-8 reveal">
             <div class="photo-booth-icon">&#128247;</div>
             <p class="photo-booth-eyebrow">Upload a moment</p>
-            <h3 class="font-heading text-2xl sm:text-3xl font-medium mt-3">One shared photo booth, one live gallery</h3>
-            <p class="text-sm mt-4 max-w-xl" style="color:var(--text-muted);">Take a photo or upload one from your phone. Once it is shared, it will appear live here for everyone to view and relive together.</p>
+            <h3 class="font-heading text-2xl sm:text-3xl font-medium mt-3">One shared photo booth, one live collage</h3>
+            <p class="text-sm mt-4 max-w-xl" style="color:var(--text-muted);">Take a photo or upload one from your phone. Once it is shared, it will appear live here for everyone to view, expand, and scroll through together.</p>
             <div class="photo-booth-actions">
               <button class="btn-gold" onclick="openPhotoUpload()">Upload Photos &#10024;</button>
               <span class="photo-booth-live-pill"><span aria-hidden="true">&#9679;</span>Live for everyone to view</span>
@@ -2341,8 +2754,8 @@ print(“wasssuppp”)</pre>
             <p class="photo-booth-note-label">How it works</p>
             <div class="photo-booth-note-list">
               <div class="photo-booth-note-item"><strong>Share instantly</strong><span>Upload from your phone in just a few taps, right from the celebration.</span></div>
-              <div class="photo-booth-note-item"><strong>View together</strong><span>Photos appear live here so everyone can browse the shared memory wall.</span></div>
-              <div class="photo-booth-note-item"><strong>Keep swiping</strong><span>New moments keep filling the gallery as the day unfolds.</span></div>
+              <div class="photo-booth-note-item"><strong>View the collage</strong><span>The live wall stays elegantly contained here, even if hundreds of moments arrive.</span></div>
+              <div class="photo-booth-note-item"><strong>Expand and swipe</strong><span>Tap any photo to open it full-screen, then scroll left or right to keep browsing.</span></div>
             </div>
           </div>
         </div>
@@ -2350,18 +2763,33 @@ print(“wasssuppp”)</pre>
         <div class="photo-booth-gallery-head reveal">
           <div class="photo-booth-gallery-copy">
             <p class="photo-booth-note-label" style="margin-top:0;">Live Photo Wall</p>
-            <p class="text-sm mt-3" style="color:var(--text-muted);">Guest uploads appear here live for everyone to view, revisit, and keep swiping through.</p>
+            <p class="text-sm mt-3" style="color:var(--text-muted);">Guest uploads appear here in a scrolling collage so the page stays polished while the photo wall keeps growing.</p>
+          </div>
+          <div class="photo-booth-gallery-pills">
+            <span class="photo-booth-gallery-pill"><span aria-hidden="true">&#10023;</span>Tap any photo to expand</span>
+            <span class="photo-booth-gallery-pill"><span aria-hidden="true">&#8597;</span>Scroll inside the collage</span>
           </div>
         </div>
 
         <div class="guest-uploads-shell reveal" id="guest-uploads-shell">
           <div id="guest-photos-grid" class="guest-photos-grid">
-            <div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Loading photo booth moments…</p><p class="text-sm" style="color:var(--text-muted);">Photos shared by guests will appear live here for everyone to view.</p></div>
-          </div>
-          <div class="guest-swipe-indicator" id="guest-swipe-indicator" aria-hidden="true">
-            <div class="guest-swipe-pill">
-              <span class="guest-swipe-label">Swipe for more</span>
-              <span class="guest-swipe-arrows"><span>&larr;</span><span>&rarr;</span></span>
+            <div class="guest-loading-card">
+              <div class="guest-loading-head">
+                <div class="guest-loading-emblem">&#10023;</div>
+                <div class="guest-loading-copy">
+                  <p class="guest-loading-kicker">Preparing the live collage</p>
+                  <h3>Moments are finding their place</h3>
+                  <p>Gathering guest uploads and arranging them into an elegant photo wall for everyone to enjoy.</p>
+                </div>
+              </div>
+              <div class="guest-loading-grid" aria-hidden="true">
+                <div class="guest-loading-tile guest-loading-tile--tall"></div>
+                <div class="guest-loading-tile"></div>
+                <div class="guest-loading-tile guest-loading-tile--wide"></div>
+                <div class="guest-loading-tile"></div>
+                <div class="guest-loading-tile guest-loading-tile--tall"></div>
+                <div class="guest-loading-tile"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -2551,6 +2979,10 @@ print(“wasssuppp”)</pre>
     window.closeCeremonyModal = closeCeremonyModal;
 
     // ---- Gallery Lightbox ----
+    let guestUploadsUnsubscribe = null;
+    window.guestUploadsPhotos = [];
+    window.guestUploadsLightboxIndex = 0;
+
     function openLightbox(item) {
       document.getElementById('lightbox-img').src = item.querySelector('img').src;
       document.getElementById('lightbox').classList.add('open');
@@ -2560,28 +2992,77 @@ print(“wasssuppp”)</pre>
       document.getElementById('lightbox').classList.remove('open');
       document.body.style.overflow = '';
     }
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
-    // ---- Guest Uploads Gallery ----
-    let guestUploadsUnsubscribe = null;
+    function escapeGuestUploadHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getGuestUploadsLoadingMarkup() {
+      return `
+        <div class="guest-loading-card">
+          <div class="guest-loading-head">
+            <div class="guest-loading-emblem">&#10023;</div>
+            <div class="guest-loading-copy">
+              <p class="guest-loading-kicker">Preparing the live collage</p>
+              <h3>Moments are finding their place</h3>
+              <p>Gathering guest uploads and arranging them into an elegant photo wall for everyone to enjoy.</p>
+            </div>
+          </div>
+          <div class="guest-loading-grid" aria-hidden="true">
+            <div class="guest-loading-tile guest-loading-tile--tall"></div>
+            <div class="guest-loading-tile"></div>
+            <div class="guest-loading-tile guest-loading-tile--wide"></div>
+            <div class="guest-loading-tile"></div>
+            <div class="guest-loading-tile guest-loading-tile--tall"></div>
+            <div class="guest-loading-tile"></div>
+          </div>
+        </div>`;
+    }
+
+    function getGuestUploadsStatusMarkup(icon, title, body) {
+      return `
+        <div class="guest-status-card">
+          <div class="guest-status-icon">${icon}</div>
+          <div style="display:grid; gap:10px; justify-items:center;">
+            <h3>${escapeGuestUploadHtml(title)}</h3>
+            <p>${escapeGuestUploadHtml(body)}</p>
+          </div>
+        </div>`;
+    }
+
+    function getGuestCollageFrameClass(index, total) {
+      if (total <= 1) return 'guest-collage-frame--hero';
+      const pattern = index % 8;
+      if (pattern === 0) return 'guest-collage-frame--hero';
+      if (pattern === 3 || pattern === 6) return 'guest-collage-frame--landscape';
+      if (pattern === 2 || pattern === 5) return 'guest-collage-frame--square';
+      return 'guest-collage-frame--portrait';
+    }
 
     function updateGuestUploadsSwipeHint() {
       const shell = document.getElementById('guest-uploads-shell');
       const grid = document.getElementById('guest-photos-grid');
       if (!shell || !grid) return;
-      const hasOverflow = grid.scrollWidth - grid.clientWidth > 18;
-      const atEnd = !hasOverflow || (grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 18);
+      const hasOverflow = grid.scrollHeight - grid.clientHeight > 16;
+      const canScrollUp = hasOverflow && grid.scrollTop > 10;
+      const canScrollDown = hasOverflow && (grid.scrollTop + grid.clientHeight < grid.scrollHeight - 10);
       shell.classList.toggle('is-scrollable', hasOverflow);
-      shell.classList.toggle('at-end', atEnd);
+      shell.classList.toggle('can-scroll-up', canScrollUp);
+      shell.classList.toggle('can-scroll-down', canScrollDown);
     }
 
     function initGuestUploadsSwipeHint() {
       const grid = document.getElementById('guest-photos-grid');
-      if (!grid || grid.dataset.swipeHintBound === 'true') {
+      if (!grid || grid.dataset.scrollStateBound === 'true') {
         updateGuestUploadsSwipeHint();
         return;
       }
-      grid.dataset.swipeHintBound = 'true';
+      grid.dataset.scrollStateBound = 'true';
       const sync = () => window.requestAnimationFrame(updateGuestUploadsSwipeHint);
       grid.addEventListener('scroll', sync, { passive: true });
       window.addEventListener('resize', sync, { passive: true });
@@ -2592,23 +3073,130 @@ print(“wasssuppp”)</pre>
       sync();
     }
 
+    function updateGuestUploadsLightboxMeta() {
+      const photos = window.guestUploadsPhotos || [];
+      const countEl = document.getElementById('guest-lightbox-count');
+      const captionEl = document.getElementById('guest-lightbox-caption');
+      const prevBtn = document.getElementById('guest-lightbox-prev');
+      const nextBtn = document.getElementById('guest-lightbox-next');
+      const current = photos[window.guestUploadsLightboxIndex] || {};
+      if (countEl) countEl.textContent = photos.length ? `${window.guestUploadsLightboxIndex + 1} / ${photos.length}` : '0 / 0';
+      if (captionEl) captionEl.textContent = current.caption || 'Shared live by a wedding guest';
+      if (prevBtn) prevBtn.disabled = window.guestUploadsLightboxIndex <= 0;
+      if (nextBtn) nextBtn.disabled = !photos.length || window.guestUploadsLightboxIndex >= photos.length - 1;
+    }
+
+    function syncGuestUploadsLightboxPosition() {
+      const track = document.getElementById('guest-lightbox-track');
+      if (!track) return;
+      const width = Math.max(track.clientWidth, 1);
+      const nextIndex = Math.max(0, Math.min((window.guestUploadsPhotos || []).length - 1, Math.round(track.scrollLeft / width)));
+      if (nextIndex !== window.guestUploadsLightboxIndex) {
+        window.guestUploadsLightboxIndex = nextIndex;
+      }
+      updateGuestUploadsLightboxMeta();
+    }
+
+    function scrollGuestUploadsLightboxTo(index, smooth = true) {
+      const track = document.getElementById('guest-lightbox-track');
+      const slides = track ? track.querySelectorAll('.guest-lightbox-slide') : [];
+      const targetIndex = Math.max(0, Math.min(slides.length - 1, index));
+      window.guestUploadsLightboxIndex = targetIndex;
+      if (slides[targetIndex]) {
+        slides[targetIndex].scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'nearest', inline: 'start' });
+      }
+      updateGuestUploadsLightboxMeta();
+    }
+
+    function renderGuestUploadsLightbox(startIndex = 0) {
+      const track = document.getElementById('guest-lightbox-track');
+      const photos = window.guestUploadsPhotos || [];
+      if (!track || !photos.length) return;
+      track.innerHTML = photos.map((photo, index) => {
+        const src = photo.imageData || photo.imageUrl || photo.url || '';
+        const caption = escapeGuestUploadHtml(photo.caption || `Guest upload ${index + 1}`);
+        return `
+          <div class="guest-lightbox-slide">
+            <img src="${src}" alt="${caption}">
+          </div>`;
+      }).join('');
+      if (!track.dataset.boundScroll) {
+        track.dataset.boundScroll = 'true';
+        track.addEventListener('scroll', () => window.requestAnimationFrame(syncGuestUploadsLightboxPosition), { passive: true });
+      }
+      window.guestUploadsLightboxIndex = Math.max(0, Math.min(photos.length - 1, startIndex));
+      updateGuestUploadsLightboxMeta();
+      window.requestAnimationFrame(() => scrollGuestUploadsLightboxTo(window.guestUploadsLightboxIndex, false));
+    }
+
+    window.openGuestUploadsLightbox = function(index) {
+      if (!(window.guestUploadsPhotos || []).length) return;
+      const modal = document.getElementById('guest-lightbox');
+      if (!modal) return;
+      renderGuestUploadsLightbox(index);
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeGuestUploadsLightbox = function(event) {
+      if (event && event.target !== event.currentTarget) return;
+      const modal = document.getElementById('guest-lightbox');
+      if (modal) modal.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    window.stepGuestUploadsLightbox = function(delta, event) {
+      if (event) event.stopPropagation();
+      const photos = window.guestUploadsPhotos || [];
+      if (!photos.length) return;
+      const nextIndex = Math.max(0, Math.min(photos.length - 1, window.guestUploadsLightboxIndex + delta));
+      scrollGuestUploadsLightboxTo(nextIndex, true);
+    };
+
+    document.addEventListener('keydown', (e) => {
+      const guestLightboxOpen = document.getElementById('guest-lightbox')?.classList.contains('open');
+      if (e.key === 'Escape') {
+        if (guestLightboxOpen) {
+          closeGuestUploadsLightbox();
+          return;
+        }
+        closeLightbox();
+      }
+      if (!guestLightboxOpen) return;
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        window.stepGuestUploadsLightbox(1);
+      }
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        window.stepGuestUploadsLightbox(-1);
+      }
+    });
+
     function renderGuestUploads(photos) {
       const grid = document.getElementById('guest-photos-grid');
       if (!grid) return;
+      window.guestUploadsPhotos = photos.slice();
       if (!photos.length) {
-        grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">No photo booth moments yet</p><p class="text-sm" style="color:var(--text-muted);">Be the first to upload one. It will appear live here for everyone to view.</p></div>`;
+        grid.innerHTML = getGuestUploadsStatusMarkup('📷', 'No photo booth moments yet', 'Be the first to upload one. It will appear live here for everyone to view in the collage.');
         updateGuestUploadsSwipeHint();
         return;
       }
-      grid.innerHTML = photos.map(p => `
-        <div class="card overflow-hidden reveal-scale" style="flex:0 0 min(82vw, 320px); max-width:320px; scroll-snap-align:center;">
-          <img src="${p.imageData || p.imageUrl || p.url || ''}" alt="Guest upload" style="width:100%; aspect-ratio:4/3; object-fit:cover; object-position:center; display:block; background:var(--bg-alt);">
-          <div style="padding:16px 18px;">
-            ${p.caption ? `<p style="font-size:13px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.5;">${String(p.caption).replace(/</g,'&lt;')}</p>` : ''}
-            <p style="font-size:11px; color:var(--text-light); margin:0; text-transform:uppercase; letter-spacing:0.08em;">Guest Upload</p>
-          </div>
-        </div>
-      `).join('');
+      grid.innerHTML = photos.map((photo, index) => {
+        const src = photo.imageData || photo.imageUrl || photo.url || '';
+        const caption = escapeGuestUploadHtml(photo.caption || 'Tap to expand');
+        const frameClass = getGuestCollageFrameClass(index, photos.length);
+        return `
+          <button type="button" class="guest-collage-item" onclick="openGuestUploadsLightbox(${index})" aria-label="Open guest upload ${index + 1} of ${photos.length}">
+            <span class="guest-collage-frame ${frameClass}">
+              <img src="${src}" alt="Guest upload ${index + 1}" loading="lazy">
+              <span class="guest-collage-meta">
+                <span class="guest-collage-label">Guest upload</span>
+                <span class="guest-collage-caption">${caption}</span>
+              </span>
+            </span>
+          </button>`;
+      }).join('');
       initGuestUploadsSwipeHint();
       window.setTimeout(updateGuestUploadsSwipeHint, 80);
     }
@@ -2623,7 +3211,7 @@ print(“wasssuppp”)</pre>
             window.setTimeout(() => loadGuestUploads(retryCount + 1), 400);
             return;
           }
-          grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Photo booth gallery unavailable</p><p class="text-sm" style="color:var(--text-muted);">Please check back shortly. Shared photos will appear live here once the gallery reconnects.</p></div>`;
+          grid.innerHTML = getGuestUploadsStatusMarkup('✦', 'Photo booth collage unavailable', 'Please check back shortly. Shared photos will appear here once the live gallery reconnects.');
           updateGuestUploadsSwipeHint();
           return;
         }
@@ -2639,12 +3227,12 @@ print(“wasssuppp”)</pre>
           renderGuestUploads(photos);
         }, (e) => {
           console.error('Guest uploads listener error:', e);
-          grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Couldn’t load guest uploads</p><p class="text-sm" style="color:var(--text-muted);">${String(e.message).replace(/</g,'&lt;')}</p></div>`;
+          grid.innerHTML = getGuestUploadsStatusMarkup('✦', 'Couldn’t load guest uploads', String(e.message || 'Please try again in a moment.'));
           updateGuestUploadsSwipeHint();
           guestUploadsUnsubscribe = null;
         });
       } catch (e) {
-        grid.innerHTML = `<div class="card p-8 text-center" style="min-width:100%; flex:0 0 100%;"><div class="text-4xl mb-3">📷</div><p class="font-heading text-xl font-medium mb-2">Couldn’t load guest uploads</p><p class="text-sm" style="color:var(--text-muted);">${String(e.message).replace(/</g,'&lt;')}</p></div>`;
+        grid.innerHTML = getGuestUploadsStatusMarkup('✦', 'Couldn’t load guest uploads', String(e.message || 'Please try again in a moment.'));
         updateGuestUploadsSwipeHint();
       }
     }
