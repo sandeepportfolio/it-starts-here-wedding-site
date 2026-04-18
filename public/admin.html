@@ -577,6 +577,7 @@
         <button class="nav-tab active" data-view="dashboard">Overview</button>
         <button class="nav-tab" data-view="rsvps">RSVPs</button>
         <button class="nav-tab" data-view="photos">Photos</button>
+        <button class="nav-tab" data-view="messages">Messages</button>
     </div>
 </nav>
 
@@ -602,12 +603,23 @@
                 <div class="stat-label">Photos</div>
                 <div class="stat-value" id="stat-photos"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></div>
             </div>
+            <div class="stat-card">
+                <div class="stat-label">Messages</div>
+                <div class="stat-value" id="stat-messages"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></div>
+            </div>
         </div>
 
         <div class="section-header">
             <div class="section-title">Recent Guests</div>
         </div>
         <div id="recent-rsvps">
+            <div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>
+        </div>
+
+        <div class="section-header">
+            <div class="section-title">Recent Guestbook Messages</div>
+        </div>
+        <div id="recent-messages">
             <div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>
         </div>
     </div>
@@ -660,6 +672,20 @@
         </div>
         <div class="photo-grid stagger" id="photos-grid">
             <div class="loading-row" style="grid-column:1/-1;"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>
+        </div>
+    </div>
+
+    <!-- MESSAGES VIEW -->
+    <div class="view" id="view-messages">
+        <div class="section-header">
+            <div class="section-title">Guestbook Messages</div>
+            <button class="refresh-btn" onclick="window.loadMessages()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                Refresh
+            </button>
+        </div>
+        <div class="rsvp-list stagger" id="messages-list">
+            <div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>
         </div>
     </div>
 
@@ -758,6 +784,7 @@
             document.getElementById(viewId).classList.add('active');
             if (tab.dataset.view === 'rsvps') window.loadRSVPs?.();
             if (tab.dataset.view === 'photos') window.loadPhotos?.();
+            if (tab.dataset.view === 'messages') window.loadMessages?.();
         });
     });
 
@@ -796,6 +823,7 @@
     let db = null;
     let pendingDeleteId = null;
     let rsvpCache = [];
+    let messageCache = [];
 
     try {
         const app = initializeApp(firebaseConfig);
@@ -851,6 +879,21 @@
         } catch (e) {
             console.error('Photo delete error:', e);
             showToast('Failed to delete photo: ' + e.message, 'error');
+        }
+    };
+
+    window.deleteMessage = async function(id) {
+        if (!id || !db) return;
+        const ok = window.confirm('Delete this guestbook message?');
+        if (!ok) return;
+        try {
+            await deleteDoc(doc(db, 'messages', id));
+            showToast('Guestbook message deleted');
+            loadDashboard();
+            window.loadMessages?.();
+        } catch (e) {
+            console.error('Message delete error:', e);
+            showToast('Failed to delete message: ' + e.message, 'error');
         }
     };
 
@@ -959,10 +1002,45 @@
 
             const photoSnap = await getDocs(collection(db, 'photos'));
             document.getElementById('stat-photos').textContent = photoSnap.size;
+
+            const messageSnap = await getDocs(collection(db, 'messages'));
+            const messages = [];
+            messageSnap.forEach(d => messages.push({ id: d.id, ...d.data() }));
+            messageCache = messages;
+            document.getElementById('stat-messages').textContent = messages.length;
+
+            const recentMessages = document.getElementById('recent-messages');
+            const sortedMessages = sortByDate([...messages]);
+            if (!sortedMessages.length) {
+                recentMessages.innerHTML = `<div class="empty-state">${icons.inbox}<h3>No messages yet</h3><p>Guestbook notes will appear here once guests start signing.</p></div>`;
+            } else {
+                recentMessages.innerHTML = '<div class="rsvp-list stagger">' + sortedMessages.slice(0, 6).map(m => renderMessageCard(m)).join('') + '</div>';
+            }
         } catch (e) {
             console.error('Dashboard error:', e);
             document.getElementById('stat-rsvps').textContent = '—';
+            document.getElementById('stat-messages').textContent = '—';
         }
+    }
+
+    function renderMessageCard(m) {
+        return `
+        <div class="rsvp-card">
+            <div class="rsvp-card-head">
+                <div>
+                    <div class="rsvp-name">${esc(m.name || 'Guest')}</div>
+                    <div class="rsvp-meta" style="margin-top:6px;">
+                        ${m.email ? `<span class="rsvp-meta-item">${icons.mail}${esc(m.email)}</span>` : `<span class="rsvp-meta-item">${icons.inbox}Guestbook message</span>`}
+                    </div>
+                </div>
+                <span class="rsvp-badge pending"><span class="dot"></span>Message</span>
+            </div>
+            <div class="rsvp-message" style="font-style:normal; color:var(--text);">${esc(m.message || '—')}</div>
+            <div class="rsvp-footer">
+                <span>${fmtDateFull(m.createdAt)}</span>
+                <button class="action-btn delete-btn" onclick="deleteMessage('${m.id}')">${icons.trash} Delete</button>
+            </div>
+        </div>`;
     }
 
     // ─── Render RSVP Card (Mobile) ───
@@ -1081,6 +1159,32 @@
         } catch (e) {
             console.error('Photo load error:', e);
             grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><h3>Error</h3><p>${esc(e.message)}</p></div>`;
+        }
+    };
+
+    // ─── Load Messages ───
+    window.loadMessages = async function() {
+        if (!db) return;
+        const list = document.getElementById('messages-list');
+        list.innerHTML = '<div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>';
+
+        try {
+            const snap = await getDocs(collection(db, 'messages'));
+            const messages = [];
+            snap.forEach(d => messages.push({ id: d.id, ...d.data() }));
+            messageCache = messages;
+            const sorted = sortByDate(messages);
+
+            if (!sorted.length) {
+                list.innerHTML = `<div class="empty-state">${icons.inbox}<h3>No messages yet</h3><p>Guestbook notes will appear here once guests start signing.</p></div>`;
+                return;
+            }
+
+            list.innerHTML = sorted.map(m => renderMessageCard(m)).join('');
+            list.classList.add('stagger');
+        } catch (e) {
+            console.error('Message load error:', e);
+            list.innerHTML = `<div class="empty-state"><h3>Error</h3><p>${esc(e.message)}</p></div>`;
         }
     };
 
