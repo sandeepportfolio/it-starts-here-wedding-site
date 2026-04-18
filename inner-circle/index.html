@@ -786,45 +786,6 @@
       background: linear-gradient(145deg, rgba(34,27,21,0.98), rgba(28,22,17,0.96));
       box-shadow: 0 18px 38px rgba(0,0,0,0.24);
     }
-    .guest-collage-card-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .guest-collage-card-kicker {
-      margin: 0;
-      font-size: 0.64rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: var(--gold);
-    }
-    .guest-collage-card-title {
-      margin: 6px 0 0;
-      font-size: 0.9rem;
-      line-height: 1.5;
-      color: var(--text-muted);
-    }
-    .guest-collage-card-range {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(184,146,74,0.18);
-      background: rgba(255,255,255,0.7);
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: var(--burgundy);
-      white-space: nowrap;
-    }
-    .dark .guest-collage-card-range {
-      background: rgba(255,255,255,0.06);
-      color: #f6efe4;
-    }
     .guest-collage-six-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1201,14 +1162,6 @@
         padding: 14px;
         border-radius: 22px;
         gap: 14px;
-      }
-      .guest-collage-card-head {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-      .guest-collage-card-range {
-        padding: 7px 10px;
-        font-size: 0.64rem;
       }
       .guest-collage-six-grid {
         gap: 8px;
@@ -3429,13 +3382,6 @@ print(“wasssuppp”)</pre>
       const collages = buildGuestUploadsCollages(photos);
       grid.innerHTML = collages.map((collage, collageIndex) => `
         <section class="guest-collage-card" aria-label="Swipeable guest uploads collage ${collageIndex + 1} of ${collages.length}">
-          <div class="guest-collage-card-head">
-            <div>
-              <p class="guest-collage-card-kicker">Collage ${collageIndex + 1}</p>
-              <p class="guest-collage-card-title">6-photo overview for quick upload verification</p>
-            </div>
-            <span class="guest-collage-card-range">${(collageIndex * 6) + 1}-${(collageIndex * 6) + collage.length}</span>
-          </div>
           <div class="guest-collage-six-grid">
             ${collage.map((photo) => {
               const src = photo.imageData || photo.imageUrl || photo.url || '';
