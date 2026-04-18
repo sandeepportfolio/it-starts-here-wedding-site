@@ -1493,6 +1493,80 @@
       letter-spacing: 0.2em;
       box-shadow: 0 12px 28px rgba(184,146,74,0.24);
     }
+    .hotel-scroll-shell {
+      position: relative;
+      margin-top: 10px;
+      border-radius: 32px;
+      border: 1px solid rgba(184,146,74,0.14);
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(249,244,236,0.96));
+      box-shadow: 0 22px 48px rgba(45,34,21,0.08);
+      padding: 16px;
+      overflow: hidden;
+    }
+    .dark .hotel-scroll-shell {
+      background: linear-gradient(180deg, rgba(30,24,19,0.96), rgba(24,19,15,0.98));
+      box-shadow: 0 22px 48px rgba(0,0,0,0.26);
+    }
+    .hotel-scroll-shell::before,
+    .hotel-scroll-shell::after {
+      content: '';
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      height: 34px;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.22s ease;
+    }
+    .hotel-scroll-shell::before {
+      top: 16px;
+      background: linear-gradient(to bottom, rgba(247,243,236,0.96), rgba(247,243,236,0));
+    }
+    .hotel-scroll-shell::after {
+      bottom: 16px;
+      background: linear-gradient(to top, rgba(247,243,236,0.98), rgba(247,243,236,0));
+    }
+    .dark .hotel-scroll-shell::before {
+      background: linear-gradient(to bottom, rgba(24,19,15,0.96), rgba(24,19,15,0));
+    }
+    .dark .hotel-scroll-shell::after {
+      background: linear-gradient(to top, rgba(24,19,15,0.98), rgba(24,19,15,0));
+    }
+    .hotel-scroll-shell.can-scroll-up::before,
+    .hotel-scroll-shell.can-scroll-down::after {
+      opacity: 1;
+    }
+    .hotel-scroll-content {
+      max-height: min(76vh, 980px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 4px 6px 8px;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(184,146,74,0.38) transparent;
+    }
+    .hotel-scroll-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    .hotel-scroll-content::-webkit-scrollbar-thumb {
+      background: rgba(184,146,74,0.34);
+      border-radius: 999px;
+    }
+    .hotel-scroll-content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .hotel-scroll-content #price-filter {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      padding: 12px 0 18px;
+      margin-bottom: 22px;
+      background: linear-gradient(to bottom, rgba(255,252,246,0.98), rgba(255,252,246,0.92), rgba(255,252,246,0));
+    }
+    .dark .hotel-scroll-content #price-filter {
+      background: linear-gradient(to bottom, rgba(28,22,17,0.98), rgba(28,22,17,0.92), rgba(28,22,17,0));
+    }
     #price-filter {
       display: flex;
       flex-wrap: wrap;
@@ -1521,6 +1595,19 @@
       }
     }
     @media (max-width: 639px) {
+      .hotel-scroll-shell {
+        border-radius: 24px;
+        padding: 10px;
+      }
+      .hotel-scroll-shell::before,
+      .hotel-scroll-shell::after {
+        left: 10px;
+        right: 10px;
+      }
+      .hotel-scroll-content {
+        max-height: 62vh;
+        padding: 2px 2px 6px;
+      }
       .hotel-info {
         padding: 15px 14px 16px;
       }
@@ -2368,6 +2455,9 @@ print(“wasssuppp”)</pre>
           <p class="text-sm mt-3 max-w-lg mx-auto" style="color: var(--text-muted);">Handpicked hotels near Shree Swaminarayan Gurukul, including one preferred luxury recommendation for out-of-town guests. Every link verified.</p>
           <div class="section-divider mt-4"></div>
         </div>
+
+        <div class="hotel-scroll-shell reveal" id="hotel-scroll-shell">
+          <div class="hotel-scroll-content" id="hotel-scroll-content">
         <!-- Venue + quick actions -->
         <div class="hotel-quick-actions reveal">
           <a href="https://www.google.com/maps/dir/?api=1&destination=621+Park+Vista+Rd+Plano+TX+75094" target="_blank" rel="noopener" class="hotel-quick-action">
@@ -2667,6 +2757,8 @@ print(“wasssuppp”)</pre>
           <div class="card p-5 flex items-start gap-3 reveal">
             <span class="text-2xl shrink-0">&#128663;</span>
             <div><p class="text-sm font-medium">Getting There</p><p class="text-xs mt-1" style="color: var(--text-muted);"><strong style="color:var(--gold);">We highly recommend renting a car or having one.</strong> The venue is in a residential area with limited ride-share availability. ~30 min from DFW Airport &middot; ~45 min from Dallas Love Field. Complimentary parking at venue.</p></div>
+          </div>
+        </div>
           </div>
         </div>
       </div>
@@ -2969,6 +3061,7 @@ print(“wasssuppp”)</pre>
 
     document.addEventListener('DOMContentLoaded', initStoryGuide);
     document.addEventListener('DOMContentLoaded', initGuestUploadsSwipeHint);
+    document.addEventListener('DOMContentLoaded', initHotelsScrollState);
 
     // ---- Events Toggle ----
     function toggleEvent(card) {
@@ -3199,6 +3292,27 @@ print(“wasssuppp”)</pre>
         window.stepGuestUploadsLightbox(-1);
       }
     });
+
+    function initHotelsScrollState() {
+      const shell = document.getElementById('hotel-scroll-shell');
+      const content = document.getElementById('hotel-scroll-content');
+      if (!shell || !content) return;
+      const sync = () => {
+        const hasOverflow = content.scrollHeight - content.clientHeight > 16;
+        shell.classList.toggle('can-scroll-up', hasOverflow && content.scrollTop > 10);
+        shell.classList.toggle('can-scroll-down', hasOverflow && (content.scrollTop + content.clientHeight < content.scrollHeight - 10));
+      };
+      if (content.dataset.scrollStateBound !== 'true') {
+        content.dataset.scrollStateBound = 'true';
+        content.addEventListener('scroll', sync, { passive: true });
+        window.addEventListener('resize', sync, { passive: true });
+        if ('ResizeObserver' in window) {
+          const observer = new ResizeObserver(sync);
+          observer.observe(content);
+        }
+      }
+      window.requestAnimationFrame(sync);
+    }
 
     function renderGuestUploads(photos) {
       const grid = document.getElementById('guest-photos-grid');
