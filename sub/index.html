@@ -674,6 +674,16 @@
     .photo-booth-gallery-copy p:last-child {
       margin-bottom: 0;
     }
+    .photo-booth-refresh-note {
+      margin-top: 10px;
+      font-size: 0.72rem;
+      line-height: 1.55;
+      color: var(--burgundy);
+      letter-spacing: 0.02em;
+    }
+    .photo-booth-refresh-note strong {
+      font-weight: 800;
+    }
     .photo-booth-gallery-pills {
       display: flex;
       flex-wrap: wrap;
@@ -1113,6 +1123,13 @@
       .photo-booth-live-pill {
         width: 100%;
         justify-content: center;
+      }
+      .hero-quick-actions {
+        gap: 10px;
+      }
+      .hero-quick-actions .btn-gold {
+        width: 100%;
+        min-width: 0;
       }
       .photo-booth-gallery-pills {
         width: 100%;
@@ -1781,6 +1798,19 @@
       box-shadow: 0 8px 32px rgba(184,146,74,0.45), 0 4px 12px rgba(0,0,0,0.2);
     }
     .ceremony-cal-btn svg { flex-shrink: 0; }
+    .hero-quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .hero-quick-actions .btn-gold {
+      justify-content: center;
+      min-width: 180px;
+    }
+    .hero-quick-actions button.btn-gold {
+      border: none;
+    }
   </style>
 </head>
 <body class="font-body antialiased">
@@ -1852,19 +1882,17 @@
       <div style="display:flex; flex-direction:column; gap:14px;" id="photo-upload-form">
         <div>
           <label style="font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:6px;">Photos *</label>
-          <label for="photo-file-input" style="display:block;">
-            <div style="border:2px dashed var(--border); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; background:var(--bg);" id="photo-drop-zone" ondragover="event.preventDefault(); this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="window.handleGuestPhotoDrop(event)">
-              <img id="photo-preview-img" src="" alt="Preview" style="display:none; max-width:100%; max-height:200px; border-radius:8px; margin:0 auto 12px; object-fit:cover;">
-              <div id="photo-placeholder" style="color:var(--text-muted);">
-                <div style="font-size:1.75rem; margin-bottom:8px;">🖼️</div>
-                <p style="font-size:12px;">Tap, click, or drag photos here</p>
-                <p style="font-size:10px; color:var(--text-light); margin-top:4px;">iPhone and Android supported. Select multiple now, or add more before uploading. JPG, PNG, GIF, HEIC up to 10MB each, up to 12 total.</p>
-              </div>
+          <div style="border:2px dashed var(--border); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; background:var(--bg);" id="photo-drop-zone" onclick="window.openGuestPhotoPicker(event)" ondragover="event.preventDefault(); this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="window.handleGuestPhotoDrop(event)">
+            <img id="photo-preview-img" src="" alt="Preview" style="display:none; max-width:100%; max-height:200px; border-radius:8px; margin:0 auto 12px; object-fit:cover;">
+            <div id="photo-placeholder" style="color:var(--text-muted);">
+              <div style="font-size:1.75rem; margin-bottom:8px;">🖼️</div>
+              <p style="font-size:12px;">Tap, click, or drag photos here</p>
+              <p style="font-size:10px; color:var(--text-light); margin-top:4px;">iPhone and Android supported. Select multiple now, or add more before uploading. After choosing photos, tap Done or ✓ in your picker, then tap Upload Photos below. JPG, PNG, GIF, HEIC up to 10MB each, up to 20 total.</p>
             </div>
-          </label>
+          </div>
           <div id="photo-selection-summary" style="display:none; font-size:11px; color:var(--text-muted); text-align:center; margin-top:10px;"></div>
           <div style="display:flex; justify-content:center; margin-top:10px;">
-            <label for="photo-file-input" id="photo-add-more-btn" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 14px; border-radius:999px; border:1px solid var(--border); background:var(--bg-alt); color:var(--text); font-size:11px; font-weight:600; letter-spacing:0.04em; cursor:pointer; text-transform:uppercase;">Choose or Add Photos</label>
+            <button type="button" id="photo-add-more-btn" onclick="window.openGuestPhotoPicker(event)" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 14px; border-radius:999px; border:1px solid var(--border); background:var(--bg-alt); color:var(--text); font-size:11px; font-weight:600; letter-spacing:0.04em; cursor:pointer; text-transform:uppercase;">Choose or Add Photos</button>
           </div>
           <input type="file" id="photo-file-input" accept="image/*,.heic,.heif" multiple style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; opacity:0; pointer-events:none;">
         </div>
@@ -1888,8 +1916,10 @@
         <div class="absolute inset-0" style="background: linear-gradient(to bottom, var(--bg) 0%, transparent 25%, transparent 55%, var(--bg) 100%);"></div>
       </div>
       <div class="relative z-10 text-center px-6 py-20 hero-entrance" id="hero-inner">
-        <div class="mb-8">
+        <div class="hero-quick-actions mb-8">
           <a href="#rsvp" class="btn-gold">RSVP Now <span>&#10141;</span></a>
+          <a href="#livestream" class="btn-gold">Live Stream <span>&#128250;</span></a>
+          <button type="button" class="btn-gold" onclick="openPhotoUpload()">Upload Photos <span>&#10024;</span></button>
         </div>
         <div>
           <p class="section-label mb-3">A Royal Wedding</p>
@@ -2350,7 +2380,7 @@ print(“wasssuppp”)</pre>
               </div>
             </div>
             <div class="ceremony-modal-cta">
-              <a href="https://calendar.google.com/calendar/r/eventedit?text=Wedding+Ceremony+-+Chamanthi+%26+Sandeep&dates=20260509T085000/C20260509T105000&details=Shree+Swaminarayan+Gurukul%2C+Plano+TX&location=Plano%2C+TX" target="_blank" class="btn-gold ceremony-cal-btn">
+              <a href="https://calendar.google.com/calendar/r/eventedit?text=Chamanthi+%26+Sandeep+Wedding+Day&dates=20260509T060000/20260509T140000&ctz=America%2FChicago&details=Celebrate+with+Chamanthi+%26+Sandeep+at+Shree+Swaminarayan+Gurukul+in+Plano%2C+Texas.&location=Shree+Swaminarayan+Gurukul%2C+621+Park+Vista+Rd%2C+Plano%2C+TX+75094" target="_blank" class="btn-gold ceremony-cal-btn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 Add to Calendar
               </a>
@@ -2898,6 +2928,7 @@ print(“wasssuppp”)</pre>
           <div class="photo-booth-gallery-copy">
             <p class="photo-booth-note-label" style="margin-top:0;">Live Photo Wall</p>
             <p class="text-sm mt-3" style="color:var(--text-muted);">Guest uploads appear here in a scrolling collage so the page stays polished while the photo wall keeps growing.</p>
+            <p class="photo-booth-refresh-note"><strong>Refresh the website to see recently uploaded photos.</strong></p>
           </div>
           <div class="photo-booth-gallery-pills">
             <span class="photo-booth-gallery-pill"><span aria-hidden="true">&#10023;</span>Tap any photo to expand</span>
@@ -3389,6 +3420,25 @@ print(“wasssuppp”)</pre>
       const fileInput = document.getElementById('photo-file-input');
       if (fileInput) fileInput.value = '';
       window.selectedGuestPhotoFiles = [];
+    window.MAX_GUEST_PHOTO_UPLOADS = 20;
+
+    window.openGuestPhotoPicker = function(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      const fileInput = document.getElementById('photo-file-input');
+      if (!fileInput) return;
+      try {
+        if (typeof fileInput.showPicker === 'function') {
+          fileInput.showPicker();
+          return;
+        }
+      } catch (err) {
+        console.warn('showPicker unavailable, falling back to click:', err);
+      }
+      fileInput.click();
+    };
       const preview = document.getElementById('photo-preview-img');
       const placeholder = document.getElementById('photo-placeholder');
       const summary = document.getElementById('photo-selection-summary');
@@ -3439,7 +3489,7 @@ print(“wasssuppp”)</pre>
       const firstFile = files[0];
 
       if (addMore) {
-        addMore.textContent = files.length ? `Add More Photos (${files.length}/12)` : 'Choose or Add Photos';
+        addMore.textContent = files.length ? `Add More Photos (${files.length}/${window.MAX_GUEST_PHOTO_UPLOADS})` : 'Choose or Add Photos';
       }
 
       if (!firstFile || !preview) {
@@ -3456,7 +3506,7 @@ print(“wasssuppp”)</pre>
         if (placeholder) placeholder.style.display = 'none';
         if (summary) {
           summary.textContent = files.length > 1
-            ? `${files.length} photos selected. You can add more before uploading, and they’ll upload together across all wedding sites.`
+            ? `${files.length} photos selected. Tap Upload Photos below when you’re ready, and they’ll upload together across all wedding sites.`
             : `${firstFile.name} selected. You can tap again to add more photos before uploading.`;
           summary.style.display = 'block';
         }
@@ -3487,7 +3537,7 @@ print(“wasssuppp”)</pre>
         }
         const key = window.getGuestPhotoFileKey(file);
         if (seen.has(key)) return;
-        if (selected.length >= 12) {
+        if (selected.length >= window.MAX_GUEST_PHOTO_UPLOADS) {
           skippedForLimit += 1;
           return;
         }
@@ -3501,7 +3551,7 @@ print(“wasssuppp”)</pre>
 
       if (errorEl) {
         const notes = [];
-        if (skippedForLimit) notes.push('You can upload up to 12 photos at a time.');
+        if (skippedForLimit) notes.push(`You can upload up to ${window.MAX_GUEST_PHOTO_UPLOADS} photos at a time.`);
         if (skippedForType) notes.push(`${skippedForType} file${skippedForType === 1 ? '' : 's'} skipped because they were not supported image types.`);
         if (notes.length) {
           errorEl.textContent = notes.join(' ');
@@ -3626,14 +3676,16 @@ print(“wasssuppp”)</pre>
         const storage = window.firebaseStorage && window.firebaseStorage();
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
         if (!window.addDoc || !window.collection) throw new Error('Photo saving is not ready yet. Please try again in a moment.');
-        if (files.length > 12) throw new Error('Please upload up to 12 photos at a time.');
+        if (files.length > window.MAX_GUEST_PHOTO_UPLOADS) throw new Error(`Please upload up to ${window.MAX_GUEST_PHOTO_UPLOADS} photos at a time.`);
 
         const currentPath = window.location.pathname;
         const source = currentPath.startsWith('/sub/') ? 'sub' : currentPath.startsWith('/inner-circle/') ? 'inner-circle' : 'main-site';
         const hardwareCap = navigator.hardwareConcurrency ? Math.max(3, Math.min(6, Math.ceil(navigator.hardwareConcurrency / 2))) : 4;
         const connectionType = (navigator.connection && navigator.connection.effectiveType) || '';
         const networkCap = /2g/.test(connectionType) ? 2 : connectionType === '3g' ? 3 : 5;
-        const workerCount = Math.min(files.length, hardwareCap, networkCap);
+        const isPhoneLike = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
+        const mobileCap = isPhoneLike ? 2 : hardwareCap;
+        const workerCount = Math.min(files.length, mobileCap, networkCap);
         let uploadedCount = 0;
         const failures = [];
         const finalizationTasks = [];
@@ -3724,8 +3776,8 @@ print(“wasssuppp”)</pre>
 
         if (successEl) {
           successEl.querySelector('p').textContent = failures.length
-            ? `✨ ${uploadedCount} of ${files.length} photos started uploading fast. The rest can be tried again.`
-            : `✨ ${uploadedCount} photo${uploadedCount === 1 ? '' : 's'} uploaded fast and syncing across all wedding sites.`;
+            ? `✨ ${uploadedCount} of ${files.length} photos started uploading fast. Refresh the website to see recently uploaded photos, then try the rest again.`
+            : `✨ ${uploadedCount} photo${uploadedCount === 1 ? '' : 's'} uploaded fast. Refresh the website to see recently uploaded photos.`;
           successEl.style.display = 'block';
         }
         if (errorEl && failures.length) {
