@@ -12,7 +12,7 @@
   <!-- Firebase configuration -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, doc, updateDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, doc, setDoc, updateDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
     import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
     const firebaseConfig = {
@@ -3864,7 +3864,8 @@ print(“wasssuppp”)</pre>
             approved: true,
             source,
             uploadStatus: 'processing',
-            createdAt: new Date()
+            createdAt: new Date(),
+        updatedAt: new Date()
           }), 5000, 'Saving your photo took too long.');
 
           queueFinalization(photoRef, file, index);
@@ -3915,7 +3916,20 @@ print(“wasssuppp”)</pre>
 
     // ---- RSVP (4-step: attendance → events → details → confirm) ----
     let rsvpResponse = '';
+    let rsvpDraftId = '';
     const TOTAL_RSVP_STEPS = 4;
+
+    function getOrCreateRsvpDraftId() {
+      try {
+        const existing = localStorage.getItem('rsvpDraftId-sub');
+        if (existing) return existing;
+        const fresh = 'rsvp-sub-' + (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + '-' + Math.random().toString(16).slice(2));
+        localStorage.setItem('rsvpDraftId-sub', fresh);
+        return fresh;
+      } catch (e) {
+        return 'rsvp-sub-' + Date.now();
+      }
+    }
 
     function toggleEventCheck(el) {
       el.classList.toggle('checked');
@@ -3983,15 +3997,20 @@ print(“wasssuppp”)</pre>
         message: message || '',
         status: 'pending',
         source: 'sub',
-        createdAt: new Date()
+        createdAt: new Date(),
+        updatedAt: new Date()
       };
 
       try {
         const db = window.firebaseDb();
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
 
-        await window.addDoc(window.collection(db, 'rsvps'), data);
-        try { localStorage.setItem('rsvpSubmitted-sub', 'true'); } catch (e) {}
+        const draftId = rsvpDraftId || getOrCreateRsvpDraftId();
+        await setDoc(doc(db, 'rsvps', draftId), data, { merge: true });
+        try {
+          localStorage.setItem('rsvpSubmitted-sub', 'true');
+          localStorage.setItem('rsvpDraftId-sub', draftId);
+        } catch (e) {}
         goRsvpStep(TOTAL_RSVP_STEPS);
       } catch (e) {
         console.error('RSVP error:', e);
@@ -4002,6 +4021,7 @@ print(“wasssuppp”)</pre>
       }
     }
 
+    try { rsvpDraftId = localStorage.getItem('rsvpDraftId-sub') || ''; } catch (e) {}
 
 
     // ---- Hotel Filter ----

@@ -12,7 +12,7 @@
   <!-- Firebase configuration -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, doc, updateDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, doc, setDoc, updateDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
     import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
     const firebaseConfig = {
@@ -3840,7 +3840,8 @@ print(“wasssuppp”)</pre>
             approved: true,
             source,
             uploadStatus: 'processing',
-            createdAt: new Date()
+            createdAt: new Date(),
+        updatedAt: new Date()
           }), 5000, 'Saving your photo took too long.');
 
           queueFinalization(photoRef, file, index);
@@ -3891,7 +3892,20 @@ print(“wasssuppp”)</pre>
 
     // ---- RSVP ----
     let rsvpResponse = '';
+    let rsvpDraftId = '';
     const TOTAL_RSVP_STEPS = 4;
+
+    function getOrCreateRsvpDraftId() {
+      try {
+        const existing = localStorage.getItem('rsvpDraftId-it-starts-here');
+        if (existing) return existing;
+        const fresh = 'rsvp-it-starts-here-' + (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + '-' + Math.random().toString(16).slice(2));
+        localStorage.setItem('rsvpDraftId-it-starts-here', fresh);
+        return fresh;
+      } catch (e) {
+        return 'rsvp-it-starts-here-' + Date.now();
+      }
+    }
 
     window.toggleEventCheck = function(el) { el.classList.toggle('checked'); };
     window.getSelectedEvents = function() {
@@ -3900,10 +3914,11 @@ print(“wasssuppp”)</pre>
 
     window.selectRsvp = function(el, response) {
       rsvpResponse = response;
+      rsvpDraftId = getOrCreateRsvpDraftId();
       document.querySelectorAll('.rsvp-option').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
       // On main site, auto-select wedding-ceremony and skip event-selection step
-      var isMainSite = !window.location.pathname.startsWith('/sub/');
+      var isMainSite = !window.location.pathname.includes('/sub/') && !window.location.pathname.includes('/inner-circle/');
       if (isMainSite && response !== 'declined') {
         var wc = document.querySelector('[data-event="wedding-ceremony"]');
         if (wc && !wc.classList.contains('checked')) {
@@ -3913,9 +3928,9 @@ print(“wasssuppp”)</pre>
       setTimeout(() => {
         if (response === 'declined') {
           document.getElementById('rsvp-confirm-title').textContent = "We'll Miss You";
-          document.getElementById('rsvp-confirm-msg').textContent = "Thank you for letting us know. We'll keep you in our hearts on the big day.";
-          window.goRsvpStep(TOTAL_RSVP_STEPS);
-        } else if (isMainSite) {
+          document.getElementById('rsvp-confirm-msg').textContent = "Thanks for letting us know. Please leave your name so we can keep your response in the guest list.";
+        }
+        if (isMainSite) {
           window.goRsvpStep(3);
         } else {
           window.goRsvpStep(2);
@@ -3926,7 +3941,7 @@ print(“wasssuppp”)</pre>
       document.querySelectorAll('.rsvp-step').forEach(s => s.classList.remove('active'));
       document.getElementById('rsvp-step-' + step).classList.add('active');
       // Main site skips event-selection (step 2), so adjust label
-      var isMainSite = !window.location.pathname.startsWith('/sub/');
+      var isMainSite = !window.location.pathname.includes('/sub/') && !window.location.pathname.includes('/inner-circle/');
       var adjustedStep = step;
       var totalSteps = TOTAL_RSVP_STEPS;
       if (isMainSite) {
@@ -3974,15 +3989,20 @@ print(“wasssuppp”)</pre>
         message: message || '',
         status: 'pending',
         source: 'main-site',
-        createdAt: new Date()
+        createdAt: new Date(),
+        updatedAt: new Date()
       };
 
       try {
         const db = window.firebaseDb();
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
 
-        await window.addDoc(window.collection(db, 'rsvps'), data);
-        try { localStorage.setItem('rsvpSubmitted-main', 'true'); } catch (e) {}
+        const draftId = rsvpDraftId || getOrCreateRsvpDraftId();
+        await setDoc(doc(db, 'rsvps', draftId), data, { merge: true });
+        try {
+          localStorage.setItem('rsvpSubmitted-main', 'true');
+          localStorage.setItem('rsvpDraftId-it-starts-here', draftId);
+        } catch (e) {}
         window.goRsvpStep(TOTAL_RSVP_STEPS);
       } catch (e) {
         console.error('RSVP error:', e);
@@ -3993,6 +4013,7 @@ print(“wasssuppp”)</pre>
       }
     }
 
+    try { rsvpDraftId = localStorage.getItem('rsvpDraftId-it-starts-here') || ''; } catch (e) {}
 
 
     // ---- Hotel Filter ----
@@ -4137,7 +4158,7 @@ print(“wasssuppp”)</pre>
       // RSVP Step 1 navigation
       var s1back = document.getElementById('rsvp-step1-back');
       var s1next = document.getElementById('rsvp-step1-next');
-      var isMainSite = !window.location.pathname.startsWith('/sub/');
+      var isMainSite = !window.location.pathname.includes('/sub/') && !window.location.pathname.includes('/inner-circle/');
       if (s1back) s1back.addEventListener('click', function() { window.goRsvpStep(1); });
       if (s1next) s1next.addEventListener('click', function() {
         // Main site skips event-selection step (step 2), goes directly to details
