@@ -701,6 +701,10 @@
                 <div class="stat-value" id="stat-attending"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></div>
             </div>
             <div class="stat-card">
+                <div class="stat-label">Total Guests</div>
+                <div class="stat-value" id="stat-guests"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></div>
+            </div>
+            <div class="stat-card">
                 <div class="stat-label">Declined</div>
                 <div class="stat-value" id="stat-not-attending"><div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div></div>
             </div>
@@ -1250,11 +1254,14 @@
             const rsvps = [];
             rsvpSnap.forEach(d => rsvps.push({ id: d.id, ...d.data() }));
             rsvpCache = rsvps;
-            const attending = rsvps.filter(r => isAttending(r.attendance)).length;
+            const attendingRsvps = rsvps.filter(r => isAttending(r.attendance));
+            const attending = attendingRsvps.length;
+            const totalGuests = attendingRsvps.reduce((sum, r) => sum + 1 + (parseInt(r.plusOnes, 10) || 0), 0);
             const declined = rsvps.filter(r => isDeclined(r.attendance)).length;
 
             document.getElementById('stat-rsvps').textContent = rsvps.length;
             document.getElementById('stat-attending').textContent = attending;
+            document.getElementById('stat-guests').textContent = totalGuests;
             document.getElementById('stat-not-attending').textContent = declined;
 
             const sorted = sortByDate([...rsvps]);
@@ -1284,6 +1291,10 @@
         } catch (e) {
             console.error('Dashboard error:', e);
             document.getElementById('stat-rsvps').textContent = '—';
+            document.getElementById('stat-attending').textContent = '—';
+            document.getElementById('stat-guests').textContent = '—';
+            document.getElementById('stat-not-attending').textContent = '—';
+            document.getElementById('stat-photos').textContent = '—';
             document.getElementById('stat-messages').textContent = '—';
         }
     }
