@@ -49,6 +49,7 @@
     window.orderBy = orderBy;
     window.limit = limit;
     window.doc = doc;
+    window.setDoc = setDoc;
     window.updateDoc = updateDoc;
     window.onSnapshot = onSnapshot;
     window.serverTimestamp = serverTimestamp;
@@ -3998,7 +3999,8 @@ print(“wasssuppp”)</pre>
         if (!db) throw new Error('Firebase not configured. Please add your Firebase config.');
 
         const draftId = rsvpDraftId || getOrCreateRsvpDraftId();
-        await setDoc(doc(db, 'rsvps', draftId), data, { merge: true });
+        if (!window.setDoc || !window.doc) throw new Error('RSVP saving is not ready yet. Please try again in a moment.');
+        await window.setDoc(window.doc(db, 'rsvps', draftId), data, { merge: true });
         try {
           localStorage.setItem('rsvpSubmitted-main', 'true');
           localStorage.setItem('rsvpDraftId-it-starts-here', draftId);
