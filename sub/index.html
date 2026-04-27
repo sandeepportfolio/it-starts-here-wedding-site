@@ -3942,13 +3942,15 @@ print(“wasssuppp”)</pre>
 
     function selectRsvp(el, response) {
       rsvpResponse = response;
+      rsvpDraftId = getOrCreateRsvpDraftId();
       document.querySelectorAll('.rsvp-option').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
       setTimeout(() => {
         if (response === 'declined') {
+          document.querySelectorAll('.event-check.checked').forEach(item => item.classList.remove('checked'));
           document.getElementById('rsvp-confirm-title').textContent = "We'll Miss You";
-          document.getElementById('rsvp-confirm-msg').textContent = "Thank you for letting us know. We'll keep you in our hearts on the big day.";
-          goRsvpStep(TOTAL_RSVP_STEPS);
+          document.getElementById('rsvp-confirm-msg').textContent = "Thanks for letting us know. Please leave your name so we can keep your response in the guest list.";
+          goRsvpStep(3);
         } else {
           goRsvpStep(2);
         }
@@ -3963,9 +3965,14 @@ print(“wasssuppp”)</pre>
         const bar = document.getElementById('rsvp-bar-' + i);
         if (bar) { bar.classList.toggle('active', i <= step); }
       }
-      if (step === TOTAL_RSVP_STEPS && rsvpResponse !== 'declined') {
-        document.getElementById('rsvp-confirm-title').textContent = 'Thank You!';
-        document.getElementById('rsvp-confirm-msg').textContent = "Your response has been recorded. We can't wait to celebrate with you!";
+      if (step === TOTAL_RSVP_STEPS) {
+        if (rsvpResponse === 'declined') {
+          document.getElementById('rsvp-confirm-title').textContent = "We'll Miss You";
+          document.getElementById('rsvp-confirm-msg').textContent = "Your response has been recorded. Thank you for letting us know.";
+        } else {
+          document.getElementById('rsvp-confirm-title').textContent = 'Thank You!';
+          document.getElementById('rsvp-confirm-msg').textContent = "Your response has been recorded. We can't wait to celebrate with you!";
+        }
       }
     }
 
@@ -4174,7 +4181,7 @@ print(“wasssuppp”)</pre>
       // RSVP Step 3 (details) navigation
       var rsvpBack = document.getElementById('rsvp-back-btn');
       var rsvpSubmit = document.getElementById('rsvp-submit-btn');
-      if (rsvpBack) rsvpBack.addEventListener('click', function() { goRsvpStep(2); });
+      if (rsvpBack) rsvpBack.addEventListener('click', function() { goRsvpStep(rsvpResponse === 'declined' ? 1 : 2); });
       if (rsvpSubmit) rsvpSubmit.addEventListener('click', function() { submitRsvpForm(); });
 
       // Photo upload
