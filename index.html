@@ -1266,6 +1266,106 @@
     .hotel-card { display: flex; gap: 16px; padding: 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg-card); transition: all 0.2s; text-decoration: none; color: var(--text); }
     .hotel-card:hover { border-color: var(--gold); transform: translateY(-1px); }
 
+
+    /* Gift Registry */
+    .registry-section {
+      position: relative;
+      background: var(--bg);
+    }
+    .registry-section .nav-focus-anchor {
+      scroll-margin-top: 112px;
+    }
+    .registry-panel {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: clamp(24px, 4vw, 38px);
+      border: 1px solid rgba(184,146,74,0.2);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(251,248,242,0.7));
+      box-shadow: 0 18px 50px rgba(45,34,21,0.055);
+      text-align: center;
+    }
+    .dark .registry-panel {
+      background: linear-gradient(180deg, rgba(42,36,30,0.74), rgba(35,30,24,0.68));
+      box-shadow: 0 18px 50px rgba(0,0,0,0.24);
+    }
+    .registry-intro {
+      max-width: 520px;
+      margin: 0 auto 22px;
+    }
+    .registry-intro p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.8;
+    }
+    .registry-single {
+      max-width: 360px;
+      margin: 0 auto;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+    .registry-label {
+      margin: 0;
+      color: var(--gold);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+    .registry-value {
+      margin: 8px 0 16px;
+      color: var(--text);
+      font-size: clamp(1.18rem, 4vw, 1.45rem);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      overflow-wrap: anywhere;
+    }
+    .registry-actions {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .registry-copy {
+      appearance: none;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 10px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: all 0.22s ease;
+    }
+    .registry-copy:hover,
+    .registry-copy.copied {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--gold-glow);
+      transform: translateY(-1px);
+    }
+    .registry-note {
+      margin: 22px auto 0;
+      max-width: 520px;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.76rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 767px) {
+      .registry-panel { padding: 24px 18px; }
+      .registry-copy { width: 100%; }
+    }
+
     /* Hotel image cards — new redesigned style */
     .hotel-img-card {
       display: flex;
@@ -2073,6 +2173,7 @@
         <a href="#details-focus" class="nav-link">Details</a>
         <a href="#gallery-focus" class="nav-link">Gallery</a>
         <a href="#hotels-focus" class="nav-link">Stay</a>
+        <a href="#registry-focus" class="nav-link">Gifts</a>
         <a href="#livestream-focus" class="nav-link" style="flex-shrink:0;">Live</a>
         <button id="theme-toggle" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer flex-shrink-0 ml-1" style="display:none; background:var(--gold-glow); border:1px solid var(--border); transition:all 0.2s;" title="Toggle dark mode">
           <span id="theme-icon" class="text-sm">&#9789;</span>
@@ -2793,6 +2894,7 @@ print(“wasssuppp”)</pre>
 
 
 
+
     <!-- ===== LIVE STREAM ===== -->
     <section id="livestream" class="py-24 px-6" style="background: var(--bg-alt);">
       <div class="max-w-4xl mx-auto">
@@ -2955,6 +3057,33 @@ print(“wasssuppp”)</pre>
 
 
 
+    <!-- ===== GIFT REGISTRY ===== -->
+    <section id="registry" class="registry-section py-20 px-6">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-10 reveal nav-focus-anchor" id="registry-focus">
+          <p class="section-label mb-2">With Gratitude</p>
+          <h2 class="section-title text-4xl sm:text-5xl">Gift Registry</h2>
+          <p class="text-sm mt-3 max-w-lg mx-auto" style="color: var(--text-muted);">Your presence is the gift. For loved ones who have asked, Zelle details are below.</p>
+          <div class="section-divider mt-4"></div>
+        </div>
+
+        <div class="registry-panel reveal">
+          <div class="registry-intro">
+            <p>Thank you for surrounding us with love, blessings, and support as we begin this next chapter together.</p>
+          </div>
+          <div class="registry-single" aria-label="Gift registry Zelle details">
+            <p class="registry-label">Zelle</p>
+            <p class="registry-value">214-609-9053</p>
+            <div class="registry-actions">
+              <button type="button" class="registry-copy" data-copy="2146099053" onclick="copyRegistryDetail(this)">Copy Number</button>
+            </div>
+          </div>
+          <p class="registry-note">Gifts are optional. Your love and blessings already mean everything to us.</p>
+        </div>
+      </div>
+    </section>
+
+
     <!-- ===== FOOTER ===== -->
     <section class="py-20 px-6 relative overflow-hidden" style="background:var(--bg-alt);">
       <div class="absolute inset-0 opacity-[0.08]"><img src="https://6b37b55fc9cf23b8013d.cdn6.editmysite.com/uploads/b/9dede0d0-6dcf-11e9-99f9-f9d28ac0251e/Dallas.jpg?width=2400&optimize=medium" alt="" class="w-full h-full object-cover" loading="lazy"><div class="absolute inset-0" style="background:var(--bg-alt); opacity:0.92;"></div></div>
@@ -2980,6 +3109,38 @@ print(“wasssuppp”)</pre>
 
   <!-- ===================== JAVASCRIPT ===================== -->
   <script id="main-app-scripts-v2">
+    // ---- Gift Registry Copy Buttons ----
+    function copyRegistryDetail(button) {
+      var value = button.getAttribute('data-copy') || '';
+      var original = button.getAttribute('data-original-label') || button.textContent;
+      button.setAttribute('data-original-label', original);
+      function showCopied() {
+        button.textContent = 'Copied';
+        button.classList.add('copied');
+        window.setTimeout(function() {
+          button.textContent = original;
+          button.classList.remove('copied');
+        }, 1600);
+      }
+      function fallbackCopy() {
+        var textarea = document.createElement('textarea');
+        textarea.value = value;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try { document.execCommand('copy'); showCopied(); }
+        catch (e) { button.textContent = value; }
+        document.body.removeChild(textarea);
+      }
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(value).then(showCopied).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+    }
+
     // ---- Theme Toggle ----
     const html = document.documentElement;
     // Mark body so CSS can distinguish main site (no /sub/) from sub site
@@ -4279,6 +4440,14 @@ print(“wasssuppp”)</pre>
       fab.classList.remove('hidden');
       if (submitted && rsvpLink) {
         rsvpLink.style.display = 'none';
+      }
+      var registry = document.getElementById('registry');
+      if (registry && 'IntersectionObserver' in window) {
+        var registryFabObserver = new IntersectionObserver(function(entries) {
+          var registryVisible = entries.some(function(entry) { return entry.isIntersecting; });
+          fab.classList.toggle('hidden', registryVisible);
+        }, { threshold: 0.12, rootMargin: '0px 0px -12% 0px' });
+        registryFabObserver.observe(registry);
       }
     })();
     loadGuestUploads();
