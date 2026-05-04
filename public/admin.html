@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>C&S Wedding — Admin</title>
+    <link rel="icon" href="data:,">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -318,6 +319,141 @@
         .rsvp-table tr:last-child td { border-bottom: none; }
         .rsvp-table tr:hover td { background: var(--bg-card-hover); }
         .rsvp-table .name-cell { color: var(--text); font-weight: 500; }
+
+        /* ─── Event Attendance Filters ─── */
+        .event-attendance-panel {
+            margin: 0 0 18px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background:
+                radial-gradient(ellipse 90% 80% at 10% 0%, rgba(212,176,106,0.08), transparent 55%),
+                linear-gradient(145deg, rgba(212,176,106,0.035), rgba(255,255,255,0.01));
+            overflow: hidden;
+        }
+        .event-panel-head {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: 14px; margin-bottom: 14px;
+        }
+        .event-eyebrow {
+            font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.14em;
+            color: var(--gold-dim); font-weight: 700; margin-bottom: 4px;
+        }
+        .event-panel-title {
+            font-family: var(--serif); font-size: 1.22rem; font-weight: 600;
+            color: var(--text); line-height: 1.1;
+        }
+        .event-panel-copy {
+            margin-top: 5px; font-size: 0.78rem; color: var(--text-secondary);
+        }
+        .event-selected-pill {
+            flex-shrink: 0;
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 7px 11px; border-radius: 999px;
+            background: rgba(12,11,10,0.48); border: 1px solid var(--border-strong);
+            color: var(--gold); font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+        }
+        .event-filter-strip {
+            display: flex; gap: 10px;
+            margin: 0 -16px 14px; padding: 0 16px 4px;
+            overflow-x: auto; overflow-y: hidden;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none;
+            scroll-snap-type: x proximity;
+        }
+        .event-filter-strip::-webkit-scrollbar { display: none; }
+        .event-filter-btn {
+            min-width: 156px; scroll-snap-align: start;
+            padding: 12px 13px; border: 1px solid var(--border);
+            border-radius: 16px; background: rgba(26,25,24,0.72);
+            color: var(--text-secondary); cursor: pointer;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+            text-align: left; font-family: var(--sans);
+        }
+        .event-filter-btn:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+        .event-filter-btn.active {
+            border-color: rgba(212,176,106,0.48);
+            background: linear-gradient(145deg, rgba(212,176,106,0.18), rgba(212,176,106,0.045));
+            color: var(--text);
+            box-shadow: inset 0 0 0 1px rgba(212,176,106,0.08), 0 10px 32px rgba(0,0,0,0.2);
+        }
+        .event-filter-label {
+            display: block; font-size: 0.8rem; font-weight: 700;
+            color: inherit; line-height: 1.2;
+        }
+        .event-filter-meta {
+            display: flex; align-items: baseline; gap: 5px; margin-top: 8px;
+        }
+        .event-filter-count {
+            font-family: var(--serif); font-size: 1.6rem; font-weight: 600;
+            color: var(--gold); line-height: 1;
+        }
+        .event-filter-unit { font-size: 0.66rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+        .event-filter-sub { display: block; margin-top: 3px; font-size: 0.68rem; color: var(--text-muted); }
+        .event-summary-grid {
+            display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px; margin-bottom: 12px;
+        }
+        .event-summary-card {
+            padding: 12px; border-radius: 14px;
+            background: rgba(12,11,10,0.42); border: 1px solid var(--border);
+        }
+        .event-summary-label {
+            font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 0.1em; margin-bottom: 5px; font-weight: 700;
+        }
+        .event-summary-value {
+            font-family: var(--serif); font-size: 1.75rem; color: var(--gold);
+            line-height: 1; font-weight: 600;
+        }
+        .event-roster-card {
+            border: 1px solid var(--border); border-radius: 16px;
+            background: rgba(12,11,10,0.34); overflow: hidden;
+        }
+        .event-roster-head {
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+            padding: 12px 14px; border-bottom: 1px solid var(--border);
+        }
+        .event-roster-title {
+            font-family: var(--serif); font-size: 1rem; color: var(--text); font-weight: 600;
+        }
+        .event-roster-note { font-size: 0.68rem; color: var(--text-muted); white-space: nowrap; }
+        .event-roster-list {
+            display: grid; grid-template-columns: 1fr; gap: 0;
+        }
+        .event-roster-person {
+            display: flex; justify-content: space-between; gap: 12px;
+            padding: 12px 14px; border-bottom: 1px solid var(--border);
+        }
+        .event-roster-person:last-child { border-bottom: none; }
+        .event-roster-name { color: var(--text); font-weight: 700; font-size: 0.86rem; }
+        .event-roster-meta {
+            display: flex; flex-wrap: wrap; gap: 5px 10px;
+            margin-top: 4px; color: var(--text-secondary); font-size: 0.72rem;
+        }
+        .event-roster-contact {
+            color: var(--text-muted); font-size: 0.7rem; text-align: right;
+            max-width: 42%; word-break: break-word;
+        }
+        .event-roster-empty {
+            padding: 22px 14px; text-align: center; color: var(--text-muted); font-size: 0.82rem;
+        }
+        @media (max-width: 560px) {
+            .event-attendance-panel { margin-left: -2px; margin-right: -2px; padding: 14px; border-radius: 18px; }
+            .event-panel-head { flex-direction: column; align-items: stretch; gap: 10px; }
+            .event-selected-pill { align-self: flex-start; }
+            .event-filter-strip { margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px; }
+            .event-filter-btn { min-width: 142px; padding: 11px 12px; }
+            .event-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .event-roster-person { flex-direction: column; gap: 6px; }
+            .event-roster-contact { max-width: 100%; text-align: left; }
+        }
+        @media (min-width: 900px) {
+            .event-summary-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .event-roster-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .event-roster-person:nth-last-child(2) { border-bottom: none; }
+            .event-roster-person:nth-child(odd) { border-right: 1px solid var(--border); }
+        }
 
         /* ─── Photo Grid ─── */
         .photo-grid {
@@ -743,6 +879,30 @@
             </button>
         </div>
 
+        <section class="event-attendance-panel" aria-labelledby="event-attendance-title">
+            <div class="event-panel-head">
+                <div>
+                    <div class="event-eyebrow">Event Filters</div>
+                    <h2 class="event-panel-title" id="event-attendance-title">Attendance by Event</h2>
+                    <p class="event-panel-copy">Swipe the filters on mobile, then see exact counts and the guest roster for that event.</p>
+                </div>
+                <div class="event-selected-pill" id="event-selected-pill">All RSVPs</div>
+            </div>
+            <div class="event-filter-strip" id="event-filter-strip" aria-label="Filter RSVPs by event">
+                <button class="event-filter-btn active" type="button">Loading…</button>
+            </div>
+            <div class="event-summary-grid" id="event-summary-grid"></div>
+            <div class="event-roster-card">
+                <div class="event-roster-head">
+                    <div class="event-roster-title" id="event-roster-title">People attending</div>
+                    <div class="event-roster-note" id="event-roster-note">—</div>
+                </div>
+                <div class="event-roster-list" id="event-roster-list">
+                    <div class="event-roster-empty">Loading attendee roster…</div>
+                </div>
+            </div>
+        </section>
+
         <!-- Mobile Cards -->
         <div class="rsvp-list stagger" id="rsvp-cards">
             <div class="loading-row"><span class="loading-pulse"></span><span class="loading-pulse"></span><span class="loading-pulse"></span></div>
@@ -756,7 +916,7 @@
                         <th>Guest</th>
                         <th>Contact</th>
                         <th>Status</th>
-                        <th>+1s</th>
+                        <th>Guests</th>
                         <th>Events</th>
                         <th>Message</th>
                         <th>Date</th>
@@ -954,6 +1114,7 @@
     let db = null;
     let pendingDeleteId = null;
     let rsvpCache = [];
+    let activeEventFilter = 'all';
     let messageCache = [];
     let photoCache = [];
     let selectedPhotoIds = new Set();
@@ -966,7 +1127,7 @@
 
     // ─── Helpers ───
     function esc(str) {
-        if (!str) return '';
+        if (str === null || str === undefined) return '';
         return String(str).replace(/[&<>'"]/g, t => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[t]||t));
     }
     function fmtDate(d) {
@@ -979,10 +1140,171 @@
         const dt = d.toDate ? d.toDate() : new Date(d);
         return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
-    function isAttending(a) { return a === 'yes' || a === 'attending'; }
-    function isDeclined(a) { return a === 'no' || a === 'not attending'; }
+    const EVENT_DEFINITIONS = [
+        { id: 'wedding-ceremony', label: 'Wedding Ceremony' },
+        { id: 'mehendi', label: 'Mehendi' },
+        { id: 'pelli-koduku', label: 'Pelli Koduku' },
+        { id: 'pelli-kuthuru', label: 'Pelli Kuthuru' },
+        { id: 'vratham', label: 'Vratham' },
+    ];
+    const EVENT_LABELS = EVENT_DEFINITIONS.reduce((labels, event) => { labels[event.id] = event.label; return labels; }, {});
+
+    function normalizeAttendance(a) { return String(a || '').trim().toLowerCase(); }
+    function isAttending(a) { return ['yes', 'attending', 'accepted'].includes(normalizeAttendance(a)); }
+    function isDeclined(a) { return ['no', 'not attending', 'not-attending', 'declined'].includes(normalizeAttendance(a)); }
+    function isPending(a) { return !isAttending(a) && !isDeclined(a); }
     function badgeClass(a) { return isAttending(a) ? 'attending' : isDeclined(a) ? 'not-attending' : 'pending'; }
     function badgeLabel(a) { return isAttending(a) ? 'Attending' : isDeclined(a) ? 'Declined' : 'Pending'; }
+
+    function guestTotal(r) {
+        const plus = Number.parseInt(r?.plusOnes ?? r?.plus_ones ?? 0, 10);
+        return 1 + (Number.isFinite(plus) && plus > 0 ? plus : 0);
+    }
+
+    function plural(value, singular, pluralLabel = singular + 's') {
+        return `${value} ${value === 1 ? singular : pluralLabel}`;
+    }
+
+    function getRsvpEvents(r) {
+        const raw = Array.isArray(r?.events)
+            ? r.events
+            : typeof r?.events === 'string'
+                ? r.events.split(',')
+                : r?.event
+                    ? [r.event]
+                    : [];
+        return [...new Set(raw.map(e => String(e || '').trim()).filter(Boolean))];
+    }
+
+    function eventLabel(eventId) {
+        if (eventId === 'all') return 'All RSVPs';
+        if (eventId === 'no-event') return 'No Event Selected';
+        return EVENT_LABELS[eventId] || String(eventId || 'Event')
+            .replace(/[-_]+/g, ' ')
+            .replace(/\b\w/g, ch => ch.toUpperCase());
+    }
+
+    function eventSortValue(eventId) {
+        const idx = EVENT_DEFINITIONS.findIndex(event => event.id === eventId);
+        return idx === -1 ? 999 : idx;
+    }
+
+    function eventScopedRsvps(rsvps, eventId) {
+        if (eventId === 'all') return rsvps;
+        if (eventId === 'no-event') return rsvps.filter(r => getRsvpEvents(r).length === 0);
+        return rsvps.filter(r => getRsvpEvents(r).includes(eventId));
+    }
+
+    function eventAttendees(rsvps, eventId) {
+        return eventScopedRsvps(rsvps, eventId).filter(r => isAttending(r.attendance));
+    }
+
+    function eventGuestCount(rsvps, eventId) {
+        return eventAttendees(rsvps, eventId).reduce((sum, r) => sum + guestTotal(r), 0);
+    }
+
+    function getEventOptions(rsvps) {
+        const discovered = new Set(EVENT_DEFINITIONS.map(event => event.id));
+        rsvps.forEach(r => getRsvpEvents(r).forEach(eventId => discovered.add(eventId)));
+        const eventOptions = [...discovered]
+            .filter(Boolean)
+            .sort((a, b) => eventSortValue(a) - eventSortValue(b) || eventLabel(a).localeCompare(eventLabel(b)))
+            .map(id => ({ id, label: eventLabel(id) }));
+        const hasUnassignedAttendees = rsvps.some(r => isAttending(r.attendance) && getRsvpEvents(r).length === 0);
+        if (hasUnassignedAttendees) eventOptions.push({ id: 'no-event', label: 'No Event Selected' });
+        return [{ id: 'all', label: 'All RSVPs' }, ...eventOptions];
+    }
+
+    function matchesActiveEventFilter(r) {
+        if (activeEventFilter === 'all') return true;
+        if (!isAttending(r.attendance)) return false;
+        const events = getRsvpEvents(r);
+        if (activeEventFilter === 'no-event') return events.length === 0;
+        return events.includes(activeEventFilter);
+    }
+
+    function renderEventRosterPerson(r) {
+        const events = getRsvpEvents(r).map(eventLabel);
+        const dietary = r.dietary || r.dietary_restrictions || '';
+        const meta = [
+            plural(guestTotal(r), 'guest'),
+            activeEventFilter === 'all' ? (events.length ? events.join(', ') : 'No event selected') : '',
+            dietary ? `Diet: ${dietary}` : '',
+        ].filter(Boolean);
+        const contact = r.phone || r.email || '';
+        return `
+            <div class="event-roster-person">
+                <div>
+                    <div class="event-roster-name">${esc(r.name || 'Guest')}</div>
+                    <div class="event-roster-meta">${meta.map(item => `<span>${esc(item)}</span>`).join('')}</div>
+                </div>
+                ${contact ? `<div class="event-roster-contact">${esc(contact)}</div>` : ''}
+            </div>`;
+    }
+
+    function renderEventInsights(rsvps) {
+        const strip = document.getElementById('event-filter-strip');
+        const summaryGrid = document.getElementById('event-summary-grid');
+        const rosterTitle = document.getElementById('event-roster-title');
+        const rosterNote = document.getElementById('event-roster-note');
+        const rosterList = document.getElementById('event-roster-list');
+        const selectedPill = document.getElementById('event-selected-pill');
+        if (!strip || !summaryGrid || !rosterTitle || !rosterNote || !rosterList || !selectedPill) return;
+
+        const options = getEventOptions(rsvps);
+        if (!options.some(option => option.id === activeEventFilter)) activeEventFilter = 'all';
+
+        strip.innerHTML = options.map(option => {
+            const isAll = option.id === 'all';
+            const attendees = eventAttendees(rsvps, option.id);
+            const guests = eventGuestCount(rsvps, option.id);
+            const primaryCount = isAll ? rsvps.length : guests;
+            const primaryUnit = isAll ? 'RSVPs' : 'guests';
+            const sub = isAll
+                ? `${plural(attendees.length, 'attendee RSVP')} · ${plural(guests, 'guest')}`
+                : plural(attendees.length, 'attendee RSVP');
+            return `
+                <button class="event-filter-btn ${option.id === activeEventFilter ? 'active' : ''}" type="button" data-event-filter="${esc(option.id)}" aria-pressed="${option.id === activeEventFilter ? 'true' : 'false'}">
+                    <span class="event-filter-label">${esc(option.label)}</span>
+                    <span class="event-filter-meta"><span class="event-filter-count">${primaryCount}</span><span class="event-filter-unit">${primaryUnit}</span></span>
+                    <span class="event-filter-sub">${esc(sub)}</span>
+                </button>`;
+        }).join('');
+
+        strip.querySelectorAll('[data-event-filter]').forEach(button => {
+            button.addEventListener('click', () => {
+                activeEventFilter = button.dataset.eventFilter || 'all';
+                renderRsvpResults(sortByDate([...rsvpCache]));
+            });
+        });
+
+        const selectedLabel = eventLabel(activeEventFilter);
+        selectedPill.textContent = selectedLabel;
+
+        const scoped = eventScopedRsvps(rsvps, activeEventFilter);
+        const attendees = eventAttendees(rsvps, activeEventFilter);
+        const guests = attendees.reduce((sum, r) => sum + guestTotal(r), 0);
+        const pending = scoped.filter(r => isPending(r.attendance)).length;
+        const declined = scoped.filter(r => isDeclined(r.attendance)).length;
+        const summary = [
+            { label: activeEventFilter === 'all' ? 'Total RSVPs' : 'Event RSVPs', value: scoped.length },
+            { label: 'Attending RSVPs', value: attendees.length },
+            { label: 'Total Guests', value: guests },
+            { label: 'Pending / Declined', value: `${pending} / ${declined}` },
+        ];
+        summaryGrid.innerHTML = summary.map(item => `
+            <div class="event-summary-card">
+                <div class="event-summary-label">${esc(item.label)}</div>
+                <div class="event-summary-value">${esc(item.value)}</div>
+            </div>`).join('');
+
+        const sortedAttendees = [...attendees].sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+        rosterTitle.textContent = activeEventFilter === 'all' ? 'All attending guests' : `${selectedLabel} attendees`;
+        rosterNote.textContent = `${plural(sortedAttendees.length, 'RSVP')} · ${plural(guests, 'guest')}`;
+        rosterList.innerHTML = sortedAttendees.length
+            ? sortedAttendees.map(renderEventRosterPerson).join('')
+            : `<div class="event-roster-empty">No attending guests${activeEventFilter === 'all' ? ' yet.' : ` for ${esc(selectedLabel)} yet.`}</div>`;
+    }
 
     function sortByDate(arr) {
         return arr.sort((a, b) => {
@@ -1256,7 +1578,7 @@
             rsvpCache = rsvps;
             const attendingRsvps = rsvps.filter(r => isAttending(r.attendance));
             const attending = attendingRsvps.length;
-            const totalGuests = attendingRsvps.reduce((sum, r) => sum + 1 + (parseInt(r.plusOnes, 10) || 0), 0);
+            const totalGuests = attendingRsvps.reduce((sum, r) => sum + guestTotal(r), 0);
             const declined = rsvps.filter(r => isDeclined(r.attendance)).length;
 
             document.getElementById('stat-rsvps').textContent = rsvps.length;
@@ -1321,20 +1643,21 @@
 
     // ─── Render RSVP Card (Mobile) ───
     function renderRsvpCard(r) {
-        const events = (r.events || []).map(e => `<span class="event-chip">${esc(e.replace(/-/g,' '))}</span>`).join('');
+        const events = getRsvpEvents(r).map(e => `<span class="event-chip">${esc(eventLabel(e))}</span>`).join('');
         const message = r.message ? `<div class="rsvp-message">${esc(r.message)}</div>` : '';
+        const guests = guestTotal(r);
         return `
         <div class="rsvp-card">
             <div class="rsvp-card-head">
-                <div class="rsvp-name">${esc(r.name)}</div>
+                <div class="rsvp-name">${esc(r.name || 'Guest')}</div>
                 <span class="rsvp-badge ${badgeClass(r.attendance)}"><span class="dot"></span>${badgeLabel(r.attendance)}</span>
             </div>
             <div class="rsvp-meta">
-                <span class="rsvp-meta-item">${icons.mail}${esc(r.email)}</span>
+                ${r.email ? `<span class="rsvp-meta-item">${icons.mail}${esc(r.email)}</span>` : ''}
                 ${r.phone ? `<span class="rsvp-meta-item">${icons.phone}${esc(r.phone)}</span>` : ''}
-                ${r.plusOnes ? `<span class="rsvp-meta-item">${icons.users}+${r.plusOnes} guest${r.plusOnes>1?'s':''}</span>` : ''}
+                <span class="rsvp-meta-item">${icons.users}${plural(guests, 'guest')}</span>
             </div>
-            ${events ? `<div class="rsvp-events">${events}</div>` : ''}
+            ${events ? `<div class="rsvp-events">${events}</div>` : '<div class="rsvp-events"><span class="event-chip">No event selected</span></div>'}
             ${message}
             <div class="rsvp-footer">
                 <span>${esc(r.source || 'main site')}</span>
@@ -1351,6 +1674,53 @@
         </div>`;
     }
 
+    function renderRsvpRows(sorted) {
+        return sorted.map(r => {
+            const dietary = r.dietary || r.dietary_restrictions || '';
+            const events = getRsvpEvents(r).map(e => `<span class="event-chip">${esc(eventLabel(e))}</span>`).join(' ') || '—';
+            const message = r.message ? esc(String(r.message).substring(0, 100)) + (String(r.message).length > 100 ? '...' : '') : '—';
+            return `
+                <tr>
+                    <td class="name-cell">${esc(r.name || 'Guest')}${dietary ? `<br><span style="font-size:0.7rem;color:var(--text-muted)">Diet: ${esc(dietary)}</span>` : ''}</td>
+                    <td>${r.email ? `<span style="font-size:0.78rem;">${esc(r.email)}</span>` : '—'}${r.phone ? `<br><span style="font-size:0.72rem;color:var(--text-muted)">${esc(r.phone)}</span>` : ''}</td>
+                    <td><span class="rsvp-badge ${badgeClass(r.attendance)}"><span class="dot"></span>${badgeLabel(r.attendance)}</span></td>
+                    <td>${guestTotal(r)}</td>
+                    <td>${events}</td>
+                    <td style="max-width:200px;"><span style="font-size:0.75rem;color:var(--text-muted)">${message}</span></td>
+                    <td style="white-space:nowrap;font-size:0.75rem;color:var(--text-muted)">${fmtDateFull(r.createdAt)}</td>
+                    <td>
+                        <div style="display:flex;gap:6px;">
+                            <button class="tbl-action tbl-edit" onclick="openEditModal('${r.id}')" title="Edit">${icons.edit}</button>
+                            <button class="tbl-action tbl-delete" onclick="openDeleteModal('${r.id}')" title="Delete">${icons.trash}</button>
+                        </div>
+                    </td>
+                </tr>`;
+        }).join('');
+    }
+
+    function renderRsvpResults(sorted) {
+        const cards = document.getElementById('rsvp-cards');
+        const tbody = document.getElementById('rsvp-table-body');
+        if (!cards || !tbody) return;
+
+        renderEventInsights(sorted);
+
+        const visible = sorted.filter(matchesActiveEventFilter);
+        if (!visible.length) {
+            const selectedLabel = eventLabel(activeEventFilter);
+            const empty = activeEventFilter === 'all'
+                ? `<div class="empty-state">${icons.inbox}<h3>No RSVPs yet</h3><p>Guests will appear here once they respond.</p></div>`
+                : `<div class="empty-state">${icons.inbox}<h3>No attendees for ${esc(selectedLabel)} yet</h3><p>Try another event filter or check back after more guests respond.</p></div>`;
+            cards.innerHTML = empty;
+            tbody.innerHTML = `<tr><td colspan="8">${empty}</td></tr>`;
+            return;
+        }
+
+        cards.innerHTML = visible.map(r => renderRsvpCard(r)).join('');
+        cards.classList.add('stagger');
+        tbody.innerHTML = renderRsvpRows(visible);
+    }
+
     // ─── Load RSVPs ───
     window.loadRSVPs = async function() {
         if (!db) return;
@@ -1364,40 +1734,11 @@
             const rsvps = [];
             snap.forEach(d => rsvps.push({ id: d.id, ...d.data() }));
             rsvpCache = rsvps;
-            const sorted = sortByDate(rsvps);
-
-            if (!sorted.length) {
-                const empty = `<div class="empty-state">${icons.inbox}<h3>No RSVPs yet</h3><p>Guests will appear here once they respond.</p></div>`;
-                cards.innerHTML = empty;
-                tbody.innerHTML = `<tr><td colspan="8">${empty}</td></tr>`;
-                return;
-            }
-
-            // Mobile cards
-            cards.innerHTML = sorted.map(r => renderRsvpCard(r)).join('');
-            cards.classList.add('stagger');
-
-            // Desktop table
-            tbody.innerHTML = sorted.map(r => `
-                <tr>
-                    <td class="name-cell">${esc(r.name)}${r.dietary ? `<br><span style="font-size:0.7rem;color:var(--text-muted)">Diet: ${esc(r.dietary)}</span>` : ''}</td>
-                    <td><span style="font-size:0.78rem;">${esc(r.email)}</span>${r.phone?`<br><span style="font-size:0.72rem;color:var(--text-muted)">${esc(r.phone)}</span>`:''}</td>
-                    <td><span class="rsvp-badge ${badgeClass(r.attendance)}"><span class="dot"></span>${badgeLabel(r.attendance)}</span></td>
-                    <td>${r.plusOnes || 0}</td>
-                    <td>${(r.events||[]).map(e=>`<span class="event-chip">${esc(e.replace(/-/g,' '))}</span>`).join(' ')||'—'}</td>
-                    <td style="max-width:200px;"><span style="font-size:0.75rem;color:var(--text-muted)">${r.message?esc(r.message.substring(0,100))+(r.message.length>100?'...':''):'—'}</span></td>
-                    <td style="white-space:nowrap;font-size:0.75rem;color:var(--text-muted)">${fmtDateFull(r.createdAt)}</td>
-                    <td>
-                        <div style="display:flex;gap:6px;">
-                            <button class="tbl-action tbl-edit" onclick="openEditModal('${r.id}')" title="Edit">${icons.edit}</button>
-                            <button class="tbl-action tbl-delete" onclick="openDeleteModal('${r.id}')" title="Delete">${icons.trash}</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+            renderRsvpResults(sortByDate([...rsvps]));
         } catch (e) {
             console.error('RSVP load error:', e);
             cards.innerHTML = `<div class="empty-state"><h3>Error</h3><p>${esc(e.message)}</p></div>`;
+            tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><h3>Error</h3><p>${esc(e.message)}</p></div></td></tr>`;
         }
     };
 
