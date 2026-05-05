@@ -1864,6 +1864,8 @@
     .ceremony-date { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 8px; }
     .ceremony-title { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 400; color: #fff; line-height: 1.1; margin-bottom: 6px; text-shadow: 0 2px 12px rgba(0,0,0,0.3); }
     .ceremony-venue { font-size: 0.82rem; color: rgba(255,255,255,0.6); }
+    .ceremony-card-dress { display: inline-block; max-width: 100%; box-sizing: border-box; margin-top: 12px; padding: 8px 12px; border-radius: 999px; background: rgba(212,176,106,0.14); border: 1px solid rgba(212,176,106,0.28); color: rgba(255,255,255,0.9); font-size: 0.72rem; line-height: 1.45; }
+    .ceremony-card-dress strong { color: var(--gold); font-weight: 600; }
     .ceremony-tap-hint { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 0.7rem; color: rgba(212,176,106,0.7); letter-spacing: 0.1em; text-transform: uppercase; }
     .ceremony-tap-ring { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(212,176,106,0.4); position: relative; flex-shrink: 0; }
     .ceremony-tap-ring::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; border: 1.5px solid rgba(212,176,106,0.6); animation: tapPulse 2s ease-in-out infinite; }
@@ -2439,17 +2441,13 @@ print(“wasssuppp”)</pre>
             <div class="ceremony-date">May 9th, 2026 &middot; 8:50 AM</div>
             <h3 class="ceremony-title">Wedding Ceremony</h3>
             <p class="ceremony-venue">Shree Swaminarayan Gurukul</p>
+            <p class="ceremony-card-dress"><strong>Dress code:</strong> Pattu saree preferred for women · Kurta set for men</p>
             <div class="ceremony-tap-hint">
               <div class="ceremony-tap-ring"></div>
               <span>Tap for details</span>
             </div>
           </div>
         </div>
-
-        <div class="ceremony-dress-code reveal" style="margin:14px auto 0; max-width:580px; padding:14px 18px; border-radius:16px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.18); text-align:center;">
-          <p style="font-size:0.86rem; color:var(--text-muted); line-height:1.6; margin:0;"><strong style="color:var(--text);">Dress code:</strong> Pattu saree preferred for women · Kurta set for men</p>
-        </div>
-
         <!-- Ceremony Detail Modal -->
         <div id="ceremony-modal" class="ceremony-modal" onclick="closeCeremonyModal(event)">
           <div class="ceremony-modal-card" onclick="event.stopPropagation()">
