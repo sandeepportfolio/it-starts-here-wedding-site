@@ -1868,8 +1868,47 @@
     .ceremony-date { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 8px; }
     .ceremony-title { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 400; color: #fff; line-height: 1.1; margin-bottom: 6px; text-shadow: 0 2px 12px rgba(0,0,0,0.3); }
     .ceremony-venue { font-size: 0.82rem; color: rgba(255,255,255,0.6); }
-    .ceremony-card-dress { display: inline-block; max-width: 100%; box-sizing: border-box; margin-top: 12px; padding: 8px 12px; border-radius: 999px; background: rgba(212,176,106,0.14); border: 1px solid rgba(212,176,106,0.28); color: rgba(255,255,255,0.9); font-size: 0.72rem; line-height: 1.45; }
-    .ceremony-card-dress strong { color: var(--gold); font-weight: 600; }
+    .ceremony-card-dress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 540px;
+      box-sizing: border-box;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,248,232,0.18) 0%, rgba(212,176,106,0.10) 100%);
+      border: 1px solid rgba(244,220,164,0.34);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .ceremony-card-dress-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.15rem;
+      background: rgba(212,176,106,0.18);
+      border: 1px solid rgba(212,176,106,0.36);
+      box-shadow: inset 0 0 18px rgba(255,232,176,0.12);
+    }
+    .ceremony-card-dress-copy { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .ceremony-card-dress-label { font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+    .ceremony-card-dress-text { font-size: 0.84rem; color: #fff; line-height: 1.35; font-weight: 500; }
+    .ceremony-card-dress-note { font-size: 0.68rem; color: rgba(255,255,255,0.68); line-height: 1.35; }
+    @media (max-width: 480px) {
+      .ceremony-hero { min-height: 380px; }
+      .ceremony-hero-content { padding: 28px 22px; }
+      .ceremony-card-dress { align-items: flex-start; gap: 10px; padding: 11px 12px; border-radius: 16px; }
+      .ceremony-card-dress-icon { width: 32px; height: 32px; font-size: 1rem; }
+      .ceremony-card-dress-text { font-size: 0.78rem; }
+      .ceremony-card-dress-note { font-size: 0.64rem; }
+    }
     .ceremony-tap-hint { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 0.7rem; color: rgba(212,176,106,0.7); letter-spacing: 0.1em; text-transform: uppercase; }
     .ceremony-tap-ring { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(212,176,106,0.4); position: relative; flex-shrink: 0; }
     .ceremony-tap-ring::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; border: 1.5px solid rgba(212,176,106,0.6); animation: tapPulse 2s ease-in-out infinite; }
@@ -2413,7 +2452,14 @@ print(“wasssuppp”)</pre>
             <div class="ceremony-date">May 9th, 2026 &middot; 8:50 AM</div>
             <h3 class="ceremony-title">Wedding Ceremony</h3>
             <p class="ceremony-venue">Shree Swaminarayan Gurukul</p>
-            <p class="ceremony-card-dress"><strong>Dress code:</strong> Pattu saree preferred for women · Kurta set for men</p>
+            <div class="ceremony-card-dress" aria-label="Wedding ceremony dress code">
+              <span class="ceremony-card-dress-icon" aria-hidden="true">🪷</span>
+              <span class="ceremony-card-dress-copy">
+                <span class="ceremony-card-dress-label">Temple ceremony attire</span>
+                <span class="ceremony-card-dress-text">Pattu sarees preferred for women · Kurta sets for men</span>
+                <span class="ceremony-card-dress-note">Festive, modest, and rooted in tradition.</span>
+              </span>
+            </div>
             <div class="ceremony-tap-hint">
               <div class="ceremony-tap-ring"></div>
               <span>Tap for details</span>
@@ -2473,7 +2519,7 @@ print(“wasssuppp”)</pre>
                 <div class="ceremony-detail-icon">&#129512;</div>
                 <div class="ceremony-detail-content">
                   <h4>Dress Code</h4>
-                  <p>Pattu saree preferred for women and kurta set for men. Please dress modestly and respectfully.</p>
+                  <p>Pattu sarees preferred for women and kurta sets for men. Please dress modestly and respectfully.</p>
                 </div>
               </div>
               <!-- What to Expect -->
