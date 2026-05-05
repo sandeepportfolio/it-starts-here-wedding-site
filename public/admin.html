@@ -754,6 +754,49 @@
         }
         .form-select option { background: var(--bg-elevated); color: var(--text); }
         .form-textarea { resize: vertical; min-height: 70px; }
+        .form-help {
+            margin-top: 6px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+        .edit-events-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        @media (min-width: 520px) { .edit-events-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        .edit-event-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 11px 12px;
+            min-height: 48px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+        .edit-event-option:hover {
+            border-color: var(--border-strong);
+            background: var(--bg-card-hover);
+            transform: translateY(-1px);
+        }
+        .edit-event-option input {
+            width: 17px;
+            height: 17px;
+            margin-top: 1px;
+            flex-shrink: 0;
+            accent-color: var(--gold);
+        }
+        .edit-event-option span {
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+        .edit-event-option input:checked + span { color: var(--gold); }
 
         /* ─── Modal Buttons ─── */
         .btn {
@@ -1001,6 +1044,11 @@
                 </select>
             </div>
             <div class="form-group">
+                <label class="form-label">Events Attending</label>
+                <div class="edit-events-grid" id="edit-events-list" aria-label="Events this guest is attending"></div>
+                <div class="form-help">Select every event this guest plans to attend. Leave all unchecked if no event is assigned.</div>
+            </div>
+            <div class="form-group">
                 <label class="form-label">Plus Ones</label>
                 <input class="form-input" id="edit-plusones" type="number" min="0" max="10">
             </div>
@@ -1015,7 +1063,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-ghost" onclick="closeEditModal()">Cancel</button>
-            <button class="btn btn-gold" onclick="saveEdit()">Save Changes</button>
+            <button class="btn btn-gold" id="edit-save-btn" onclick="saveEdit()">Save Changes</button>
         </div>
     </div>
 </div>
@@ -1176,6 +1224,36 @@
         return [...new Set(raw
             .map(e => String(e || '').trim())
             .filter(eventId => eventId && !DEPRECATED_EVENT_IDS.has(eventId.toLowerCase())))];
+    }
+
+    function getEditableEventOptions(selectedEvents = []) {
+        const known = new Set(EVENT_DEFINITIONS.map(event => event.id));
+        const customEvents = selectedEvents
+            .filter(eventId => eventId && !known.has(eventId))
+            .sort((a, b) => eventLabel(a).localeCompare(eventLabel(b)))
+            .map(id => ({ id, label: eventLabel(id) }));
+        return [...EVENT_DEFINITIONS, ...customEvents];
+    }
+
+    function renderEditEventOptions(selectedEvents = []) {
+        const container = document.getElementById('edit-events-list');
+        if (!container) return;
+        const selected = new Set(selectedEvents);
+        const options = getEditableEventOptions(selectedEvents);
+        container.innerHTML = options.map((event, index) => {
+            const checked = selected.has(event.id) ? 'checked' : '';
+            return `
+                <label class="edit-event-option" for="edit-event-${index}">
+                    <input id="edit-event-${index}" type="checkbox" value="${esc(event.id)}" data-edit-event ${checked}>
+                    <span>${esc(event.label)}</span>
+                </label>`;
+        }).join('');
+    }
+
+    function getEditSelectedEvents() {
+        return [...document.querySelectorAll('[data-edit-event]:checked')]
+            .map(input => String(input.value || '').trim())
+            .filter(eventId => eventId && !DEPRECATED_EVENT_IDS.has(eventId.toLowerCase()));
     }
 
     function eventLabel(eventId) {
@@ -1510,9 +1588,10 @@
         document.getElementById('edit-name').value = r.name || '';
         document.getElementById('edit-email').value = r.email || '';
         document.getElementById('edit-phone').value = r.phone || '';
-        document.getElementById('edit-dietary').value = r.dietary || '';
+        document.getElementById('edit-dietary').value = r.dietary || r.dietary_restrictions || '';
         document.getElementById('edit-message').value = r.message || '';
-        document.getElementById('edit-plusones').value = r.plusOnes || 0;
+        document.getElementById('edit-plusones').value = Number.parseInt(r.plusOnes ?? r.plus_ones ?? 0, 10) || 0;
+        renderEditEventOptions(getRsvpEvents(r));
         const att = document.getElementById('edit-attendance');
         if (isAttending(r.attendance)) att.value = 'yes';
         else if (isDeclined(r.attendance)) att.value = 'no';
@@ -1524,16 +1603,21 @@
     window.saveEdit = async function() {
         const id = document.getElementById('edit-id').value;
         if (!id || !db) return;
+        const saveBtn = document.getElementById('edit-save-btn');
+        const selectedEvents = getEditSelectedEvents();
         const updates = {
             name: document.getElementById('edit-name').value.trim(),
             email: document.getElementById('edit-email').value.trim(),
             phone: document.getElementById('edit-phone').value.trim(),
             attendance: document.getElementById('edit-attendance').value,
-            plusOnes: parseInt(document.getElementById('edit-plusones').value) || 0,
+            events: selectedEvents,
+            event: selectedEvents[0] || '',
+            plusOnes: parseInt(document.getElementById('edit-plusones').value, 10) || 0,
             dietary: document.getElementById('edit-dietary').value.trim(),
             message: document.getElementById('edit-message').value.trim(),
         };
         try {
+            if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Saving…'; }
             await updateDoc(doc(db, 'rsvps', id), updates);
             closeEditModal();
             showToast('RSVP updated successfully');
@@ -1542,6 +1626,8 @@
         } catch (e) {
             console.error('Update error:', e);
             showToast('Failed to update: ' + e.message, 'error');
+        } finally {
+            if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save Changes'; }
         }
     };
 
