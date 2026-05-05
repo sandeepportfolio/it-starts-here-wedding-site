@@ -512,14 +512,27 @@
       #hero .text-panel { padding: 24px 20px; }
       #hero-countdown { flex-wrap: wrap; }
       .nav-link { padding: 8px 12px; font-size: 11px; }
-      .story-main { border-radius: 20px; padding: 20px 18px; }
+      #story { padding-top: 3.75rem !important; padding-bottom: 3.75rem !important; }
+      #story .mb-12 { margin-bottom: 1.75rem !important; }
+      #story .section-divider { margin-top: 0.85rem !important; }
+      .story-main { border-radius: 18px; padding: 14px 12px; }
+      .story-sections { gap: 10px; }
       .story-menu-list { grid-template-columns: 1fr; }
-      .story-section { padding: 16px; }
-      .story-section-lead { max-width: none; }
+      .story-section { gap: 9px; padding: 12px; border-radius: 18px; }
+      .story-section-copy { gap: 8px; }
+      .story-section-copy p { font-size: 0.9rem; line-height: 1.56; }
+      .story-section-lead { max-width: none; font-size: 0.94rem !important; line-height: 1.58 !important; }
+      .story-section-kicker { font-size: 0.66rem; letter-spacing: 0.22em; }
+      .story-code-top { padding: 8px 12px; }
+      .story-code-pre { padding: 12px; font-size: 0.8rem; line-height: 1.55; }
+      .story-quote-panel { padding: 16px 14px; border-radius: 18px; }
+      .story-quote-line { font-size: 1.18rem; line-height: 1.24; }
+      .story-quote-credit { margin-top: 9px; font-size: 0.66rem; letter-spacing: 0.14em; }
+      .story-quote-ending { margin-top: 6px; font-size: 0.82rem; }
       .story-menu-btn { grid-template-columns: 30px minmax(0, 1fr); }
       .story-menu-num { width: 30px; height: 30px; }
       .story-section-accent,
-      .story-section-highlight { padding: 14px 15px !important; }
+      .story-section-highlight { padding: 10px 11px !important; font-size: 0.9rem !important; line-height: 1.48 !important; border-radius: 15px; }
     }
 
 
@@ -2219,15 +2232,11 @@
               </div>
               <div class="event-check" data-event="pelli-kuthuru">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                <div><p class="text-sm font-medium">Pelli Kuthuru</p><p class="text-xs" style="color:var(--text-muted);">May 8th · 3129 Lakemont Dr, Little Elm</p></div>
+                <div><p class="text-sm font-medium">Pelli Kuthuru</p><p class="text-xs" style="color:var(--text-muted);">May 8th · 12:00 PM · 3129 Lakemont Dr, Little Elm</p></div>
               </div>
               <div class="event-check" data-event="wedding-ceremony">
                 <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <div><p class="text-sm font-medium">Wedding Ceremony</p><p class="text-xs" style="color:var(--text-muted);">The main event</p></div>
-              </div>
-              <div class="event-check" data-event="vratham">
-                <div class="ec-box"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                <div><p class="text-sm font-medium">Vratham</p><p class="text-xs" style="color:var(--text-muted);">May 10th · 8720 Mandevilla Dr, Plano</p></div>
               </div>
             </div>
             <div class="flex gap-3" style="padding-top:24px;">
@@ -2397,7 +2406,7 @@ print(“wasssuppp”)</pre>
             <div style="font-size:2.5rem; margin-bottom:12px;">&#128081;</div>
             <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 8th &middot; 8:30 AM</p>
             <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Pelli Koduku</h3>
-            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A bright, feel-good morning with family, blessings, and plenty of photo moments. <strong style="color:var(--text);">Dress code:</strong> Kurtha, lehenga, churidar, or any Indian traditional outfit. Any color is fine.</p>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">Everyone, please wear yellow for the fun activities. Getting wet is optional. Afterward, head straight to Pelli Kuthuru—no outfit change needed if you’re already in yellow.</p>
             <a href="https://www.google.com/maps/search/?api=1&query=8720+Mandevilla+Dr+Plano+TX+75024" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
               <span style="font-size:0.72rem; color:var(--gold);">&#128205; 8720 Mandevilla Dr, Plano, TX</span>
             </a>
@@ -2405,21 +2414,11 @@ print(“wasssuppp”)</pre>
           <!-- Pelli Kuthuru -->
           <div class="reveal stagger" style="--d:2; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--bg-card); padding:28px 24px; text-align:center; transition:all 0.3s;">
             <div aria-label="Pelli Kuthuru lotus emoji" role="img" style="font-size:2.5rem; line-height:1; margin-bottom:12px; filter:drop-shadow(0 8px 18px rgba(184,146,74,0.22));">🪷</div>
-            <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 8th &middot; 10:15 AM</p>
+            <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 8th &middot; 12:00 PM</p>
             <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Pelli Kuthuru</h3>
-            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">Get ready for some insta reels and games. A cozy Telugu bridal celebration with tradition, laughter, and picture-perfect family moments. <strong style="color:var(--text);">Dress code:</strong> Kurtha, lehenga, churidar, or any Indian traditional outfit. Any color is fine.</p>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">TikToks, games, and a cozy Telugu bridal celebration with family. <strong style="color:var(--text);">Dress code:</strong> Traditional Indian attire.</p>
             <a href="https://www.google.com/maps/search/?api=1&query=3129+Lakemont+Dr+Little+Elm+TX+75068" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
               <span style="font-size:0.72rem; color:var(--gold);">&#128205; 3129 Lakemont Dr, Little Elm, TX</span>
-            </a>
-          </div>
-          <!-- Vratham -->
-          <div class="reveal stagger" style="--d:3; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--bg-card); padding:28px 24px; text-align:center; transition:all 0.3s;">
-            <div style="font-size:2.5rem; margin-bottom:12px;">&#128304;</div>
-            <p style="font-size:0.6rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px;">May 10th &middot; 5:00 PM</p>
-            <h3 class="font-heading text-2xl" style="font-weight:400; margin-bottom:8px;">Vratham</h3>
-            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; max-width:280px; margin:0 auto;">A calm, meaningful family gathering to close out the wedding weekend beautifully.</p>
-            <a href="https://www.google.com/maps/search/?api=1&query=8720+Mandevilla+Dr+Plano+TX+75024" target="_blank" rel="noopener" style="margin-top:14px; padding:8px 16px; border-radius:12px; background:rgba(212,176,106,0.08); border:1px solid rgba(212,176,106,0.15); display:inline-block; text-decoration:none; transition:all 0.2s;">
-              <span style="font-size:0.72rem; color:var(--gold);">&#128205; 8720 Mandevilla Dr, Plano, TX 75024</span>
             </a>
           </div>
         </div>

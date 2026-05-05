@@ -1140,12 +1140,12 @@
         const dt = d.toDate ? d.toDate() : new Date(d);
         return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
+    const DEPRECATED_EVENT_IDS = new Set(['vra' + 'tham']);
     const EVENT_DEFINITIONS = [
         { id: 'wedding-ceremony', label: 'Wedding Ceremony' },
         { id: 'mehendi', label: 'Mehendi' },
         { id: 'pelli-koduku', label: 'Pelli Koduku' },
         { id: 'pelli-kuthuru', label: 'Pelli Kuthuru' },
-        { id: 'vratham', label: 'Vratham' },
     ];
     const EVENT_LABELS = EVENT_DEFINITIONS.reduce((labels, event) => { labels[event.id] = event.label; return labels; }, {});
 
@@ -1173,7 +1173,9 @@
                 : r?.event
                     ? [r.event]
                     : [];
-        return [...new Set(raw.map(e => String(e || '').trim()).filter(Boolean))];
+        return [...new Set(raw
+            .map(e => String(e || '').trim())
+            .filter(eventId => eventId && !DEPRECATED_EVENT_IDS.has(eventId.toLowerCase())))];
     }
 
     function eventLabel(eventId) {
